@@ -1,0 +1,83 @@
+.overheader{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: space-between;
+}
+.header-group{
+    flex-grow: 2;
+    position: relative;
+}
+.header-group:first-child{
+    flex-grow: 1;
+}
+.header-group:not(:last-child){
+    padding-right: 8px;
+}
+.icon-APIjieru, .icon-qiyong1, .icon-qiyong, .icon-feiji{
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 3rem;
+    color: cornflowerblue;
+}
+.icon-qiyong1{
+    font-size: 2.7rem;
+}
+.icon-APIjieru:hover, .icon-qiyong:hover, .icon-qiyong1:hover, .icon-feiji:hover, .info-data:hover{
+    transform: scale(1.3);
+    transition: transform 0.8s;
+}
+.header-data{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #F2F2F2;
+    text-align: center;
+    border-radius: 5px;
+}
+.header-data:first-child{
+    background-color: #E2F0D9;
+    height: 100%;
+}
+.info{
+    padding: 1em 1em 1em 0;
+    text-align: center;
+}
+.info-row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+.info-item{
+    flex-grow: 1;
+    display: block;
+    font-size: 12px;
+    color: #888888;
+}
+.info-row > .info-item:first-child{
+    text-align: left;
+}
+.info-row > .info-item:not(:first-child){
+    margin-left: 3em;
+}
+.info-item label{
+    margin-bottom: 0;
+}
+.info-data:not(.h1){
+    font-size: 16px;
+    color: #5B9BDE;
+    font-weight: bold;
+}
+.btn-custom{
+    width: 5em;
+    border: 1px solid #c2c2c2;
+    background-color: inherit;
+    color: inherit;
+}
+.btn-custom:hover, .btn-active{
+    border: 1px solid #1E9FFF;
+    background-color: inherit;
+    color: #1E9FFF;
+}

@@ -1,0 +1,186 @@
+html,body{
+    margin:0px;
+    height:100%;
+}
+.bootstrap-select .dropdown-menu, .dropdown-menu ul{
+    max-height: 200px !important;
+}
+.shotContainer{
+    text-align: center;
+    max-height: 50em;
+    overflow: auto;
+}
+.shotItem{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 6px;
+    overflow: auto;
+}
+.shotItem:hover{
+    background-color: rgb(245,245,245);
+}
+.image{
+    height: 200px;
+    margin: 10px;
+    border: 1px solid black;
+}
+.imgInfo{
+    padding-left: 18px;
+    text-align: left;
+}
+.list-group{
+    height: 100%;
+    overflow: auto;
+    margin-bottom: 0;
+    padding: 5px;
+    position: relative;
+}
+.tree-panel{
+    margin-bottom: 0;
+    position: relative;
+}
+.ztree{
+    margin-bottom: 10px;
+    max-height: 10em;
+    overflow:auto;
+}
+.fadeinStyle{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15px;
+    line-height: 18px;
+    background-color: #f5f5f5;
+    border-radius: 15px 15px 4px 4px;
+}
+.oper-control{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 26em;
+}
+.fadeoutStyle{
+    width: 100%;
+    height: 15px;
+    line-height: 18px;
+    background-color: #f5f5f5;
+    border-radius: 0 0 15px 15px;
+}
+.nav-justified > li.active{
+    background: none;
+    border-left: none;
+}
+.nav-justified>li.active>a, .nav-justified>li.active>a:focus, .nav-justified>li.active>a:hover{
+    background: none;
+    color: #388bff;
+    border-bottom: 2px solid;
+    padding: 10px 15px;
+}
+.nav-justified > li > a{
+    padding: 10px 15px;
+}
+.nav-justified a:hover{
+    background: none !important;
+}
+#myTabContent > .tab-pane{
+    height: 21.8em;
+    position: relative;
+}
+.carousel{
+    height: 100%;
+    padding: 5px;
+    position: relative;
+}
+.carousel-inner > .item{
+    height: 21em;
+}
+.carousel-inner > .item > img{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+.carousel-control{
+    background: none !important;
+}
+.control-tips{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #ccc;
+}
+#tvcontainer{
+    width: 100%;
+    position: relative;
+    margin-bottom: 5px;
+    background: -webkit-linear-gradient(left top, #388bff, black); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(bottom right, #388bff, black); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(bottom right, #388bff, black); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to bottom right, #388bff, black); /* 标准的语法（必须放在最后） */
+}
+#TVB{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+@media (max-width: 768px) {
+    .tree-panel{
+        height: 30em;
+    }
+    .tree-panel .ztree{
+        max-height: 5em;
+    }
+    #tvcontainer{
+        height: 30em;
+    }
+}
+@media (min-width: 768px) {
+    .tree-panel{
+        height: 40em;
+    }
+    .tree-panel .ztree{
+        max-height: 5em;
+    }
+    #tvcontainer{
+        height: 37em;
+    }
+}
+@media (min-width: 991px) {
+    .tree-panel{
+        height: 48em;
+    }
+    .tree-panel .ztree{
+        max-height: 13em;
+    }
+    #tvcontainer{
+        height: 45em;
+    }
+}
+@media (min-width: 1280px) {
+    .tree-panel{
+        height: 60em;
+    }
+    .tree-panel .ztree{
+        max-height: 25em;
+    }
+    #tvcontainer{
+        height: 57em;
+    }
+}
+@media (min-width: 1920px){
+    .tree-panel{
+        height: 60em;
+    }
+    .tree-panel .ztree{
+        max-height: 25em;
+    }
+    #tvcontainer{
+        height: 57em;
+    }
+}
