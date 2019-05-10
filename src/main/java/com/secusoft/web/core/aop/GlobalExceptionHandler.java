@@ -1,5 +1,6 @@
 package com.secusoft.web.core.aop;
 
+import com.secusoft.web.common.GlobalApiResult;
 import com.secusoft.web.common.exception.BizExceptionEnum;
 import com.secusoft.web.common.exception.BussinessException;
 import com.secusoft.web.common.exception.InvalidKaptchaException;
@@ -61,9 +62,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String unAuth(AuthenticationException e) {
+    @ResponseBody
+    public GlobalApiResult<Object> unAuth(AuthenticationException e) {
         log.error("用户未登陆：", e);
-        return "/login";
+        return GlobalApiResult.failure(401,"用户未登录");
     }
 
     /**
@@ -73,11 +75,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DisabledAccountException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String accountLocked(DisabledAccountException e, Model model) {
+    @ResponseBody
+    public GlobalApiResult<Object> accountLocked(DisabledAccountException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号被冻结", getIp()));
         model.addAttribute("tips", "账号被冻结");
-        return "/login";
+        return GlobalApiResult.failure(419,"账号被冻结");
     }
 
     /**
@@ -87,11 +90,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(CredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public String credentials(CredentialsException e, Model model) {
+    @ResponseBody
+    public GlobalApiResult<Object> credentials(CredentialsException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", getIp()));
         model.addAttribute("tips", "账号密码错误");
-        return "/login";
+        return GlobalApiResult.failure(400,"账号密码错误");
     }
 
     /**
@@ -101,11 +105,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(InvalidKaptchaException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String credentials(InvalidKaptchaException e, Model model) {
+    @ResponseBody
+    public GlobalApiResult<Object> credentials(InvalidKaptchaException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "验证码错误", getIp()));
         model.addAttribute("tips", "验证码错误");
-        return "/login";
+        return GlobalApiResult.failure(412,"验证码错误");
     }
 
     /**
@@ -145,10 +150,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(InvalidSessionException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
+    @ResponseBody
+    public GlobalApiResult<Object> sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
         model.addAttribute("tips", "session超时");
         assertAjax(request, response);
-        return "/login";
+        return GlobalApiResult.failure(410,"session超时");
     }
 
     /**
@@ -159,10 +165,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UnknownSessionException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
+    @ResponseBody
+    public GlobalApiResult<Object> sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
         model.addAttribute("tips", "session超时");
         assertAjax(request, response);
-        return "/login";
+        return GlobalApiResult.failure(411,"session异常");
     }
 
     private void assertAjax(HttpServletRequest request, HttpServletResponse response) {

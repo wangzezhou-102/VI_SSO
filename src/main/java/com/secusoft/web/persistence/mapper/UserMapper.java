@@ -58,4 +58,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @date 2017年2月17日 下午11:07:46
      */
     User getByAccount(@Param("account") String account);
+
+    //查询登录的账号角色为前端还是后端
+    List<Map<String, Object>> getRolecode(@Param("username") String username);
 }

@@ -72,4 +72,8 @@
 		from user where account = #{account} and status != 3
 	</select>
 
+	<select id="getRolecode" resultType="map">
+		SELECT u.id,account,r.code FROM user u LEFT JOIN role r on u.roleid=r.id
+		where account = #{username}
+	</select>
 </mapper>
