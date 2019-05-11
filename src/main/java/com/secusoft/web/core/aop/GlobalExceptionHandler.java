@@ -5,6 +5,7 @@ import com.secusoft.web.common.exception.BizExceptionEnum;
 import com.secusoft.web.common.exception.BussinessException;
 import com.secusoft.web.common.exception.InvalidKaptchaException;
 import com.secusoft.web.core.base.tips.ErrorTip;
+import com.secusoft.web.core.exception.BizException;
 import com.secusoft.web.core.log.LogManager;
 import com.secusoft.web.core.log.factory.LogTaskFactory;
 import com.secusoft.web.core.shiro.ShiroKit;
@@ -48,11 +49,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BussinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorTip notFount(BussinessException e) {
+    public GlobalApiResult<Object> notFount(BussinessException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
         getRequest().setAttribute("tip", e.getMessage());
         log.error("业务异常:", e);
-        return new ErrorTip(e.getCode(), e.getMessage());
+        return GlobalApiResult.failure(e.getCode(), e.getMessage());
     }
 
     /**
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public GlobalApiResult<Object> unAuth(AuthenticationException e) {
         log.error("用户未登陆：", e);
-        return GlobalApiResult.failure(401,"用户未登录");
+        return GlobalApiResult.failure(BizExceptionEnum.USER_NOT_LOGIN.getCode(), BizExceptionEnum.USER_NOT_LOGIN.getMessage());
     }
 
     /**
@@ -79,8 +80,7 @@ public class GlobalExceptionHandler {
     public GlobalApiResult<Object> accountLocked(DisabledAccountException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号被冻结", getIp()));
-        model.addAttribute("tips", "账号被冻结");
-        return GlobalApiResult.failure(419,"账号被冻结");
+        return GlobalApiResult.failure(BizExceptionEnum.ACCOUNT_FREEZED.getCode(),BizExceptionEnum.ACCOUNT_FREEZED.getMessage());
     }
 
     /**
@@ -94,8 +94,7 @@ public class GlobalExceptionHandler {
     public GlobalApiResult<Object> credentials(CredentialsException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "账号密码错误", getIp()));
-        model.addAttribute("tips", "账号密码错误");
-        return GlobalApiResult.failure(400,"账号密码错误");
+        return GlobalApiResult.failure(BizExceptionEnum.ACCOUNT_PWD_ERROR.getCode(),BizExceptionEnum.ACCOUNT_PWD_ERROR.getMessage());
     }
 
     /**
@@ -109,8 +108,7 @@ public class GlobalExceptionHandler {
     public GlobalApiResult<Object> credentials(InvalidKaptchaException e, Model model) {
         String username = getRequest().getParameter("username");
         LogManager.me().executeLog(LogTaskFactory.loginLog(username, "验证码错误", getIp()));
-        model.addAttribute("tips", "验证码错误");
-        return GlobalApiResult.failure(412,"验证码错误");
+        return GlobalApiResult.failure(BizExceptionEnum.INVALID_KAPTCHA.getCode(),BizExceptionEnum.INVALID_KAPTCHA.getMessage());
     }
 
     /**
@@ -121,10 +119,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UndeclaredThrowableException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
-    public ErrorTip credentials(UndeclaredThrowableException e) {
+    public GlobalApiResult<Object> credentials(UndeclaredThrowableException e) {
         getRequest().setAttribute("tip", "权限不足");
         log.error("权限异常!", e);
-        return new ErrorTip(BizExceptionEnum.NO_PERMITION.getCode(),BizExceptionEnum.NO_PERMITION.getMessage());
+        return GlobalApiResult.failure(BizExceptionEnum.NO_PERMITION.getCode(),BizExceptionEnum.NO_PERMITION.getMessage());
     }
 
     /**
@@ -135,11 +133,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ErrorTip notFount(RuntimeException e) {
+    public GlobalApiResult<Object> notFount(RuntimeException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
         getRequest().setAttribute("tip", "服务器未知运行时异常");
         log.error("运行时异常:", e);
-        return new ErrorTip(BizExceptionEnum.SERVER_ERROR.getCode(),BizExceptionEnum.SERVER_ERROR.getMessage());
+        return GlobalApiResult.failure(BizExceptionEnum.SERVER_ERROR.getCode(),BizExceptionEnum.SERVER_ERROR.getMessage());
     }
 
     /**
@@ -154,7 +152,7 @@ public class GlobalExceptionHandler {
     public GlobalApiResult<Object> sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
         model.addAttribute("tips", "session超时");
         assertAjax(request, response);
-        return GlobalApiResult.failure(410,"session超时");
+        return GlobalApiResult.failure(BizExceptionEnum.SESSION_TIMEOUT.getCode(),"session超时");
     }
 
     /**
@@ -167,9 +165,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalApiResult<Object> sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
-        model.addAttribute("tips", "session超时");
         assertAjax(request, response);
-        return GlobalApiResult.failure(411,"session异常");
+        return GlobalApiResult.failure(BizExceptionEnum.SESSION_UNKNOW.getCode(),BizExceptionEnum.SESSION_UNKNOW.getMessage());
     }
 
     private void assertAjax(HttpServletRequest request, HttpServletResponse response) {

@@ -20,10 +20,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -50,11 +47,14 @@ public class LoginController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public GlobalApiResult<Object> loginVali() {
+    @CrossOrigin(origins = "*", maxAge = 3600)
+    public GlobalApiResult<Object> loginVali(@RequestBody Map<String,Object> parmmap) {
 
-        String username = super.getPara("username").trim();
-        String password = super.getPara("password").trim();
-        String remember = super.getPara("remember");
+          String username = (String)parmmap.get("userName");
+          String password = (String)parmmap.get("passWord");
+          Boolean remember = (Boolean)parmmap.get("rememberMe");
+
+
 
         //验证验证码是否正确
         if (KaptchaUtil.getKaptchaOnOff()) {
@@ -69,7 +69,7 @@ public class LoginController extends BaseController {
         Subject currentUser = ShiroKit.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
 
-        if ("on".equals(remember)) {
+        if (remember) {
             token.setRememberMe(true);
         } else {
             token.setRememberMe(false);
