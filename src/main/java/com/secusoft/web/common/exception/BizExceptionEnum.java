@@ -36,8 +36,8 @@ public enum BizExceptionEnum {
     /**
      * 数据问题
      */
-    DB_RESOURCE_NULL(630,"数据库中没有该资源");
-
+    DB_RESOURCE_NULL(630,"数据库中没有该资源"),
+	ERROR_WRAPPER_FIELD(640,"包装字典属性失败");
 
 
 

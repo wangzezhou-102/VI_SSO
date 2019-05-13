@@ -1,11 +1,13 @@
 
 ### login
 
-POST http://127.0.0.1:8006/login HTTP/1.1
+POST http://127.0.0.1:8007/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "viweb",
-    "password": "123",
-    "remember": true
+    "userName": "admin",
+    "passWord": "admin",
+    "rememberMe": true
 }
+
+###
