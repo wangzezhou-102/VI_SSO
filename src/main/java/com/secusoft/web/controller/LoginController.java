@@ -6,20 +6,15 @@ import com.secusoft.web.common.exception.InvalidKaptchaException;
 import com.secusoft.web.core.base.controller.BaseController;
 import com.secusoft.web.core.log.LogManager;
 import com.secusoft.web.core.log.factory.LogTaskFactory;
-import com.secusoft.web.core.node.MenuNode;
 import com.secusoft.web.core.shiro.ShiroKit;
 import com.secusoft.web.core.shiro.ShiroUser;
-import com.secusoft.web.core.util.ApiMenuFilter;
 import com.secusoft.web.core.util.KaptchaUtil;
 import com.secusoft.web.core.util.ToolUtil;
 import com.secusoft.web.persistence.mapper.MenuMapper;
 import com.secusoft.web.persistence.mapper.UserMapper;
-import com.secusoft.web.persistence.model.User;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +29,7 @@ import static com.secusoft.web.core.support.HttpKit.getIp;
  * @Date 2017年1月10日 下午8:25:24
  */
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class LoginController extends BaseController {
 
     @Autowired
@@ -45,15 +41,12 @@ public class LoginController extends BaseController {
     /**
      * 点击登录执行的动作
      */
-    @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @CrossOrigin(origins = "*", maxAge = 3600)
-    public GlobalApiResult<Object> loginVali(@RequestBody Map<String,Object> parmmap) {
+    public GlobalApiResult<Object> loginVali(@RequestBody Map<String,String> paramMap) {
 
-          String username = (String)parmmap.get("userName");
-          String password = (String)parmmap.get("passWord");
-          Boolean remember = (Boolean)parmmap.get("rememberMe");
-
+          String username = paramMap.get("userName").trim();
+          String password = paramMap.get("passWord").trim();
+          String remember = paramMap.get("rememberMe");
 
 
         //验证验证码是否正确
@@ -69,7 +62,7 @@ public class LoginController extends BaseController {
         Subject currentUser = ShiroKit.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
 
-        if (remember) {
+        if ("true".equals(remember)) {
             token.setRememberMe(true);
         } else {
             token.setRememberMe(false);
@@ -101,7 +94,6 @@ public class LoginController extends BaseController {
     /**
      * 退出登录
      */
-    @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public GlobalApiResult<Object> logOut() {
         LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUser().getId(), getIp()));

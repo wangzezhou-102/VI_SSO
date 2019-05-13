@@ -4,8 +4,6 @@ import com.secusoft.web.common.GlobalApiResult;
 import com.secusoft.web.common.exception.BizExceptionEnum;
 import com.secusoft.web.common.exception.BussinessException;
 import com.secusoft.web.common.exception.InvalidKaptchaException;
-import com.secusoft.web.core.base.tips.ErrorTip;
-import com.secusoft.web.core.exception.BizException;
 import com.secusoft.web.core.log.LogManager;
 import com.secusoft.web.core.log.factory.LogTaskFactory;
 import com.secusoft.web.core.shiro.ShiroKit;

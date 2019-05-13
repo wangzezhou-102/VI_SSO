@@ -1,13 +1,18 @@
 
 ### login
 
-POST http://127.0.0.1:8007/login HTTP/1.1
+POST http://127.0.0.1:8006/login HTTP/1.1
 content-type: application/json
 
 {
-    "userName": "admin",
-    "passWord": "admin",
+    "userName": "viweb",
+    "passWord": "123",
     "rememberMe": true
 }
 
-###
+### test
+POST http://127.0.0.1:8006/test HTTP/1.1
+content-type: application/json
+Cookie: rememberMe=ADZPKpduPAsLyojeQdhXeYBBCddN0baF6GRpQjjkhnNbixLmCrMywK4H/AwvuuDTMok82S+YECQBn5CEIprfA07N6KmwUEi9QdTCpIZxUbZ9NFnGs6mL41of0ZlX0MhIkD+EZg4h1k2uEinOvDcl4DTKf4S3ihsYsC46KVWbiUS1mtPRufsaDu5jkW8AUEA7SeYriNMM9T+Aqkp5XgDyVkvvMr2sjKkSQ6MCQibZ1m+V2B5EAv869Bn14p63ci1A7K3SO1vWzxMZ3wfB5KjVst9u80n9c/AA4m3f/YsU0OXBfqvnF7v8/H4dp8UHGyo2K1MM0SaNdIMPVtrtlfKwgI26rN4qJaU9qEFzWIqNh66AsEbUVGs4HexMnr/l4Nx/VEKjsp/QtQo0aQAoWvZe9ZSdpqrMvPZ1jEwwv3TzjKnltXheWZ2ji7vUXDzwH+/GA5ZmHLZd8bfA7RdwfvvqE81HIRq7KkrpFGqHXbXvUNmZVK7v8ELC+X1JBpHaREo0hJuI/6/FAgZcDszHJNVPn7YEyBF3dBOMQ2txaSrpNUOs8jN97LfhX46ESjD1trR+FMrvtBaB5fA1L/hR7QOisk+KGMofy6LrrjEv5v2bdT0XAGY8+reUiKMYOFOp7zCWmHq0oNgb9PTQA+Fjgd2J1NIDsD6O9XtdRocWHTBlEhMnjcILAaUlh0isELQ1KXvMQWCdC8y8AlPj2ZBjZiQcUNldNRdgPzwx+Cdiz7h++o+/4UyuLJCw/bNMao+H6PBZzySAbr2jmHYzuGoCRLmnUYNcO+ePDqM00m10cGKk5ZbLr+02iQD245HgZmdTFk11XUdMd9TFM6NdT6CtyDEYLAFZxcnuLU3LPuJjPwFGd2YAqWdKpZgGDvxgDl1QRFE7A/DXSHYEW/X3qczYSZsiFkMI85DS9aRysbyP1/34jA9lM4DcPmHsxQm77ne/+0ygMpbShc7NdnZ7Ph+6U/hgF0BWupAryKxo57H/Ebl4IUkI7t9LcvTpOVCJjHbnjMI6VvB/ArI5gRuk9+RWWwK1UcPH5KZ/JZCgzyV/ms7pyfg=
+
+
