@@ -45,7 +45,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(BussinessException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public GlobalApiResult<Object> notFount(BussinessException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
@@ -60,7 +59,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public GlobalApiResult<Object> unAuth(AuthenticationException e) {
         log.error("用户未登陆：", e);
@@ -73,7 +71,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(DisabledAccountException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public GlobalApiResult<Object> accountLocked(DisabledAccountException e, Model model) {
         String username = getRequest().getParameter("username");
@@ -87,7 +84,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(CredentialsException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public GlobalApiResult<Object> credentials(CredentialsException e, Model model) {
         String username = getRequest().getParameter("username");
@@ -101,7 +97,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(InvalidKaptchaException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalApiResult<Object> credentials(InvalidKaptchaException e, Model model) {
         String username = getRequest().getParameter("username");
@@ -115,7 +110,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(UndeclaredThrowableException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public GlobalApiResult<Object> credentials(UndeclaredThrowableException e) {
         getRequest().setAttribute("tip", "权限不足");
@@ -129,7 +123,6 @@ public class GlobalExceptionHandler {
      *
      */
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public GlobalApiResult<Object> notFount(RuntimeException e) {
         LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
@@ -145,7 +138,6 @@ public class GlobalExceptionHandler {
      * @Date 2017/6/7 21:02
      */
     @ExceptionHandler(InvalidSessionException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalApiResult<Object> sessionTimeout(InvalidSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
         model.addAttribute("tips", "session超时");
@@ -160,7 +152,6 @@ public class GlobalExceptionHandler {
      * @Date 2017/6/7 21:02
      */
     @ExceptionHandler(UnknownSessionException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public GlobalApiResult<Object> sessionTimeout(UnknownSessionException e, Model model, HttpServletRequest request, HttpServletResponse response) {
         assertAjax(request, response);
