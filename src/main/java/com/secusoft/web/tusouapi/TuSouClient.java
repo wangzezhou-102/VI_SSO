@@ -72,8 +72,8 @@ public class TuSouClient{
     private static final String CHARSET = "UTF-8";
     private static final int MAX_TOTAL_CONNECTIONS = 50;
     private static final int MAX_ROUTE_CONNECTIONS = 20;
-    private static final int CONNECT_TIMEOUT = 3000; // 连接时间
-    private static final int SOCKET_TIMEOUT = 10000; // 获取内容时间
+    private static final int CONNECT_TIMEOUT = 5000; // 连接时间
+    private static final int SOCKET_TIMEOUT = 60000; // 获取内容时间
 
     private static PoolingHttpClientConnectionManager cm = null;
     private static CloseableHttpClient httpclient;

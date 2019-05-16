@@ -3,10 +3,8 @@ package com.secusoft.web;
 import com.secusoft.web.tusouapi.TuSouClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.io.*;
@@ -18,7 +16,6 @@ import java.util.Properties;
  *
  * @Date 2017/5/21 12:06
  */
-@EnableTransactionManagement
 @SpringBootApplication
 public class MainApplication extends WebMvcConfigurerAdapter{
 

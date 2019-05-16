@@ -1,16 +1,12 @@
 package com.secusoft.web.core.base.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.secusoft.web.core.base.tips.SuccessTip;
-import com.secusoft.web.core.base.warpper.BaseControllerWarpper;
-import com.secusoft.web.core.page.PageInfoBT;
 import com.secusoft.web.core.support.HttpKit;
 import com.secusoft.web.core.util.FileUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,19 +51,6 @@ public class BaseController {
         return (Integer) this.getHttpServletRequest().getServletContext().getAttribute("systemCount");
     }
 
-    /**
-     * 把service层的分页信息，封装为bootstrap table通用的分页封装
-     */
-    protected <T> PageInfoBT<T> packForBT(Page<T> page) {
-        return new PageInfoBT<T>(page);
-    }
-
-    /**
-     * 包装一个list，让list增加额外属性
-     */
-    protected Object warpObject(BaseControllerWarpper warpper) {
-        return warpper.warp();
-    }
 
     /**
      * 删除cookie
