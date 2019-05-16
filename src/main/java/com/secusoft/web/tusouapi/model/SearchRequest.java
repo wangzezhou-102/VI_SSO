@@ -34,107 +34,64 @@ public class SearchRequest {
      */
     private String type;
 
-
-    
+    /**
+     * 支持使用多个目标id查询,实现渐进式查询,id与id之间用逗号隔开,如"001,002"查询的结果是与001和002两个目标共同相似度最高的图像
+     */
+    private String ids;
 
     /**
-     * @return the uid
+     * 图像内容，base64编码,多个⽤","隔开,与ossUrls,features三选⼀,优先级关系:features>ossUrls>contents
      */
-    public String getUid() {
-        return uid;
-    }
+    private String contents;
 
     /**
-     * @param uid the uid to set
+     * 图像内容，base64编码,多个⽤","隔开,与ossUrls,features三选⼀,优先级关系:features>ossUrls>contents
      */
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+    private String ossUrls;
 
     /**
-     * @return the taskId
+     * 图像内容，base64编码,多个⽤","隔开,与ossUrls,features三选⼀,优先级关系:features>ossUrls>contents
      */
-    public String getTaskId() {
-        return taskId;
-    }
+    private String features;
+
+    private Object attribute; //TODO
 
     /**
-     * @param taskId the taskId to set
+     * 查询范围起始时间戳(毫秒) 13位 如1553734800000
      */
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
-    }
+    private Long startTime;
 
     /**
-     * @return the algorithmName
+     * 查询范围结束时间戳 (毫秒) 13位 如1553734800000
      */
-    public String getAlgorithmName() {
-        return algorithmName;
-    }
+    private Long endTime;
+
 
     /**
-     * @param algorithmName the algorithmName to set
+     * 摄像头点位id,支持多个查询各点位间用逗号隔开
      */
-    public void setAlgorithmName(String algorithmName) {
-        this.algorithmName = algorithmName;
-    }
+    private String cameraId;
 
     /**
-     * @return the algorithmVersion
+     * 特征匹配的score阈值，算法相关，根据公式将相似度转换为score然后取相反数,例如： ⽤户想查找相似度0.5-0.8之间，如果0.5对应计算score是0.7，0.8对应计算score是0. 4, 那么threshold和maxT hresd对应的值是-0.7 、-0.4
      */
-    public String getAlgorithmVersion() {
-        return algorithmVersion;
-    }
+    private Double threshold;
 
     /**
-     * @param algorithmVersion the algorithmVersion to set
+     * 特征匹配的score阈值,算法相关,根据公式将相似度转为score然后取相反数
      */
-    public void setAlgorithmVersion(String algorithmVersion) {
-        this.algorithmVersion = algorithmVersion;
-    }
+    private Double maxThrehold;
+
 
     /**
-     * @return the indexName
+     * 局部搜索的时候需要这个参数，是一个浮点数组，每个数字用逗号隔开,取值0或1,数组长度和特征长度一致,例如特征是4维的，那么weights可能的取值类似"1,1,1,0"
      */
-    public String getIndexName() {
-        return indexName;
-    }
-
-    /**
-     * @param indexName the indexName to set
-     */
-    public void setIndexName(String indexName) {
-        this.indexName = indexName;
-    }
-
-    /**
-     * @return the noFeature
-     */
-    public String getNoFeature() {
-        return noFeature;
-    }
-
-    /**
-     * @param noFeature the noFeature to set
-     */
-    public void setNoFeature(String noFeature) {
-        this.noFeature = noFeature;
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
+    private String weightsString;
 
 
-    
+
+
+
+
+
 }

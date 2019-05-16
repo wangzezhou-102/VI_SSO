@@ -158,6 +158,8 @@ public class ShiroConfig {
         hashMap.put("/kaptcha", "anon");
         hashMap.put("/**", "user");
 
+        hashMap.put("/tusou/**", "anon");
+
 
 
         shiroFilter.setFilterChainDefinitionMap(hashMap);

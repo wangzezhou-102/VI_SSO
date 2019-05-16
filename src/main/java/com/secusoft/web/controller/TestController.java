@@ -1,12 +1,9 @@
 package com.secusoft.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.secusoft.web.core.base.controller.BaseController;
-import com.secusoft.web.persistence.mapper.UserMapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.secusoft.web.tusouapi.TuSouClient;
+import org.springframework.web.bind.annotation.*;
 
 
 
@@ -15,15 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController extends BaseController {
 
 
-    @Autowired
-    UserMapper userMapper;
-
     @RequestMapping("/test")
     public Object test(){
 
-
-        return userMapper.selectList(null);
+        return SUCCESS_TIP;
     }
-
 
 }

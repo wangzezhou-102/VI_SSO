@@ -1,6 +1,10 @@
 package com.secusoft.web.tusouapi;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.tusouapi.model.BaseResponse;
 import org.apache.http.*;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
@@ -16,6 +20,8 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -27,9 +33,9 @@ import java.net.ConnectException;
  */
 public class TuSouClient{
 
-    private static Logger log = LoggerFactory.getLogger(TuSouClient.class.getName());
+    private static Logger log = LoggerFactory.getLogger(TuSouClient.class);
 
-    private String tuSouEndpoint = "http://33.95.245.246:8801";
+    public static String tuSouEndpoint;
 
     //API 资源路径
     public static final String Path_SEARCH="/search";
@@ -180,7 +186,7 @@ public class TuSouClient{
      */
     public String fetchByPostMethod(String url, String jsonStr){
         String resultStr = null;
-        HttpPost httpPost = new HttpPost(getTuSouEndpoint()+url);
+        HttpPost httpPost = new HttpPost(tuSouEndpoint+url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));
         httpPost.addHeader(HttpHeaders.USER_AGENT,USERAGENT);
 //		httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
@@ -203,12 +209,13 @@ public class TuSouClient{
         return resultStr;
     }
 
-    public String getTuSouEndpoint() {
-        return tuSouEndpoint;
-    }
+    public BaseResponse fetchByPostMethod(String url, BaseRequest request){
+        String requestStr = JSON.toJSONString(request);
+        String responseStr = fetchByPostMethod(url, requestStr);
+        BaseResponse<JSONArray> response = new BaseResponse<>();
+        response = JSON.parseObject(responseStr, (Class<BaseResponse<JSONArray>>) response.getClass());
+        return response;
 
-    public void setTuSouEndpoint(String tuSouEndpoint) {
-        this.tuSouEndpoint = tuSouEndpoint;
     }
 
 }

@@ -1,7 +1,9 @@
 package com.secusoft.web;
 
+import com.secusoft.web.tusouapi.TuSouClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -34,6 +36,7 @@ public class MainApplication extends WebMvcConfigurerAdapter{
                 properties.load(in);
                 SpringApplication app = new SpringApplication(MainApplication.class);
                 app.setDefaultProperties(properties);
+                TuSouClient.tuSouEndpoint =  properties.getProperty("tusou.api.addr");
                 logger.info("读取config下config.properties配置成功!");
                 app.run(args);
             } catch (IOException e) {

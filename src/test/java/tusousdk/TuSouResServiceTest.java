@@ -18,6 +18,6 @@ public class TuSouResServiceTest {
 
         BaseResponse<JSONArray> response = tuSouResService.resList(requestBody);
 
-        assert "SUCCESS".equals(response.getErrorCode());
+        assert "SUCCESS".equals(response.getErrorCode()):"请求异常:"+response.getErrorMsg();
     }
 }
