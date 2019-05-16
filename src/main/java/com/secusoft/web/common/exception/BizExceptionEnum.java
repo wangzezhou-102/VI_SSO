@@ -17,7 +17,7 @@ public enum BizExceptionEnum {
     USER_NOT_LOGIN(401,"用户未登录"),
 	USER_NOT_EXISTED(600, "没有此用户"),
 	ACCOUNT_FREEZED(601, "账号被冻结"),
-    ACCOUNT_TYPE_ERROR(602,"账号类型错误"),
+    ACCOUNT_ERROR(602,"账号错误"),
     ACCOUNT_PWD_ERROR(603,"账号密码错误"),
     INVALID_KAPTCHA(604,"验证码不正确"),
 	/**

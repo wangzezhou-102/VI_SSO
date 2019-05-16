@@ -10,6 +10,17 @@ content-type: application/json
     "rememberMe": true
 }
 
+### 密码错误
+
+POST http://127.0.0.1:8006/login HTTP/1.1
+content-type: application/json
+
+{
+  "userName": "admin",
+  "passWord": "a",
+  "rememberMe": true
+}
+
 ### test
 POST http://127.0.0.1:8006/test HTTP/1.1
 content-type: application/json

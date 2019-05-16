@@ -2,6 +2,7 @@ package com.secusoft.web.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.secusoft.web.common.GlobalApiResult;
+import com.secusoft.web.common.exception.BizExceptionEnum;
 import com.secusoft.web.common.exception.InvalidKaptchaException;
 import com.secusoft.web.core.base.controller.BaseController;
 import com.secusoft.web.core.log.LogManager;
@@ -75,7 +76,7 @@ public class LoginController extends BaseController {
         }
 
         if(!"web".equals(code)){
-            return GlobalApiResult.failure(500,"账号类型错误");
+            return GlobalApiResult.failure(BizExceptionEnum.ACCOUNT_ERROR.getCode(), BizExceptionEnum.ACCOUNT_ERROR.getMessage());
         }
 
         currentUser.login(token);
