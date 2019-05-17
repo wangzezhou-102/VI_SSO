@@ -1,11 +1,12 @@
 package com.secusoft.web.tusouapi.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouAlgorithmService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TuSouAlgorithmServiceImpl implements TuSouAlgorithmService {
 
     @Override

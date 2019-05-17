@@ -1,5 +1,6 @@
 package com.secusoft.web;
 
+import com.secusoft.web.shipinapi.ShiPinClient;
 import com.secusoft.web.tusouapi.TuSouClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class MainApplication extends WebMvcConfigurerAdapter{
                 SpringApplication app = new SpringApplication(MainApplication.class);
                 app.setDefaultProperties(properties);
                 TuSouClient.tuSouEndpoint =  properties.getProperty("tusou.api.addr");
+                ShiPinClient.shiPinEndpoint = properties.getProperty("shipin.api.addr");
                 logger.info("读取config下config.properties配置成功!");
                 app.run(args);
             } catch (IOException e) {
