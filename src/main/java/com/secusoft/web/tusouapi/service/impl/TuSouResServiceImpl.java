@@ -1,13 +1,14 @@
 package com.secusoft.web.tusouapi.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouResService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TuSouResServiceImpl implements TuSouResService {
 
     private static Logger log = LoggerFactory.getLogger(TuSouResServiceImpl.class);

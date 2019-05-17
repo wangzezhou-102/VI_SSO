@@ -45,20 +45,6 @@ public class ToolUtil {
         }
         return sb.toString();
     }
-    
-    /**
-     * 判断一个对象是否是时间类型
-     * 
-     *
-     *  2017/4/18 12:55
-     */
-    public static String dateType(Object o){
-        if(o instanceof Date){
-            return DateUtil.getDay((Date) o);
-        }else{
-            return o.toString();
-        }
-    }
 
     /**
      * 获取异常的具体信息
@@ -477,15 +463,6 @@ public class ToolUtil {
         return str;
     }
 
-    /**
-     * 当前时间
-     *
-     *
-     *  2017/5/7 21:56
-     */
-    public static String currentTime(){
-        return DateUtil.getTime();
-    }
 
     /**
      * 首字母大写

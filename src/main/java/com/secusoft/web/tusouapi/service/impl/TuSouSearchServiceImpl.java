@@ -6,7 +6,9 @@ import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.SearchRequest;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TuSouSearchServiceImpl implements TuSouSearchService {
 
     @Override

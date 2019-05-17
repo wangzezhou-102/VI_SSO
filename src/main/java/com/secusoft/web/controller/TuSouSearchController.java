@@ -1,9 +1,11 @@
 package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.secusoft.web.shipinapi.service.CameraService;
 import com.secusoft.web.tusouapi.TuSouClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,9 @@ public class TuSouSearchController {
 
     private static Logger log = LoggerFactory.getLogger(TuSouSearchController.class);
 
+    @Autowired
+    private CameraService CameraServiceImpl;
+
     @RequestMapping("/search")
     public Object search(@RequestBody Object request){
 
@@ -25,5 +30,11 @@ public class TuSouSearchController {
         log.info(">> "+requestStr);
 
         return JSON.parseObject(responseStr);
+    }
+
+    @RequestMapping("/camera_detail_list")
+    public Object getALLCameraDetail(){
+
+        return CameraServiceImpl.getAllCamera();
     }
 }
