@@ -13,15 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/tusou")
-public class TuSouSearchController {
+public class TuSouController {
 
-    private static Logger log = LoggerFactory.getLogger(TuSouSearchController.class);
+    private static Logger log = LoggerFactory.getLogger(TuSouController.class);
 
-    @Autowired
-    private CameraService CameraServiceImpl;
 
-    @RequestMapping("/search")
+    @RequestMapping("/tusou_search")
     public Object search(@RequestBody Object request){
 
         String requestStr = JSON.toJSONString(request);
@@ -32,9 +29,5 @@ public class TuSouSearchController {
         return JSON.parseObject(responseStr);
     }
 
-    @RequestMapping("/camera_detail_list")
-    public Object getALLCameraDetail(){
 
-        return CameraServiceImpl.getAllCamera();
-    }
 }

@@ -20,7 +20,7 @@ public class CacheConfig {
     public CacheManager cacheManager() {
 
         TTLConcurrentMapCache cameraCache = new TTLConcurrentMapCache("camera_list");
-        cameraCache.setExpiresTime(600);
+        cameraCache.setExpiresTime(300);
 
         List<TTLConcurrentMapCache> caches = new ArrayList<>();
         caches.add(cameraCache);

@@ -2,31 +2,49 @@ package com.secusoft.web.shipinapi.model;
 
 public class Camera {
 
-    private String deviceid;
-    private String lat;
-    private String lng;
+    private String cameraId;
+    private String latitude;
+    private String longitude;
+    private int cameraType;
+    private String name;
 
-    public String getDeviceid() {
-        return deviceid;
+    public String getCameraId() {
+        return cameraId;
     }
 
-    public void setDeviceid(String deviceid) {
-        this.deviceid = deviceid;
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
     }
 
-    public String getLat() {
-        return lat;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
-    public String getLng() {
-        return lng;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLng(String lng) {
-        this.lng = lng;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public int getCameraType() {
+        return cameraType;
+    }
+
+    public void setCameraType(int cameraType) {
+        this.cameraType = cameraType;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

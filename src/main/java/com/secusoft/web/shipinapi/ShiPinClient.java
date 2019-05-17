@@ -36,7 +36,7 @@ public class ShiPinClient {
     public static String shiPinEndpoint;
 
     //API 资源路径
-    public static final String Path_CAMERA_LIST="/v2/access_device_list";
+    public static final String Path_CAMERA_LIST="/v3/access_device_list";
 
 
     private volatile static ShiPinClient HttpClientConnectionPool;
