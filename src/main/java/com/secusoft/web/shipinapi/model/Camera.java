@@ -7,6 +7,8 @@ public class Camera {
     private String longitude;
     private int cameraType;
     private String name;
+    private String rtmpAddress;
+    private String[] position;
 
     public String getCameraId() {
         return cameraId;
@@ -46,5 +48,21 @@ public class Camera {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRtmpAddress() {
+        return rtmpAddress;
+    }
+
+    public void setRtmpAddress(String rtmpAddress) {
+        this.rtmpAddress = rtmpAddress;
+    }
+
+    public String[] getPosition() {
+        return position;
+    }
+
+    public void setPosition(String[] position) {
+        this.position = position;
     }
 }

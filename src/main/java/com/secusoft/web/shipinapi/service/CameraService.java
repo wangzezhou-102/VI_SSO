@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CameraService {
 
+    List<Camera> getAllCamera() ;
 
-    List<Camera> getAllCamera();
 }

@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +17,9 @@ import java.util.List;
 public class CameraServiceImpl implements CameraService {
     @Override
     @Cacheable
-    public List<Camera> getAllCamera() {
-
+    public List<Camera> getAllCamera()  {
         String responseStr = ShiPinClient.getClientConnectionPool().fetchByPostMethod(ShiPinClient.Path_CAMERA_LIST, "");
-
         List<Camera> cameraList = new ArrayList<>();
-
         return JSON.parseObject(responseStr, (Class<ArrayList<Camera>>) cameraList.getClass());
     }
 }

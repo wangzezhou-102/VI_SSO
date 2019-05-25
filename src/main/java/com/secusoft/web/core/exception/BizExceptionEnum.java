@@ -38,10 +38,13 @@ public enum BizExceptionEnum {
      * 数据问题
      */
     DB_RESOURCE_NULL(630,"数据库中没有该资源"),
-	ERROR_WRAPPER_FIELD(640,"包装字典属性失败");
+	ERROR_WRAPPER_FIELD(640,"包装字典属性失败"),
 
-
-
+	/**
+	 *服务器问题
+	 */
+	SHIPIN_SERVER_ERROR(650,"视频平台服务器异常"),
+	REQUEST_SERVER_ERROR(660,"服务器请求失败");
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;

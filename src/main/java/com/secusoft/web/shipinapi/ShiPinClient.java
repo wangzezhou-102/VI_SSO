@@ -1,10 +1,9 @@
 package com.secusoft.web.shipinapi;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.secusoft.web.tusouapi.model.BaseRequest;
-import com.secusoft.web.tusouapi.model.BaseResponse;
+
+import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.exception.BussinessException;
 import org.apache.http.*;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
@@ -174,8 +173,10 @@ public class ShiPinClient {
             EntityUtils.consume(entity);
         }catch (ConnectException ce){//服务器请求失败
             log.error(ce.getMessage());
+            throw new BussinessException(BizExceptionEnum.REQUEST_SERVER_ERROR);
         } catch (IOException e) {
             log.error(e.getMessage());
+            throw new BussinessException(BizExceptionEnum.SHIPIN_SERVER_ERROR);
         } finally{
             httpPost.abort();
         }
