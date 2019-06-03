@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.FolderMapper">
+    <resultMap id="result_Folder_Map" type="com.secusoft.web.model.Folder">
+        <id column="id" property="id" />
+        <result column="folder_name" property="folderName" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <insert id="insertFolder" parameterType="com.secusoft.web.model.Folder">
+        insert into vi_folder(id,folder_name,status)
+        values(#{id},#{folderName},#{status})
+  </insert>
+
+    <delete id="deleteFolderById" parameterType="java.lang.String">
+        delete from vi_folder where id = #{id}
+    </delete>
+
+    <update id="updateNonEmptyFolderById" parameterType="com.secusoft.web.model.Folder">
+        update vi_folder
+        <set>
+            <if test="folderName != null">
+                folder_name=#{folderName},
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="selectByStatus" resultMap="result_Folder_Map">
+        select id , folder_name as name ,status from vi_folder where status =#{status}
+    </select>
+
+    <!-- 获得条件相同的文件夹总数,以参数Folder对象中不为空的属性作为条件进行查询-->
+    <select id="selectCountFolderByObj" parameterType="com.secusoft.web.model.Folder" resultType="java.lang.Integer">
+        select
+          count(*)
+        from vi_folder
+        <where>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="folderName != null "> and folder_name = #{folderName}</if>
+            <if test="id != null "> and id = #{id}</if>
+        </where>
+    </select>
+
+    <!-- 通过Folder的id获得对应数据库中表的数据对象-->
+    <select id="selectFolderById" parameterType="java.lang.Object" resultMap="result_Folder_Map">
+        select
+        *
+        from vi_folder
+        where id = #{id}
+    </select>
+
+    <select id="selectPicById" resultType="map">
+        select p.id,p.origimage_url,p.cropimage_url,p.is_track,`picture_time` ,p.gbdevice_id,p.folder_id,p.score ,g.lng,g.lat
+        from vi_picture p left JOIN vi_gbdevice g on p.gbdevice_id =g.deviceid
+        where id=#{id} and is_track=0
+    </select>
+
+</mapper>
