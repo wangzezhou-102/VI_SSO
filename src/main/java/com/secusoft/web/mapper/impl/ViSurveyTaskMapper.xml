@@ -4,4 +4,28 @@
     <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
       INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,survey_status,enable) VALUES(#{task_id},#{survey_name},#{begin_time},#{end_time},#{survey_type},#{survey_status},0)
     </insert>
+
+     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
+         update vi_survey_task
+         <set>
+             <if test="survey_name != null">
+                 survey_name=#{survey_name},
+             </if>
+             <if test="begin_time != null">
+                 begin_time=#{begin_time},
+             </if>
+             <if test="end_time != null">
+                 end_time=#{end_time},
+             </if>
+             <if test="survey_status != null">
+                 survey_status=#{survey_status},
+             </if>
+         </set>
+         where id=#{id}
+     </update>
+
+    <delete id="delViSurveyTask" parameterType="java.lang.Integer">
+        delete from vi_survey_task
+         where id=#{id}
+    </delete>
 </mapper>

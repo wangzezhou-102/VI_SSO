@@ -23,4 +23,22 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         viSurveyTaskMapper.insertViSurveyTask(viSurveyTask);
         return ResultVo.success();
     }
+
+    @Override
+    public ResultVo updateViSurveyTask(ViSurveyTask viSurveyTask) {
+        if(viSurveyTask == null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        viSurveyTaskMapper.updateViSurveyTask(viSurveyTask);
+        return ResultVo.success();
+    }
+
+    @Override
+    public ResultVo delViSurveyTask(Integer id) {
+        if(id==0){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        viSurveyTaskMapper.delViSurveyTask(id);
+        return ResultVo.success();
+    }
 }

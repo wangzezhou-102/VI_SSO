@@ -22,4 +22,17 @@ public class ViSurveyTaskController {
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
+    @RequestMapping("/updateViSurveyTaskSurveyStatus")
+    public ResponseEntity<ResultVo> updateViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
+        ResultVo resultVo = viSurveyTaskService.updateViSurveyTask(viSurveyTask);
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
+
+    @RequestMapping("/delViSurveyTask")
+    public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
+
+        System.out.println("要删除的ID："+viSurveyTask.getId());
+        ResultVo resultVo = viSurveyTaskService.delViSurveyTask(viSurveyTask.getId());
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
 }
