@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.ViSurveyTaskMapper">
-    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
+    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask" useGeneratedKeys="true">
+      <selectKey keyProperty="id" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
+          select 't'+ @@IDENTITY as taskId
+      </selectKey>
       INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,survey_status,area_type,survey_device,enable)
-      VALUES(#{task_id},#{survey_name},#{begin_time},#{end_time},#{survey_type},#{area_type},#{survey_device},#{survey_status},0)
+      VALUES(#{taskId},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{surveyStatus},#{areaType},#{surveyDevice},0)
     </insert>
 
      <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
          update vi_survey_task
          <set>
              <if test="survey_name != null">
-                 survey_name=#{survey_name},
+                 survey_name=#{surveyName},
              </if>
              <if test="begin_time != null">
-                 begin_time=#{begin_time},
+                 begin_time=#{beginTime},
              </if>
              <if test="end_time != null">
-                 end_time=#{end_time},
+                 end_time=#{endTime},
              </if>
              <if test="survey_status != null">
-                 survey_status=#{survey_status},
+                 survey_status=#{surveyStatus},
              </if>
          </set>
          where id=#{id}
@@ -31,6 +34,6 @@
     </delete>
     
     <select id="getAllViSurveyTask" resultType="ViSurveyTask">
-        select id,task_id,survey_name,begin_time,end_time,survey_type,survey_status,area_type,survey_device,enable from vi_survey_task
+        select * from vi_survey_task
     </select>
 </mapper>
