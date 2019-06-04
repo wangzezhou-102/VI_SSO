@@ -1,6 +1,5 @@
 package com.secusoft.web.model;
 
-import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,18 +8,20 @@ import java.util.Date;
 
 
 @TableName("vi_survey_task")
-public class ViSurveyTask extends Model<ViSurveyTask> {
+public class ViSurveyTask  implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String task_id;
-    private String survey_name;
+    private String taskId;
+    private String surveyName;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date begin_time;
+    private Date beginTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date end_time;
-    private Integer survey_type;
-    private Integer survey_status;
+    private Date endTime;
+    private Integer surveyType;
+    private Integer surveyStatus;
+    private Integer areaType;
+    private String surveyDevice;
     private Integer enable;
 
     public Integer getId() {
@@ -31,52 +32,68 @@ public class ViSurveyTask extends Model<ViSurveyTask> {
         this.id = id;
     }
 
-    public String getTask_id() {
-        return task_id;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setTask_id(String task_id) {
-        this.task_id = task_id;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
-    public String getSurvey_name() {
-        return survey_name;
+    public String getSurveyName() {
+        return surveyName;
     }
 
-    public void setSurvey_name(String survey_name) {
-        this.survey_name = survey_name;
+    public void setSurveyName(String surveyName) {
+        this.surveyName = surveyName;
     }
 
-    public Date getBegin_time() {
-        return begin_time;
+    public Date getBeginTime() {
+        return beginTime;
     }
 
-    public void setBegin_time(Date begin_time) {
-        this.begin_time = begin_time;
+    public void setBeginTime(Date beginTime) {
+        this.beginTime = beginTime;
     }
 
-    public Date getEnd_time() {
-        return end_time;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEnd_time(Date end_time) {
-        this.end_time = end_time;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public Integer getSurvey_type() {
-        return survey_type;
+    public Integer getSurveyType() {
+        return surveyType;
     }
 
-    public void setSurvey_type(Integer survey_type) {
-        this.survey_type = survey_type;
+    public void setSurveyType(Integer surveyType) {
+        this.surveyType = surveyType;
     }
 
-    public Integer getSurvey_status() {
-        return survey_status;
+    public Integer getSurveyStatus() {
+        return surveyStatus;
     }
 
-    public void setSurvey_status(Integer survey_status) {
-        this.survey_status = survey_status;
+    public void setSurveyStatus(Integer surveyStatus) {
+        this.surveyStatus = surveyStatus;
+    }
+
+    public Integer getAreaType() {
+        return areaType;
+    }
+
+    public void setAreaType(Integer areaType) {
+        this.areaType = areaType;
+    }
+
+    public String getSurveyDevice() {
+        return surveyDevice;
+    }
+
+    public void setSurveyDevice(String surveyDevice) {
+        this.surveyDevice = surveyDevice;
     }
 
     public Integer getEnable() {
@@ -88,20 +105,17 @@ public class ViSurveyTask extends Model<ViSurveyTask> {
     }
 
     @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
     public String toString() {
         return "ViSurveyTask{" +
                 "id=" + id +
-                ", task_id='" + task_id + '\'' +
-                ", survey_name='" + survey_name + '\'' +
-                ", begin_time=" + begin_time +
-                ", end_time=" + end_time +
-                ", survey_type=" + survey_type +
-                ", survey_status=" + survey_status +
+                ", taskId='" + taskId + '\'' +
+                ", surveyName='" + surveyName + '\'' +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", surveyType=" + surveyType +
+                ", surveyStatus=" + surveyStatus +
+                ", areaType=" + areaType +
+                ", surveyDevice='" + surveyDevice + '\'' +
                 ", enable=" + enable +
                 '}';
     }

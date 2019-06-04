@@ -3,6 +3,8 @@ package com.secusoft.web.mapper;
 import com.secusoft.web.model.ViSurveyTask;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface ViSurveyTaskMapper {
 
     /**
@@ -21,4 +23,10 @@ public interface ViSurveyTaskMapper {
      * 删除一条布控任务
      */
     void delViSurveyTask(@Param("id") Integer id);
+
+    /**
+     * 获取所有布控任务
+     * @return
+     */
+    List<ViSurveyTask> getAllViSurveyTask();
 }

@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.ViSurveyTaskMapper">
     <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
-      INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,survey_status,enable) VALUES(#{task_id},#{survey_name},#{begin_time},#{end_time},#{survey_type},#{survey_status},0)
+      INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,survey_status,area_type,survey_device,enable)
+      VALUES(#{task_id},#{survey_name},#{begin_time},#{end_time},#{survey_type},#{area_type},#{survey_device},#{survey_status},0)
     </insert>
 
      <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
@@ -28,4 +29,8 @@
         delete from vi_survey_task
          where id=#{id}
     </delete>
+    
+    <select id="getAllViSurveyTask" resultType="ViSurveyTask">
+        select id,task_id,survey_name,begin_time,end_time,survey_type,survey_status,area_type,survey_device,enable from vi_survey_task
+    </select>
 </mapper>

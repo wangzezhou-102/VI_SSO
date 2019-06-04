@@ -46,7 +46,15 @@ public enum BizExceptionEnum {
 	 *服务器问题
 	 */
 	SHIPIN_SERVER_ERROR(650,"视频平台服务器异常"),
-	REQUEST_SERVER_ERROR(660,"服务器请求失败");
+	REQUEST_SERVER_ERROR(660,"服务器请求失败"),
+
+	/**
+	 * 添加布控相关
+	 * @param code
+	 * @param message
+	 */
+	TASK_DATE_WRONG(670,"开始时间不能大于结束时间"),
+	TASK_NANE_NULL(680,"布控任务名称不能为空");
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;

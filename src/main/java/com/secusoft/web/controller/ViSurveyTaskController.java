@@ -1,8 +1,10 @@
 package com.secusoft.web.controller;
 
 import com.secusoft.web.Service.ViSurveyTaskService;
+import com.secusoft.web.core.common.GlobalApiResult;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViSurveyTask;
+import com.secusoft.web.model.ViSurveyTaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,12 @@ public class ViSurveyTaskController {
     @RequestMapping("/delViSurveyTask")
     public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
 
-        System.out.println("要删除的ID："+viSurveyTask.getId());
         ResultVo resultVo = viSurveyTaskService.delViSurveyTask(viSurveyTask.getId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
+
+    @RequestMapping("/listViSurveyTask")
+    public Object listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo){
+        return  GlobalApiResult.success(viSurveyTaskService.getAllInformation(viSurveyTaskVo));
     }
 }
