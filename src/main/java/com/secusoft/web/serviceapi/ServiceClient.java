@@ -1,5 +1,4 @@
-package com.secusoft.web.tusouapi;
-
+package com.secusoft.web.serviceapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -25,59 +24,19 @@ import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.ConnectException;
 
-/**
- * 天擎搜索图搜API 接口封装
- * @author yhchen
- */
-public class TuSouClient{
+public class ServiceClient {
+    private static Logger log = LoggerFactory.getLogger(ServiceClient.class);
 
-    private static Logger log = LoggerFactory.getLogger(TuSouClient.class);
+    public static String ServiceEndpoint;
 
-    public static String tuSouEndpoint;
-
-    //布控库操作相关参数
-    public static String tuSouRequestId;
-    public static String tuSouBkid;
-    public static String tuSouBkdesc;
-    public static String tuSouBkname;
-    public static String tuSouAlgorithmName;
-    public static String tuSouAlgorithmVersion;
-    public static String tuSouAlgorithmType;
-    public static String tuSouOssEndpoint;
-    public static String tuSouOssAccess_id;
-    public static String tuSouOssAccess_key;
-    public static String tuSouOssBucket_name;
 
     //API 资源路径
-    public static final String Path_SEARCH="/search";
+    //布控库信息查询
+    public static final String Path_BKREPO_META="/bkrepometa";
+    //布控库创建
+    public static final String Path_BKREPO_CREATE="/bkrepocreate";
 
-    public static final String Path_RES_START="/res/start";
-    public static final String Path_RES_STOP="/res/stop";
-    public static final String Path_RES_LIST="/res/list";
-    public static final String Path_RES_DELETE="/res/delete";
-
-    public static final String Path_ALGORITHM_ATTRIBUTE="/algorithm/attribute";
-    public static final String Path_ALGORITHM_FEATURE="/algorithm/feature";
-    public static final String Path_ALGORITHM_DETECT="/algorithm/detect";
-
-    public static final String Path_BKREPO_CREATE="/bkrepo/create";
-    public static final String Path_BKREPO_UPDATE="/bkrepo/update";
-    public static final String Path_BKREPO_DELETE="/bkrepo/delete";
-    public static final String Path_BKREPO_META="/bkrepo/meta";
-
-    public static final String Path_BKMEMBER_ADD="/bkmember/add";
-    public static final String Path_BKMEMBER_DELETE="/bkmember/delete";
-    public static final String Path_BKMEMBER_LIST="/bkmember/list";
-
-    public static final String Path_BKTASK_SUBMIT="/bktask/submit";
-    public static final String Path_BKTASK_START="/bktask/start";
-    public static final String Path_BKTASK_STOP="/bktask/stop";
-    public static final String Path_BKTASK_GET="/bktask/get";
-    public static final String Path_BKTASK_LIST="/bktask/list";
-    public static final String Path_BKTASK_DELETE="/bktask/delete";
-
-
-    private volatile static TuSouClient HttpClientConnectionPool;
+    private volatile static ServiceClient HttpClientConnectionPool;
 
     private static final String USERAGENT = "SZ-JAVA";
     private static final String CHARSET = "UTF-8";
@@ -144,18 +103,18 @@ public class TuSouClient{
         }
     }
 
-    private TuSouClient(){}
+    private ServiceClient(){}
 
     /**
      * 获取HttpClientConnectionPool对象，这是单例方法
      *
      * @return
      */
-    public static TuSouClient getClientConnectionPool() {
+    public static ServiceClient getClientConnectionPool() {
         if (HttpClientConnectionPool == null) {
-            synchronized (TuSouClient.class) {
+            synchronized (ServiceClient.class) {
                 if (HttpClientConnectionPool == null) {
-                    HttpClientConnectionPool = new TuSouClient();
+                    HttpClientConnectionPool = new ServiceClient();
                 }
             }
         }
@@ -197,7 +156,7 @@ public class TuSouClient{
      */
     public String fetchByPostMethod(String url, String jsonStr){
         String resultStr = null;
-        HttpPost httpPost = new HttpPost(tuSouEndpoint+url);
+        HttpPost httpPost = new HttpPost(ServiceEndpoint+url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));
         httpPost.addHeader(HttpHeaders.USER_AGENT,USERAGENT);
 //		httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
@@ -228,5 +187,4 @@ public class TuSouClient{
         return response;
 
     }
-
 }

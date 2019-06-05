@@ -1,5 +1,6 @@
 package com.secusoft.web;
 
+import com.secusoft.web.serviceapi.ServiceClient;
 import com.secusoft.web.shipinapi.ShiPinClient;
 import com.secusoft.web.tusouapi.TuSouClient;
 import org.slf4j.Logger;
@@ -35,7 +36,19 @@ public class MainApplication extends WebMvcConfigurerAdapter{
                 SpringApplication app = new SpringApplication(MainApplication.class);
                 app.setDefaultProperties(properties);
                 TuSouClient.tuSouEndpoint =  properties.getProperty("tusou.api.addr");
+                TuSouClient.tuSouRequestId= properties.getProperty("bkrepo.requestId");
+                TuSouClient.tuSouBkid= properties.getProperty("bkrepo.bkid");
+                TuSouClient.tuSouBkdesc= properties.getProperty("bkrepo.meta.bkdesc");
+                TuSouClient.tuSouBkname= properties.getProperty("bkrepo.meta.bkname");
+                TuSouClient.tuSouAlgorithmName= properties.getProperty("bkrepo.meta.algorithmName");
+                TuSouClient.tuSouAlgorithmVersion= properties.getProperty("bkrepo.meta.algorithmVersion");
+                TuSouClient.tuSouAlgorithmType= properties.getProperty("bkrepo.meta.algorithmType");
+                TuSouClient.tuSouOssEndpoint= properties.getProperty("bkrepo.meta.ossInfo.endpoint");
+                TuSouClient.tuSouOssAccess_id= properties.getProperty("bkrepo.meta.ossInfo.access_id");
+                TuSouClient.tuSouOssAccess_key= properties.getProperty("bkrepo.meta.ossInfo.access_key");
+                TuSouClient.tuSouOssBucket_name= properties.getProperty("bkrepo.meta.ossInfo.bucket_name");
                 ShiPinClient.shiPinEndpoint = properties.getProperty("shipin.api.addr");
+                ServiceClient.ServiceEndpoint=properties.getProperty("service.api.addr");
                 logger.info("读取config下config.properties配置成功!");
                 app.run(args);
             } catch (IOException e) {

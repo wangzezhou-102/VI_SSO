@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
@@ -61,11 +60,11 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     }
 
     @Override
-    public Map<String, Object> getAllInformation(ViSurveyTaskVo viSurveyTaskVo) {
+    public ResultVo getAllInformation(ViSurveyTaskVo viSurveyTaskVo) {
         PageHelper.startPage(viSurveyTaskVo.getCurrent(),viSurveyTaskVo.getSize());
 
         List<ViSurveyTask> list=viSurveyTaskMapper.getAllViSurveyTask();
 
-        return PageReturnUtils.getPageMap(list,viSurveyTaskVo.getCurrent(),viSurveyTaskVo.getSize());
+        return ResultVo.success(PageReturnUtils.getPageMap(list,viSurveyTaskVo.getCurrent(),viSurveyTaskVo.getSize()));
     }
 }

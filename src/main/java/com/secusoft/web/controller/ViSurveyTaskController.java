@@ -1,7 +1,6 @@
 package com.secusoft.web.controller;
 
 import com.secusoft.web.Service.ViSurveyTaskService;
-import com.secusoft.web.core.common.GlobalApiResult;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViSurveyTask;
 import com.secusoft.web.model.ViSurveyTaskVo;
@@ -38,7 +37,7 @@ public class ViSurveyTaskController {
     }
 
     @RequestMapping("/listViSurveyTask")
-    public Object listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo){
-        return  GlobalApiResult.success(viSurveyTaskService.getAllInformation(viSurveyTaskVo));
+    public ResponseEntity<ResultVo> listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo){
+        return  new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
     }
 }
