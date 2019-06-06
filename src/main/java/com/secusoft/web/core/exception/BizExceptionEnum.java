@@ -8,8 +8,9 @@ package com.secusoft.web.core.exception;
 public enum BizExceptionEnum {
 
 	OK(1001010,"成功"),
-	REPEAT(10001011,"数据重复"),
-	PARAM_NULL(10001012,"参数为空"),
+	REPEAT(1001011,"数据重复"),
+	PARAM_NULL(1001012,"参数为空"),
+	PARAM_ERROR(1001013,"参数有误"),
 	NOT_FOUND(404,"Not Found"),
     REQUEST_NULL(400, "请求有错误"),
     NO_PERMITION(403, "权限不足"),

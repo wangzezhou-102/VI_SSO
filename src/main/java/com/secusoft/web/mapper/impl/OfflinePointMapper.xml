@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.OfflinePointMapper">
+
+    <resultMap id="offlinePointMap" type="offlinePointBean">
+        <id column="ID" property="id"/>
+        <result column="POINT_NAME" property="pointName"/>
+        <collection column="ID" property="videos" ofType="offlineVideoBean"
+                     select="com.secusoft.web.mapper.OfflineVideoMapper.readOfflineVideo">
+        </collection>
+    </resultMap>
+    <sql id="table">
+        vi_offline_point
+    </sql>
+    
+    <sql id="whereSql">
+        <where>
+	        <if test="id!=null">
+	           and id=#{id}
+	        </if> 
+	        <if test="pointName!=null and pointName!=''">
+               and point_name=#{pointName}
+	        </if>
+	        <if test="idn!=null">
+               and id!=#{idn}
+	        </if>
+	        <if test="keyWord!=null and keyWord!=''">
+	           and instr(point_name,#{keyWord})>0
+	        </if>
+	        <if test="folderId!=null">
+	           and folder_id=#{folderId}
+	        </if>
+        </where>
+    </sql>
+    <!-- 根据条件查找,返回数量 -->
+    <select id="readOfflinePointCountByParam" parameterType="offlinePointBean" resultType="long">
+        select count(1) from 
+        <include refid="table"/>
+        <include refid="whereSql"/>
+    </select>
+    
+    <!-- 根据条件查找,返回list -->
+    <select id="readOfflinePointListByParam" parameterType="offlinePointBean" resultType="offlinePointBean">
+        select * from 
+        <include refid="table"/>
+        <include refid="whereSql"/>      
+    </select>
+    
+    <!-- 关联查询 -->
+    <select id="readOfflinePoint" parameterType="long" resultMap="offlinePointMap">
+        select id,point_name from 
+        <include refid="table"/>
+        where folder_id=#{folderId}
+    </select>
+</mapper>

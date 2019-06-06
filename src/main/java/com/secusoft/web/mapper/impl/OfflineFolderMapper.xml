@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.OfflineFolderMapper">
+
+    <resultMap id="offlineFolderMap" type="offlineFolderBean">
+        <id column="ID" property="id"/>
+        <result column="FOLDER_NAME" property="folderName"/>
+        <collection column="ID" property="points" ofType="offlinePointBean"
+                     select="com.secusoft.web.mapper.OfflinePointMapper.readOfflinePoint">
+        </collection>
+    </resultMap>
+    
+    <sql id="table">
+        vi_offline_folder
+    </sql>
+    
+    <sql id="whereSql">
+        <where>
+	        <if test="id!=null">
+	           and id=#{id}
+	        </if> 
+	        <if test="folderName!=null and folderName!=''">
+               and folder_name=#{folderName}
+	        </if>
+	        <if test="idn!=null">
+               and id!=#{idn}
+	        </if>
+	        <if test="keyWord!=null and keyWord!=''">
+	           and instr(folder_name,#{keyWord})>0
+	        </if>
+        </where>
+    </sql>
+    <!-- 根据条件查找,返回数量 -->
+    <select id="readOfflineFolderCountByParam" parameterType="offlineFolderBean" resultType="long">
+        select count(1) from 
+        <include refid="table"/>
+        <include refid="whereSql"/>
+    </select>
+    
+    <!-- 根据条件查找,返回list -->
+    <select id="readOfflineFolderListByParam" parameterType="offlineFolderBean" resultType="offlineFolderBean">
+        select * from 
+        <include refid="table"/>
+        <include refid="whereSql"/>      
+    </select>
+    
+    <!-- 关联查询 -->
+    <select id="readOfflineFolder" resultMap="offlineFolderMap">
+        select id,folder_name from 
+        <include refid="table"/>
+    </select>
+</mapper>

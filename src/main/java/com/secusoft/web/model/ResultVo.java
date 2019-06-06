@@ -51,6 +51,10 @@ public class ResultVo<T> {
         return resultVo;
     }
 
+    public static ResultVo failure(BizExceptionEnum error) {
+        return failure(error.getCode(), error.getMessage());
+    }
+    
     public static <T> ResultVo<T> failure(int errorCode, String errorMessage) {
         ResultVo resultVo = new ResultVo();
         resultVo.code = errorCode;
