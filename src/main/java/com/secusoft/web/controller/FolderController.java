@@ -1,5 +1,6 @@
 package com.secusoft.web.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.model.Folder;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.FolderService;
@@ -43,10 +44,12 @@ public class FolderController {
     }
 
 
-//    @RequestMapping("/getFolderByStatus")
-//    public ResponseEntity<ResultVo> getFolder(int i){
-//        List<Map<String, Object>> byStatus = folderService.getByStatus(i);
-//        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
-//    }
+    @RequestMapping("getFolderByStatus")
+    public ResponseEntity<ResultVo> getFolder(@RequestBody JSONObject jsonObject){
+        Integer i = Integer.parseInt(jsonObject.get("status").toString());
+        ResultVo resultVo = folderService.getFolderByStatus(i);
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
 
+    //展示所有的文件夹  在添加的时候可以选择？
 }

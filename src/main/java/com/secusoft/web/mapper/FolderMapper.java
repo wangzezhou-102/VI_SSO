@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface FolderMapper {
-
     int insertFolder(Folder folder);
     int deleteFolderById(@Param("id") String id);
     int updateNonEmptyFolderById(Folder folder);

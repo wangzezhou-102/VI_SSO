@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.DeviceMapper">
+    <!-- Area的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_Device_Map" type="com.secusoft.web.model.Device">
+        <id column="id" property="id" />
+        <result column="device_id" property="deviceId" />
+        <result column="parent_id" property="parentId" />
+        <result column="device_name" property="deviceName" />
+        <result column="type" property="type" />
+        <result column="ip" property="ip" />
+        <result column="port" property="port" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+    </resultMap>
+
+    <!-- 数据库中表名为:vi_device的列名,as前是数据库的列名,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="vi_device_Column">
+        vi_device.id as id
+        ,vi_device.device_id as device_id
+        ,vi_device.parent_id as parent_id
+        ,vi_device.device_name as device_name
+        ,vi_device.type as type
+        ,vi_device.ip as ip
+        ,vi_device.port as port
+        ,vi_device.longitude
+        ,vi_device.latitude
+    </sql>
+    <!-- 获得一个Area对象,以参数Area对象中不为空的属性作为条件进行查询-->
+    <select id="selectDeviceByObj" parameterType="com.secusoft.web.model.Device" resultMap="result_Device_Map">
+        select
+        <include refid="vi_device_Column" />
+        from vi_area
+        <where>
+            <if test="modifiedUser != null "> and vi_area.modified_user = #{modifiedUser}</if>
+            <if test="createUser != null "> and vi_area.create_user = #{createUser}</if>
+            <if test="gmtModified != null "> and vi_area.gmt_modified = #{gmtModified}</if>
+            <if test="gmtCreate != null "> and vi_area.gmt_create = #{gmtCreate}</if>
+            <if test="folderId != null "> and vi_area.folder_id = #{folderId}</if>
+            <if test="areaName != null "> and vi_area.area_name = #{areaName}</if>
+            <if test="id != null "> and vi_area.id = #{id}</if>
+        </where>
+    </select> 
+
+    <!-- 通过Device的id获得对应数据库中表的数据对象-->
+    <select id="selectDeviceById" parameterType="java.lang.String" resultMap="result_Device_Map">
+        select 
+            <include refid="vi_device_Column" />
+        from vi_device
+        where vi_device.id = #{id}
+    </select>
+
+    <!-- 通过区域中间表设备表联合查询Device信息 -->
+    <select id="selectDeviceByAreaId" parameterType="java.lang.String" resultMap="result_Device_Map">
+        select
+        <include refid="vi_device_Column" />
+        from vi_area_device ad left JOIN vi_device on ad.device_id = vi_device.device_id
+        where area_id =#{id}
+    </select>
+
+
+
+</mapper>

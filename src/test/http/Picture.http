@@ -1,0 +1,45 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+###收藏图片
+POST http://localhost:8006/addPicture
+Content-Type: application/json
+
+{
+  "cropImageSignedUrl": "234",
+  "origImageUrl": "222",
+  "cropImageUrl": "222",
+  "oriImageSignedUrl": "222",
+  "pictureTime": "123456",
+  "deviceId": "7",
+  "folderId": "1",
+  "score": "99"
+}
+
+###取消收藏
+POST http://localhost:8006/removePicture
+Content-Type: application/json
+
+{
+   "id": "3"
+}
+
+###展示该图片详细信息
+POST http://localhost:8006/getPictureById
+Content-Type: application/json
+
+{
+    "id": "1"
+}
+
+###测试
+POST http://localhost:8006/testpic
+Content-Type: application/json
+
+{}
+
+###
+###

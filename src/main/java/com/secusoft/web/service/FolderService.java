@@ -11,7 +11,7 @@ public interface FolderService {
     ResultVo removeFolder(String id);
     ResultVo setFolderStatus(Folder folder);
     ResultVo setFolderName(Folder folder);
-    List<Folder> getFolderByStatus(int status);
+    ResultVo getFolderByStatus(Integer status);
     Map<String, Object> getPicById(String id);
 
 }

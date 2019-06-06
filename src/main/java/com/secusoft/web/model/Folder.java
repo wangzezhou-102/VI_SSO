@@ -14,7 +14,7 @@ public class Folder implements Serializable {
     private String id;
     private String folderName;
     //文件夹状态 ：0未结案  1结案
-    private int status;
+    private Integer status;
 
     //收藏图片集合
     private List imageSearchList;
@@ -27,7 +27,7 @@ public class Folder implements Serializable {
     public Folder() {
     }
 
-    public Folder(String id, String folderName, int status, List imageSearchList, List trackList, List deviceArea) {
+    public Folder(String id, String folderName, Integer status, List imageSearchList, List trackList, List deviceArea) {
         this.id = id;
         this.folderName = folderName;
         this.status = status;
@@ -56,11 +56,11 @@ public class Folder implements Serializable {
         this.folderName = folderName;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

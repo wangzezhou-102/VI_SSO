@@ -1,0 +1,53 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+###新增区域
+POST http://localhost:8006/addArea
+Content-Type: application/json
+
+{
+   "Area": {
+       "areaName": "区域一",
+     "folderId": 1
+   },
+  "devices": [1,2,3]
+
+}
+
+###删除区域
+POST http://localhost:8006/removeArea
+Content-Type: application/json
+
+{
+   "id": "1"
+}
+
+###修改区域下的设备
+POST http://localhost:8006/updateArea
+Content-Type: application/json
+
+{
+  "Area": {
+    "id": 6,
+    "areaName": "区域一更改后",
+    "folderId": 1
+  },
+  "devices": [1,2,3]
+}
+
+###
+
+
+
+###获取一个区域下的所有设备
+POST http://localhost:8006/readArea
+Content-Type: application/json
+
+{
+    "id": "7"
+}
+
+###

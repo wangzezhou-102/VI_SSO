@@ -2,7 +2,7 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.secusoft.web.Service.BoxSelectService;
+import com.secusoft.web.service.BoxSelectService;
 import com.secusoft.web.core.common.GlobalApiResult;
 import com.secusoft.web.model.Point;
 import com.secusoft.web.model.Round;
@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 public class BoxSelectController {
     @Autowired
-    private BoxSelectService boxSelectService;
+    private  BoxSelectService boxSelectService;
     @Autowired
     private  CameraService CameraServiceImpl;
 

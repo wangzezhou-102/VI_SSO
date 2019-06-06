@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.FolderMapper">
-    <resultMap id="result_Folder_Map" type="com.secusoft.web.model.Folder">
+    <resultMap id="result_Folder_Map" type="folder">
         <id column="id" property="id" />
         <result column="folder_name" property="folderName" />
         <result column="status" property="status" />
     </resultMap>
 
     <insert id="insertFolder" parameterType="com.secusoft.web.model.Folder">
-        insert into vi_folder(id,folder_name,status)
-        values(#{id},#{folderName},#{status})
-  </insert>
+        insert into vi_folder(folder_name,status)
+        values(#{folderName},#{status})
+    </insert>
+
+    <!-- 获得条件相同的文件夹总数,以参数Folder对象中不为空的属性作为条件进行查询-->
+    <select id="selectCountFolderByObj" parameterType="com.secusoft.web.model.Folder" resultType="java.lang.Integer">
+        select
+        count(*)
+        from vi_folder
+        <where>
+            <if test="folderName != null "> and folder_name = #{folderName}</if>
+        </where>
+    </select>
 
     <delete id="deleteFolderById" parameterType="java.lang.String">
         delete from vi_folder where id = #{id}
@@ -30,20 +40,10 @@
     </update>
 
     <select id="selectByStatus" resultMap="result_Folder_Map">
-        select id , folder_name as name ,status from vi_folder where status =#{status}
+        select id , folder_name  ,status from vi_folder where status =#{status}
     </select>
 
-    <!-- 获得条件相同的文件夹总数,以参数Folder对象中不为空的属性作为条件进行查询-->
-    <select id="selectCountFolderByObj" parameterType="com.secusoft.web.model.Folder" resultType="java.lang.Integer">
-        select
-          count(*)
-        from vi_folder
-        <where>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="folderName != null "> and folder_name = #{folderName}</if>
-            <if test="id != null "> and id = #{id}</if>
-        </where>
-    </select>
+
 
     <!-- 通过Folder的id获得对应数据库中表的数据对象-->
     <select id="selectFolderById" parameterType="java.lang.Object" resultMap="result_Folder_Map">
