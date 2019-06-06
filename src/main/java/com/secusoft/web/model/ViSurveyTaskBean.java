@@ -8,7 +8,7 @@ import java.util.Date;
 
 
 @TableName("vi_survey_task")
-public class ViSurveyTask  implements Serializable {
+public class ViSurveyTaskBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -22,7 +22,12 @@ public class ViSurveyTask  implements Serializable {
     private Integer surveyStatus;
     private Integer areaType;
     private String surveyDevice;
+    private String topic;
     private Integer enable;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date CreateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date ModifyTime;
 
     public Integer getId() {
         return id;
@@ -104,6 +109,30 @@ public class ViSurveyTask  implements Serializable {
         this.enable = enable;
     }
 
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public Date getCreateTime() {
+        return CreateTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        CreateTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return ModifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        ModifyTime = modifyTime;
+    }
+
     @Override
     public String toString() {
         return "ViSurveyTask{" +
@@ -116,7 +145,10 @@ public class ViSurveyTask  implements Serializable {
                 ", surveyStatus=" + surveyStatus +
                 ", areaType=" + areaType +
                 ", surveyDevice='" + surveyDevice + '\'' +
+                ", topic='" + topic + '\'' +
                 ", enable=" + enable +
+                ", CreateTime=" + CreateTime +
+                ", ModifyTime=" + ModifyTime +
                 '}';
     }
 }

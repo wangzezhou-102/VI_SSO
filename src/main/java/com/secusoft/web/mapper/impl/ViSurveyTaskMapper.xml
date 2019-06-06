@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.ViSurveyTaskMapper">
-    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask" useGeneratedKeys="true">
-      <selectKey keyProperty="id" resultType="java.lang.Integer" order="BEFORE" statementType="PREPARED">
-          select 't'+ @@IDENTITY as taskId
-      </selectKey>
-      INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,survey_status,area_type,survey_device,enable)
-      VALUES(#{taskId},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{surveyStatus},#{areaType},#{surveyDevice},0)
+    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id" useGeneratedKeys="true">
+        <!-- selectKey 标签表示子查询中主键的提取问题
+                     keyColumn表示查询语句返回结果的列名
+                     keyProperty表示将属性设置到某个列中 此处为empNo 中
+                     order="BEFORE表示在插入语句之前执行
+                     resultType="int"表示返回值得类型为int类型
+                 -->
+      INSERT INTO vi_survey_task(task_id,topic,survey_name,begin_time,end_time,survey_type,area_type,survey_device)
+        VALUES(#{taskId},#{topic},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType},#{surveyDevice})
     </insert>
 
-     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTask">
+     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
          update vi_survey_task
          <set>
-             <if test="survey_name != null">
+             <if test="surveyName != null">
                  survey_name=#{surveyName},
              </if>
-             <if test="begin_time != null">
+             <if test="beginTime != null">
                  begin_time=#{beginTime},
              </if>
-             <if test="end_time != null">
+             <if test="endTime != null">
                  end_time=#{endTime},
              </if>
-             <if test="survey_status != null">
+             <if test="surveyStatus != null">
                  survey_status=#{surveyStatus},
+             </if>
+             <if test="topic != null">
+                 topic=#{topic},
+             </if>
+             <if test="taskId != null">
+                 task_id=#{taskId},
+             </if>
+             <if test="ModifyTime != null">
+                 modify_time=#{ModifyTime},
              </if>
          </set>
          where id=#{id}
@@ -33,7 +45,7 @@
          where id=#{id}
     </delete>
     
-    <select id="getAllViSurveyTask" resultType="ViSurveyTask">
+    <select id="getAllViSurveyTask" resultType="com.secusoft.web.model.ViSurveyTaskBean">
         select * from vi_survey_task
     </select>
 </mapper>

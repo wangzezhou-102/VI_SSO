@@ -49,12 +49,26 @@ public enum BizExceptionEnum {
 	REQUEST_SERVER_ERROR(660,"服务器请求失败"),
 
 	/**
-	 * 添加布控相关
+	 * 布控任务相关
 	 * @param code
 	 * @param message
 	 */
 	TASK_DATE_WRONG(670,"开始时间不能大于结束时间"),
-	TASK_NANE_NULL(680,"布控任务名称不能为空");
+	TASK_DATE_NULL(680,"开始时间或结束时间不能为空"),
+	TASK_NANE_NULL(690,"布控任务名称不能为空"),
+
+	/**
+	 * 布控库相关
+	 */
+	REPO_NAME_NULL(700,"布控库名称不能为空"),
+
+	/**
+	 * 自定义布控库相关
+	 */
+	PRIVATEREPO_IDENTITYNAME_NULL(710,"姓名不能为空"),
+	PRIVATEREPO_IDENTITYID_NULL(720,"身份证号不能为空"),
+	PRIVATEREPO_IMAGEURL_NULL(720,"图片地址不能为空"),
+	PRIVATEREPO_REPOID_NULL(720,"关联的布控库不能为空"),;
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;

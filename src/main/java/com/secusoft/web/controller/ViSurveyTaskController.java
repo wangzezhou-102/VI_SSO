@@ -2,7 +2,7 @@ package com.secusoft.web.controller;
 
 import com.secusoft.web.Service.ViSurveyTaskService;
 import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.ViSurveyTask;
+import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViSurveyTaskVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,26 +17,26 @@ public class ViSurveyTaskController {
     @Autowired
     ViSurveyTaskService viSurveyTaskService;
 
-    @RequestMapping("/insertViSurveyTask")
-    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
-        ResultVo resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTask);
+    @RequestMapping("/insertvisurveytask")
+    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
+        ResultVo resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/updateViSurveyTaskSurveyStatus")
-    public ResponseEntity<ResultVo> updateViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
-        ResultVo resultVo = viSurveyTaskService.updateViSurveyTask(viSurveyTask);
+    @RequestMapping("/updatevisurveytask")
+    public ResponseEntity<ResultVo> updateViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
+        ResultVo resultVo = viSurveyTaskService.updateViSurveyTask(viSurveyTaskBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/delViSurveyTask")
-    public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTask viSurveyTask){
+    @RequestMapping("/delvisurveytask")
+    public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
 
-        ResultVo resultVo = viSurveyTaskService.delViSurveyTask(viSurveyTask.getId());
+        ResultVo resultVo = viSurveyTaskService.delViSurveyTask(viSurveyTaskBean.getId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/listViSurveyTask")
+    @RequestMapping("/listvisurveytask")
     public ResponseEntity<ResultVo> listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo){
         return  new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
     }

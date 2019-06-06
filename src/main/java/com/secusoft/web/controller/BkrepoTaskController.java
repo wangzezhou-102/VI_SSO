@@ -12,6 +12,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * 布控库判断
+ */
 @Component
 public class BkrepoTaskController implements ApplicationRunner {
 
@@ -33,10 +36,10 @@ public class BkrepoTaskController implements ApplicationRunner {
 //                "\t\t}\n" +
 //                "\t}]\n" +
 //                "}" ;
-//        responseStr="{\n" +
-//                "\t\"errorCode\": \"SUCCESS\",\n" +
-//                "\t\"errorMsg\": \"\",\n" +
-//                "\t\"data\": \"null\"}" ;
+        responseStr="{\n" +
+                "\t\"errorCode\": \"SUCCESS\",\n" +
+                "\t\"errorMsg\": \"\",\n" +
+                "\t\"data\": \"null\"}" ;
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseStr);
         String code=jsonObject.getString("code");
         String data=jsonObject.getString("data");

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViPrivateMemberMapper">
+    <insert id="insertViPrivateMember" parameterType="com.secusoft.web.model.ViPrivateMemberBean" keyProperty="id" useGeneratedKeys="true">
+
+      INSERT INTO vi_private_member(object_id,identity_name,identity_id,image_url,repo_id,description)
+        VALUES(#{objectId},#{identityName},#{identityId},#{imageUrl},#{repoId},#{description})
+    </insert>
+
+     <update id="updateViPrivateMember" parameterType="com.secusoft.web.model.ViPrivateMemberBean">
+         update vi_private_member
+         <set>
+             <if test="identityName != null">
+                 identity_name=#{identityName},
+             </if>
+             <if test="identityId != null">
+                 identity_id=#{identityId},
+             </if>
+             <if test="imageUrl != null">
+                 image_url=#{imageUrl},
+             </if>
+             <if test="description != null">
+                 description=#{description},
+             </if>
+             <if test="objectId != null">
+                 object_id=#{objectId},
+             </if>
+         </set>
+         where id=#{id}
+     </update>
+
+    <delete id="delViPrivateMember" parameterType="java.lang.Integer">
+        delete from vi_private_member
+         where id=#{id}
+    </delete>
+    
+    <select id="getAllViPrivateMember" resultType="com.secusoft.web.model.ViPrivateMemberBean">
+        select * from vi_private_member
+    </select>
+</mapper>

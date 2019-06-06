@@ -1,14 +1,14 @@
 package com.secusoft.web.Service;
 
 import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.ViSurveyTask;
+import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViSurveyTaskVo;
 
 public interface ViSurveyTaskService {
 
-    ResultVo insertViSurveyTask(ViSurveyTask viSurveyTask);
+    ResultVo insertViSurveyTask(ViSurveyTaskBean viSurveyTaskBean);
 
-    ResultVo updateViSurveyTask(ViSurveyTask viSurveyTask);
+    ResultVo updateViSurveyTask(ViSurveyTaskBean viSurveyTaskBean);
 
     ResultVo delViSurveyTask(Integer id);
 

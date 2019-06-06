@@ -13,7 +13,7 @@ import java.text.ParseException;
 @Component
 @Configurable
 @EnableScheduling
-public class FireDataTaskController{
+public class BkrepoDataTaskController {
 
         /**
      * 烽火定时请求数据
@@ -22,7 +22,7 @@ public class FireDataTaskController{
      */
     //0 0 */1 * * ? 每小时执行一次
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0 0/1 * * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "0 0 */2 * * ?")//0 0 */1 * * ?
     public void task() throws ParseException, InterruptedException {
         System.out.println("启动烽火定时任务");
     }

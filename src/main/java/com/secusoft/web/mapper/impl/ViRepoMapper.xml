@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViRepoMapper">
+    <insert id="insertViRepo" parameterType="com.secusoft.web.model.ViRepoBean" keyProperty="id" useGeneratedKeys="true">
+
+      INSERT INTO vi_repo(bkdesc,bkname,police_station_id,table_name,type)
+        VALUES(#{bkdesc},#{bkname},#{policeStationId},#{tableName},#{type})
+    </insert>
+
+     <update id="updateViRepo" parameterType="com.secusoft.web.model.ViRepoBean">
+         update vi_repo
+         <set>
+             <if test="bkname != null">
+                 bkname=#{bkname},
+             </if>
+             <if test="bkdesc != null">
+                 bkdesc=#{bkdesc},
+             </if>
+         </set>
+         where id=#{id}
+     </update>
+
+    <delete id="delViRepo" parameterType="java.lang.Integer">
+        delete from vi_repo
+         where id=#{id}
+    </delete>
+    
+    <select id="getAllViRepo" resultType="com.secusoft.web.model.ViRepoBean">
+        select * from vi_repo
+    </select>
+</mapper>

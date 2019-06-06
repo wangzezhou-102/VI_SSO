@@ -3,6 +3,7 @@ package com.secusoft.web;
 import com.secusoft.web.serviceapi.ServiceClient;
 import com.secusoft.web.shipinapi.ShiPinClient;
 import com.secusoft.web.tusouapi.TuSouClient;
+import com.secusoft.web.utils.OdpsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -49,6 +50,10 @@ public class MainApplication extends WebMvcConfigurerAdapter{
                 TuSouClient.tuSouOssBucket_name= properties.getProperty("bkrepo.meta.ossInfo.bucket_name");
                 ShiPinClient.shiPinEndpoint = properties.getProperty("shipin.api.addr");
                 ServiceClient.ServiceEndpoint=properties.getProperty("service.api.addr");
+                OdpsUtils.accessId=properties.getProperty("Odps.accessId");
+                OdpsUtils.accessKey=properties.getProperty("Odps.accessKey");
+                OdpsUtils.endPoint=properties.getProperty("Odps.endPoint");
+                OdpsUtils.project=properties.getProperty("Odps.project");
                 logger.info("读取config下config.properties配置成功!");
                 app.run(args);
             } catch (IOException e) {

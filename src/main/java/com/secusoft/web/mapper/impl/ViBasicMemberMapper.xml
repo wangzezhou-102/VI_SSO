@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViBasicMemberMapper">
+    <insert id="insertViBasicMember" parameterType="com.secusoft.web.model.ViBasicMemberBean" keyProperty="id" useGeneratedKeys="true">
+
+      INSERT INTO vi_basic_member(object_id,repo_id,real_object_id,identity_id,identity_name,content,image_url,feature,attribute,status)
+        VALUES(#{objectId},#{repoId},#{realObjectId},#{identityId},#{identityName},#{content},#{imageUrl},#{feature},#{attribute},#{status})
+    </insert>
+
+     <update id="updateViBasicMember" parameterType="com.secusoft.web.model.ViBasicMemberBean">
+         update vi_basic_member
+         <set>
+             <if test="identityName != null">
+                 identity_name=#{identityName},
+             </if>
+             <if test="identityId != null">
+                 identity_id=#{identityId},
+             </if>
+             <if test="imageUrl != null">
+                 image_url=#{imageUrl},
+             </if>
+         </set>
+         where id=#{id}
+     </update>
+
+    <delete id="delViBasicMember" parameterType="java.lang.Integer">
+        delete from vi_basic_member
+         where id=#{id}
+    </delete>
+    
+    <select id="getAllViBasicMember" parameterType="String" resultType="com.secusoft.web.model.ViBasicMemberBean">
+        select * from vi_basic_member
+        <where>
+            <if test="objectId != null">
+                object_id LIKE concat(#{objectId},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
