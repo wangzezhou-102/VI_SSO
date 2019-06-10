@@ -1,10 +1,10 @@
 package com.secusoft.web.service;
 
-import com.secusoft.web.model.Picture;
+import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 
 public interface PictureService {
-    ResultVo addPicture(Picture picture);
+    ResultVo addPicture(PictureBean pictureBean);
     ResultVo removePicture(String id);
     ResultVo getPictureById(String id);
 }

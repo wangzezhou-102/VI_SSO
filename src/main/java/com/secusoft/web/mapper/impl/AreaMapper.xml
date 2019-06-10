@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.AreaMapper">
     <!-- Area的resultMap,column是给数据库列起的别名,它对应property类的属性-->
-    <resultMap id="result_Area_Map" type="com.secusoft.web.model.Area">
+    <resultMap id="result_Area_Map" type="com.secusoft.web.model.AreaBean">
         <id column="id" property="id" />
         <result column="area_name" property="areaName" />
         <result column="folder_id" property="folderId" />
@@ -17,7 +17,7 @@
 
     <!-- 将Area插入到对应数据库的表中,包括属性值为null的数据-->
 
-    <insert id="insertArea" parameterType="com.secusoft.web.model.Area">
+    <insert id="insertArea" parameterType="com.secusoft.web.model.AreaBean">
         insert into vi_area(area_name,folder_id)
         values(#{areaName},#{folderId})
         <selectKey keyProperty="id" resultType="java.lang.String" >
@@ -35,7 +35,7 @@
     </insert>
 
     <!-- 获得名字相同的区域总数,以参数Folder对象中不为空的属性作为条件进行查询-->
-    <select id="selectCountAreaByName" parameterType="com.secusoft.web.model.Folder" resultType="java.lang.Integer">
+    <select id="selectCountAreaByName" parameterType="com.secusoft.web.model.FolderBean" resultType="java.lang.Integer">
         select
         count(*)
         from vi_Area
@@ -64,7 +64,7 @@
     </select> 
 
     <!-- 获得一个Area对象,以参数Area对象中不为空的属性作为条件进行查询-->
-    <select id="selectAreaByObj" parameterType="com.secusoft.web.model.Area" resultMap="result_Area_Map">
+    <select id="selectAreaByObj" parameterType="com.secusoft.web.model.AreaBean" resultMap="result_Area_Map">
         select 
             <include refid="vi_area_Column" /> 
         from vi_area
@@ -86,7 +86,7 @@
 
 
     <!-- 将Area中属性值不为null的数据,插入到对应数据库的表中-->
-    <insert id="insertNonEmptyArea" parameterType="com.secusoft.web.model.Area">
+    <insert id="insertNonEmptyArea" parameterType="com.secusoft.web.model.AreaBean">
         insert into vi_area
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -115,7 +115,7 @@
     </delete>
 
     <!-- 通过Area的id将Area的数据更新到数据库中对应的表,包括值null的数据-->
-    <update id="updateAreaById" parameterType="com.secusoft.web.model.Area">
+    <update id="updateAreaById" parameterType="com.secusoft.web.model.AreaBean">
         update vi_area set
             area_name=#{areaName}
             ,folder_id=#{folderId}
@@ -127,7 +127,7 @@
     </update>
 
     <!-- 通过Area的id更改Area名称 -->
-    <update id="updateAreaNameById" parameterType="com.secusoft.web.model.Area">
+    <update id="updateAreaNameById" parameterType="com.secusoft.web.model.AreaBean">
         update vi_area
         set  area_name=#{areaName}
         where id=#{id}

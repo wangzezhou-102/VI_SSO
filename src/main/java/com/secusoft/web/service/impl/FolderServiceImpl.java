@@ -1,7 +1,7 @@
 package com.secusoft.web.service.impl;
 
 import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.model.Folder;
+import com.secusoft.web.model.FolderBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.FolderService;
 import com.secusoft.web.mapper.FolderMapper;
@@ -18,15 +18,15 @@ public class FolderServiceImpl implements FolderService {
     FolderMapper folderMapper;
 
     @Override
-    public ResultVo addFolder(Folder folder) {
+    public ResultVo addFolder(FolderBean folderBean) {
 
-        if(folder == null || StringUtils.isEmpty(folder.getFolderName())){
+        if(folderBean == null || StringUtils.isEmpty(folderBean.getFolderName())){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        System.out.println(folderMapper.selectCountFolderByObj(folder));
-        if(folderMapper.selectCountFolderByObj(folder)==0){
-            folder.setStatus(0);
-            folderMapper.insertFolder(folder);
+        System.out.println(folderMapper.selectCountFolderByObj(folderBean));
+        if(folderMapper.selectCountFolderByObj(folderBean)==0){
+            folderBean.setStatus(0);
+            folderMapper.insertFolder(folderBean);
         }else {
             return ResultVo.failure(BizExceptionEnum.REPEAT.getCode(),BizExceptionEnum.REPEAT.getMessage());
         }
@@ -43,22 +43,22 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public ResultVo setFolderStatus(Folder folder) {
-        if(folder == null || StringUtils.isEmpty(folder.getId())){
+    public ResultVo setFolderStatus(FolderBean folderBean) {
+        if(folderBean == null || StringUtils.isEmpty(folderBean.getId())){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        folder.setStatus(1);
-        folderMapper.updateNonEmptyFolderById(folder);
+        folderBean.setStatus(1);
+        folderMapper.updateNonEmptyFolderById(folderBean);
         return ResultVo.success();
     }
 
     @Override
-    public ResultVo setFolderName(Folder folder) {
-        if(folder == null || StringUtils.isEmpty(folder.getFolderName())){
+    public ResultVo setFolderName(FolderBean folderBean) {
+        if(folderBean == null || StringUtils.isEmpty(folderBean.getFolderName())){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        if(folderMapper.selectCountFolderByObj(folder)==0){
-            folderMapper.updateNonEmptyFolderById(folder);
+        if(folderMapper.selectCountFolderByObj(folderBean)==0){
+            folderMapper.updateNonEmptyFolderById(folderBean);
         }else{
             return ResultVo.failure(BizExceptionEnum.REPEAT.getCode(),BizExceptionEnum.REPEAT.getMessage());
         }
@@ -67,8 +67,8 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public ResultVo getFolderByStatus(Integer status) {
-        List<Folder> folders = folderMapper.selectByStatus(status);
-        return ResultVo.success(folders);
+        List<FolderBean> folderBeans = folderMapper.selectByStatus(status);
+        return ResultVo.success(folderBeans);
     }
 
     @Override

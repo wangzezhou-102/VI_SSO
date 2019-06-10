@@ -1,6 +1,6 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.model.Picture;
+import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,34 +19,34 @@ public class PictureController {
 
     /**
      * 收藏图片
-     * @param picture 图片对象
+     * @param pictureBean 图片对象
      * @return
      */
     @RequestMapping("/addPicture")
-    public ResponseEntity<ResultVo> addPicture(@RequestBody Picture picture){
-        ResultVo resultVo = pictureService.addPicture(picture);
+    public ResponseEntity<ResultVo> addPicture(@RequestBody PictureBean pictureBean){
+        ResultVo resultVo = pictureService.addPicture(pictureBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
      * 取消收藏图片
-     * @param picture 图片ID
+     * @param pictureBean 图片ID
      * @return
      */
     @RequestMapping("/removePicture")
-    public ResponseEntity<ResultVo> removeFolder(@RequestBody Picture picture){
-        ResultVo resultVo = pictureService.removePicture(picture.getId());
+    public ResponseEntity<ResultVo> removeFolder(@RequestBody PictureBean pictureBean){
+        ResultVo resultVo = pictureService.removePicture(pictureBean.getId());
         return  new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
      * 收藏图片详情
-     * @param picture
+     * @param pictureBean
      * @return
      */
     @RequestMapping("/getPictureById")
-     public ResponseEntity<ResultVo> getFolder(@RequestBody Picture picture){
-        ResultVo resultVo = pictureService.getPictureById(picture.getId());
+     public ResponseEntity<ResultVo> getFolder(@RequestBody PictureBean pictureBean){
+        ResultVo resultVo = pictureService.getPictureById(pictureBean.getId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
    }
 

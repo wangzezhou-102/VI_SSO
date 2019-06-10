@@ -1,13 +1,13 @@
 package com.secusoft.web.model;
 
-public class Point {
+public class PointBean {
     private Double longitude;
     private Double latitude;
 
-    public Point() {
+    public PointBean() {
     }
 
-    public Point(Double longitude, Double latitude) {
+    public PointBean(Double longitude, Double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
     }

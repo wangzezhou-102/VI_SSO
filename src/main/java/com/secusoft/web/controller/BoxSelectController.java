@@ -2,10 +2,10 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.secusoft.web.model.RoundBean;
 import com.secusoft.web.service.BoxSelectService;
 import com.secusoft.web.core.common.GlobalApiResult;
-import com.secusoft.web.model.Point;
-import com.secusoft.web.model.Round;
+import com.secusoft.web.model.PointBean;
 import com.secusoft.web.shipinapi.model.Camera;
 import com.secusoft.web.shipinapi.service.CameraService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,13 @@ public class BoxSelectController {
      */
     @RequestMapping("/boxselect")
     public Object boxselect(@RequestBody String request){
-        ArrayList<Point> points = JSON.parseObject(request, new TypeReference<ArrayList<Point>>() {
+        ArrayList<PointBean> pointBeans = JSON.parseObject(request, new TypeReference<ArrayList<PointBean>>() {
         });
         //获取设备列表待改进
         List<Camera> cameras=JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),new TypeReference<ArrayList<Camera>>(){});
         List<Camera> cameraList = new ArrayList<>();
         JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),(Class<ArrayList<Camera>>) cameraList.getClass());
-        return GlobalApiResult.success(boxSelectService.isPtInPoly(cameras,points));
+        return GlobalApiResult.success(boxSelectService.isPtInPoly(cameras, pointBeans));
     }
 
     /**
@@ -48,9 +48,9 @@ public class BoxSelectController {
      * @return
      */
     @RequestMapping("/roundboxselect")
-    public Object roundboxselect(@RequestBody Round round){
+    public Object roundboxselect(@RequestBody RoundBean roundBean){
         //获取设备列表待改进
         List<Camera> cameras=JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),new TypeReference<ArrayList<Camera>>(){});
-        return GlobalApiResult.success(boxSelectService.isPtInPoly2(cameras,round.getPoint(),round.getRadius()));
+        return GlobalApiResult.success(boxSelectService.isPtInPoly2(cameras, roundBean.getPointBean(), roundBean.getRadius()));
     }
 }

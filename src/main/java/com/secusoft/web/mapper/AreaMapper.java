@@ -1,16 +1,15 @@
 package com.secusoft.web.mapper;
 
-import com.secusoft.web.model.Area;
-import com.secusoft.web.model.Device;
+import com.secusoft.web.model.AreaBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface AreaMapper {
-    int insertArea(Area area);
+    int insertArea(AreaBean areaBean);
     int insertAreaDevice(@Param("ids") List ids, @Param("areaid") String areaid);
-    int selectCountAreaByName(Area area);
-    int updateAreaNameById(Area are);
+    int selectCountAreaByName(AreaBean areaBean);
+    int updateAreaNameById(AreaBean are);
     int deleteAreaById(String id);
     int deleteAreaDeviceById(String id);
 

@@ -3,7 +3,7 @@ package com.secusoft.web.model;
 import java.io.Serializable;
 
 
-public class Picture implements Serializable {
+public class PictureBean implements Serializable {
     private String id;
     private String origImageUrl;
     private String cropImageUrl;
@@ -21,13 +21,13 @@ public class Picture implements Serializable {
      */
     private String score;
 
-    private Device device;
+    private DeviceBean deviceBean;
 
-    public Picture() {
+    public PictureBean() {
         super();
     }
 
-    public Picture(String id, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, Device device) {
+    public PictureBean(String id, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, DeviceBean deviceBean) {
         this.id = id;
         this.origImageUrl = origImageUrl;
         this.cropImageUrl = cropImageUrl;
@@ -38,7 +38,7 @@ public class Picture implements Serializable {
         this.folderId = folderId;
         this.picType = picType;
         this.score = score;
-        this.device = device;
+        this.deviceBean = deviceBean;
     }
 
     public String getId() {
@@ -121,17 +121,17 @@ public class Picture implements Serializable {
         this.score = score;
     }
 
-    public Device getDevice() {
-        return device;
+    public DeviceBean getDeviceBean() {
+        return deviceBean;
     }
 
-    public void setDevice(Device device) {
-        this.device = device;
+    public void setDeviceBean(DeviceBean deviceBean) {
+        this.deviceBean = deviceBean;
     }
 
     @Override
     public String toString() {
-        return "Picture{" +
+        return "PictureBean{" +
                 "id='" + id + '\'' +
                 ", origImageUrl='" + origImageUrl + '\'' +
                 ", cropImageUrl='" + cropImageUrl + '\'' +
@@ -142,7 +142,7 @@ public class Picture implements Serializable {
                 ", folderId='" + folderId + '\'' +
                 ", picType=" + picType +
                 ", score='" + score + '\'' +
-                ", device=" + device +
+                ", deviceBean=" + deviceBean +
                 '}';
     }
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.TrackMapper">
     <!-- Track的resultMap,column是给数据库列起的别名,它对应property类的属性-->
-    <resultMap id="result_Track_Map" type="com.secusoft.web.model.Track">
+    <resultMap id="result_Track_Map" type="com.secusoft.web.model.TrackBean">
         <id column="id" property="id" />
         <result column="track_name" property="trackName" />
         <result column="folder_id" property="folderId" />
@@ -16,7 +16,7 @@
         ,vi_track.folder_id as folder_id
     </sql>
 
-    <insert id="insertTrack" parameterType="com.secusoft.web.model.Track">
+    <insert id="insertTrack" parameterType="com.secusoft.web.model.TrackBean">
         insert into vi_track(id,track_name,folder_id)
         values(#{id},#{trackName},#{folderId})
         <selectKey keyProperty="id" resultType="java.lang.String" >
@@ -45,7 +45,7 @@
     </delete>
 
     <!-- 通过Track的id将Track中属性值不为null的数据更新到数据库对应的表中-->
-    <update id="updateTrackNameById" parameterType="com.secusoft.web.model.Track">
+    <update id="updateTrackNameById" parameterType="com.secusoft.web.model.TrackBean">
         update vi_track
         <set>
             <if test="trackName != null">
@@ -69,7 +69,7 @@
     </select>
 
     <!-- 获得一个Track对象,以参数Track对象中不为空的属性作为条件进行查询-->
-    <select id="selectTrackByObj" parameterType="com.secusoft.web.model.Track" resultMap="result_Track_Map">
+    <select id="selectTrackByObj" parameterType="com.secusoft.web.model.TrackBean" resultMap="result_Track_Map">
         select 
             <include refid="vi_track_Column" /> 
         from vi_track

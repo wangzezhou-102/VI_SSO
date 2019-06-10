@@ -2,8 +2,8 @@ package com.secusoft.web.service.impl;
 
 import com.secusoft.web.mapper.AreaMapper;
 import com.secusoft.web.mapper.DeviceMapper;
-import com.secusoft.web.model.Area;
-import com.secusoft.web.model.Device;
+import com.secusoft.web.model.AreaBean;
+import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.AreaService;
 import org.springframework.stereotype.Service;
@@ -20,36 +20,36 @@ public class AreaServiceImpl implements AreaService {
     private DeviceMapper deviceMapper;
 
     @Override
-    public ResultVo addArea(Area area, List deviceIds) {
-        areaMapper.insertArea(area);
-        areaMapper.insertAreaDevice(deviceIds,area.getId());
+    public ResultVo addArea(AreaBean areaBean, List deviceIds) {
+        areaMapper.insertArea(areaBean);
+        areaMapper.insertAreaDevice(deviceIds, areaBean.getId());
         return ResultVo.success();
     }
 
 
     @Override
-    public ResultVo removeArea(Area area) {
-        areaMapper.deleteAreaDeviceById(area.getId());
-        areaMapper.deleteAreaById(area.getId());
+    public ResultVo removeArea(AreaBean areaBean) {
+        areaMapper.deleteAreaDeviceById(areaBean.getId());
+        areaMapper.deleteAreaById(areaBean.getId());
         return ResultVo.success();
     }
 
     @Override
-    public ResultVo updateAreaName(Area area) {
-        areaMapper.updateAreaNameById(area);
+    public ResultVo updateAreaName(AreaBean areaBean) {
+        areaMapper.updateAreaNameById(areaBean);
         return ResultVo.success();
     }
 
     @Override
-    public ResultVo updateArea(Area area, List deviceIds) {
-        areaMapper.deleteAreaDeviceById(area.getId());
-        areaMapper.insertAreaDevice(deviceIds,area.getId());
+    public ResultVo updateArea(AreaBean areaBean, List deviceIds) {
+        areaMapper.deleteAreaDeviceById(areaBean.getId());
+        areaMapper.insertAreaDevice(deviceIds, areaBean.getId());
         return  ResultVo.success();
     }
 
     @Override
-    public ResultVo readArea(Area area) {
-        List<Device> devices = deviceMapper.selectDeviceByAreaId(area.getId());
-        return ResultVo.success(devices);
+    public ResultVo readArea(AreaBean areaBean) {
+        List<DeviceBean> deviceBeans = deviceMapper.selectDeviceByAreaId(areaBean.getId());
+        return ResultVo.success(deviceBeans);
     }
 }

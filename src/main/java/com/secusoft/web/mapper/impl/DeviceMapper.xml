@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.DeviceMapper">
     <!-- Area的resultMap,column是给数据库列起的别名,它对应property类的属性-->
-    <resultMap id="result_Device_Map" type="com.secusoft.web.model.Device">
+    <resultMap id="result_Device_Map" type="com.secusoft.web.model.DeviceBean">
         <id column="id" property="id" />
         <result column="device_id" property="deviceId" />
         <result column="parent_id" property="parentId" />
@@ -27,7 +27,7 @@
         ,vi_device.latitude
     </sql>
     <!-- 获得一个Area对象,以参数Area对象中不为空的属性作为条件进行查询-->
-    <select id="selectDeviceByObj" parameterType="com.secusoft.web.model.Device" resultMap="result_Device_Map">
+    <select id="selectDeviceByObj" parameterType="com.secusoft.web.model.DeviceBean" resultMap="result_Device_Map">
         select
         <include refid="vi_device_Column" />
         from vi_area

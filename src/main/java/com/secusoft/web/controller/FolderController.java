@@ -1,7 +1,7 @@
 package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.secusoft.web.model.Folder;
+import com.secusoft.web.model.FolderBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +20,26 @@ public class FolderController {
     FolderService folderService;
 
     @RequestMapping("/addFolder")
-    public ResponseEntity<ResultVo> addFolder(@RequestBody Folder folder){
-        ResultVo resultVo = folderService.addFolder(folder);
+    public ResponseEntity<ResultVo> addFolder(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.addFolder(folderBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("/removeFolder")
-    public ResponseEntity<ResultVo> removeFolder(@RequestBody Folder folder){
-        ResultVo resultVo = folderService.removeFolder(folder.getId());
+    public ResponseEntity<ResultVo> removeFolder(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.removeFolder(folderBean.getId());
         return  new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("setFolderStatus")
-    public ResponseEntity<ResultVo> setFolderStatus(@RequestBody Folder folder){
-        ResultVo resultVo = folderService.setFolderStatus(folder);
+    public ResponseEntity<ResultVo> setFolderStatus(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.setFolderStatus(folderBean);
         return  new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("setFolderName")
-    public ResponseEntity<ResultVo> setFolderName(@RequestBody Folder folder){
-        ResultVo resultVo = folderService.setFolderName(folder);
+    public ResponseEntity<ResultVo> setFolderName(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.setFolderName(folderBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

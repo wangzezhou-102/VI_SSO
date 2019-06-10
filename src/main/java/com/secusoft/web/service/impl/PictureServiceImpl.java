@@ -3,8 +3,8 @@ package com.secusoft.web.service.impl;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.mapper.PictureMapper;
-import com.secusoft.web.model.Device;
-import com.secusoft.web.model.Picture;
+import com.secusoft.web.model.DeviceBean;
+import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PictureService;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class PictureServiceImpl implements PictureService {
     DeviceMapper deviceMapper;
 
     @Override
-    public ResultVo addPicture(Picture picture) {
-        if (picture==null){
+    public ResultVo addPicture(PictureBean pictureBean) {
+        if (pictureBean ==null){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         //图片收藏type为0 轨迹内的图type为1
-        picture.setPicType(0);
-        pictureMapper.insertPicture(picture);
+        pictureBean.setPicType(0);
+        pictureMapper.insertPicture(pictureBean);
 
         return ResultVo.success();
     }
@@ -46,9 +46,9 @@ public class PictureServiceImpl implements PictureService {
         if(StringUtils.isEmpty(id)){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        Picture picture = pictureMapper.selectPictureById(id);
-        Device device = deviceMapper.selectDeviceById(picture.getDeviceId());
-        picture.setDevice(device);
-        return ResultVo.success(picture);
+        PictureBean pictureBean = pictureMapper.selectPictureById(id);
+        DeviceBean deviceBean = deviceMapper.selectDeviceById(pictureBean.getDeviceId());
+        pictureBean.setDeviceBean(deviceBean);
+        return ResultVo.success(pictureBean);
     }
 }

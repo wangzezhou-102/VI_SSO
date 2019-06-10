@@ -2,7 +2,7 @@ package com.secusoft.web.model;
 
 import java.io.Serializable;
 
-public class Device implements Serializable {
+public class DeviceBean implements Serializable {
     private String id;
     private String deviceId;
     private String parentId;
@@ -13,10 +13,10 @@ public class Device implements Serializable {
     private String longitude;//经度
     private String latitude;//纬度
 
-    public Device() {
+    public DeviceBean() {
     }
 
-    public Device(String id, String deviceId, String parentId, String deviceName, Integer type, String ip, Integer port, String longitude, String latitude) {
+    public DeviceBean(String id, String deviceId, String parentId, String deviceName, Integer type, String ip, Integer port, String longitude, String latitude) {
         this.id = id;
         this.deviceId = deviceId;
         this.parentId = parentId;
@@ -102,7 +102,7 @@ public class Device implements Serializable {
 
     @Override
     public String toString() {
-        return "Device{" +
+        return "DeviceBean{" +
                 "id='" + id + '\'' +
                 ", deviceId='" + deviceId + '\'' +
                 ", parentId='" + parentId + '\'' +

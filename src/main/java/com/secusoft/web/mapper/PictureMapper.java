@@ -1,14 +1,13 @@
 package com.secusoft.web.mapper;
 
-import com.secusoft.web.model.Picture;
-import org.apache.ibatis.annotations.Param;
+import com.secusoft.web.model.PictureBean;
 
 import java.util.List;
 
 public interface PictureMapper {
-    int insertPicture(Picture picture);
+    int insertPicture(PictureBean pictureBean);
     int deletePictureById(String id);
     int deleteMorePictureById(List<String> pids);
-    Picture selectPictureById(String id);
-    int insertMorePicture(List<Picture> pictures);
+    PictureBean selectPictureById(String id);
+    int insertMorePicture(List<PictureBean> pictureBeans);
 }

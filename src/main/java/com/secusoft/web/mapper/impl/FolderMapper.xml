@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.FolderMapper">
-    <resultMap id="result_Folder_Map" type="folder">
+    <resultMap id="result_Folder_Map" type="folderBean">
         <id column="id" property="id" />
         <result column="folder_name" property="folderName" />
         <result column="status" property="status" />
     </resultMap>
 
-    <insert id="insertFolder" parameterType="com.secusoft.web.model.Folder">
+    <insert id="insertFolder" parameterType="com.secusoft.web.model.FolderBean">
         insert into vi_folder(folder_name,status)
         values(#{folderName},#{status})
     </insert>
 
     <!-- 获得条件相同的文件夹总数,以参数Folder对象中不为空的属性作为条件进行查询-->
-    <select id="selectCountFolderByObj" parameterType="com.secusoft.web.model.Folder" resultType="java.lang.Integer">
+    <select id="selectCountFolderByObj" parameterType="com.secusoft.web.model.FolderBean" resultType="java.lang.Integer">
         select
         count(*)
         from vi_folder
@@ -26,7 +26,7 @@
         delete from vi_folder where id = #{id}
     </delete>
 
-    <update id="updateNonEmptyFolderById" parameterType="com.secusoft.web.model.Folder">
+    <update id="updateNonEmptyFolderById" parameterType="com.secusoft.web.model.FolderBean">
         update vi_folder
         <set>
             <if test="folderName != null">

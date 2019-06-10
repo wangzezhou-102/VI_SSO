@@ -1,7 +1,7 @@
 package com.secusoft.web.service.impl;
 
+import com.secusoft.web.model.PointBean;
 import com.secusoft.web.service.BoxSelectService;
-import com.secusoft.web.model.Point;
 import com.secusoft.web.shipinapi.model.Camera;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +10,13 @@ import java.util.*;
 @Service
 public class BoxSelectServiceImpl implements BoxSelectService {
     @Override
-    public Map<String, Object> isPtInPoly(List<Camera> cameras,List<Point> ps) {
+    public Map<String, Object> isPtInPoly(List<Camera> cameras,List<PointBean> ps) {
         Double maxLon,minLon,maxLat,minLat;
         List<Double> lon=new ArrayList<>();
         List<Double> lat=new ArrayList<>();
-        for (Point point : ps) {
-            lon.add(point.getLongitude());
-            lat.add(point.getLatitude());
+        for (PointBean pointBean : ps) {
+            lon.add(pointBean.getLongitude());
+            lat.add(pointBean.getLatitude());
         }
         maxLon= Collections.max(lon);
         minLon= Collections.min(lon);
@@ -77,7 +77,7 @@ public class BoxSelectServiceImpl implements BoxSelectService {
     }
 
     @Override
-    public Map<String, Object> isPtInPoly2(List<Camera> cameras, Point point, Double radius) {
+    public Map<String, Object> isPtInPoly2(List<Camera> cameras, PointBean pointBean, Double radius) {
         Map<String, Object> map = new HashMap<>();
         StringBuilder sb = new StringBuilder();
         for (Camera camera : cameras) {
@@ -85,7 +85,7 @@ public class BoxSelectServiceImpl implements BoxSelectService {
             Double ALat = Double.valueOf(camera.getLatitude());
 
             //返回所有平方和的   平方根
-            double d = Math.hypot( (point.getLongitude() - ALon ), (point.getLatitude() - ALat) );
+            double d = Math.hypot( (pointBean.getLongitude() - ALon ), (pointBean.getLatitude() - ALat) );
             if( d <= radius){
                 if (sb.length() == 0) {
                     sb.append(camera.getCameraId());

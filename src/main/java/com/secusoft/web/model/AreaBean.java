@@ -2,20 +2,20 @@ package com.secusoft.web.model;
 
 import java.util.List;
 
-public class Area {
+public class AreaBean {
     private String id;//主键
     private String areaName;//区域名称
     private Integer folderId;//文件夹关联Id
-    private List<Device> devices;
+    private List<DeviceBean> deviceBeans;
 
-    public Area() {
+    public AreaBean() {
     }
 
-    public Area(String id, String areaName, Integer folderId, List<Device> devices) {
+    public AreaBean(String id, String areaName, Integer folderId, List<DeviceBean> deviceBeans) {
         this.id = id;
         this.areaName = areaName;
         this.folderId = folderId;
-        this.devices = devices;
+        this.deviceBeans = deviceBeans;
     }
 
     public String getId() {
@@ -42,21 +42,21 @@ public class Area {
         this.folderId = folderId;
     }
 
-    public List<Device> getDevices() {
-        return devices;
+    public List<DeviceBean> getDeviceBeans() {
+        return deviceBeans;
     }
 
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
+    public void setDeviceBeans(List<DeviceBean> deviceBeans) {
+        this.deviceBeans = deviceBeans;
     }
 
     @Override
     public String toString() {
-        return "Area{" +
+        return "AreaBean{" +
                 "id='" + id + '\'' +
                 ", areaName='" + areaName + '\'' +
                 ", folderId=" + folderId +
-                ", devices=" + devices +
+                ", deviceBeans=" + deviceBeans +
                 '}';
     }
 }

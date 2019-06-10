@@ -7,7 +7,7 @@ import java.util.List;
  *
  * 收藏文件夹实体
  */
-public class Folder implements Serializable {
+public class FolderBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,10 +24,10 @@ public class Folder implements Serializable {
     private List deviceArea;
 
 
-    public Folder() {
+    public FolderBean() {
     }
 
-    public Folder(String id, String folderName, Integer status, List imageSearchList, List trackList, List deviceArea) {
+    public FolderBean(String id, String folderName, Integer status, List imageSearchList, List trackList, List deviceArea) {
         this.id = id;
         this.folderName = folderName;
         this.status = status;
@@ -90,7 +90,7 @@ public class Folder implements Serializable {
 
     @Override
     public String toString() {
-        return "Folder{" +
+        return "FolderBean{" +
                 "id='" + id + '\'' +
                 ", folderName='" + folderName + '\'' +
                 ", status=" + status +

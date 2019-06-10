@@ -3,9 +3,9 @@ package com.secusoft.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.secusoft.web.model.Picture;
+import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.Track;
+import com.secusoft.web.model.TrackBean;
 import com.secusoft.web.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,21 +30,21 @@ public class TrackController {
      */
     @RequestMapping("addtrack")
     public ResponseEntity<ResultVo> addTrack(@RequestBody JSONObject jsonObject){
-        Track track = JSON.parseObject(jsonObject.get("track").toString(), new TypeReference<Track>() {
+        TrackBean trackBean = JSON.parseObject(jsonObject.get("trackBean").toString(), new TypeReference<TrackBean>() {
         });
-        ArrayList<Picture> pictureList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<Picture>>() {
+        ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("pictureBeanList").toString(), new TypeReference<ArrayList<PictureBean>>() {
         });
-        ResultVo resultVo = trackService.addTrack(track, pictureList);
+        ResultVo resultVo = trackService.addTrack(trackBean, pictureBeanList);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
      * 删除轨迹
-     * @param track id
+     * @param trackBean id
      * @return
      */
-    public ResponseEntity<ResultVo> removeTrack(@RequestBody Track track){
-        ResultVo resultVo = trackService.removeTrack(track);
+    public ResponseEntity<ResultVo> removeTrack(@RequestBody TrackBean trackBean){
+        ResultVo resultVo = trackService.removeTrack(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
@@ -54,32 +54,32 @@ public class TrackController {
      * @return
      */
     public ResponseEntity<ResultVo> updateTrack(@RequestBody JSONObject jsonObject){
-        Track track = JSON.parseObject(jsonObject.get("Track").toString(), new TypeReference<Track>() {
+        TrackBean trackBean = JSON.parseObject(jsonObject.get("TrackBean").toString(), new TypeReference<TrackBean>() {
         });
-        ArrayList<Picture> pictureList = JSON.parseObject(jsonObject.get("PictureList").toString(), new TypeReference<ArrayList<Picture>>() {
+        ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("PictureList").toString(), new TypeReference<ArrayList<PictureBean>>() {
         });
-        ResultVo resultVo = trackService.updateTrack(track, pictureList);
+        ResultVo resultVo = trackService.updateTrack(trackBean, pictureBeanList);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
      * 修改轨迹名称
-     * @param track
+     * @param trackBean
      * @return
      */
-    public ResponseEntity<ResultVo> updateTrackName(@RequestBody Track track){
-        ResultVo resultVo = trackService.updateTrackName(track);
+    public ResponseEntity<ResultVo> updateTrackName(@RequestBody TrackBean trackBean){
+        ResultVo resultVo = trackService.updateTrackName(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
      * 展示该轨迹详情
-     * @param track
+     * @param trackBean
      * @return
      */
     @RequestMapping("readTrack")
-    public ResponseEntity<ResultVo> readTrack(@RequestBody Track track){
-        ResultVo resultVo = trackService.readTrack(track);
+    public ResponseEntity<ResultVo> readTrack(@RequestBody TrackBean trackBean){
+        ResultVo resultVo = trackService.readTrack(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
 
     }

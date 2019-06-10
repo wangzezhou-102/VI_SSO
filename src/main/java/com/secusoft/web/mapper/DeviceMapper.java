@@ -1,11 +1,11 @@
 package com.secusoft.web.mapper;
 
-import com.secusoft.web.model.Device;
+import com.secusoft.web.model.DeviceBean;
 
 import java.util.List;
 
 public interface DeviceMapper {
-    Device selectDeviceById(String id);
-    List<Device> selectDeviceByAreaId(String id);
+    DeviceBean selectDeviceById(String id);
+    List<DeviceBean> selectDeviceByAreaId(String id);
 
 }

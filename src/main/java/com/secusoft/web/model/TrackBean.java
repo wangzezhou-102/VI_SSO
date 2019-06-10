@@ -3,20 +3,20 @@ package com.secusoft.web.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class Track implements Serializable {
+public class TrackBean implements Serializable {
     private String id;
     private String trackName;
     private String folderId;
-    private List<Picture> pictures;
+    private List<PictureBean> pictureBeans;
 
-    public Track() {
+    public TrackBean() {
     }
 
-    public Track(String id, String trackName, String folderId, List<Picture> pictures) {
+    public TrackBean(String id, String trackName, String folderId, List<PictureBean> pictureBeans) {
         this.id = id;
         this.trackName = trackName;
         this.folderId = folderId;
-        this.pictures = pictures;
+        this.pictureBeans = pictureBeans;
     }
 
     public String getId() {
@@ -43,11 +43,11 @@ public class Track implements Serializable {
         this.folderId = folderId;
     }
 
-    public List<Picture> getPictures() {
-        return pictures;
+    public List<PictureBean> getPictureBeans() {
+        return pictureBeans;
     }
 
-    public void setPictures(List<Picture> pictures) {
-        this.pictures = pictures;
+    public void setPictureBeans(List<PictureBean> pictureBeans) {
+        this.pictureBeans = pictureBeans;
     }
 }
