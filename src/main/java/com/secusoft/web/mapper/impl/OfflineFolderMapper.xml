@@ -5,7 +5,7 @@
     <resultMap id="offlineFolderMap" type="offlineFolderBean">
         <id column="ID" property="id"/>
         <result column="FOLDER_NAME" property="folderName"/>
-        <collection column="ID" property="pointBeans" ofType="offlinePointBean"
+        <collection column="ID" property="points" ofType="offlinePointBean"
                      select="com.secusoft.web.mapper.OfflinePointMapper.readOfflinePoint">
         </collection>
     </resultMap>

@@ -3,14 +3,9 @@ package com.secusoft.web.core.exception;
 import com.secusoft.web.core.common.GlobalApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.UndeclaredThrowableException;
 import static com.secusoft.web.core.support.HttpKit.getRequest;
 
@@ -65,12 +60,12 @@ public class GlobalExceptionHandler {
     }
 
 
-    private void assertAjax(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getHeader("x-requested-with") != null
-                && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-            //如果是ajax请求响应头会有，x-requested-with
-            response.setHeader("sessionstatus", "timeout");//在响应头设置session状态
-        }
-    }
+//    private void assertAjax(HttpServletRequest request, HttpServletResponse response) {
+//        if (request.getHeader("x-requested-with") != null
+//                && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
+//            //如果是ajax请求响应头会有，x-requested-with
+//            response.setHeader("sessionstatus", "timeout");//在响应头设置session状态
+//        }
+//    }
 
 }
