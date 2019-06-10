@@ -1,6 +1,6 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.Service.ViPrivateMemberService;
+import com.secusoft.web.service.ViPrivateMemberService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;

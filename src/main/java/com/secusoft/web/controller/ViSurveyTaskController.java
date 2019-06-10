@@ -1,6 +1,6 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.Service.ViSurveyTaskService;
+import com.secusoft.web.service.ViSurveyTaskService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViSurveyTaskVo;

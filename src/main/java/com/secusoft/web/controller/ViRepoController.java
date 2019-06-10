@@ -1,6 +1,6 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.Service.ViRepoService;
+import com.secusoft.web.service.ViRepoService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViRepoBean;
 import com.secusoft.web.model.ViRepoVo;

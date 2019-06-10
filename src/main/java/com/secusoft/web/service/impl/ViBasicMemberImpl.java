@@ -1,7 +1,7 @@
-package com.secusoft.web.Service.impl;
+package com.secusoft.web.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.secusoft.web.Service.ViBasicMemberService;
+import com.secusoft.web.service.ViBasicMemberService;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViBasicMemberBean;

@@ -1,4 +1,4 @@
-package com.secusoft.web.Service;
+package com.secusoft.web.service;
 
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViRepoBean;

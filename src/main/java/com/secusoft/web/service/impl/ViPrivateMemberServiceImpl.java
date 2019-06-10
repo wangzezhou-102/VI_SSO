@@ -1,7 +1,7 @@
-package com.secusoft.web.Service.impl;
+package com.secusoft.web.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.secusoft.web.Service.ViPrivateMemberService;
+import com.secusoft.web.service.ViPrivateMemberService;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.model.ResultVo;
