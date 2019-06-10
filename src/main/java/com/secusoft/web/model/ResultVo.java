@@ -10,7 +10,7 @@ import com.secusoft.web.core.exception.BizExceptionEnum;
  * @company 视在数科
  * @date 2019年5月27日
  */
-public class ResultVo<T> {
+public class ResultVo {
 
     /**
      * 业务错误码
@@ -26,7 +26,7 @@ public class ResultVo<T> {
      * 返回信息
      */
     @JsonInclude(Include.NON_EMPTY)
-    private T data;
+    private Object data;
 
     /**
      * 总数
@@ -37,15 +37,15 @@ public class ResultVo<T> {
     public ResultVo() {
     }
 
-    public static <T> ResultVo<T> success() {
-        ResultVo<T> resultVo = new ResultVo<T>();
+    public static  ResultVo success() {
+        ResultVo resultVo = new ResultVo();
         resultVo.data = null;
         resultVo.message = "success";
         return resultVo;
     }
 
-    public static <T> ResultVo<T> success(T result) {
-        ResultVo<T> resultVo = new ResultVo<T>();
+    public static  ResultVo success(Object result) {
+        ResultVo resultVo = new ResultVo();
         resultVo.data = result;
         resultVo.message = "success";
         return resultVo;
@@ -55,15 +55,15 @@ public class ResultVo<T> {
         return failure(error.getCode(), error.getMessage());
     }
     
-    public static <T> ResultVo<T> failure(int errorCode, String errorMessage) {
+    public static  ResultVo failure(int errorCode, String errorMessage) {
         ResultVo resultVo = new ResultVo();
         resultVo.code = errorCode;
         resultVo.message = errorMessage;
         return resultVo;
     }
 
-    public static <T>ResultVo<T> failure(int errorCode) {
-        ResultVo<T> resultVo = new ResultVo<T>();
+    public static ResultVo failure(int errorCode) {
+        ResultVo resultVo = new ResultVo();
         resultVo.code = errorCode;
         return resultVo;
     }
@@ -89,7 +89,7 @@ public class ResultVo<T> {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
