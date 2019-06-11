@@ -1,7 +1,7 @@
 package com.secusoft.web.shipinapi;
 
 
-
+import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
 import org.apache.http.*;
@@ -32,7 +32,7 @@ public class ShiPinClient {
 
     private static Logger log = LoggerFactory.getLogger(ShiPinClient.class);
 
-    public static String shiPinEndpoint;
+    public static String shiPinEndpoint = NormalConfig.getAddrApiShipin();
 
     //API 资源路径
     public static final String Path_CAMERA_LIST="/v3/access_device_list";

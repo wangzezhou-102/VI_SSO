@@ -2,6 +2,7 @@ package com.secusoft.web.serviceapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import org.apache.http.*;
@@ -27,14 +28,14 @@ import java.net.ConnectException;
 public class ServiceClient {
     private static Logger log = LoggerFactory.getLogger(ServiceClient.class);
 
-    public static String ServiceEndpoint;
+    public static String ServiceEndpoint = NormalConfig.getAddrApiService();
 
 
     //API 资源路径
     //布控库信息查询
-    public static final String Path_BKREPO_META="/bkrepometa";
+    public static final String Path_BKREPO_META = "/bkrepometa";
     //布控库创建
-    public static final String Path_BKREPO_CREATE="/bkrepocreate";
+    public static final String Path_BKREPO_CREATE = "/bkrepocreate";
 
     private volatile static ServiceClient HttpClientConnectionPool;
 
@@ -52,7 +53,7 @@ public class ServiceClient {
     /**
      * 初始化连接池
      */
-    static{
+    static {
         try {
             cm = new PoolingHttpClientConnectionManager();
             cm.setMaxTotal(MAX_TOTAL_CONNECTIONS);
@@ -103,7 +104,8 @@ public class ServiceClient {
         }
     }
 
-    private ServiceClient(){}
+    private ServiceClient() {
+    }
 
     /**
      * 获取HttpClientConnectionPool对象，这是单例方法
@@ -123,6 +125,7 @@ public class ServiceClient {
 
     /**
      * 获取HttpClient。在获取之前，确保HttpClientConnectionPool对象已创建。
+     *
      * @return
      */
     public static CloseableHttpClient getHttpClient() {
@@ -137,7 +140,7 @@ public class ServiceClient {
         if (cm != null) {
             cm.shutdown();
         }
-        if(httpclient != null){
+        if (httpclient != null) {
             try {
                 httpclient.close();
             } catch (IOException e) {
@@ -150,15 +153,16 @@ public class ServiceClient {
 
     /**
      * Post方法封装，发送post请求，获取响应内容
+     *
      * @param url
      * @param jsonStr
      * @return
      */
-    public String fetchByPostMethod(String url, String jsonStr){
+    public String fetchByPostMethod(String url, String jsonStr) {
         String resultStr = null;
-        HttpPost httpPost = new HttpPost(ServiceEndpoint+url);
+        HttpPost httpPost = new HttpPost(ServiceEndpoint + url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));
-        httpPost.addHeader(HttpHeaders.USER_AGENT,USERAGENT);
+        httpPost.addHeader(HttpHeaders.USER_AGENT, USERAGENT);
 //		httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
 //		httpPost.addHeader(HttpHeaders.ACCEPT,"Application/json");
 //		httpPost.addHeader(HttpHeaders.CONNECTION,"keep-alive");
@@ -167,19 +171,19 @@ public class ServiceClient {
         try {
             response = httpclient.execute(httpPost);
             HttpEntity entity = response.getEntity();
-            resultStr = EntityUtils.toString(entity,CHARSET);
+            resultStr = EntityUtils.toString(entity, CHARSET);
             EntityUtils.consume(entity);
-        }catch (ConnectException ce){//服务器请求失败
+        } catch (ConnectException ce) {//服务器请求失败
             log.error(ce.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
-        } finally{
+        } finally {
             httpPost.abort();
         }
         return resultStr;
     }
 
-    public BaseResponse fetchByPostMethod(String url, BaseRequest request){
+    public BaseResponse fetchByPostMethod(String url, BaseRequest request) {
         String requestStr = JSON.toJSONString(request);
         String responseStr = fetchByPostMethod(url, requestStr);
         BaseResponse<JSONArray> response = new BaseResponse<>();

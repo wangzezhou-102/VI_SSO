@@ -1,6 +1,6 @@
 package com.secusoft.web.model.gazhk;
 
-public class viGazhkHzZjk1YdcjryBean {
+public class ViGazhkHzZjk1YdcjryBean {
     private String id;
 
     private String objectId;

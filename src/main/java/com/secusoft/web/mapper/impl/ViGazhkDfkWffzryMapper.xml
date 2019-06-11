@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViGazhkDfkWffzryMapper">
+    <insert id="addViGazhkDfkWffzry" parameterType="com.secusoft.web.model.gazhk.ViGazhkDfkWffzryBean">
+          insert into vi_gazhk_dfk_wffzry (pk_id, object_id, jg_sf,
+      jg_ss, r_ajbh, r_rybh,
+      r_xlh, r_ajlb, r_ryly,
+      r_zhrq, r_zhdw, r_lxr,
+      r_lxdh, r_zyaq, r_cldw,
+      r_clrq, r_cllx, r_cljg,
+      r_cfrq, r_xxzk, r_zxd,
+      r_zxdxz, r_sfrq, r_sfly,
+      r_rylx, r_bz, r_jbqkjsxbx,
+      r_glcs, r_jgxzcy, r_bgxj,
+      r_zxyy, r_zxrq, r_zxr,
+      r_tbdw, r_tbr, r_tbsj,
+      lrdw, lrr, lrsj,
+      csbz, scbz, xgsj,
+      csspdw, csscspdw, scyy,
+      sbsj, r_ywxtfl, r_cfjsrq,
+      r_ypxq, r_ajlb1, r_ajlb2,
+      r_zrdd, r_zhddxz, r_zhfs,
+      scbz_format, r_cldw_code6, r_rybh_jgcode,
+      r_rybh_mzcode, r_rybh_xm, r_rybh_xb,
+      r_rybh_sfzh, r_rybh_mz, r_rybh_jg,
+      r_ajlb_format, r_ryly_format, r_zhdw_format,
+      r_cldw_format, r_cllx_format, r_xxzk_format,
+      r_zxd_format, r_sfly_format, r_rylx_format,
+      r_tbdw_format, lrdw_format, csspdw_format,
+      csscspdw_format, r_ywxtfl_format, r_ajlb1_format,
+      r_ajlb2_format)
+    values (#{pkId,jdbcType=VARCHAR}, #{objectId,jdbcType=VARCHAR}, #{jgSf,jdbcType=VARCHAR},
+      #{jgSs,jdbcType=VARCHAR}, #{rAjbh,jdbcType=VARCHAR}, #{rRybh,jdbcType=VARCHAR},
+      #{rXlh,jdbcType=VARCHAR}, #{rAjlb,jdbcType=VARCHAR}, #{rRyly,jdbcType=VARCHAR},
+      #{rZhrq,jdbcType=TIMESTAMP}, #{rZhdw,jdbcType=VARCHAR}, #{rLxr,jdbcType=VARCHAR},
+      #{rLxdh,jdbcType=VARCHAR}, #{rZyaq,jdbcType=VARCHAR}, #{rCldw,jdbcType=VARCHAR},
+      #{rClrq,jdbcType=TIMESTAMP}, #{rCllx,jdbcType=VARCHAR}, #{rCljg,jdbcType=VARCHAR},
+      #{rCfrq,jdbcType=TIMESTAMP}, #{rXxzk,jdbcType=VARCHAR}, #{rZxd,jdbcType=VARCHAR},
+      #{rZxdxz,jdbcType=VARCHAR}, #{rSfrq,jdbcType=TIMESTAMP}, #{rSfly,jdbcType=VARCHAR},
+      #{rRylx,jdbcType=VARCHAR}, #{rBz,jdbcType=VARCHAR}, #{rJbqkjsxbx,jdbcType=VARCHAR},
+      #{rGlcs,jdbcType=VARCHAR}, #{rJgxzcy,jdbcType=VARCHAR}, #{rBgxj,jdbcType=VARCHAR},
+      #{rZxyy,jdbcType=VARCHAR}, #{rZxrq,jdbcType=TIMESTAMP}, #{rZxr,jdbcType=VARCHAR},
+      #{rTbdw,jdbcType=VARCHAR}, #{rTbr,jdbcType=VARCHAR}, #{rTbsj,jdbcType=TIMESTAMP},
+      #{lrdw,jdbcType=VARCHAR}, #{lrr,jdbcType=VARCHAR}, #{lrsj,jdbcType=TIMESTAMP},
+      #{csbz,jdbcType=VARCHAR}, #{scbz,jdbcType=INTEGER}, #{xgsj,jdbcType=TIMESTAMP},
+      #{csspdw,jdbcType=VARCHAR}, #{csscspdw,jdbcType=VARCHAR}, #{scyy,jdbcType=VARCHAR},
+      #{sbsj,jdbcType=TIMESTAMP}, #{rYwxtfl,jdbcType=VARCHAR}, #{rCfjsrq,jdbcType=TIMESTAMP},
+      #{rYpxq,jdbcType=VARCHAR}, #{rAjlb1,jdbcType=VARCHAR}, #{rAjlb2,jdbcType=VARCHAR},
+      #{rZrdd,jdbcType=VARCHAR}, #{rZhddxz,jdbcType=VARCHAR}, #{rZhfs,jdbcType=VARCHAR},
+      #{scbzFormat,jdbcType=VARCHAR}, #{rCldwCode6,jdbcType=VARCHAR}, #{rRybhJgcode,jdbcType=VARCHAR},
+      #{rRybhMzcode,jdbcType=VARCHAR}, #{rRybhXm,jdbcType=VARCHAR}, #{rRybhXb,jdbcType=VARCHAR},
+      #{rRybhSfzh,jdbcType=VARCHAR}, #{rRybhMz,jdbcType=VARCHAR}, #{rRybhJg,jdbcType=VARCHAR},
+      #{rAjlbFormat,jdbcType=VARCHAR}, #{rRylyFormat,jdbcType=VARCHAR}, #{rZhdwFormat,jdbcType=VARCHAR},
+      #{rCldwFormat,jdbcType=VARCHAR}, #{rCllxFormat,jdbcType=VARCHAR}, #{rXxzkFormat,jdbcType=VARCHAR},
+      #{rZxdFormat,jdbcType=VARCHAR}, #{rSflyFormat,jdbcType=VARCHAR}, #{rRylxFormat,jdbcType=VARCHAR},
+      #{rTbdwFormat,jdbcType=VARCHAR}, #{lrdwFormat,jdbcType=VARCHAR}, #{csspdwFormat,jdbcType=VARCHAR},
+      #{csscspdwFormat,jdbcType=VARCHAR}, #{rYwxtflFormat,jdbcType=VARCHAR}, #{rAjlb1Format,jdbcType=VARCHAR},
+      #{rAjlb2Format,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="truncateTable">
+      truncate table vi_gazhk_dfk_wffzry
+    </update>
+</mapper>

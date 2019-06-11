@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2019/6/6 15:40
  */
 @Service
-public class ViBasicMemberImpl implements ViBasicMemberService {
+public class ViBasicMemberServiceImpl implements ViBasicMemberService {
 
     @Resource
     ViBasicMemberMapper viBasicMemberMapper;
@@ -55,4 +55,16 @@ public class ViBasicMemberImpl implements ViBasicMemberService {
 
         return ResultVo.success(PageReturnUtils.getPageMap(list,viBasicMemberVo.getCurrent(),viBasicMemberVo.getSize()));
     }
+
+    /**
+     * 是否关注该布控
+     * @param viBasicMemberBean
+     * @return
+     */
+    @Override
+    public ResultVo updateFocusMenber(ViBasicMemberBean viBasicMemberBean) {
+        viBasicMemberMapper.updateFocusMenber(viBasicMemberBean);
+        return ResultVo.success();
+    }
+
 }

@@ -20,4 +20,6 @@ public interface ViBasicMemberService {
     ResultVo getAllViBasicMember(ViBasicMemberBean viBasicMemberBean);
 
     ResultVo getPagedViBasicMember(ViBasicMemberVo viBasicMemberVo);
+
+    ResultVo updateFocusMenber(ViBasicMemberBean viBasicMemberBean);
 }

@@ -32,5 +32,5 @@ public interface ViRepoMapper {
      * 获取所有布控库
      * @return
      */
-    List<ViRepoBean> getAllViRepo();
+    List<ViRepoBean> getAllViRepo(ViRepoBean viRepoBean);
 }

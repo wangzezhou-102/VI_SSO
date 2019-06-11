@@ -3,6 +3,7 @@ package com.secusoft.web.tusouapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import org.apache.http.*;
@@ -20,6 +21,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -27,54 +29,66 @@ import java.net.ConnectException;
 
 /**
  * 天擎搜索图搜API 接口封装
+ *
  * @author yhchen
  */
-public class TuSouClient{
+public class TuSouClient {
 
     private static Logger log = LoggerFactory.getLogger(TuSouClient.class);
 
-    public static String tuSouEndpoint;
+    public static String tuSouEndpoint = NormalConfig.getAddrApiTusou();
 
     //布控库操作相关参数
+    @Value("#{config['bkrepo.requestId']}")
     public static String tuSouRequestId;
+    @Value("#{config['bkrepo.bkid']}")
     public static String tuSouBkid;
+    @Value("#{config['bkrepo.meta.bkdesc']}")
     public static String tuSouBkdesc;
+    @Value("#{config['bkrepo.meta.bkname']}")
     public static String tuSouBkname;
+    @Value("#{config['bkrepo.meta.algorithmName']}")
     public static String tuSouAlgorithmName;
+    @Value("#{config['bkrepo.meta.algorithmVersion']}")
     public static String tuSouAlgorithmVersion;
+    @Value("#{config['bkrepo.meta.algorithmType']}")
     public static String tuSouAlgorithmType;
+    @Value("#{config['bkrepo.meta.ossInfo.endpoint']}")
     public static String tuSouOssEndpoint;
+    @Value("#{config['bkrepo.meta.ossInfo.access_id']}")
     public static String tuSouOssAccess_id;
+    @Value("#{config['bkrepo.meta.ossInfo.access_key']}")
     public static String tuSouOssAccess_key;
+    @Value("#{config['bkrepo.meta.ossInfo.bucket_name']}")
     public static String tuSouOssBucket_name;
 
     //API 资源路径
-    public static final String Path_SEARCH="/search";
+    public static final String Path_SEARCH = "/search";
 
-    public static final String Path_RES_START="/res/start";
-    public static final String Path_RES_STOP="/res/stop";
-    public static final String Path_RES_LIST="/res/list";
-    public static final String Path_RES_DELETE="/res/delete";
+    public static final String Path_RES_START = "/res/start";
+    public static final String Path_RES_STOP = "/res/stop";
+    public static final String Path_RES_LIST = "/res/list";
+    public static final String Path_RES_DELETE = "/res/delete";
 
-    public static final String Path_ALGORITHM_ATTRIBUTE="/algorithm/attribute";
-    public static final String Path_ALGORITHM_FEATURE="/algorithm/feature";
-    public static final String Path_ALGORITHM_DETECT="/algorithm/detect";
+    public static final String Path_ALGORITHM_ATTRIBUTE = "/algorithm/attribute";
+    public static final String Path_ALGORITHM_FEATURE = "/algorithm/feature";
+    public static final String Path_ALGORITHM_DETECT = "/algorithm/detect";
 
-    public static final String Path_BKREPO_CREATE="/bkrepo/create";
-    public static final String Path_BKREPO_UPDATE="/bkrepo/update";
-    public static final String Path_BKREPO_DELETE="/bkrepo/delete";
-    public static final String Path_BKREPO_META="/bkrepo/meta";
+    public static final String Path_BKREPO_CREATE = "/bkrepo/create";
+    public static final String Path_BKREPO_UPDATE = "/bkrepo/update";
+    public static final String Path_BKREPO_DELETE = "/bkrepo/delete";
+    public static final String Path_BKREPO_META = "/bkrepo/meta";
 
-    public static final String Path_BKMEMBER_ADD="/bkmember/add";
-    public static final String Path_BKMEMBER_DELETE="/bkmember/delete";
-    public static final String Path_BKMEMBER_LIST="/bkmember/list";
+    public static final String Path_BKMEMBER_ADD = "/bkmember/add";
+    public static final String Path_BKMEMBER_DELETE = "/bkmember/delete";
+    public static final String Path_BKMEMBER_LIST = "/bkmember/list";
 
-    public static final String Path_BKTASK_SUBMIT="/bktask/submit";
-    public static final String Path_BKTASK_START="/bktask/start";
-    public static final String Path_BKTASK_STOP="/bktask/stop";
-    public static final String Path_BKTASK_GET="/bktask/get";
-    public static final String Path_BKTASK_LIST="/bktask/list";
-    public static final String Path_BKTASK_DELETE="/bktask/delete";
+    public static final String Path_BKTASK_SUBMIT = "/bktask/submit";
+    public static final String Path_BKTASK_START = "/bktask/start";
+    public static final String Path_BKTASK_STOP = "/bktask/stop";
+    public static final String Path_BKTASK_GET = "/bktask/get";
+    public static final String Path_BKTASK_LIST = "/bktask/list";
+    public static final String Path_BKTASK_DELETE = "/bktask/delete";
 
 
     private volatile static TuSouClient HttpClientConnectionPool;
@@ -93,7 +107,7 @@ public class TuSouClient{
     /**
      * 初始化连接池
      */
-    static{
+    static {
         try {
             cm = new PoolingHttpClientConnectionManager();
             cm.setMaxTotal(MAX_TOTAL_CONNECTIONS);
@@ -144,7 +158,8 @@ public class TuSouClient{
         }
     }
 
-    private TuSouClient(){}
+    private TuSouClient() {
+    }
 
     /**
      * 获取HttpClientConnectionPool对象，这是单例方法
@@ -164,6 +179,7 @@ public class TuSouClient{
 
     /**
      * 获取HttpClient。在获取之前，确保HttpClientConnectionPool对象已创建。
+     *
      * @return
      */
     public static CloseableHttpClient getHttpClient() {
@@ -178,7 +194,7 @@ public class TuSouClient{
         if (cm != null) {
             cm.shutdown();
         }
-        if(httpclient != null){
+        if (httpclient != null) {
             try {
                 httpclient.close();
             } catch (IOException e) {
@@ -191,15 +207,16 @@ public class TuSouClient{
 
     /**
      * Post方法封装，发送post请求，获取响应内容
+     *
      * @param url
      * @param jsonStr
      * @return
      */
-    public String fetchByPostMethod(String url, String jsonStr){
+    public String fetchByPostMethod(String url, String jsonStr) {
         String resultStr = null;
-        HttpPost httpPost = new HttpPost(tuSouEndpoint+url);
+        HttpPost httpPost = new HttpPost(tuSouEndpoint + url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));
-        httpPost.addHeader(HttpHeaders.USER_AGENT,USERAGENT);
+        httpPost.addHeader(HttpHeaders.USER_AGENT, USERAGENT);
 //		httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
 //		httpPost.addHeader(HttpHeaders.ACCEPT,"Application/json");
 //		httpPost.addHeader(HttpHeaders.CONNECTION,"keep-alive");
@@ -208,19 +225,19 @@ public class TuSouClient{
         try {
             response = httpclient.execute(httpPost);
             HttpEntity entity = response.getEntity();
-            resultStr = EntityUtils.toString(entity,CHARSET);
+            resultStr = EntityUtils.toString(entity, CHARSET);
             EntityUtils.consume(entity);
-        }catch (ConnectException ce){//服务器请求失败
+        } catch (ConnectException ce) {//服务器请求失败
             log.error(ce.getMessage());
         } catch (IOException e) {
             log.error(e.getMessage());
-        } finally{
+        } finally {
             httpPost.abort();
         }
         return resultStr;
     }
 
-    public BaseResponse fetchByPostMethod(String url, BaseRequest request){
+    public BaseResponse fetchByPostMethod(String url, BaseRequest request) {
         String requestStr = JSON.toJSONString(request);
         String responseStr = fetchByPostMethod(url, requestStr);
         BaseResponse<JSONArray> response = new BaseResponse<>();

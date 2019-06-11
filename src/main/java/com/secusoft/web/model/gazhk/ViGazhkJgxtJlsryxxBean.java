@@ -1,51 +1,55 @@
 package com.secusoft.web.model.gazhk;
 
-public class viGazhkJgxtKssryxxBean {
+public class ViGazhkJgxtJlsryxxBean {
     private String zybh;
 
     private String objectId;
 
     private String xb;
 
-    private String gj;
+    private String zjlx;
 
-    private String sf;
-
-    private String xzzqhSs;
-
-    private String mz;
+    private String hyzk;
 
     private String jg;
 
     private String hjszd;
 
+    private String zy;
+
     private String tssf;
 
     private String xzzqh;
 
-    private String ssjd;
-
-    private String cljg;
-
-    private String ajlb;
-
-    private String zjlx;
-
-    private String xzzqhSf;
-
-    private String hyzk;
-
-    private String zy;
+    private String wfxz;
 
     private String rsyy;
+
+    private String jgSf;
+
+    private String jgSs;
+
+    private String hjszdSf;
+
+    private String hjszdSs;
+
+    private String xzzqhSs;
+
+    private String gj;
+
+    private String whcd;
+
+    private String sf;
+
+    private String csyy;
 
     private String jbxxbh;
 
     private String xm;
 
-    private String csrq;
-
     private String xbFormat;
+
+    private String csrq;
 
     private String zjlxFormat;
 
@@ -57,9 +61,9 @@ public class viGazhkJgxtKssryxxBean {
 
     private String gjFormat;
 
-    private String whcdFormat;
-
     private String jgFormat;
+
+    private String whcdFormat;
 
     private String hjszdFormat;
 
@@ -77,11 +81,7 @@ public class viGazhkJgxtKssryxxBean {
 
     private String jsmc;
 
-    private String ssjdFormat;
-
-    private String cljgFormat;
-
-    private String ajlbFormat;
+    private String wfxzFormat;
 
     private String rsrq;
 
@@ -89,27 +89,25 @@ public class viGazhkJgxtKssryxxBean {
 
     private String csqx;
 
-    private String dbrq;
+    private String jlts;
 
-    private String sydw;
+    private String jlksrq;
 
-    private String syr;
+    private String jljsrq;
 
-    private String rsflwsh;
+    private String sjdw;
 
-    private String whcd;
+    private String sjr;
 
-    private String jgSs;
+    private String flwsh;
 
-    private String hjszdSf;
+    private String xzzqhSf;
 
-    private String jgSf;
-
-    private String hjszdSs;
-
-    private String jsh;
+    private String mz;
 
     private String jsbh;
+
+    private String jsh;
 
     public String getZybh() {
         return zybh;
@@ -135,36 +133,20 @@ public class viGazhkJgxtKssryxxBean {
         this.xb = xb == null ? null : xb.trim();
     }
 
-    public String getGj() {
-        return gj;
+    public String getZjlx() {
+        return zjlx;
     }
 
-    public void setGj(String gj) {
-        this.gj = gj == null ? null : gj.trim();
+    public void setZjlx(String zjlx) {
+        this.zjlx = zjlx == null ? null : zjlx.trim();
     }
 
-    public String getSf() {
-        return sf;
+    public String getHyzk() {
+        return hyzk;
     }
 
-    public void setSf(String sf) {
-        this.sf = sf == null ? null : sf.trim();
-    }
-
-    public String getXzzqhSs() {
-        return xzzqhSs;
-    }
-
-    public void setXzzqhSs(String xzzqhSs) {
-        this.xzzqhSs = xzzqhSs == null ? null : xzzqhSs.trim();
-    }
-
-    public String getMz() {
-        return mz;
-    }
-
-    public void setMz(String mz) {
-        this.mz = mz == null ? null : mz.trim();
+    public void setHyzk(String hyzk) {
+        this.hyzk = hyzk == null ? null : hyzk.trim();
     }
 
     public String getJg() {
@@ -183,6 +165,14 @@ public class viGazhkJgxtKssryxxBean {
         this.hjszd = hjszd == null ? null : hjszd.trim();
     }
 
+    public String getZy() {
+        return zy;
+    }
+
+    public void setZy(String zy) {
+        this.zy = zy == null ? null : zy.trim();
+    }
+
     public String getTssf() {
         return tssf;
     }
@@ -199,60 +189,12 @@ public class viGazhkJgxtKssryxxBean {
         this.xzzqh = xzzqh == null ? null : xzzqh.trim();
     }
 
-    public String getSsjd() {
-        return ssjd;
+    public String getWfxz() {
+        return wfxz;
     }
 
-    public void setSsjd(String ssjd) {
-        this.ssjd = ssjd == null ? null : ssjd.trim();
-    }
-
-    public String getCljg() {
-        return cljg;
-    }
-
-    public void setCljg(String cljg) {
-        this.cljg = cljg == null ? null : cljg.trim();
-    }
-
-    public String getAjlb() {
-        return ajlb;
-    }
-
-    public void setAjlb(String ajlb) {
-        this.ajlb = ajlb == null ? null : ajlb.trim();
-    }
-
-    public String getZjlx() {
-        return zjlx;
-    }
-
-    public void setZjlx(String zjlx) {
-        this.zjlx = zjlx == null ? null : zjlx.trim();
-    }
-
-    public String getXzzqhSf() {
-        return xzzqhSf;
-    }
-
-    public void setXzzqhSf(String xzzqhSf) {
-        this.xzzqhSf = xzzqhSf == null ? null : xzzqhSf.trim();
-    }
-
-    public String getHyzk() {
-        return hyzk;
-    }
-
-    public void setHyzk(String hyzk) {
-        this.hyzk = hyzk == null ? null : hyzk.trim();
-    }
-
-    public String getZy() {
-        return zy;
-    }
-
-    public void setZy(String zy) {
-        this.zy = zy == null ? null : zy.trim();
+    public void setWfxz(String wfxz) {
+        this.wfxz = wfxz == null ? null : wfxz.trim();
     }
 
     public String getRsyy() {
@@ -261,6 +203,78 @@ public class viGazhkJgxtKssryxxBean {
 
     public void setRsyy(String rsyy) {
         this.rsyy = rsyy == null ? null : rsyy.trim();
+    }
+
+    public String getJgSf() {
+        return jgSf;
+    }
+
+    public void setJgSf(String jgSf) {
+        this.jgSf = jgSf == null ? null : jgSf.trim();
+    }
+
+    public String getJgSs() {
+        return jgSs;
+    }
+
+    public void setJgSs(String jgSs) {
+        this.jgSs = jgSs == null ? null : jgSs.trim();
+    }
+
+    public String getHjszdSf() {
+        return hjszdSf;
+    }
+
+    public void setHjszdSf(String hjszdSf) {
+        this.hjszdSf = hjszdSf == null ? null : hjszdSf.trim();
+    }
+
+    public String getHjszdSs() {
+        return hjszdSs;
+    }
+
+    public void setHjszdSs(String hjszdSs) {
+        this.hjszdSs = hjszdSs == null ? null : hjszdSs.trim();
+    }
+
+    public String getXzzqhSs() {
+        return xzzqhSs;
+    }
+
+    public void setXzzqhSs(String xzzqhSs) {
+        this.xzzqhSs = xzzqhSs == null ? null : xzzqhSs.trim();
+    }
+
+    public String getGj() {
+        return gj;
+    }
+
+    public void setGj(String gj) {
+        this.gj = gj == null ? null : gj.trim();
+    }
+
+    public String getWhcd() {
+        return whcd;
+    }
+
+    public void setWhcd(String whcd) {
+        this.whcd = whcd == null ? null : whcd.trim();
+    }
+
+    public String getSf() {
+        return sf;
+    }
+
+    public void setSf(String sf) {
+        this.sf = sf == null ? null : sf.trim();
+    }
+
+    public String getCsyy() {
+        return csyy;
+    }
+
+    public void setCsyy(String csyy) {
+        this.csyy = csyy == null ? null : csyy.trim();
     }
 
     public String getJbxxbh() {
@@ -279,20 +293,20 @@ public class viGazhkJgxtKssryxxBean {
         this.xm = xm == null ? null : xm.trim();
     }
 
-    public String getCsrq() {
-        return csrq;
-    }
-
-    public void setCsrq(String csrq) {
-        this.csrq = csrq == null ? null : csrq.trim();
-    }
-
     public String getXbFormat() {
         return xbFormat;
     }
 
     public void setXbFormat(String xbFormat) {
         this.xbFormat = xbFormat == null ? null : xbFormat.trim();
+    }
+
+    public String getCsrq() {
+        return csrq;
+    }
+
+    public void setCsrq(String csrq) {
+        this.csrq = csrq == null ? null : csrq.trim();
     }
 
     public String getZjlxFormat() {
@@ -335,20 +349,20 @@ public class viGazhkJgxtKssryxxBean {
         this.gjFormat = gjFormat == null ? null : gjFormat.trim();
     }
 
-    public String getWhcdFormat() {
-        return whcdFormat;
-    }
-
-    public void setWhcdFormat(String whcdFormat) {
-        this.whcdFormat = whcdFormat == null ? null : whcdFormat.trim();
-    }
-
     public String getJgFormat() {
         return jgFormat;
     }
 
     public void setJgFormat(String jgFormat) {
         this.jgFormat = jgFormat == null ? null : jgFormat.trim();
+    }
+
+    public String getWhcdFormat() {
+        return whcdFormat;
+    }
+
+    public void setWhcdFormat(String whcdFormat) {
+        this.whcdFormat = whcdFormat == null ? null : whcdFormat.trim();
     }
 
     public String getHjszdFormat() {
@@ -415,28 +429,12 @@ public class viGazhkJgxtKssryxxBean {
         this.jsmc = jsmc == null ? null : jsmc.trim();
     }
 
-    public String getSsjdFormat() {
-        return ssjdFormat;
+    public String getWfxzFormat() {
+        return wfxzFormat;
     }
 
-    public void setSsjdFormat(String ssjdFormat) {
-        this.ssjdFormat = ssjdFormat == null ? null : ssjdFormat.trim();
-    }
-
-    public String getCljgFormat() {
-        return cljgFormat;
-    }
-
-    public void setCljgFormat(String cljgFormat) {
-        this.cljgFormat = cljgFormat == null ? null : cljgFormat.trim();
-    }
-
-    public String getAjlbFormat() {
-        return ajlbFormat;
-    }
-
-    public void setAjlbFormat(String ajlbFormat) {
-        this.ajlbFormat = ajlbFormat == null ? null : ajlbFormat.trim();
+    public void setWfxzFormat(String wfxzFormat) {
+        this.wfxzFormat = wfxzFormat == null ? null : wfxzFormat.trim();
     }
 
     public String getRsrq() {
@@ -463,84 +461,68 @@ public class viGazhkJgxtKssryxxBean {
         this.csqx = csqx == null ? null : csqx.trim();
     }
 
-    public String getDbrq() {
-        return dbrq;
+    public String getJlts() {
+        return jlts;
     }
 
-    public void setDbrq(String dbrq) {
-        this.dbrq = dbrq == null ? null : dbrq.trim();
+    public void setJlts(String jlts) {
+        this.jlts = jlts == null ? null : jlts.trim();
     }
 
-    public String getSydw() {
-        return sydw;
+    public String getJlksrq() {
+        return jlksrq;
     }
 
-    public void setSydw(String sydw) {
-        this.sydw = sydw == null ? null : sydw.trim();
+    public void setJlksrq(String jlksrq) {
+        this.jlksrq = jlksrq == null ? null : jlksrq.trim();
     }
 
-    public String getSyr() {
-        return syr;
+    public String getJljsrq() {
+        return jljsrq;
     }
 
-    public void setSyr(String syr) {
-        this.syr = syr == null ? null : syr.trim();
+    public void setJljsrq(String jljsrq) {
+        this.jljsrq = jljsrq == null ? null : jljsrq.trim();
     }
 
-    public String getRsflwsh() {
-        return rsflwsh;
+    public String getSjdw() {
+        return sjdw;
     }
 
-    public void setRsflwsh(String rsflwsh) {
-        this.rsflwsh = rsflwsh == null ? null : rsflwsh.trim();
+    public void setSjdw(String sjdw) {
+        this.sjdw = sjdw == null ? null : sjdw.trim();
     }
 
-    public String getWhcd() {
-        return whcd;
+    public String getSjr() {
+        return sjr;
     }
 
-    public void setWhcd(String whcd) {
-        this.whcd = whcd == null ? null : whcd.trim();
+    public void setSjr(String sjr) {
+        this.sjr = sjr == null ? null : sjr.trim();
     }
 
-    public String getJgSs() {
-        return jgSs;
+    public String getFlwsh() {
+        return flwsh;
     }
 
-    public void setJgSs(String jgSs) {
-        this.jgSs = jgSs == null ? null : jgSs.trim();
+    public void setFlwsh(String flwsh) {
+        this.flwsh = flwsh == null ? null : flwsh.trim();
     }
 
-    public String getHjszdSf() {
-        return hjszdSf;
+    public String getXzzqhSf() {
+        return xzzqhSf;
     }
 
-    public void setHjszdSf(String hjszdSf) {
-        this.hjszdSf = hjszdSf == null ? null : hjszdSf.trim();
+    public void setXzzqhSf(String xzzqhSf) {
+        this.xzzqhSf = xzzqhSf == null ? null : xzzqhSf.trim();
     }
 
-    public String getJgSf() {
-        return jgSf;
+    public String getMz() {
+        return mz;
     }
 
-    public void setJgSf(String jgSf) {
-        this.jgSf = jgSf == null ? null : jgSf.trim();
-    }
-
-    public String getHjszdSs() {
-        return hjszdSs;
-    }
-
-    public void setHjszdSs(String hjszdSs) {
-        this.hjszdSs = hjszdSs == null ? null : hjszdSs.trim();
-    }
-
-    public String getJsh() {
-        return jsh;
-    }
-
-    public void setJsh(String jsh) {
-        this.jsh = jsh == null ? null : jsh.trim();
+    public void setMz(String mz) {
+        this.mz = mz == null ? null : mz.trim();
     }
 
     public String getJsbh() {
@@ -549,5 +531,13 @@ public class viGazhkJgxtKssryxxBean {
 
     public void setJsbh(String jsbh) {
         this.jsbh = jsbh == null ? null : jsbh.trim();
+    }
+
+    public String getJsh() {
+        return jsh;
+    }
+
+    public void setJsh(String jsh) {
+        this.jsh = jsh == null ? null : jsh.trim();
     }
 }

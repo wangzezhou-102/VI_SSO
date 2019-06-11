@@ -73,7 +73,7 @@ public class ViRepoServiceImpl implements ViRepoService {
     public ResultVo getAllViRepo(ViRepoVo viRepoVo) {
         PageHelper.startPage(viRepoVo.getCurrent(),viRepoVo.getSize());
 
-        List<ViRepoBean> list=viRepoMapper.getAllViRepo();
+        List<ViRepoBean> list=viRepoMapper.getAllViRepo(viRepoVo.getViRepoBean());
 
         return ResultVo.success(PageReturnUtils.getPageMap(list,viRepoVo.getCurrent(),viRepoVo.getSize()));
     }

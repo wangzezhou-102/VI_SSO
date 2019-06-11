@@ -1,6 +1,6 @@
 package com.secusoft.web.model.gazhk;
 
-public class viGazhkElesCaseRetainersBean {
+public class ViGazhkElesCaseRetainersBean {
     private String retid;
 
     private String objectId;

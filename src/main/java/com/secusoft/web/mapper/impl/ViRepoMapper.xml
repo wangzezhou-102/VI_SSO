@@ -1,31 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.ViRepoMapper">
+    <!-- Picture的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ViRepo_Map" type="com.secusoft.web.model.ViRepoBean">
+        <id column="id" property="id"/>
+        <result column="bkdesc" property="bkdesc"/>
+        <result column="bkname" property="bkname"/>
+        <result column="police_station_id" property="policeStationId"/>
+        <result column="type" property="type"/>
+        <result column="picture_time" property="pictureTime"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+    <sql id="table">
+        vi_repo
+    </sql>
+
+    <sql id="whereSql">
+        <where>
+            <if test="tableName!=null">
+                and table_name=#{tableName}
+            </if>
+            <if test="policeStationId!=null">
+                and police_station_id=#{policeStationId}
+            </if>
+            <if test="type!=null">
+                and type=#{type}
+            </if>
+            <if test="bkname!=null">
+                and bkname=#{bkname}
+            </if>
+        </where>
+    </sql>
     <insert id="insertViRepo" parameterType="com.secusoft.web.model.ViRepoBean" keyProperty="id" useGeneratedKeys="true">
 
       INSERT INTO vi_repo(bkdesc,bkname,police_station_id,table_name,type)
         VALUES(#{bkdesc},#{bkname},#{policeStationId},#{tableName},#{type})
     </insert>
 
-     <update id="updateViRepo" parameterType="com.secusoft.web.model.ViRepoBean">
-         update vi_repo
-         <set>
-             <if test="bkname != null">
-                 bkname=#{bkname},
-             </if>
-             <if test="bkdesc != null">
-                 bkdesc=#{bkdesc},
-             </if>
-         </set>
-         where id=#{id}
-     </update>
+    <update id="updateViRepo" parameterType="com.secusoft.web.model.ViRepoBean">
+        update vi_repo
+        <set>
+            <if test="bkname != null">
+                bkname=#{bkname},
+            </if>
+            <if test="bkdesc != null">
+                bkdesc=#{bkdesc},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 
     <delete id="delViRepo" parameterType="java.lang.Integer">
         delete from vi_repo
          where id=#{id}
     </delete>
-    
-    <select id="getAllViRepo" resultType="com.secusoft.web.model.ViRepoBean">
-        select * from vi_repo
+
+    <select id="getAllViRepo" parameterType="com.secusoft.web.model.ViRepoBean"
+            resultType="com.secusoft.web.model.ViRepoBean">
+        select * from
+        <include refid="table"/>
+        <include refid="whereSql"/>
     </select>
 </mapper>

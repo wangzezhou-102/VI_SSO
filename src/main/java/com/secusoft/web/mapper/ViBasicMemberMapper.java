@@ -33,4 +33,10 @@ public interface ViBasicMemberMapper {
      * @return
      */
     List<ViBasicMemberBean> getAllViBasicMember(@Param("objectId") String objectId);
+
+    /**
+     * 是否关注该布控
+     * @param viBasicMemberBean
+     */
+    void updateFocusMenber(ViBasicMemberBean viBasicMemberBean);
 }

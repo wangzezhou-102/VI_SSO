@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViGazhkSjzyzhQgpqryMapper">
+  <insert id="addViGazhkSjzyzhQgpqry" parameterType="com.secusoft.web.model.gazhk.ViGazhkSjzyzhQgpqryBean">
+    insert into vi_gazhk_sjzyzh_qgpqry (xh, object_id, xm, xb, sfzh, jg)
+    values (#{xh}, #{objectId}, #{xm}, #{xb}, #{sfzh}, #{jg})
+  </insert>
+
+    <update id="truncateTable">
+      truncate table vi_gazhk_sjzyzh_qgpqry
+    </update>
+</mapper>

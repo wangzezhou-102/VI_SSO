@@ -62,14 +62,15 @@ public enum BizExceptionEnum {
 	 * 布控库相关
 	 */
 	REPO_NAME_NULL(700,"布控库名称不能为空"),
+	RRPO_EXISTS(710,"布控库名称不能为空"),
 
 	/**
 	 * 自定义布控库相关
 	 */
-	PRIVATEREPO_IDENTITYNAME_NULL(710,"姓名不能为空"),
-	PRIVATEREPO_IDENTITYID_NULL(720,"身份证号不能为空"),
-	PRIVATEREPO_IMAGEURL_NULL(720,"图片地址不能为空"),
-	PRIVATEREPO_REPOID_NULL(720,"关联的布控库不能为空"),;
+	PRIVATEREPO_IDENTITYNAME_NULL(720,"姓名不能为空"),
+	PRIVATEREPO_IDENTITYID_NULL(730,"身份证号不能为空"),
+	PRIVATEREPO_IMAGEURL_NULL(740,"图片地址不能为空"),
+	PRIVATEREPO_REPOID_NULL(750,"关联的布控库不能为空"),;
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;

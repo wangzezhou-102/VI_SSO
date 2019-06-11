@@ -2,7 +2,7 @@ package com.secusoft.web.model.gazhk;
 
 import java.util.Date;
 
-public class viGazhkQbptXjqkryBean {
+public class ViGazhkQbptXjqkryBean {
     private String iidd;
 
     private String objectId;
