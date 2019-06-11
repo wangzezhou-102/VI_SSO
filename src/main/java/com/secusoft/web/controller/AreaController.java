@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *  区域收藏接口
+ *  @author huanghao
+ */
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 public class AreaController {
@@ -26,7 +30,7 @@ public class AreaController {
      */
     @RequestMapping("/addArea")
     public ResponseEntity<ResultVo> addArea(@RequestBody JSONObject jsonObject){
-        AreaBean areaBean = JSON.parseObject(jsonObject.get("AreaBean").toString(), new TypeReference<AreaBean>() {
+        AreaBean areaBean = JSON.parseObject(jsonObject.get("Area").toString(), new TypeReference<AreaBean>() {
         });
         List<String> deviceIds = JSON.parseObject(jsonObject.get("devices").toString(), new TypeReference<List<String>>() {
         });
@@ -65,7 +69,7 @@ public class AreaController {
      * @param areaBean 区域名称 以及 区域ID
      * @return
      */
-    @RequestMapping
+    @RequestMapping("updateAreaName")
     public ResponseEntity<ResultVo> updateAreaName(@RequestBody AreaBean areaBean){
         ResultVo resultVo = areaService.updateAreaName(areaBean);
         return new ResponseEntity<ResultVo>(resultVo,HttpStatus.OK);

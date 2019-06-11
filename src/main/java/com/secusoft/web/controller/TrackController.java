@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
+/**
+ *  收藏轨迹接口
+ *  @author huanghao
+ */
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
 public class TrackController {
@@ -30,9 +34,9 @@ public class TrackController {
      */
     @RequestMapping("addtrack")
     public ResponseEntity<ResultVo> addTrack(@RequestBody JSONObject jsonObject){
-        TrackBean trackBean = JSON.parseObject(jsonObject.get("trackBean").toString(), new TypeReference<TrackBean>() {
+        TrackBean trackBean = JSON.parseObject(jsonObject.get("track").toString(), new TypeReference<TrackBean>() {
         });
-        ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("pictureBeanList").toString(), new TypeReference<ArrayList<PictureBean>>() {
+        ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<PictureBean>>() {
         });
         ResultVo resultVo = trackService.addTrack(trackBean, pictureBeanList);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
@@ -43,6 +47,7 @@ public class TrackController {
      * @param trackBean id
      * @return
      */
+    @RequestMapping("removetrack")
     public ResponseEntity<ResultVo> removeTrack(@RequestBody TrackBean trackBean){
         ResultVo resultVo = trackService.removeTrack(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
@@ -53,8 +58,9 @@ public class TrackController {
      * @param jsonObject
      * @return
      */
+    @RequestMapping("updatetrack")
     public ResponseEntity<ResultVo> updateTrack(@RequestBody JSONObject jsonObject){
-        TrackBean trackBean = JSON.parseObject(jsonObject.get("TrackBean").toString(), new TypeReference<TrackBean>() {
+        TrackBean trackBean = JSON.parseObject(jsonObject.get("Track").toString(), new TypeReference<TrackBean>() {
         });
         ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("PictureList").toString(), new TypeReference<ArrayList<PictureBean>>() {
         });
@@ -67,6 +73,7 @@ public class TrackController {
      * @param trackBean
      * @return
      */
+    @RequestMapping("updatetrackname")
     public ResponseEntity<ResultVo> updateTrackName(@RequestBody TrackBean trackBean){
         ResultVo resultVo = trackService.updateTrackName(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);

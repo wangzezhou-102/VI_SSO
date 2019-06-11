@@ -58,6 +58,12 @@
         where area_id =#{id}
     </select>
 
-
+    <!-- 关联查询-->
+    <select id="selectDeviceByPid" parameterType="java.lang.String" resultMap="result_Device_Map">
+        select
+        <include refid="vi_device_Column" />
+        from vi_device
+        where vi_device.id = #{id}
+    </select>
 
 </mapper>

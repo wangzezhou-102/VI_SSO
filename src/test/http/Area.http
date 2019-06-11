@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
    "Area": {
-       "areaName": "区域一",
+     "areaName": "区域一",
      "folderId": 1
    },
   "devices": [1,2,3]
@@ -22,10 +22,10 @@ POST http://localhost:8006/removeArea
 Content-Type: application/json
 
 {
-   "id": "1"
+   "id": "8"
 }
 
-###修改区域下的设备
+###修改区域下的设备名称
 POST http://localhost:8006/updateArea
 Content-Type: application/json
 
@@ -48,6 +48,15 @@ Content-Type: application/json
 
 {
     "id": "7"
+}
+
+###修改区域名称
+POST http://localhost:8006/updateAreaName
+Content-Type: application/json
+
+{
+    "id": "7",
+  "areaName": "gg"
 }
 
 ###

@@ -6,7 +6,15 @@
         <id column="id" property="id" />
         <result column="track_name" property="trackName" />
         <result column="folder_id" property="folderId" />
-
+    </resultMap>
+    
+    <resultMap id="track_Picture_Map" type="com.secusoft.web.model.TrackBean">
+        <id column="id" property="id" />
+        <result column="track_name" property="trackName" />
+        <result column="folder_id" property="folderId" />
+        <collection column="ID" property="pictureBeans" ofType="pictureBean"
+                    select="com.secusoft.web.mapper.PictureMapper.selectPictureByTid">
+        </collection>
     </resultMap>
 
     <!-- 数据库中表名为:vi_track的列名,as前是数据库的列名,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
@@ -41,7 +49,7 @@
     
     <delete id="deletcTrackPictureById" parameterType="java.lang.String">
         delete from vi_track_picture
-        where id=#{id}
+        where track_id=#{id}
     </delete>
 
     <!-- 通过Track的id将Track中属性值不为null的数据更新到数据库对应的表中-->
@@ -55,7 +63,7 @@
         where id=#{id}
     </update>
 
-    <select id="selectTrackPictureByTid" parameterType="java.lang.String">
+    <select id="selectTrackPictureByTid" parameterType="java.lang.String" resultType="java.lang.String">
           select picture_id from vi_track_picture
           where track_id =#{id}
     </select>
@@ -80,6 +88,11 @@
         </where>
     </select> 
 
-
+    <!--关联查询-->
+    <select id="selectTrackByFid" parameterType="java.lang.String" resultMap="track_Picture_Map">
+        select id ,track_name,folder_id
+        from vi_track
+        where folder_id = #{fid}
+    </select>
 
 </mapper>

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *  收藏图片接口
+ *  @author huanghao
+ */
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 public class PictureController {

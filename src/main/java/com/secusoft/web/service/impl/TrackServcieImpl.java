@@ -22,6 +22,9 @@ public class TrackServcieImpl implements TrackService {
     @Override
     public ResultVo addTrack(TrackBean trackBean, List<PictureBean> pictureBeans) {
         trackMapper.insertTrack(trackBean);
+        for (PictureBean pictureBean : pictureBeans) {
+            pictureBean.setPicType(1);
+        }
         pictureMapper.insertMorePicture(pictureBeans);
         ArrayList<String> picIds = new ArrayList<>();
         for (PictureBean pictureBean : pictureBeans) {
@@ -33,6 +36,8 @@ public class TrackServcieImpl implements TrackService {
 
     @Override
     public ResultVo removeTrack(TrackBean trackBean) {
+        List<String> pids = trackMapper.selectTrackPictureByTid(trackBean.getId());
+        pictureMapper.deleteMorePictureById(pids);
         trackMapper.deletcTrackPictureById(trackBean.getId());
         trackMapper.deleteTrackById(trackBean.getId());
         return ResultVo.success();
@@ -56,12 +61,12 @@ public class TrackServcieImpl implements TrackService {
             picIds.add(pictureBean.getId());
         }
         trackMapper.insertTrackPicture(picIds, trackBean.getId());
-        return null;
+        return ResultVo.success();
     }
 
     @Override
     public ResultVo readTrack(TrackBean trackBean) {
-
-        return null;
+        trackMapper.selectTrackById(trackBean.getId());
+        return ResultVo.success();
     }
 }

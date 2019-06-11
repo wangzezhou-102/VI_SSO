@@ -24,7 +24,7 @@ POST http://localhost:8006/removePicture
 Content-Type: application/json
 
 {
-   "id": "3"
+   "id": "29"
 }
 
 ###展示该图片详细信息

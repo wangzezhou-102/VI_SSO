@@ -8,6 +8,15 @@
         <result column="folder_id" property="folderId" />
     </resultMap>
 
+    <resultMap id="folder_Area_Map" type="com.secusoft.web.model.AreaBean">
+        <id column="id" property="id" />
+        <result column="area_name" property="areaName" />
+        <result column="folder_id" property="folderId" />
+        <collection column="id" property="deviceBeans" ofType="deviceBean"
+                    select="com.secusoft.web.mapper.DeviceMapper.selectDeviceByAreaId">
+        </collection>
+    </resultMap>
+
     <!-- 数据库中表名为:vi_area的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
     <sql id="vi_area_Column">
         vi_area.id as id
@@ -133,4 +142,10 @@
         where id=#{id}
     </update>
 
+    <!--关联查询-->
+    <select id="selectAreaByFid" parameterType="java.lang.String" resultMap="folder_Area_Map">
+        select id ,area_name ,folder_id
+        from vi_area
+        where folder_id =#{fid}
+    </select>
 </mapper>
