@@ -1,6 +1,5 @@
 package com.secusoft.web.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -12,47 +11,43 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "Odps")
 public class OdpsConfig {
 
-    private static String accessId;
+    private String accessId;
 
-    private static String accessKey;
+    private String accessKey;
 
-    private static String endPoint;
+    private String endPoint;
 
-    private static String project;
+    private String project;
 
-    public static String getAccessId() {
+    public String getAccessId() {
         return accessId;
     }
 
-    @Value("${Odps.accessId}")
-    public static void setAccessId(String accessId) {
-        OdpsConfig.accessId = accessId;
+    public void setAccessId(String accessId) {
+        this.accessId = accessId;
     }
 
-    public static String getAccessKey() {
+    public String getAccessKey() {
         return accessKey;
     }
 
-    @Value("${Odps.accessKey}")
-    public static void setAccessKey(String accessKey) {
-        OdpsConfig.accessKey = accessKey;
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
     }
 
-    public static String getEndPoint() {
+    public String getEndPoint() {
         return endPoint;
     }
 
-    @Value("${Odps.endPoint}")
-    public static void setEndPoint(String endPoint) {
-        OdpsConfig.endPoint = endPoint;
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
     }
 
-    public static String getProject() {
+    public String getProject() {
         return project;
     }
 
-    @Value("${Odps.project}")
-    public static void setProject(String project) {
-        OdpsConfig.project = project;
+    public void setProject(String project) {
+        this.project = project;
     }
 }

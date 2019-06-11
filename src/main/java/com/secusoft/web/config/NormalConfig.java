@@ -10,61 +10,61 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-@ConfigurationProperties(prefix = "Normal")
+@ConfigurationProperties(prefix = "normal")
 public class NormalConfig {
 
-    private static String bkrepoTable;
+    @Value("${normal.BkrepoTable}")
+    private String bkrepoTable;
 
-    private static String addrApiService;
+    @Value("${normal.addrApiService}")
+    private String addrApiService;
 
-    private static String addrApiShipin;
+    @Value("${normal.addrApiService}")
+    private String addrApiShipin;
 
-    private static String addrApiTusou;
+    @Value("${normal.addrApiService}")
+    private String addrApiTusou;
 
-    private static String bkrepoDataTaskTime;
+    @Value("${normal.addrApiService}")
+    private String bkrepoDataTaskTime;
 
-    public static String getBkrepoTable() {
+    public String getBkrepoTable() {
         return bkrepoTable;
     }
 
-    @Value("${Normal.BkrepoTable}")
-    public static void setBkrepoTable(String bkrepoTable) {
-        NormalConfig.bkrepoTable = bkrepoTable;
+    public void setBkrepoTable(String bkrepoTable) {
+        this.bkrepoTable = bkrepoTable;
     }
 
-    public static String getAddrApiService() {
+    public String getAddrApiService() {
         return addrApiService;
     }
 
-    @Value("${Normal.addrApiService}")
-    public static void setAddrApiService(String addrApiService) {
-        NormalConfig.addrApiService = addrApiService;
+    public void setAddrApiService(String addrApiService) {
+        this.addrApiService = addrApiService;
     }
 
-    public static String getAddrApiShipin() {
+    public String getAddrApiShipin() {
         return addrApiShipin;
     }
 
-    @Value("${Normal.addrApiShipin}")
-    public static void setAddrApiShipin(String addrApiShipin) {
-        NormalConfig.addrApiShipin = addrApiShipin;
+    public void setAddrApiShipin(String addrApiShipin) {
+        this.addrApiShipin = addrApiShipin;
     }
 
-    public static String getAddrApiTusou() {
+    public String getAddrApiTusou() {
         return addrApiTusou;
     }
 
-    @Value("${Normal.addrApiTusou}")
-    public static void setAddrApiTusou(String addrApiTusou) {
-        NormalConfig.addrApiTusou = addrApiTusou;
+    public void setAddrApiTusou(String addrApiTusou) {
+        this.addrApiTusou = addrApiTusou;
     }
 
-    public static String getBkrepoDataTaskTime() {
+    public String getBkrepoDataTaskTime() {
         return bkrepoDataTaskTime;
     }
 
-    @Value("${Normal.BkrepoDataTaskTime}")
-    public static void setBkrepoDataTaskTime(String bkrepoDataTaskTime) {
-        NormalConfig.bkrepoDataTaskTime = bkrepoDataTaskTime;
+    public void setBkrepoDataTaskTime(String bkrepoDataTaskTime) {
+        this.bkrepoDataTaskTime = bkrepoDataTaskTime;
     }
 }

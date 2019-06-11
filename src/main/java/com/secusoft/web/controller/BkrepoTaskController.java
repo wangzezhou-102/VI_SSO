@@ -2,15 +2,19 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.secusoft.web.config.BkrepoConfig;
+import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.serviceapi.ServiceClient;
-import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.BKRepoCreateRequest;
 import com.secusoft.web.tusouapi.model.BKRepoMeta;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.OSSInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * 布控库判断
@@ -18,10 +22,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class BkrepoTaskController implements ApplicationRunner {
 
+    @Resource
+    BkrepoConfig bkrepoConfig;
+
+    private ServiceApiConfig serviceApiConfig;
+
+    @Autowired
+    public  BkrepoTaskController(ServiceApiConfig serviceApiConfig){
+        this.serviceApiConfig = serviceApiConfig;
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        String responseStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceClient.Path_BKREPO_META, "");
+        String responseStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkrepoMeta(), "");
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -46,23 +60,23 @@ public class BkrepoTaskController implements ApplicationRunner {
         if("1001010".equals(code)&&(data.isEmpty()||"null".equals(data))){
             //头部参数
             BaseRequest<BKRepoCreateRequest> bkRepoCreateRequestBaseRequest=new BaseRequest<>();
-            bkRepoCreateRequestBaseRequest.setRequestId(TuSouClient.tuSouRequestId);
+            bkRepoCreateRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
             //请求data参数
             BKRepoCreateRequest bkRepoCreateRequest=new BKRepoCreateRequest();
-            bkRepoCreateRequest.setBkid(TuSouClient.tuSouBkid);
+            bkRepoCreateRequest.setBkid(bkrepoConfig.getBkid());
             //meta参数
             BKRepoMeta bkRepoMeta=new BKRepoMeta();
-            bkRepoMeta.setBkdesc(TuSouClient.tuSouBkdesc);
-            bkRepoMeta.setBkname(TuSouClient.tuSouBkname);
-            bkRepoMeta.setAlgorithmName(TuSouClient.tuSouAlgorithmName);
-            bkRepoMeta.setAlgorithmVersion(TuSouClient.tuSouAlgorithmVersion);
-            bkRepoMeta.setAlgorithmType(TuSouClient.tuSouAlgorithmType);
+            bkRepoMeta.setBkdesc(bkrepoConfig.getMeta().getBkdesc());
+            bkRepoMeta.setBkname(bkrepoConfig.getMeta().getBkname());
+            bkRepoMeta.setAlgorithmName(bkrepoConfig.getMeta().getAlgorithmName());
+            bkRepoMeta.setAlgorithmVersion(bkrepoConfig.getMeta().getAlgorithmVersion());
+            bkRepoMeta.setAlgorithmType(bkrepoConfig.getMeta().getAlgorithmVersion());
             //ossInfo参数
             OSSInfo ossInfo=new OSSInfo();
-            ossInfo.setOssEndpoint(TuSouClient.tuSouOssEndpoint);
-            ossInfo.setOssAccessKeyId(TuSouClient.tuSouOssAccess_id);
-            ossInfo.setOssAccessKeySecret(TuSouClient.tuSouOssAccess_key);
-            ossInfo.setOssBucket(TuSouClient.tuSouOssBucket_name);
+            ossInfo.setOssEndpoint(bkrepoConfig.getMeta().getOssInfo().getEndpoint());
+            ossInfo.setOssAccessKeyId(bkrepoConfig.getMeta().getOssInfo().getAccess_id());
+            ossInfo.setOssAccessKeySecret(bkrepoConfig.getMeta().getOssInfo().getAccess_key());
+            ossInfo.setOssBucket(bkrepoConfig.getMeta().getOssInfo().getBucket_name());
             bkRepoMeta.setOssInfo(ossInfo);
             bkRepoCreateRequest.setMeta(bkRepoMeta);
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
@@ -70,7 +84,7 @@ public class BkrepoTaskController implements ApplicationRunner {
 //            System.out.println(JSON.toJSONString(bkRepoCreateRequestBaseRequest));
 
             String requestStr = JSON.toJSONString(bkRepoCreateRequestBaseRequest);
-            String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_BKREPO_CREATE, requestStr);
+            String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkrepoCreate(), requestStr);
             //解析json
             jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
             code=jsonObject.getString("code");

@@ -21,7 +21,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -34,33 +34,16 @@ import java.net.ConnectException;
  */
 public class TuSouClient {
 
+    private static NormalConfig normalConfig;
+
+    @Autowired
+    public  TuSouClient(NormalConfig normalConfig){
+        this.normalConfig = normalConfig;
+    }
+
     private static Logger log = LoggerFactory.getLogger(TuSouClient.class);
 
-    public static String tuSouEndpoint = NormalConfig.getAddrApiTusou();
-
-    //布控库操作相关参数
-    @Value("#{config['bkrepo.requestId']}")
-    public static String tuSouRequestId;
-    @Value("#{config['bkrepo.bkid']}")
-    public static String tuSouBkid;
-    @Value("#{config['bkrepo.meta.bkdesc']}")
-    public static String tuSouBkdesc;
-    @Value("#{config['bkrepo.meta.bkname']}")
-    public static String tuSouBkname;
-    @Value("#{config['bkrepo.meta.algorithmName']}")
-    public static String tuSouAlgorithmName;
-    @Value("#{config['bkrepo.meta.algorithmVersion']}")
-    public static String tuSouAlgorithmVersion;
-    @Value("#{config['bkrepo.meta.algorithmType']}")
-    public static String tuSouAlgorithmType;
-    @Value("#{config['bkrepo.meta.ossInfo.endpoint']}")
-    public static String tuSouOssEndpoint;
-    @Value("#{config['bkrepo.meta.ossInfo.access_id']}")
-    public static String tuSouOssAccess_id;
-    @Value("#{config['bkrepo.meta.ossInfo.access_key']}")
-    public static String tuSouOssAccess_key;
-    @Value("#{config['bkrepo.meta.ossInfo.bucket_name']}")
-    public static String tuSouOssBucket_name;
+    public static String tuSouEndpoint = normalConfig.getAddrApiTusou();
 
     //API 资源路径
     public static final String Path_SEARCH = "/search";

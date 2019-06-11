@@ -1,5 +1,10 @@
 package com.secusoft.web.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.secusoft.web.config.BkrepoConfig;
+import com.secusoft.web.config.ServiceApiConfig;
+import com.secusoft.web.core.util.StringUtils;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViGazhkSjzyzhQgpqryMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
@@ -8,13 +13,16 @@ import com.secusoft.web.model.ViBasicMemberBean;
 import com.secusoft.web.model.ViRepoBean;
 import com.secusoft.web.model.gazhk.ViGazhkSjzyzhQgpqryBean;
 import com.secusoft.web.service.ViGazhkSjzyzhQgpqryService;
+import com.secusoft.web.serviceapi.ServiceClient;
+import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
+import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- *
  * code is far away from bug with the animal protecting
  * ┏┓　　　┏┓
  * ┏┛┻━━━┛┻┓
@@ -34,9 +42,9 @@ import java.util.List;
  * 　　　┃┫┫　┃┫┫
  * 　　　┗┻┛　┗┻┛
  *
+ * @author chjiang
  * @Description : 全国扒窃人员Impl
  * ---------------------------------
- * @author chjiang
  * @since 2019/6/10 19:30
  */
 @Service
@@ -52,17 +60,28 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
     ViBasicMemberMapper viBasicMemberMapper;
 
 
+    private ServiceApiConfig serviceApiConfig;
+    private BkrepoConfig bkrepoConfig;
+
+    @Autowired
+    public ViGazhkSjzyzhQgpqryServiceImpl(ServiceApiConfig serviceApiConfig,
+                         BkrepoConfig bkrepoConfig){
+        this.serviceApiConfig = serviceApiConfig;
+        this.bkrepoConfig = bkrepoConfig;
+    }
+
+
     @Override
-    public ResultVo addViGazhkSjzyzhQgpqry(ViGazhkSjzyzhQgpqryBean viGazhkSjzyzhQgpqryBean,String tableName) {
-        ViRepoBean viRepoBean=new ViRepoBean();
+    public ResultVo addViGazhkSjzyzhQgpqry(ViGazhkSjzyzhQgpqryBean viGazhkSjzyzhQgpqryBean, String tableName) {
+        ViRepoBean viRepoBean = new ViRepoBean();
         viRepoBean.setBkname("全国扒窃人员");
         viRepoBean.setType(0);
         viRepoBean.setTableName("vi_gazhk_sjzyzh_qgpqry");
         List<ViRepoBean> list = viRepoMapper.getAllViRepo(viRepoBean);
         //判断布控库是否存在
-        if(list.size()>0){
-            viRepoBean=list.get(0);
-        }else{
+        if (list.size() > 0) {
+            viRepoBean = list.get(0);
+        } else {
             viRepoMapper.insertViRepo(viRepoBean);
         }
         viGazhkSjzyzhQgpqryMapper.truncateTable();
@@ -78,11 +97,37 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
         viBasicMemberBean.setStatus(1);
 
         List<ViBasicMemberBean> allViBasicMember = viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean.getObjectId());
-        if(allViBasicMember.size()==0) {
+        if (allViBasicMember.size() == 0) {
             viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
-        }else{
-            System.out.println("已存在"+viBasicMemberBean.getIdentityName());
+        } else {
+            ViBasicMemberBean viBasicMemberBean1 = allViBasicMember.get(0);
+            //判断身份证号是否有变化
+            if (viBasicMemberBean1.getIdentityId() != viBasicMemberBean.getIdentityId()) {
+                viBasicMemberBean1.setIdentityId(viBasicMemberBean.getIdentityId());
+            }
+            //判断姓名是否有变化
+            if (viBasicMemberBean1.getIdentityName() != viBasicMemberBean.getIdentityName()) {
+                viBasicMemberBean1.setIdentityName(viBasicMemberBean.getIdentityName());
+            }
+            viBasicMemberMapper.updateViBasicMember(viBasicMemberBean1);
+            //删除布控人员接口
+            BKMemberDeleteRequest bkMemberDeleteRequest=new BKMemberDeleteRequest();
+            bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
+            bkMemberDeleteRequest.setObjectIds(viBasicMemberBean1.getObjectId());
+            String requestStr = JSON.toJSONString(bkMemberDeleteRequest);
+            ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberDelete(), requestStr);
         }
+        BKMemberAddRequest bkMemberAddRequest=new BKMemberAddRequest();
+        bkMemberAddRequest.setBkid(bkrepoConfig.getBkid());
+        bkMemberAddRequest.setBkid(viBasicMemberBean.getObjectId());
+        bkMemberAddRequest.setContents(viBasicMemberBean.getContent());
+        bkMemberAddRequest.setImageUrls(viBasicMemberBean.getImageUrl());
+        bkMemberAddRequest.setFeature(viBasicMemberBean.getFeature());
+        if(StringUtils.isNotEmpty(viBasicMemberBean.getAttribute())) {
+            bkMemberAddRequest.setAttribute((JSONObject) JSONObject.parse(viBasicMemberBean.getAttribute()));
+        }
+        String requestStr = JSON.toJSONString(bkMemberAddRequest);
+        ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberAdd(), requestStr);
         return ResultVo.success();
     }
 

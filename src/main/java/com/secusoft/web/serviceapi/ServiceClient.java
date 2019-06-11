@@ -2,7 +2,6 @@ package com.secusoft.web.serviceapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import org.apache.http.*;
@@ -20,22 +19,29 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.ConnectException;
 
+@Component
 public class ServiceClient {
     private static Logger log = LoggerFactory.getLogger(ServiceClient.class);
 
-    public static String ServiceEndpoint = NormalConfig.getAddrApiService();
+    @Value("${normal.addrApiService}")
+    private String addrApiService;
 
-
-    //API 资源路径
-    //布控库信息查询
-    public static final String Path_BKREPO_META = "/bkrepometa";
-    //布控库创建
-    public static final String Path_BKREPO_CREATE = "/bkrepocreate";
+//    //API 资源路径
+//    //布控库信息查询
+//    public static final String Path_BKREPO_META = serviceApiConfig.getPathBkrepoMeta();
+//    //布控库创建
+//    public static final String Path_BKREPO_CREATE = "/bkrepocreate";
+//    //添加布控目标
+//    public static final String Path_BKMEMBER_ADD = "/bkmemberadd";
+//    //删除布控目标
+//    public static final String Path_BKMEMBER_DELETE = "/bkmemberdelete";
 
     private volatile static ServiceClient HttpClientConnectionPool;
 
@@ -159,8 +165,9 @@ public class ServiceClient {
      * @return
      */
     public String fetchByPostMethod(String url, String jsonStr) {
+        System.out.println("addrApiService:"+addrApiService);
         String resultStr = null;
-        HttpPost httpPost = new HttpPost(ServiceEndpoint + url);
+        HttpPost httpPost = new HttpPost(addrApiService + url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));
         httpPost.addHeader(HttpHeaders.USER_AGENT, USERAGENT);
 //		httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
