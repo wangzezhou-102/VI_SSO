@@ -4,12 +4,13 @@
 # * 'gtrp' and 'gtr' create a GET request with or without query parameters;
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+###增加一个轨迹
 POST http://localhost:8006/addtrack
 Content-Type: application/json
 
 {
   "track":{
-      "trackName": "akun轨迹",
+      "trackName": "第三轨迹",
       "folderId": "2"
   },
   "pictureList": [{
@@ -19,7 +20,6 @@ Content-Type: application/json
     "oriImageSignedUrl": "111",
     "pictureTime": "123456",
     "deviceId": "7",
-    "folderId": "1",
     "score": "199"
   },{
     "cropImageSignedUrl": "666",
@@ -28,9 +28,25 @@ Content-Type: application/json
     "oriImageSignedUrl": "666",
     "pictureTime": "123456",
     "deviceId": "7",
-    "folderId": "1",
     "score": "199"
   }]
+}
+
+###修改轨迹名称
+POST http://localhost:8006/updatetrackname
+Content-Type: application/json
+
+{
+  "trackName": "真实轨迹",
+  "id": "2"
+}
+
+###删除轨迹
+POST http://localhost:8006/removetrack
+Content-Type: application/json
+
+{
+  "id": "4"
 }
 
 ###

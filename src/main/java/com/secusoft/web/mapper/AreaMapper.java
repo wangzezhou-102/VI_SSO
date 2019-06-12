@@ -12,5 +12,6 @@ public interface AreaMapper {
     int updateAreaNameById(AreaBean are);
     int deleteAreaById(String id);
     int deleteAreaDeviceById(String id);
+    List<AreaBean> selectAreaByFid(String fid);
 
 }

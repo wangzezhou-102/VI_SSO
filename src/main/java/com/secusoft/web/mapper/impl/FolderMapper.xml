@@ -43,7 +43,18 @@
         select id , folder_name  ,status from vi_folder where status =#{status}
     </select>
 
-
+    <select id="selectAllFolder" resultType="com.secusoft.web.model.FolderBean">
+        select id,folder_name ,status from vi_folder
+    </select>
+    <select id="selectOneFolder" resultType="com.secusoft.web.model.FolderBean">
+        select id,folder_name ,status from vi_folder
+        where id=#{fid}
+    </select>
+    <select id="selectFolderByName" parameterType="java.lang.String" resultType="com.secusoft.web.model.FolderBean">
+        SELECT id,folder_name ,status
+         FROM `vi_folder`
+         where instr(folder_name,#{name})>0
+    </select>
 
     <!-- 通过Folder的id获得对应数据库中表的数据对象-->
     <select id="selectFolderById" parameterType="java.lang.Object" resultMap="result_Folder_Map">

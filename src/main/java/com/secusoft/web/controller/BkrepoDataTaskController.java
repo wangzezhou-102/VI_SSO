@@ -31,7 +31,7 @@ public class BkrepoDataTaskController {
      */
     //0 0 */1 * * ? 每小时执行一次
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0 0/1 * * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "0 0 */1 * * ?")//0 0 */1 * * ?
     public void task() throws ParseException, InterruptedException {
 //        String[] bkrepoTable = bkrepoTable.split(",");
 //        ViRepoBean viRepoBean=null;
