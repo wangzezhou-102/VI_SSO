@@ -9,7 +9,6 @@ import com.secusoft.web.tusouapi.model.BKRepoCreateRequest;
 import com.secusoft.web.tusouapi.model.BKRepoMeta;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.OSSInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -25,17 +24,10 @@ public class BkrepoTaskController implements ApplicationRunner {
     @Resource
     BkrepoConfig bkrepoConfig;
 
-    private ServiceApiConfig serviceApiConfig;
-
-    @Autowired
-    public  BkrepoTaskController(ServiceApiConfig serviceApiConfig){
-        this.serviceApiConfig = serviceApiConfig;
-    }
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        String responseStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkrepoMeta(), "");
+        String responseStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), "");
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -84,7 +76,7 @@ public class BkrepoTaskController implements ApplicationRunner {
 //            System.out.println(JSON.toJSONString(bkRepoCreateRequestBaseRequest));
 
             String requestStr = JSON.toJSONString(bkRepoCreateRequestBaseRequest);
-            String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkrepoCreate(), requestStr);
+            String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), requestStr);
             //解析json
             jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
             code=jsonObject.getString("code");

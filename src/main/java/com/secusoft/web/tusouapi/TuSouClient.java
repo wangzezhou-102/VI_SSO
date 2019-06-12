@@ -21,7 +21,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -34,16 +33,9 @@ import java.net.ConnectException;
  */
 public class TuSouClient {
 
-    private static NormalConfig normalConfig;
-
-    @Autowired
-    public  TuSouClient(NormalConfig normalConfig){
-        this.normalConfig = normalConfig;
-    }
-
     private static Logger log = LoggerFactory.getLogger(TuSouClient.class);
 
-    public static String tuSouEndpoint = normalConfig.getAddrApiTusou();
+    public static String tuSouEndpoint = NormalConfig.getAddrApiTusou();
 
     //API 资源路径
     public static final String Path_SEARCH = "/search";

@@ -11,43 +11,43 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "Odps")
 public class OdpsConfig {
 
-    private String accessId;
+    public static String accessId;
 
-    private String accessKey;
+    public static String accessKey;
 
-    private String endPoint;
+    public static String endPoint;
 
-    private String project;
+    public static String project;
 
-    public String getAccessId() {
+    public static void setAccessId(String accessId) {
+        OdpsConfig.accessId = accessId;
+    }
+
+    public static void setAccessKey(String accessKey) {
+        OdpsConfig.accessKey = accessKey;
+    }
+
+    public static void setEndPoint(String endPoint) {
+        OdpsConfig.endPoint = endPoint;
+    }
+
+    public static void setProject(String project) {
+        OdpsConfig.project = project;
+    }
+
+    public static String getAccessId() {
         return accessId;
     }
 
-    public void setAccessId(String accessId) {
-        this.accessId = accessId;
-    }
-
-    public String getAccessKey() {
+    public static String getAccessKey() {
         return accessKey;
     }
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    public String getEndPoint() {
+    public static String getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(String endPoint) {
-        this.endPoint = endPoint;
-    }
-
-    public String getProject() {
+    public static String getProject() {
         return project;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
     }
 }

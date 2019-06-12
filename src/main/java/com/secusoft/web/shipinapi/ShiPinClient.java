@@ -19,7 +19,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
@@ -31,16 +30,9 @@ import java.net.ConnectException;
  */
 public class ShiPinClient {
 
-    private static NormalConfig normalConfig;
-
-    @Autowired
-    public  ShiPinClient(NormalConfig normalConfig){
-        this.normalConfig = normalConfig;
-    }
-
     private static Logger log = LoggerFactory.getLogger(ShiPinClient.class);
 
-    public static String shiPinEndpoint = normalConfig.getAddrApiShipin();
+    public static String shiPinEndpoint = NormalConfig.getAddrApiShipin();
 
     //API 资源路径
     public static final String Path_CAMERA_LIST="/v3/access_device_list";

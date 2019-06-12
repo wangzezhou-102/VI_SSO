@@ -1,6 +1,5 @@
 package com.secusoft.web.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -8,63 +7,57 @@ import org.springframework.stereotype.Component;
  * @author chjiang
  * @since 2019/6/10 15:21
  */
-
 @Component
 @ConfigurationProperties(prefix = "normal")
 public class NormalConfig {
 
-    @Value("${normal.BkrepoTable}")
-    private String bkrepoTable;
+    public static String bkrepoTable;
 
-    @Value("${normal.addrApiService}")
-    private String addrApiService;
+    public static String addrApiService;
 
-    @Value("${normal.addrApiService}")
-    private String addrApiShipin;
+    public static String addrApiShipin;
 
-    @Value("${normal.addrApiService}")
-    private String addrApiTusou;
+    public static String addrApiTusou;
 
-    @Value("${normal.addrApiService}")
-    private String bkrepoDataTaskTime;
+    public static String bkrepoDataTaskTime;
 
-    public String getBkrepoTable() {
+    public static String getBkrepoTable() {
         return bkrepoTable;
     }
 
-    public void setBkrepoTable(String bkrepoTable) {
-        this.bkrepoTable = bkrepoTable;
+    public static void setBkrepoTable(String bkrepoTable) {
+        NormalConfig.bkrepoTable = bkrepoTable;
     }
 
-    public String getAddrApiService() {
+    public static String getAddrApiService() {
         return addrApiService;
     }
 
-    public void setAddrApiService(String addrApiService) {
-        this.addrApiService = addrApiService;
+    public static void setAddrApiService(String addrApiService) {
+        NormalConfig.addrApiService = addrApiService;
     }
 
-    public String getAddrApiShipin() {
+    public static String getAddrApiShipin() {
         return addrApiShipin;
     }
 
-    public void setAddrApiShipin(String addrApiShipin) {
-        this.addrApiShipin = addrApiShipin;
+    public static void setAddrApiShipin(String addrApiShipin) {
+        NormalConfig.addrApiShipin = addrApiShipin;
     }
 
-    public String getAddrApiTusou() {
+    public static String getAddrApiTusou() {
         return addrApiTusou;
     }
 
-    public void setAddrApiTusou(String addrApiTusou) {
-        this.addrApiTusou = addrApiTusou;
+    public static void setAddrApiTusou(String addrApiTusou) {
+        NormalConfig.addrApiTusou = addrApiTusou;
     }
 
-    public String getBkrepoDataTaskTime() {
+    public static String getBkrepoDataTaskTime() {
         return bkrepoDataTaskTime;
     }
 
-    public void setBkrepoDataTaskTime(String bkrepoDataTaskTime) {
-        this.bkrepoDataTaskTime = bkrepoDataTaskTime;
+    public static void setBkrepoDataTaskTime(String bkrepoDataTaskTime) {
+        NormalConfig.bkrepoDataTaskTime = bkrepoDataTaskTime;
     }
 }

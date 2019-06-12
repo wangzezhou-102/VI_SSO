@@ -2,6 +2,7 @@ package com.secusoft.web.serviceapi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import org.apache.http.*;
@@ -19,7 +20,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -27,11 +28,11 @@ import java.io.IOException;
 import java.net.ConnectException;
 
 @Component
+@Configurable
 public class ServiceClient {
     private static Logger log = LoggerFactory.getLogger(ServiceClient.class);
 
-    @Value("${normal.addrApiService}")
-    private String addrApiService;
+    private String addrApiService = NormalConfig.getAddrApiService();
 
 //    //API 资源路径
 //    //布控库信息查询
@@ -165,7 +166,7 @@ public class ServiceClient {
      * @return
      */
     public String fetchByPostMethod(String url, String jsonStr) {
-        System.out.println("addrApiService:"+addrApiService);
+        System.out.println("addrApiService:" + addrApiService);
         String resultStr = null;
         HttpPost httpPost = new HttpPost(addrApiService + url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));

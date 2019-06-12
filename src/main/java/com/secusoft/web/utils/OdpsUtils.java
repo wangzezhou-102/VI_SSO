@@ -25,17 +25,13 @@ public class OdpsUtils {
 
     @Resource
     static ViGazhkSjzyzhQgpqryService viGazhkSjzyzhQgpqryService;
-    private static OdpsUtils odpsUtils;
 
     public static String sql;
     public static String table = "Tmp_" + UUID.randomUUID().toString().replace("-", "_");//其实也就是随便找了个随机字符串作为临时表的名字
     public static Odps odps = getOdps();
 
-    private static OdpsConfig odpsConfig;
-
     @Autowired
-    public OdpsUtils(OdpsConfig odpsConfig,ViGazhkSjzyzhQgpqryService viGazhkSjzyzhQgpqryService){
-        this.odpsConfig = odpsConfig;
+    public OdpsUtils(ViGazhkSjzyzhQgpqryService viGazhkSjzyzhQgpqryService){
         this.viGazhkSjzyzhQgpqryService = viGazhkSjzyzhQgpqryService;
     }
 
@@ -60,7 +56,7 @@ public class OdpsUtils {
     public static void tunnel() {
         TableTunnel tunnel = new TableTunnel(odps);
         try {
-            DownloadSession downloadSession = tunnel.createDownloadSession( odpsConfig.getProject(), table);
+            DownloadSession downloadSession = tunnel.createDownloadSession( OdpsConfig.getProject(), table);
             System.out.println("Session Status is : " + downloadSession.getStatus().toString());
             long count = downloadSession.getRecordCount();
             System.out.println("RecordCount is: " + count);
@@ -128,12 +124,12 @@ public class OdpsUtils {
      * 初始化MaxCompute(原ODPS)的连接信息
      * */
     private static Odps getOdps() {
-        Account account = new AliyunAccount(odpsConfig.getAccessId(), odpsConfig.getAccessKey());
+        Account account = new AliyunAccount(OdpsConfig.getAccessId(), OdpsConfig.getAccessKey());
         Odps odps = new Odps(account);
-        odps.setEndpoint(odpsConfig.getEndPoint());
-        odps.setDefaultProject(odpsConfig.getProject());
+        odps.setEndpoint(OdpsConfig.getEndPoint());
+        odps.setDefaultProject(OdpsConfig.getProject());
 
-        System.out.println(odpsConfig.getProject());
+        System.out.println(OdpsConfig.getProject());
         return odps;
     }
 }

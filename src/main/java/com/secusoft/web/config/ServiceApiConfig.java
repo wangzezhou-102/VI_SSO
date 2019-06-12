@@ -11,43 +11,43 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "ServiceApi")
 public class ServiceApiConfig {
 
-    private String pathBkrepoMeta;
+    public static String pathBkrepoMeta;
 
-    private String pathBkrepoCreate;
+    public static  String pathBkrepoCreate;
 
-    private String pathBkmemberAdd;
+    public static  String pathBkmemberAdd;
 
-    private String pathBkmemberDelete;
+    public static  String pathBkmemberDelete;
 
-    public String getPathBkrepoMeta() {
+    public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;
     }
 
-    public void setPathBkrepoMeta(String pathBkrepoMeta) {
-        this.pathBkrepoMeta = pathBkrepoMeta;
+    public static void setPathBkrepoMeta(String pathBkrepoMeta) {
+        ServiceApiConfig.pathBkrepoMeta = pathBkrepoMeta;
     }
 
-    public String getPathBkrepoCreate() {
+    public static String getPathBkrepoCreate() {
         return pathBkrepoCreate;
     }
 
-    public void setPathBkrepoCreate(String pathBkrepoCreate) {
-        this.pathBkrepoCreate = pathBkrepoCreate;
+    public static void setPathBkrepoCreate(String pathBkrepoCreate) {
+        ServiceApiConfig.pathBkrepoCreate = pathBkrepoCreate;
     }
 
-    public String getPathBkmemberAdd() {
+    public static String getPathBkmemberAdd() {
         return pathBkmemberAdd;
     }
 
-    public void setPathBkmemberAdd(String pathBkmemberAdd) {
-        this.pathBkmemberAdd = pathBkmemberAdd;
+    public static void setPathBkmemberAdd(String pathBkmemberAdd) {
+        ServiceApiConfig.pathBkmemberAdd = pathBkmemberAdd;
     }
 
-    public String getPathBkmemberDelete() {
+    public static String getPathBkmemberDelete() {
         return pathBkmemberDelete;
     }
 
-    public void setPathBkmemberDelete(String pathBkmemberDelete) {
-        this.pathBkmemberDelete = pathBkmemberDelete;
+    public static void setPathBkmemberDelete(String pathBkmemberDelete) {
+        ServiceApiConfig.pathBkmemberDelete = pathBkmemberDelete;
     }
 }

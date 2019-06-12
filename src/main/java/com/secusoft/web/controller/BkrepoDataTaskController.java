@@ -1,11 +1,15 @@
 package com.secusoft.web.controller;
 
+import com.secusoft.web.config.BkrepoConfig;
+import com.secusoft.web.config.NormalConfig;
+import com.secusoft.web.config.OdpsConfig;
+import com.secusoft.web.config.ServiceApiConfig;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.text.ParseException;
 
 /**
@@ -16,17 +20,8 @@ import java.text.ParseException;
 @EnableScheduling
 public class BkrepoDataTaskController {
 
-    @Value("${normal.BkrepoTable}")
-    private String bkrepoTable;
-
-    @Value("${normal.addrApiService}")
-    private String addrApiService;
-
-    @Value("${normal.addrApiShipin}")
-    private String addrApiShipin;
-
-    @Value("${normal.addrApiTusou}")
-    private String addrApiTusou;
+    @Resource
+    BkrepoConfig bkrepoConfig;
 
     /**
      * 烽火定时请求数据
@@ -48,10 +43,12 @@ public class BkrepoDataTaskController {
 //            return;
 //        }
         System.out.println("启动烽火定时任务");
-        System.out.println(bkrepoTable);
-        System.out.println(addrApiService);
-        System.out.println(addrApiShipin);
-        System.out.println(addrApiTusou);
+        System.out.println(OdpsConfig.getAccessId());
+        System.out.println(NormalConfig.getAddrApiService());
+        System.out.println(ServiceApiConfig.getPathBkmemberAdd());
+        System.out.println(bkrepoConfig.getMeta().getBkdesc());
+        System.out.println(bkrepoConfig.getBkid());
+        System.out.println(bkrepoConfig.getMeta().getOssInfo().getAccess_id());
 //        System.out.println(bkrepoConfig.getMeta().getAlgorithmName());
 //        System.out.println(bkrepoConfig.getMeta().getOssInfo().getAccess_id());
 //        System.out.println(normalConfig.getAddrApiService());
