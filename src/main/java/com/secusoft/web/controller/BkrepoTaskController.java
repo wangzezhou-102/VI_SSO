@@ -72,8 +72,6 @@ public class BkrepoTaskController implements ApplicationRunner {
             bkRepoMeta.setOssInfo(ossInfo);
             bkRepoCreateRequest.setMeta(bkRepoMeta);
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
-//            StringEntity stringEntity = new  StringEntity(JSON.toJSONString(bkRepoCreateRequestBaseRequest), "UTF-8");
-//            System.out.println(JSON.toJSONString(bkRepoCreateRequestBaseRequest));
 
             String requestStr = JSON.toJSONString(bkRepoCreateRequestBaseRequest);
             String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), requestStr);

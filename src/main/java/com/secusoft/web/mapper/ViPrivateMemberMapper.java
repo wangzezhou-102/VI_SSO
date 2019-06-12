@@ -26,7 +26,7 @@ public interface ViPrivateMemberMapper {
     /**
      * 删除一条自定义库信息
      */
-    void delViPrivateMember(@Param("id") Integer id);
+    void delViPrivateMember(@Param("objectId") String objectId);
 
     /**
      * 获取所有自定义库信息

@@ -14,7 +14,7 @@ public interface ViPrivateMemberService {
 
     ResultVo updateViPrivateMember(ViPrivateMemberBean viPrivateMemberBean);
 
-    ResultVo delViPrivateMember(Integer id);
+    ResultVo delViPrivateMember(String objectId);
 
     ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
 }

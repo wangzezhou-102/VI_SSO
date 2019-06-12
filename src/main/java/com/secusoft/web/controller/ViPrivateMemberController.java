@@ -36,7 +36,7 @@ public class ViPrivateMemberController {
 
     @RequestMapping("/delviprivatemember")
     public ResponseEntity<ResultVo> delViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean){
-        ResultVo resultVo = viPrivateMemberService.delViPrivateMember(viPrivateMemberBean.getId());
+        ResultVo resultVo = viPrivateMemberService.delViPrivateMember(viPrivateMemberBean.getObjectId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

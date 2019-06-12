@@ -19,6 +19,14 @@ public class ServiceApiConfig {
 
     public static  String pathBkmemberDelete;
 
+    public static  String pathBktaskSubmit;
+
+    public static  String pathBktaskDelete;
+
+    public static  String pathBktaskStart;
+
+    public static  String pathBktaskStop;
+
     public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;
     }
@@ -49,5 +57,37 @@ public class ServiceApiConfig {
 
     public static void setPathBkmemberDelete(String pathBkmemberDelete) {
         ServiceApiConfig.pathBkmemberDelete = pathBkmemberDelete;
+    }
+
+    public static String getPathBktaskSubmit() {
+        return pathBktaskSubmit;
+    }
+
+    public static void setPathBktaskSubmit(String pathBktaskSubmit) {
+        ServiceApiConfig.pathBktaskSubmit = pathBktaskSubmit;
+    }
+
+    public static String getPathBktaskDelete() {
+        return pathBktaskDelete;
+    }
+
+    public static void setPathBktaskDelete(String pathBktaskDelete) {
+        ServiceApiConfig.pathBktaskDelete = pathBktaskDelete;
+    }
+
+    public static String getPathBktaskStart() {
+        return pathBktaskStart;
+    }
+
+    public static void setPathBktaskStart(String pathBktaskStart) {
+        ServiceApiConfig.pathBktaskStart = pathBktaskStart;
+    }
+
+    public static String getPathBktaskStop() {
+        return pathBktaskStop;
+    }
+
+    public static void setPathBktaskStop(String pathBktaskStop) {
+        ServiceApiConfig.pathBktaskStop = pathBktaskStop;
     }
 }

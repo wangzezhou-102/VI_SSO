@@ -70,7 +70,12 @@ public enum BizExceptionEnum {
 	PRIVATEREPO_IDENTITYNAME_NULL(720,"姓名不能为空"),
 	PRIVATEREPO_IDENTITYID_NULL(730,"身份证号不能为空"),
 	PRIVATEREPO_IMAGEURL_NULL(740,"图片地址不能为空"),
-	PRIVATEREPO_REPOID_NULL(750,"关联的布控库不能为空"),;
+	PRIVATEREPO_REPOID_NULL(750,"关联的布控库不能为空"),
+
+	/**
+	 * 布控目标相关
+	 */
+	BKMEMBER_FAIL(760,"布控目标删除失败"),;
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;

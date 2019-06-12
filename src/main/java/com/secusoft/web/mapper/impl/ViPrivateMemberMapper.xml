@@ -29,9 +29,9 @@
          where id=#{id}
      </update>
 
-    <delete id="delViPrivateMember" parameterType="java.lang.Integer">
+    <delete id="delViPrivateMember" parameterType="String">
         delete from vi_private_member
-         where id=#{id}
+         where object_id=#{objectId}
     </delete>
     
     <select id="getAllViPrivateMember" resultType="com.secusoft.web.model.ViPrivateMemberBean">
