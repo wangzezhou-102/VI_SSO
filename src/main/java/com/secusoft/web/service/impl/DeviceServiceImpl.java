@@ -14,6 +14,8 @@ import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.SysOrganizationBean;
 import com.secusoft.web.service.DeviceService;
 
+import javax.annotation.Resource;
+
 /**
  * 设备Service
  * @author ChenDong
@@ -23,10 +25,10 @@ import com.secusoft.web.service.DeviceService;
 @Service
 public class DeviceServiceImpl implements DeviceService {
 
-    @Autowired
+    @Resource
     private DeviceMapper deviceMapper;
     
-    @Autowired
+    @Resource
     private SysOrganizationMapper orgMapper;
     /**
      * 获取设备信息，可分页

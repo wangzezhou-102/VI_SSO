@@ -59,7 +59,7 @@ public class FolderController {
 
     /**
      * 修改文件夹名称
-     * @param folderBean id folderName
+     * @param folderBean id 、folderName
      * @return
      */
     @RequestMapping("setFolderName")
@@ -80,9 +80,14 @@ public class FolderController {
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
+    /**
+     * 根据文件夹名称模糊查询
+     * @param jsonObject folderName
+     * @return
+     */
     @RequestMapping("getFolderByName")
     public ResponseEntity<ResultVo> getFolderByName(@RequestBody JSONObject jsonObject){
-        String name = String.valueOf(jsonObject.get("name").toString());
+        String name = String.valueOf(jsonObject.get("folderName").toString());
         System.out.println(name);
         ResultVo resultVo = folderService.getFolderByName(name);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
