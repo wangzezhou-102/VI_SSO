@@ -27,7 +27,7 @@ public class OfflineVideoServiceImpl implements OfflineVideoService{
     @Override
     public ResultVo addOfflineVideo(OfflineVideoBean offlineVideoBean) {
         OfflineVideoBean queryBean = new OfflineVideoBean();
-        queryBean.setVideoName(offlineVideoBean.getVideoName());
+        queryBean.setName(offlineVideoBean.getName());
         long count = offlineVideoMapper.readOfflineVideoCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);
@@ -54,7 +54,7 @@ public class OfflineVideoServiceImpl implements OfflineVideoService{
     public ResultVo updateOfflineVideo(OfflineVideoBean offlineVideoBean) {
         OfflineVideoBean queryBean = new OfflineVideoBean();
         queryBean.setIdn(offlineVideoBean.getId());
-        queryBean.setVideoName(offlineVideoBean.getVideoName());
+        queryBean.setName(offlineVideoBean.getName());
         long count = offlineVideoMapper.readOfflineVideoCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);

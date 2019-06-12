@@ -27,7 +27,7 @@ public class OfflinePointServiceImpl implements OfflinePointService{
     @Override
     public ResultVo addOfflinePoint(OfflinePointBean offlinePointBean) {
         OfflinePointBean queryBean = new OfflinePointBean();
-        queryBean.setPointName(offlinePointBean.getPointName());
+        queryBean.setName(offlinePointBean.getName());
         long count = offlinePointMapper.readOfflinePointCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);
@@ -54,7 +54,7 @@ public class OfflinePointServiceImpl implements OfflinePointService{
     public ResultVo updateOfflinePoint(OfflinePointBean offlinePointBean) {
         OfflinePointBean queryBean = new OfflinePointBean();
         queryBean.setIdn(offlinePointBean.getId());
-        queryBean.setPointName(offlinePointBean.getPointName());
+        queryBean.setName(offlinePointBean.getName());
         long count = offlinePointMapper.readOfflinePointCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);

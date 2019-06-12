@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.SysOrganizationMapper">
+
+    <resultMap id="sysOrganizationMap" type="sysOrganizationBean">
+        <id column="ID" property="id" />
+        <result column="ORG_ID" property="orgId"/>
+        <collection column="ORG_ID" property="orgs" ofType="sysOrganizationBean"
+                    select="readOrgChildren">
+        </collection>
+        <collection column="ORG_ID" property="devices" ofType="deviceBean"
+                    select="readDeviceList">
+        </collection>
+    </resultMap>
+
+    <sql id="table">
+        sys_organization
+    </sql>
+    
+    <!-- 查询根节点 -->
+    <select id="readOrgDeviceTree" parameterType="sysOrganizationBean" resultMap="sysOrganizationMap">
+        select * from 
+        <include refid="table"/>
+        where pid='root'
+    </select>
+    
+    <select id="readOrgChildren" parameterType="string" resultMap="sysOrganizationMap">
+        select * from 
+        <include refid="table"/>
+        where pid=#{orgId}        
+    </select>
+    
+    <select id="readDeviceList" parameterType="string" resultType="deviceBean">
+        select * from vi_device where parent_id=#{orgId}
+    </select>
+</mapper>

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.toolkit.StringUtils;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * 离线视频
@@ -20,16 +22,16 @@ public class OfflineVideoBean {
     private Long id;
     
     // 视频名称
-    private String videoName;
+    private String name;
     
     // 关联点位
-    private Long pointId;
+    private String cameraId;
    
     // 开始时间
-    private LocalDateTime beginTime;
+    private LocalDateTime startTime;
     
     // 视频地址
-    private String videoUrl;
+    private String bucket;
     
     // 创建时间
     private LocalDateTime gmtCreate;
@@ -45,10 +47,12 @@ public class OfflineVideoBean {
     
     // 非数据库字段，用于更新时进行一些不可重复的字段判断
     @TableField(exist = false)
+    @JsonInclude(value=Include.NON_EMPTY)
     private Long idn;
     
     // 非数据库字段，关键字用于模糊查询
     @TableField(exist = false)
+    @JsonInclude(value=Include.NON_EMPTY)
     private String keyWord;
     
     public Long getId() {
@@ -59,36 +63,36 @@ public class OfflineVideoBean {
         this.id = id;
     }
 
-    public String getVideoName() {
-        return videoName;
+    public String getName() {
+        return name;
     }
 
-    public void setVideoName(String videoName) {
-        this.videoName = videoName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Long getPointId() {
-        return pointId;
+    public String getCameraId() {
+        return cameraId;
     }
 
-    public void setPointId(Long pointId) {
-        this.pointId = pointId;
+    public void setCameraId(String cameraId) {
+        this.cameraId = cameraId;
     }
 
-    public LocalDateTime getBeginTime() {
-        return beginTime;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setBeginTime(LocalDateTime beginTime) {
-        this.beginTime = beginTime;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
+    public String getBucket() {
+        return bucket;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
     }
 
     public LocalDateTime getGmtCreate() {
@@ -141,12 +145,11 @@ public class OfflineVideoBean {
 
     @Override
     public String toString() {
-        return "OfflineVideoBean [id=" + id + ", videoName=" + videoName + ", pointId=" + pointId + ", beginTime="
-                + beginTime + ", videoUrl=" + videoUrl + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified
-                + ", createUser=" + createUser + ", modifiedUser=" + modifiedUser + ", idn=" + idn + ", keyWord="
-                + keyWord + "]";
+        return "OfflineVideoBean [id=" + id + ", name=" + name + ", cameraId=" + cameraId + ", startTime=" + startTime
+                + ", bucket=" + bucket + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + ", createUser="
+                + createUser + ", modifiedUser=" + modifiedUser + ", idn=" + idn + ", keyWord=" + keyWord + "]";
     }
-    
+
     /**
      * 数据校验
      * @author ChenDong
@@ -154,7 +157,7 @@ public class OfflineVideoBean {
      * @return
      */
     public boolean validate() {
-        if(StringUtils.isEmpty(videoName)||pointId == null||StringUtils.isEmpty(videoUrl)) {
+        if(StringUtils.isEmpty(name)||StringUtils.isEmpty(cameraId)) {
             return false;
         }
         return true;

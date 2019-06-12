@@ -66,4 +66,8 @@
         where vi_device.id = #{id}
     </select>
 
+    <select id="readDeviceList" parameterType="deviceBean" resultType="deviceBean">
+        select * from vi_device
+    </select>
+
 </mapper>

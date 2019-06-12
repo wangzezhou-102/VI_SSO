@@ -6,6 +6,8 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.secusoft.web.core.util.StringUtils;
 
 /**
@@ -20,8 +22,11 @@ public class OfflineFolderBean {
     @TableId(value="id", type= IdType.AUTO)
     private Long id;
     
+    // 组织结构ID
+    private String orgId;
+    
     // 文件夹名
-    private String folderName;
+    private String classifyName;
     
     // 创建时间
     private LocalDateTime gmtCreate;
@@ -37,10 +42,12 @@ public class OfflineFolderBean {
 
     // 非数据库字段，用于更新时进行一些不可重复的字段判断
     @TableField(exist = false)
+    @JsonInclude(value=Include.NON_EMPTY)
     private Long idn;
     
     // 非数据库字段，关键字用于模糊查询
     @TableField(exist = false)
+    @JsonInclude(value=Include.NON_EMPTY)
     private String keyWord;
     
     // 关联点位列表
@@ -55,12 +62,20 @@ public class OfflineFolderBean {
         this.id = id;
     }
 
-    public String getFolderName() {
-        return folderName;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getClassifyName() {
+        return classifyName;
+    }
+
+    public void setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
     }
 
     public LocalDateTime getGmtCreate() {
@@ -94,7 +109,7 @@ public class OfflineFolderBean {
     public void setModifiedUser(Long modifiedUser) {
         this.modifiedUser = modifiedUser;
     }
-
+    
     public Long getIdn() {
         return idn;
     }
@@ -121,7 +136,7 @@ public class OfflineFolderBean {
 
     @Override
     public String toString() {
-        return "OfflineFolderBean [id=" + id + ", folderName=" + folderName + ", gmtCreate=" + gmtCreate
+        return "OfflineFolderBean [id=" + id + ", classifyName=" + classifyName + ", gmtCreate=" + gmtCreate
                 + ", gmtModified=" + gmtModified + ", createUser=" + createUser + ", modifiedUser=" + modifiedUser
                 + ", idn=" + idn + ", keyWord=" + keyWord + "]";
     }
@@ -133,7 +148,7 @@ public class OfflineFolderBean {
      * @return
      */
     public boolean validate() {
-        if(StringUtils.isEmpty(folderName)) {
+        if(StringUtils.isEmpty(classifyName)||StringUtils.isEmpty(orgId)) {
             return false;
         }
         return true;

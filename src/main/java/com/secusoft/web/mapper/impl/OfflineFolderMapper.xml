@@ -4,7 +4,8 @@
 
     <resultMap id="offlineFolderMap" type="offlineFolderBean">
         <id column="ID" property="id"/>
-        <result column="FOLDER_NAME" property="folderName"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="classify_name" property="classifyName"/>
         <collection column="ID" property="points" ofType="offlinePointBean"
                      select="com.secusoft.web.mapper.OfflinePointMapper.readOfflinePoint">
         </collection>
@@ -16,18 +17,21 @@
     
     <sql id="whereSql">
         <where>
-	        <if test="id!=null">
-	           and id=#{id}
-	        </if> 
-	        <if test="folderName!=null and folderName!=''">
-               and folder_name=#{folderName}
-	        </if>
-	        <if test="idn!=null">
+            <if test="id!=null">
+               and id=#{id}
+            </if>
+            <if test="orgId!=null and orgId!=''">
+               and org_id=#{orgId}
+            </if> 
+            <if test="classifyName!=null and classifyName!=''">
+               and classify_name=#{classifyName}
+            </if>
+            <if test="idn!=null">
                and id!=#{idn}
-	        </if>
-	        <if test="keyWord!=null and keyWord!=''">
-	           and instr(folder_name,#{keyWord})>0
-	        </if>
+            </if>
+            <if test="keyWord!=null and keyWord!=''">
+               and instr(classify_name,#{keyWord})>0
+            </if>
         </where>
     </sql>
     <!-- 根据条件查找,返回数量 -->
@@ -46,7 +50,7 @@
     
     <!-- 关联查询 -->
     <select id="readOfflineFolder" resultMap="offlineFolderMap">
-        select id,folder_name from 
+        select id,org_id,classify_name from 
         <include refid="table"/>
     </select>
 </mapper>

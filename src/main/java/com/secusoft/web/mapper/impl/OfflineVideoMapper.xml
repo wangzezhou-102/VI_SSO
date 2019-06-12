@@ -8,15 +8,15 @@
     
     <sql id="whereSql">
         <where>
-	        <if test="id!=null">
-	           and id=#{id}
-	        </if> 
-	        <if test="pointId!=null">
+            <if test="id!=null">
+               and id=#{id}
+            </if> 
+            <if test="pointId!=null">
                and point_id=#{pointId}
-	        </if>
-	        <if test="idn!=null">
+            </if>
+            <if test="idn!=null">
                and id!=#{idn}
-	        </if>
+            </if>
         </where>
     </sql>
     <!-- 根据条件查找,返回数量 -->
@@ -34,9 +34,9 @@
     </select>
     
     <!-- 关联查询 -->
-    <select id="readOfflineVideo" parameterType="long" resultType="offlineVideoBean">
+    <select id="readOfflineVideo" parameterType="string" resultType="offlineVideoBean">
         select * from 
         <include refid="table"/>
-        where point_id=#{pointId}
+        where camera_id=#{cameraId}
     </select>
 </mapper>

@@ -27,7 +27,7 @@ public class OfflineFolderServiceImpl implements OfflineFolderService{
     @Override
     public ResultVo addOfflineFolder(OfflineFolderBean offlineFolderBean) {
         OfflineFolderBean queryBean = new OfflineFolderBean();
-        queryBean.setFolderName(offlineFolderBean.getFolderName());
+        queryBean.setClassifyName(offlineFolderBean.getClassifyName());
         long count = offlineFolderMapper.readOfflineFolderCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);
@@ -54,7 +54,7 @@ public class OfflineFolderServiceImpl implements OfflineFolderService{
     public ResultVo updateOfflineFolder(OfflineFolderBean offlineFolderBean) {
         OfflineFolderBean queryBean = new OfflineFolderBean();
         queryBean.setIdn(offlineFolderBean.getId());
-        queryBean.setFolderName(offlineFolderBean.getFolderName());
+        queryBean.setClassifyName(offlineFolderBean.getClassifyName());
         long count = offlineFolderMapper.readOfflineFolderCountByParam(queryBean);
         if(count>0) {
             return ResultVo.failure(BizExceptionEnum.REPEAT);

@@ -4,7 +4,8 @@
 
     <resultMap id="offlinePointMap" type="offlinePointBean">
         <id column="ID" property="id"/>
-        <result column="POINT_NAME" property="pointName"/>
+        <result column="CAMERA_ID" property="cameraId"/>
+        <result column="NAME" property="name"/>
         <collection column="ID" property="videos" ofType="offlineVideoBean"
                      select="com.secusoft.web.mapper.OfflineVideoMapper.readOfflineVideo">
         </collection>
@@ -15,21 +16,24 @@
     
     <sql id="whereSql">
         <where>
-	        <if test="id!=null">
-	           and id=#{id}
-	        </if> 
-	        <if test="pointName!=null and pointName!=''">
-               and point_name=#{pointName}
-	        </if>
-	        <if test="idn!=null">
+            <if test="id!=null">
+               and id=#{id}
+            </if> 
+            <if test="cameraId!=null and cameraId!=''">
+               and camera_id=#{cameraId}
+            </if>
+            <if test="name!=null and name!=''">
+               and name=#{name}
+            </if>
+            <if test="idn!=null">
                and id!=#{idn}
-	        </if>
-	        <if test="keyWord!=null and keyWord!=''">
-	           and instr(point_name,#{keyWord})>0
-	        </if>
-	        <if test="folderId!=null">
-	           and folder_id=#{folderId}
-	        </if>
+            </if>
+            <if test="keyWord!=null and keyWord!=''">
+               and instr(name,#{keyWord})>0
+            </if>
+            <if test="classifyId!=null">
+               and classify_id=#{classifyId}
+            </if>
         </where>
     </sql>
     <!-- 根据条件查找,返回数量 -->
@@ -47,9 +51,9 @@
     </select>
     
     <!-- 关联查询 -->
-    <select id="readOfflinePoint" parameterType="long" resultMap="offlinePointMap">
-        select id,point_name from 
+    <select id="readOfflinePoint" parameterType="string" resultMap="offlinePointMap">
+        select id,name,camera_id from 
         <include refid="table"/>
-        where folder_id=#{folderId}
+        where classify_id=#{classifyId}
     </select>
 </mapper>
