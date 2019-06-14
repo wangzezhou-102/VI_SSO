@@ -35,5 +35,5 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * 正在执行的布控任务
      * @return
      */
-    Integer getEnabledViSurveyTaskList();
+    Integer getEnabledViSurveyTaskCount();
 }
