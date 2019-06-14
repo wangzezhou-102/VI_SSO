@@ -47,7 +47,7 @@ public class OfflineVideoController {
         }
         ResultVo result = new ResultVo();
         result = offlineVideoService.addOfflineVideo(bean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -64,7 +64,7 @@ public class OfflineVideoController {
         }
         ResultVo result = new ResultVo();
         result = offlineVideoService.deleteOfflineVideo(ids);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -81,7 +81,7 @@ public class OfflineVideoController {
         }
         ResultVo result = new ResultVo();
         result = offlineVideoService.updateOfflineVideo(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -95,6 +95,6 @@ public class OfflineVideoController {
     public ResponseEntity<ResultVo> readPointList(@RequestBody OfflineVideoBean queryBean) {
         ResultVo result = new ResultVo();
         result = offlineVideoService.readOfflineVideoByParam(queryBean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
 }

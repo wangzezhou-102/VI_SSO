@@ -11,6 +11,7 @@ public class DeviceBean extends Page {
     private Integer type;
     private String ip;
     private Integer port;
+    private String status; //状态 ON-在线 OFF-离线
     private String longitude;//经度
     private String latitude;//纬度
 
@@ -25,6 +26,7 @@ public class DeviceBean extends Page {
         this.type = type;
         this.ip = ip;
         this.port = port;
+        this.status = status;
         this.longitude = longitude;
         this.latitude = latitude;
     }
@@ -85,6 +87,14 @@ public class DeviceBean extends Page {
         this.port = port;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getLongitude() {
         return longitude;
     }
@@ -103,16 +113,8 @@ public class DeviceBean extends Page {
 
     @Override
     public String toString() {
-        return "DeviceBean{" +
-                "id='" + id + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", deviceName='" + deviceName + '\'' +
-                ", type=" + type +
-                ", ip='" + ip + '\'' +
-                ", port=" + port +
-                ", longitude='" + longitude + '\'' +
-                ", latitude='" + latitude + '\'' +
-                '}';
+        return "DeviceBean [id=" + id + ", deviceId=" + deviceId + ", parentId=" + parentId + ", deviceName="
+                + deviceName + ", type=" + type + ", ip=" + ip + ", port=" + port + ", status=" + status
+                + ", longitude=" + longitude + ", latitude=" + latitude + "]";
     }
 }

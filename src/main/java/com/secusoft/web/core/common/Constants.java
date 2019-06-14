@@ -11,5 +11,8 @@ import org.springframework.http.HttpStatus;
 public class Constants {
 
     // 返回成功状态码
-    public static final HttpStatus SUCCESS = HttpStatus.OK;
+    public static final HttpStatus OK = HttpStatus.OK;
+    
+    // 成功信息
+    public static final String SUCCESS = "SUCCESS";
 }

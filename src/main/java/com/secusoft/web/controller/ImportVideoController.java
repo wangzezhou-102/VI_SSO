@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.secusoft.web.core.common.Constants;
-import com.secusoft.web.core.config.ImportVideoConfig;
+import com.secusoft.web.config.ImportVideoConfig;
 import com.secusoft.web.core.util.ResponseUtil;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.ImportVideoService;
@@ -40,7 +40,7 @@ public class ImportVideoController {
         System.out.println(ImportVideoConfig.chunk);
         ResultVo result = new ResultVo();
         result = importVideoService.chunk();
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -54,7 +54,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> mergeFile(@RequestBody Map<String, Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.mergeFile(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -68,7 +68,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> createFileClassify(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.createFileClassify(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -82,7 +82,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> modifyFileClassify(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.modifyFileClassify(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -96,7 +96,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> deleteFileClassify(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.deleteFileClassify(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -110,7 +110,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> createFileCameraRelation(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.createFileCameraRelation(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -124,7 +124,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> modifyFileCameraRelation(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.modifyFileCameraRelation(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -138,7 +138,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> dragOfflineCamera(@RequestBody Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.dragOfflineCamera(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -152,7 +152,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> deleteOfflineCamera(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.deleteOfflineCamera(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -166,7 +166,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> deleteOffline(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.deleteOffline(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -180,7 +180,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> createFileStatus(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.createFileStatus(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -194,7 +194,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> updateFileStatus(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.updateFileStatus(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -208,7 +208,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> queryFileStatus(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.queryFileStatus(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -222,7 +222,7 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> deleteFileStatus(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.deleteFileStatus(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -236,6 +236,6 @@ public class ImportVideoController {
     public ResponseEntity<ResultVo> describeFileClassifys(Map<String,Object> param) {
         ResultVo result = new ResultVo();
         result = importVideoService.describeFileClassifys(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
 }

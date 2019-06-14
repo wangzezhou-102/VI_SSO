@@ -50,6 +50,13 @@ public class ResultVo {
         resultVo.message = "success";
         return resultVo;
     }
+    public static  ResultVo success(Object result,Long totalCount) {
+        ResultVo resultVo = new ResultVo();
+        resultVo.data = result;
+        resultVo.message = "success";
+        resultVo.total= totalCount;
+        return resultVo;
+    }
 
     public static ResultVo failure(BizExceptionEnum error) {
         return failure(error.getCode(), error.getMessage());

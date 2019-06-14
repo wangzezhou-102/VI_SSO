@@ -1,6 +1,8 @@
 package com.secusoft.web.tusouapi.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.SearchRequest;
@@ -25,5 +27,5 @@ public interface TuSouSearchService{
      */
     BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request);
 
-
+    ResultVo sortsearch(JSONObject request);
 }

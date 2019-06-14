@@ -36,7 +36,7 @@ public class DeviceController {
     @PostMapping("/readdevicelist")
     public ResponseEntity<ResultVo> readDeviceList(@RequestBody DeviceBean queryBean) {
         ResultVo result = deviceService.readDeviceList(queryBean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -49,7 +49,7 @@ public class DeviceController {
     @PostMapping("/readdevicetree")
     public ResponseEntity<ResultVo> readDeviceTree(@RequestBody DeviceBean queryBean) {
         ResultVo result = deviceService.readDeviceTree();
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
 }
