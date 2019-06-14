@@ -15,5 +15,6 @@ public interface DeviceService {
     ResultVo readDeviceList(DeviceBean paramBean);
     
     ResultVo readDeviceTree();
+    
+    ResultVo readDeviceFromBase();
 }
-

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.secusoft.web.core.config.ImportVideoConfig;
+import com.secusoft.web.config.ImportVideoConfig;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.ImportVideoService;
 import com.secusoft.web.serviceapi.ServiceClient;

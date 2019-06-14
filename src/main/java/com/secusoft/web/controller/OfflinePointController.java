@@ -47,7 +47,7 @@ public class OfflinePointController {
         }
         ResultVo result = new ResultVo();
         result = offlinePointService.addOfflinePoint(bean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -64,7 +64,7 @@ public class OfflinePointController {
         }
         ResultVo result = new ResultVo();
         result = offlinePointService.deleteOfflinePoint(ids);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -78,7 +78,7 @@ public class OfflinePointController {
     public ResponseEntity<ResultVo> updateOfflinePoint(@RequestBody OfflinePointBean param) {
         ResultVo result = new ResultVo();
         result = offlinePointService.updateOfflinePoint(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -92,6 +92,6 @@ public class OfflinePointController {
     public ResponseEntity<ResultVo> readPointList(@RequestBody OfflinePointBean queryBean) {
         ResultVo result = new ResultVo();
         result = offlinePointService.readOfflinePointByParam(queryBean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
 }

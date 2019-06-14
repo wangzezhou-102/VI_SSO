@@ -1,6 +1,7 @@
 package com.secusoft.web.shipinapi;
 
 
+import com.alibaba.fastjson.JSON;
 import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.Map;
 
 /**
  * 视频平台API 接口封装
@@ -149,7 +151,18 @@ public class ShiPinClient {
         }
     }
 
-
+    /**
+     * Post请求
+     * @author ChenDong
+     * @date 2019年6月13日
+     * @param url
+     * @param param
+     * @return
+     */
+    public String fetchByPostMethod(String url, Map<String,Object> param) {
+        return fetchByPostMethod(url, JSON.toJSONString(param));
+    }
+    
     /**
      * Post方法封装，发送post请求，获取响应内容
      * @param url

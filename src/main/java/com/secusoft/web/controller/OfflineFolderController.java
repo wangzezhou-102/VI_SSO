@@ -47,7 +47,7 @@ public class OfflineFolderController {
         }
         ResultVo result = new ResultVo();
         result = offlineFolderService.addOfflineFolder(bean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -64,7 +64,7 @@ public class OfflineFolderController {
         }
         ResultVo result = new ResultVo();
         result = offlineFolderService.deleteOfflineFolder(ids);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -78,7 +78,7 @@ public class OfflineFolderController {
     public ResponseEntity<ResultVo> updateOfflineFolder(@RequestBody OfflineFolderBean param) {
         ResultVo result = new ResultVo();
         result = offlineFolderService.updateOfflineFolder(param);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -92,7 +92,7 @@ public class OfflineFolderController {
     public ResponseEntity<ResultVo> readFolderList(@RequestBody OfflineFolderBean queryBean) {
         ResultVo result = new ResultVo();
         result = offlineFolderService.readOfflineFolderByParam(queryBean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
     
     /**
@@ -106,6 +106,6 @@ public class OfflineFolderController {
     public ResponseEntity<ResultVo> readFolder(@RequestBody OfflineFolderBean queryBean) {
         ResultVo result = new ResultVo();
         result = offlineFolderService.readOfflineFolder(queryBean);
-        return ResponseUtil.handle(Constants.SUCCESS, result);
+        return ResponseUtil.handle(Constants.OK, result);
     }
 }
