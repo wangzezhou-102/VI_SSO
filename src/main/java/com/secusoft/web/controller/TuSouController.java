@@ -37,13 +37,10 @@ public class TuSouController {
      * 排序后的图搜结果
      * @return
      */
-    @RequestMapping("susou_search_sort")
-    public JSONObject sortSearch(@RequestBody JSONObject request){
+    @RequestMapping("/tusou_search_sort")
+    public ResponseEntity<ResultVo> sortSearch(@RequestBody JSONObject request){
         ResultVo resultVo = tuSouSearchService.sortsearch(request);
-        ResponseEntity<ResultVo> resultVoResponseEntity = new ResponseEntity<>(resultVo, HttpStatus.OK);
-        String responStr = JSON.toJSONString(resultVoResponseEntity, SerializerFeature.DisableCircularReferenceDetect);
-        JSONObject object = JSON.parseObject(responStr );
-        return object;
+        return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
 
 

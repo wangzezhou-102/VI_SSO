@@ -2,8 +2,19 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.secusoft.web.core.base.controller.BaseController;
+import com.secusoft.web.mapper.*;
+import com.secusoft.web.model.*;
+import com.secusoft.web.service.DeviceService;
+import com.secusoft.web.tusouapi.model.SearchData;
+import com.secusoft.web.tusouapi.model.SearchResponse;
+import com.secusoft.web.tusouapi.model.SearchSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.secusoft.web.mapper.AreaMapper;
 import com.secusoft.web.mapper.FolderMapper;
 import com.secusoft.web.mapper.PictureMapper;
@@ -17,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +48,8 @@ public class TestController extends BaseController {
     private AreaMapper areaMapper;
     @Resource
     private FolderMapper folderMapper;
+    @Resource
+    private DeviceMapper deviceMapper;
 
     @RequestMapping("/test")
     public Object test(){
@@ -827,7 +841,11 @@ public class TestController extends BaseController {
     }
 
     @RequestMapping("/testSort")
-    public Object testSort(){
+    public Object testSort(@RequestBody JSONObject jsonObject){
+        //跳过多少个
+        Integer from = Integer.parseInt(jsonObject.get("from").toString());
+        //请求多少个
+        Integer size = Integer.parseInt(jsonObject.get("size").toString());
         String akun="{\n" +
                 "  \"data\": [\n" +
                 "    {\n" +
@@ -944,10 +962,89 @@ public class TestController extends BaseController {
                 "  \"errorMsg\": \"\"\n" +
                 "}\n";
 
-        JSONObject ss = (JSONObject)JSON.parse(akun);
-        //JSONArray data=ss.get("data");
+        SearchResponse searchResponse = JSON.parseObject(akun, new TypeReference<SearchResponse>() {
+        });
+        List<SearchData> olddatas = searchResponse.getData();
+        //获取全部的设备列表
+        DeviceBean device = new DeviceBean();
+        List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
 
-        return ss;
+        olddatas.forEach(searchData -> {
+            deviceBeans.forEach(deviceBean ->{
+                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
+                    searchData.getSource().setDeviceBean(deviceBean);
+                }
+            });
+        });
+
+        List<SearchData> olddata = olddatas.subList(from, from + size);
+
+        //相似度排序
+        Collections.sort(olddata , new Comparator<SearchData>() {
+            @Override
+            public int compare(SearchData o1, SearchData o2) {
+                Double score1 = o1.getScore();
+                Double score2 = o2.getScore();
+                if (score1<score2){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        });
+        ArrayList<SearchData> data = new ArrayList<>();
+        data.addAll(olddata);
+
+        // 时间戳排序
+        if (data !=null && data.size()>1){
+            Collections.sort(data , new Comparator<SearchData>() {
+                @Override
+                public int compare(SearchData o1, SearchData o2) {
+                    Long o1Value = o1.getSource().getTimestamp();
+                    Long o2Value = o2.getSource().getTimestamp();
+                    if (o1Value<o2Value){
+                        return 1;
+                    }else{
+                        return -1;
+                    }
+                }
+            });
+        }
+
+        //设备分组排序
+        List<SearchData> dataList =olddata;
+        ArrayList<String> deviceIds = new ArrayList<>();
+        Set<String> set = new HashSet<String>();
+        Map<String,List> resultMap = new LinkedHashMap<String,List>();
+        dataList.forEach(searchData -> {
+            SearchSource source = searchData.getSource();
+            String cameraId = source.getCameraId();
+            if (set.contains(cameraId)){
+                resultMap.get(cameraId).add(searchData);
+            }else {
+                set.add(cameraId);
+                List<SearchData> list1 = new ArrayList<>();
+                list1.add(searchData);
+                resultMap.put(cameraId,list1);
+            }
+        });
+        HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+        stringSearchDataHashMap.put("score",olddata);
+        stringSearchDataHashMap.put("timestamp",data);
+        stringSearchDataHashMap.put("device",resultMap);
+
+        Long totalCount = searchResponse.getTotalCount();
+
+        String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap,totalCount), SerializerFeature.DisableCircularReferenceDetect);
+        ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
+        });
+        ResponseEntity<ResultVo> resultVoResponseEntity = new ResponseEntity<>(resultVo, HttpStatus.OK);
+
+        //String responStr = JSON.toJSONString(resultVoResponseEntity, SerializerFeature.DisableCircularReferenceDetect);
+        //JSONObject object = JSON.parseObject(responStr );
+        return resultVoResponseEntity;
+
+
     }
 
     @RequestMapping("/timetasktest")
@@ -965,4 +1062,66 @@ public class TestController extends BaseController {
 
         return null;
     }
-}
+//        SearchResponse searchResponse = JSON.parseObject(akun, new TypeReference<SearchResponse>() {
+//        });
+//        List<SearchData> olddata = searchResponse.getData();
+//        //相似度排序
+//        Collections.sort(olddata , new Comparator<SearchData>() {
+//            @Override
+//            public int compare(SearchData o1, SearchData o2) {
+//                Double score1 = o1.getScore();
+//                Double score2 = o2.getScore();
+//                if (score1<score2){
+//                    return 1;
+//                }else{
+//                    return -1;
+//                }
+//            }
+//        });
+//        ArrayList<SearchData> data = new ArrayList<>();
+//        data.addAll(olddata);
+//
+//       // 时间戳排序
+//        if (data !=null && data.size()>1){
+//            Collections.sort(data , new Comparator<SearchData>() {
+//                @Override
+//                public int compare(SearchData o1, SearchData o2) {
+//                    Long o1Value = o1.getSource().getTimestamp();
+//                    Long o2Value = o2.getSource().getTimestamp();
+//                    if (o1Value<o2Value){
+//                        return 1;
+//                    }else{
+//                        return -1;
+//                    }
+//                }
+//            });
+//        }
+//
+//        //设备分组排序
+//        List<SearchData> dataList =olddata;
+//        ArrayList<String> deviceIds = new ArrayList<>();
+//        Set<String> set = new HashSet<String>();
+//        Map<String,List> resultMap = new LinkedHashMap<String,List>();
+//        dataList.forEach(searchData -> {
+//            SearchSource source = searchData.getSource();
+//            String cameraId = source.getCameraId();
+//            if (set.contains(cameraId)){
+//                resultMap.get(cameraId).add(searchData);
+//            }else {
+//                set.add(cameraId);
+//                List<SearchData> list1 = new ArrayList<>();
+//                list1.add(searchData);
+//                resultMap.put(cameraId,list1);
+//            }
+//        });
+//        HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+//        stringSearchDataHashMap.put("score",olddata);
+//        stringSearchDataHashMap.put("timestamp",data);
+//        stringSearchDataHashMap.put("device",resultMap);
+//
+//        Long totalCount = searchResponse.getTotalCount();
+//        String s = JSON.toJSONString(stringSearchDataHashMap, SerializerFeature.DisableCircularReferenceDetect);
+//        JSONObject object = JSON.parseObject(s);
+  }
+
+

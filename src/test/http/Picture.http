@@ -14,6 +14,7 @@ Content-Type: application/json
   "cropImageUrl": "222",
   "oriImageSignedUrl": "222",
   "pictureTime": "123456",
+  "pictureId": "8848",
   "deviceId": "7",
   "folderId": "1",
   "score": "99"

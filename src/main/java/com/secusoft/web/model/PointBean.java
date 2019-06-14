@@ -1,5 +1,8 @@
 package com.secusoft.web.model;
 
+/**
+ * 点位的实体 包含经纬度
+ */
 public class PointBean {
     private Double longitude;
     private Double latitude;

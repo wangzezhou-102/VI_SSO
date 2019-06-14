@@ -29,7 +29,7 @@ public class DeviceServiceImpl implements DeviceService {
     
     @Autowired
     private SysOrganizationMapper orgMapper;
-    
+
     @Autowired
     private UbregionApiConfig ubregionApiConfig;
     /**
@@ -85,13 +85,13 @@ public class DeviceServiceImpl implements DeviceService {
 //                // 不止一次查询
 //            }else {
 //                // 查完毕
-//                
+//
 //            }
 //        }
 //        return null;
 //    }
 //
 //    public List<DeviceBean> readAllDevices(List<>) {
-//        
+//
 //    }
 }

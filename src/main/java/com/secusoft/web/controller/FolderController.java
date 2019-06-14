@@ -70,13 +70,12 @@ public class FolderController {
 
     /**
      * 根据状态展示相应文件夹
-     * @param jsonObject status
+     * @param folderBean status 0待办结  1已结案
      * @return
      */
     @RequestMapping("getFolderByStatus")
-    public ResponseEntity<ResultVo> getFolder(@RequestBody JSONObject jsonObject){
-        Integer i = Integer.parseInt(jsonObject.get("status").toString());
-        ResultVo resultVo = folderService.getFolderByStatus(i);
+    public ResponseEntity<ResultVo> getFolder(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.getFolderByStatus(folderBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
@@ -87,9 +86,10 @@ public class FolderController {
      */
     @RequestMapping("getFolderByName")
     public ResponseEntity<ResultVo> getFolderByName(@RequestBody JSONObject jsonObject){
-        String name = String.valueOf(jsonObject.get("folderName").toString());
+        String name = String.valueOf(jsonObject.get("name").toString());
+        Integer status = Integer.valueOf(jsonObject.get("status").toString());
         System.out.println(name);
-        ResultVo resultVo = folderService.getFolderByName(name);
+        ResultVo resultVo = folderService.getFolderByName(name,status);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
@@ -108,11 +108,8 @@ public class FolderController {
      * @return
      */
    @RequestMapping("readFolder")
-    public JSONObject readFolder(@RequestBody FolderBean folderBean){
+    public ResponseEntity<ResultVo> readFolder(@RequestBody FolderBean folderBean){
        ResultVo resultVo = folderService.getFolder(folderBean.getId());
-       ResponseEntity<ResultVo> resultVoResponseEntity = new ResponseEntity<>(resultVo, HttpStatus.OK);
-       String folder = JSON.toJSONString(resultVoResponseEntity, SerializerFeature.DisableCircularReferenceDetect);
-       JSONObject object = JSON.parseObject(folder);
-       return object;
+       return new ResponseEntity<>(resultVo, HttpStatus.OK);
    }
 }

@@ -2,13 +2,14 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.RoundBean;
 import com.secusoft.web.service.BoxSelectService;
-import com.secusoft.web.core.common.GlobalApiResult;
 import com.secusoft.web.model.PointBean;
-import com.secusoft.web.shipinapi.model.Camera;
 import com.secusoft.web.shipinapi.service.CameraService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
@@ -26,20 +26,18 @@ public class BoxSelectController {
     @Autowired
     private  CameraService CameraServiceImpl;
 
+
     /**
      * 多边形框选返回设备id
      * @param request 有顺序的各个点位坐标
      * @return
      */
     @RequestMapping("/boxselect")
-    public Object boxselect(@RequestBody String request){
+    public ResponseEntity<ResultVo> boxselect(@RequestBody String request){
         ArrayList<PointBean> pointBeans = JSON.parseObject(request, new TypeReference<ArrayList<PointBean>>() {
         });
-        //获取设备列表待改进
-        List<Camera> cameras=JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),new TypeReference<ArrayList<Camera>>(){});
-        List<Camera> cameraList = new ArrayList<>();
-        JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),(Class<ArrayList<Camera>>) cameraList.getClass());
-        return GlobalApiResult.success(boxSelectService.isPtInPoly(cameras, pointBeans));
+        ResultVo resultVo = boxSelectService.isPtInPoly(pointBeans);
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     /**
@@ -48,9 +46,8 @@ public class BoxSelectController {
      * @return
      */
     @RequestMapping("/roundboxselect")
-    public Object roundboxselect(@RequestBody RoundBean roundBean){
-        //获取设备列表待改进
-        List<Camera> cameras=JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),new TypeReference<ArrayList<Camera>>(){});
-        return GlobalApiResult.success(boxSelectService.isPtInPoly2(cameras, roundBean.getPointBean(), roundBean.getRadius()));
+    public ResponseEntity<ResultVo> roundboxselect(@RequestBody RoundBean roundBean){
+        ResultVo resultVo = boxSelectService.isPtInPoly2(roundBean.getPointBean(), roundBean.getRadius());
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 }

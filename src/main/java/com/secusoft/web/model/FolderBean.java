@@ -7,7 +7,7 @@ import java.util.List;
  *
  * 收藏文件夹实体
  */
-public class FolderBean implements Serializable {
+public class FolderBean extends Page  {
 
     private static final long serialVersionUID = 1L;
 

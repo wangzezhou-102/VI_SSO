@@ -1,5 +1,9 @@
 package com.secusoft.web.model;
 
+/**
+ * 框选画的圆
+ * 包含圆心的经纬度以及半径
+ */
 public class RoundBean {
     private PointBean pointBean;
     private Double radius;

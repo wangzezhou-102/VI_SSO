@@ -1,5 +1,6 @@
 package com.secusoft.web.mapper;
 
+import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.FolderBean;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,8 +13,8 @@ public interface FolderMapper {
     int deleteFolderById(@Param("id") String id);
     int updateNonEmptyFolderById(FolderBean folderBean);
     Integer selectCountFolderByObj(FolderBean folderBean);
-    List<FolderBean> selectFolderByName(@Param("name") String name);
-    List<FolderBean> selectByStatus(@Param("status")int status);
+    List<FolderBean> selectFolderByName(@Param("name") String name,@Param("status") Integer status);
+    List<FolderBean> selectByStatus(FolderBean queryBean);
     List<FolderBean> selectAllFolder();
     FolderBean selectOneFolder(String fid);
     Map<String, Object> selectPicById(@Param("id")String id);

@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class PictureBean implements Serializable {
     private String id;
+    private String pictureId;
     private String origImageUrl;
     private String cropImageUrl;
     private String oriImageSignedUrl;
@@ -27,8 +28,9 @@ public class PictureBean implements Serializable {
         super();
     }
 
-    public PictureBean(String id, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, DeviceBean deviceBean) {
+    public PictureBean(String id, String pictureId, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, DeviceBean deviceBean) {
         this.id = id;
+        this.pictureId = pictureId;
         this.origImageUrl = origImageUrl;
         this.cropImageUrl = cropImageUrl;
         this.oriImageSignedUrl = oriImageSignedUrl;
@@ -47,6 +49,14 @@ public class PictureBean implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPictureId() {
+        return pictureId;
+    }
+
+    public void setPictureId(String pictureId) {
+        this.pictureId = pictureId;
     }
 
     public String getOrigImageUrl() {

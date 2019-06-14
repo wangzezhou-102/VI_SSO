@@ -39,7 +39,7 @@
         where id=#{id}
     </update>
 
-    <select id="selectByStatus" resultMap="result_Folder_Map">
+    <select id="selectByStatus" parameterType="folderBean" resultMap="result_Folder_Map">
         select id , folder_name  ,status from vi_folder where status =#{status}
     </select>
 
@@ -50,10 +50,10 @@
         select id,folder_name ,status from vi_folder
         where id=#{fid}
     </select>
-    <select id="selectFolderByName" parameterType="java.lang.String" resultType="com.secusoft.web.model.FolderBean">
+    <select id="selectFolderByName"  resultType="com.secusoft.web.model.FolderBean">
         SELECT id,folder_name ,status
          FROM `vi_folder`
-         where instr(folder_name,#{name})>0
+         where instr(folder_name,#{name})>0 and status =#{status}
     </select>
 
     <!-- 通过Folder的id获得对应数据库中表的数据对象-->

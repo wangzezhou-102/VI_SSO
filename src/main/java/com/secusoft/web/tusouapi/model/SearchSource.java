@@ -1,5 +1,7 @@
 package com.secusoft.web.tusouapi.model;
 
+import com.secusoft.web.model.DeviceBean;
+
 /**
  * @author huanghao
  * @date 2019-06-12
@@ -32,11 +34,12 @@ public class SearchSource {
     private Integer objRight;
     private Integer upper_color;
     private String cropImageSigned;
+    private DeviceBean deviceBean;
 
     public SearchSource() {
     }
 
-    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, Integer hair, Integer objLeft, Integer lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, Integer upper_type, Integer objBottom, Integer lower_color, Double upper_colorScore, Integer sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, Integer upper_color, String cropImageSigned) {
+    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, Integer hair, Integer objLeft, Integer lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, Integer upper_type, Integer objBottom, Integer lower_color, Double upper_colorScore, Integer sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, Integer upper_color, String cropImageSigned, DeviceBean deviceBean) {
         this.origImage = origImage;
         this.oriImageSigned = oriImageSigned;
         this.hairScore = hairScore;
@@ -64,6 +67,15 @@ public class SearchSource {
         this.objRight = objRight;
         this.upper_color = upper_color;
         this.cropImageSigned = cropImageSigned;
+        this.deviceBean = deviceBean;
+    }
+
+    public DeviceBean getDeviceBean() {
+        return deviceBean;
+    }
+
+    public void setDeviceBean(DeviceBean deviceBean) {
+        this.deviceBean = deviceBean;
     }
 
     public String getOrigImage() {
@@ -315,6 +327,7 @@ public class SearchSource {
                 ", objRight=" + objRight +
                 ", upper_color=" + upper_color +
                 ", cropImageSigned='" + cropImageSigned + '\'' +
+                ", deviceBean=" + deviceBean +
                 '}';
     }
 }

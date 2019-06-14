@@ -1,5 +1,10 @@
 package com.secusoft.web.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.AreaMapper;
 import com.secusoft.web.mapper.PictureMapper;
@@ -73,18 +78,22 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public ResultVo getFolderByStatus(Integer status) {
-        System.out.println(status);
+    public ResultVo getFolderByStatus(FolderBean folderBean) {
+        if(folderBean != null && folderBean.getPageNumber() != null && folderBean.getPageSize() != null) {
+            PageHelper.startPage(folderBean.getPageNumber().intValue(), folderBean.getPageSize());
+        }
+        Integer status = folderBean.getStatus();
         if(status==null){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        List<FolderBean> folderBeans = folderMapper.selectByStatus(status);
-        return ResultVo.success(folderBeans);
+        List<FolderBean> folderBeans = folderMapper.selectByStatus(folderBean);
+        PageInfo<FolderBean> pageInfo = new PageInfo<FolderBean>(folderBeans);
+        return ResultVo.success(pageInfo.getList(),pageInfo.getTotal());
     }
 
     @Override
-    public ResultVo getFolderByName(String name) {
-        List<FolderBean> folderBeans = folderMapper.selectFolderByName(name);
+    public ResultVo getFolderByName(String name,Integer status) {
+        List<FolderBean> folderBeans = folderMapper.selectFolderByName(name,status);
         return ResultVo.success(folderBeans);
     }
 
@@ -103,7 +112,11 @@ public class FolderServiceImpl implements FolderService {
         folderBean.setImageSearchList(pictureBeans);
         folderBean.setDeviceArea(areaBeans);
         folderBean.setTrackList(trackBeans);
-        return ResultVo.success(folderBean);
+
+        String responStr = JSON.toJSONString(ResultVo.success(folderBean), SerializerFeature.DisableCircularReferenceDetect);
+        ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
+        });
+        return resultVo;
     }
 
 

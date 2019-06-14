@@ -4,6 +4,7 @@
     <!-- Picture的resultMap,column是给数据库列起的别名,它对应property类的属性-->
     <resultMap id="result_Picture_Map" type="com.secusoft.web.model.PictureBean">
         <id column="id" property="id" />
+        <result column="picture_id" property="pictureId" />
         <result column="orig_image_url" property="origImageUrl" />
         <result column="crop_image_url" property="cropImageUrl" />
         <result column="ori_image_signed_url" property="oriImageSignedUrl" />
@@ -18,6 +19,7 @@
     <!-- 关联查询映射-->
     <resultMap id="picture_Device_Map" type="PictureBean">
         <id column="ID" property="id"/>
+        <result column="picture_id" property="pictureId" />
         <result column="orig_image_url" property="origImageUrl" />
         <result column="crop_image_url" property="cropImageUrl" />
         <result column="ori_image_signed_url" property="oriImageSignedUrl" />
@@ -34,6 +36,7 @@
     <!-- 数据库中表名为:vi_picture的列名,as前是数据库的列名,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
     <sql id="vi_picture_Column">
         vi_picture.id as id
+        ,vi_picture.picture_id as picture_id
         ,vi_picture.orig_image_url as orig_image_url
         ,vi_picture.crop_image_url as crop_image_url
         ,vi_picture.ori_image_signed_url as ori_image_signed_url
@@ -68,16 +71,16 @@
 
     <!-- 将Picture插入到对应数据库的表中,包括属性值为null的数据-->
     <insert id="insertPicture" parameterType="com.secusoft.web.model.PictureBean">
-        insert into vi_picture(id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score)
-        values(#{id},#{origImageUrl},#{cropImageUrl},#{oriImageSignedUrl},#{cropImageSignedUrl},#{pictureTime},#{deviceId},#{folderId},#{picType},#{score})
+        insert into vi_picture(id,picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score)
+        values(#{id},#{pictureId},#{origImageUrl},#{cropImageUrl},#{oriImageSignedUrl},#{cropImageSignedUrl},#{pictureTime},#{deviceId},#{folderId},#{picType},#{score})
     </insert>
 
     <insert id="insertMorePicture" useGeneratedKeys="true" keyProperty="id"
             parameterType="java.util.List">
-        insert into vi_picture(orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score)
+        insert into vi_picture(picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score})
+            (#{pictureId},#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score})
         </foreach>
     </insert>
 
@@ -99,7 +102,7 @@
 
     <!-- 通过Picture的id获得对应数据库中表的数据对象-->
     <select id="selectPictureById" parameterType="java.lang.String" resultMap="result_Picture_Map">
-        SELECT p.id,p.orig_image_url,p.crop_image_url,p.ori_image_signed_url,p.crop_image_signed_url,p.picture_time,folder_id,p.pic_type,score,d.id as did,d.device_id,d.parent_id,device_name,type,ip,`port`,longitude,latitude
+        SELECT p.id,p.picture_id,p.orig_image_url,p.crop_image_url,p.ori_image_signed_url,p.crop_image_signed_url,p.picture_time,folder_id,p.pic_type,score,d.id as did,d.device_id,d.parent_id,device_name,type,ip,`port`,longitude,latitude
         FROM vi_picture p LEFT JOIN vi_device d on p.device_id = d.device_id
         where p.id = #{id}
     </select>
@@ -114,7 +117,7 @@
 
     <!-- 关联查询 -->
     <select id="selectPictureByTid" parameterType="java.lang.String" resultMap="picture_Device_Map">
-       SELECT p.id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,score,pic_type,tp.track_id
+       SELECT p.id,p.picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,score,pic_type,tp.track_id
        FROM vi_picture p left JOIN vi_track_picture tp on p.id=tp.picture_id
       where track_id=#{trackid}
     </select>
