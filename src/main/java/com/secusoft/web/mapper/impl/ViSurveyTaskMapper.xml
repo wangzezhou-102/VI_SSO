@@ -103,4 +103,10 @@
          LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
     </select>
+
+    <select id="getEnabledViSurveyTaskList" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM vi_survey_task vst
+        where vst.`enable`=1
+    </select>
 </mapper>
