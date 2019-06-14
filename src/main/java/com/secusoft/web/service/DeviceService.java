@@ -16,5 +16,5 @@ public interface DeviceService {
     
     ResultVo readDeviceTree();
     
-    ResultVo readDeviceFromBase();
+    ResultVo syncDeviceFromUbr();
 }

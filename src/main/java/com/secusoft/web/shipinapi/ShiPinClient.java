@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -160,6 +161,18 @@ public class ShiPinClient {
      * @return
      */
     public String fetchByPostMethod(String url, Map<String,Object> param) {
+        return fetchByPostMethod(url, JSON.toJSONString(param));
+    }
+    
+    /**
+     * Post请求
+     * @author ChenDong
+     * @date 2019年6月13日
+     * @param url
+     * @param param
+     * @return
+     */
+    public String fetchByPostMethod(String url, Collection<?> param) {
         return fetchByPostMethod(url, JSON.toJSONString(param));
     }
     

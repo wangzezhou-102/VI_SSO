@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.io.*;
@@ -15,6 +16,7 @@ import java.util.Properties;
  * @Date 2017/5/21 12:06
  */
 @SpringBootApplication
+@EnableScheduling
 public class MainApplication extends WebMvcConfigurerAdapter {
 
     protected final static Logger logger = LoggerFactory.getLogger(MainApplication.class);
@@ -32,10 +34,6 @@ public class MainApplication extends WebMvcConfigurerAdapter {
                 properties.load(in);
                 SpringApplication app = new SpringApplication(MainApplication.class);
                 app.setDefaultProperties(properties);
-//                TuSouClient.tuSouEndpoint = properties.getProperty("tusou.api.addr");
-//                ShiPinClient.shiPinEndpoint = properties.getProperty("shipin.api.addr");
-//                ServiceClient.ServiceEndpoint = properties.getProperty("service.api.addr");
-//                BkrepoDataTaskController.BkrepoTable = properties.getProperty("BkrepoTable");
                 logger.info("读取config下config.properties配置成功!");
                 app.run(args);
             } catch (IOException e) {

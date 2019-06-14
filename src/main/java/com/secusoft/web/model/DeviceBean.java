@@ -5,30 +5,21 @@ public class DeviceBean extends Page {
     private static final long serialVersionUID = 1L;
     
     private String id;
-    private String deviceId;
-    private String parentId;
-    private String deviceName;
-    private Integer type;
+    private String deviceId; //设备ID
+    private String parentId; //父节点
+    private String deviceName;  //设备名称
+    private Integer type;     //摄像机类型：1-球机；2-半球；3-固定枪机；4-遥控枪机
     private String ip;
     private Integer port;
     private String status; //状态 ON-在线 OFF-离线
     private String longitude;//经度
     private String latitude;//纬度
-
+    private String civilCode; //行政区划
+    private String tqApi; //天擎地址
+    private String source; //0-真实设备  1-自定义设备
+    private Integer streamState; //码流状态 0:未启动; 1:已启动
+    private String playUrl; //视频播放地址
     public DeviceBean() {
-    }
-
-    public DeviceBean(String id, String deviceId, String parentId, String deviceName, Integer type, String ip, Integer port, String longitude, String latitude) {
-        this.id = id;
-        this.deviceId = deviceId;
-        this.parentId = parentId;
-        this.deviceName = deviceName;
-        this.type = type;
-        this.ip = ip;
-        this.port = port;
-        this.status = status;
-        this.longitude = longitude;
-        this.latitude = latitude;
     }
 
     public String getId() {
@@ -111,10 +102,51 @@ public class DeviceBean extends Page {
         this.latitude = latitude;
     }
 
+    public String getCivilCode() {
+        return civilCode;
+    }
+
+    public void setCivilCode(String civilCode) {
+        this.civilCode = civilCode;
+    }
+
+    public String getTqApi() {
+        return tqApi;
+    }
+
+    public void setTqApi(String tqApi) {
+        this.tqApi = tqApi;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public Integer getStreamState() {
+        return streamState;
+    }
+
+    public void setStreamState(Integer streamState) {
+        this.streamState = streamState;
+    }
+
+    public String getPlayUrl() {
+        return playUrl;
+    }
+
+    public void setPlayUrl(String playUrl) {
+        this.playUrl = playUrl;
+    }
+
     @Override
     public String toString() {
         return "DeviceBean [id=" + id + ", deviceId=" + deviceId + ", parentId=" + parentId + ", deviceName="
                 + deviceName + ", type=" + type + ", ip=" + ip + ", port=" + port + ", status=" + status
-                + ", longitude=" + longitude + ", latitude=" + latitude + "]";
+                + ", longitude=" + longitude + ", latitude=" + latitude + ", civilCode=" + civilCode + ", tqApi="
+                + tqApi + ", source=" + source + ", streamState=" + streamState + ", playUrl=" + playUrl + "]";
     }
 }

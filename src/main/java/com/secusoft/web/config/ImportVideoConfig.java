@@ -1,7 +1,6 @@
 package com.secusoft.web.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
@@ -119,5 +118,5 @@ public class ImportVideoConfig {
     public static void setMergeFile(String mergeFile) {
         ImportVideoConfig.mergeFile = mergeFile;
     }
-
+    
 }

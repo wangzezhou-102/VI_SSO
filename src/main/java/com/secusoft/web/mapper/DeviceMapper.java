@@ -12,4 +12,9 @@ public interface DeviceMapper extends BaseMapper<DeviceBean> {
 
     List<DeviceBean> readDeviceList(DeviceBean queryBean);
 
+    void insetBatchDevice(List<DeviceBean> devices);
+    
+    void deleteDeviceTable();
+    
+    void deleteOrgDevice();
 }

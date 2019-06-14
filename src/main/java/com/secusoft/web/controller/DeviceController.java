@@ -52,4 +52,16 @@ public class DeviceController {
         return ResponseUtil.handle(Constants.OK, result);
     }
     
+    /**
+     * 查询设备树信息
+     * @author ChenDong
+     * @date 2019年6月12日
+     * @param queryBean
+     * @return
+     */
+    @PostMapping("/syncdevice")
+    public ResponseEntity<ResultVo> syncDevice() {
+        ResultVo result = deviceService.syncDeviceFromUbr();
+        return ResponseUtil.handle(Constants.OK, result);
+    }
 }
