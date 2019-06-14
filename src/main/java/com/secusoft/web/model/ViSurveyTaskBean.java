@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 @TableName("vi_survey_task")
@@ -13,21 +14,35 @@ public class ViSurveyTaskBean implements Serializable {
 
     private Integer id;
     private String taskId;
+    /**
+     * 布控任务名称
+     */
     private String surveyName;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beginTime;
+    /**
+     * 布控任务结束时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+    /**
+     * 布控类型 1-人员 2-车辆 3-事件 4-物品
+     */
     private Integer surveyType;
     private Integer surveyStatus;
+    /**
+     * 区域或框选择 1-区域选择 2-不规则圈选 3-不规则框选
+     */
     private Integer areaType;
-    private String surveyDevice;
     private String topic;
     private Integer enable;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date CreateTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ModifyTime;
+
+    private List<ViTaskRepoBean> viTaskRepoList;
+    private List<ViTaskDeviceBean> viTaskDeviceList;
 
     public Integer getId() {
         return id;
@@ -93,14 +108,6 @@ public class ViSurveyTaskBean implements Serializable {
         this.areaType = areaType;
     }
 
-    public String getSurveyDevice() {
-        return surveyDevice;
-    }
-
-    public void setSurveyDevice(String surveyDevice) {
-        this.surveyDevice = surveyDevice;
-    }
-
     public Integer getEnable() {
         return enable;
     }
@@ -133,6 +140,22 @@ public class ViSurveyTaskBean implements Serializable {
         ModifyTime = modifyTime;
     }
 
+    public List<ViTaskRepoBean> getViTaskRepoList() {
+        return viTaskRepoList;
+    }
+
+    public void setViTaskRepoList(List<ViTaskRepoBean> viTaskRepoList) {
+        this.viTaskRepoList = viTaskRepoList;
+    }
+
+    public List<ViTaskDeviceBean> getViTaskDeviceList() {
+        return viTaskDeviceList;
+    }
+
+    public void setViTaskDeviceList(List<ViTaskDeviceBean> viTaskDeviceList) {
+        this.viTaskDeviceList = viTaskDeviceList;
+    }
+
     @Override
     public String toString() {
         return "ViSurveyTask{" +
@@ -144,7 +167,6 @@ public class ViSurveyTaskBean implements Serializable {
                 ", surveyType=" + surveyType +
                 ", surveyStatus=" + surveyStatus +
                 ", areaType=" + areaType +
-                ", surveyDevice='" + surveyDevice + '\'' +
                 ", topic='" + topic + '\'' +
                 ", enable=" + enable +
                 ", CreateTime=" + CreateTime +

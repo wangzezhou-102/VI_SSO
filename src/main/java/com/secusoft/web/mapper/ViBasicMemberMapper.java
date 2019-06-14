@@ -1,5 +1,6 @@
 package com.secusoft.web.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViBasicMemberBean;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author chjiang
  * @since 2019/6/6 16:34
  */
-public interface ViBasicMemberMapper {
+public interface ViBasicMemberMapper extends BaseMapper<ViBasicMemberBean> {
 
     /**
      * 添加一条自定义库

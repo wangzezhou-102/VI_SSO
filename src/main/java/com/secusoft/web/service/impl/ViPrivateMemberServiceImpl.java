@@ -73,7 +73,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         //解析json
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
         String code=jsonObject.getString("code");
-        if("1001010".equals(code)){
+        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)){
             System.out.println("布控目标创建成功");
         }
         return ResultVo.success();
@@ -117,7 +117,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         //解析json
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
         String code=jsonObject.getString("code");
-        if("1001010".equals(code)){
+        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)){
             System.out.println("布控目标删除成功");
             viPrivateMemberMapper.delViPrivateMember(objectId);
         }else{

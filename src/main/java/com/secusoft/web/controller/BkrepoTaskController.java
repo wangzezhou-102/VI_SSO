@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.serviceapi.ServiceClient;
 import com.secusoft.web.tusouapi.model.BKRepoCreateRequest;
 import com.secusoft.web.tusouapi.model.BKRepoMeta;
@@ -49,7 +50,7 @@ public class BkrepoTaskController implements ApplicationRunner {
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseStr);
         String code=jsonObject.getString("code");
         String data=jsonObject.getString("data");
-        if("1001010".equals(code)&&(data.isEmpty()||"null".equals(data))){
+        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)&&(data.isEmpty()||"null".equals(data))){
             //头部参数
             BaseRequest<BKRepoCreateRequest> bkRepoCreateRequestBaseRequest=new BaseRequest<>();
             bkRepoCreateRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());

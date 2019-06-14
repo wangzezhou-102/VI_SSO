@@ -1,5 +1,6 @@
 package com.secusoft.web.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViRepoBean;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author chjiang
  * @since 2019/6/6 14:23
  */
-public interface ViRepoMapper {
+public interface ViRepoMapper extends BaseMapper<ViRepoBean> {
 
     /**
      * 添加一条布控库

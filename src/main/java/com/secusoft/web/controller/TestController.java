@@ -1,20 +1,26 @@
 package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.secusoft.web.core.base.controller.BaseController;
 import com.secusoft.web.mapper.AreaMapper;
 import com.secusoft.web.mapper.FolderMapper;
 import com.secusoft.web.mapper.PictureMapper;
 import com.secusoft.web.mapper.TrackMapper;
-import com.secusoft.web.model.*;
-import org.springframework.web.bind.annotation.*;
+import com.secusoft.web.model.AreaBean;
+import com.secusoft.web.model.FolderBean;
+import com.secusoft.web.model.PictureBean;
+import com.secusoft.web.model.TrackBean;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -942,5 +948,21 @@ public class TestController extends BaseController {
         //JSONArray data=ss.get("data");
 
         return ss;
+    }
+
+    @RequestMapping("/timetasktest")
+    public Object timeTaskTest() throws ParseException {
+        // 设置传入的时间格式
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // 指定一个日期
+        Date date = dateFormat.parse("2019-06-13 15:44:32");
+
+//         Timer timer = new Timer();
+//         timer.schedule(new SurveyStartTask(), date);
+//
+//        date = dateFormat.parse("2019-06-13 15:44:34");
+//        timer.schedule(new SurveyStartTask(), date);
+
+        return null;
     }
 }

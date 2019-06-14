@@ -11,21 +11,55 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "ServiceApi")
 public class ServiceApiConfig {
 
+    /**
+     * 布控库信息查询
+     */
     public static String pathBkrepoMeta;
 
-    public static  String pathBkrepoCreate;
+    /**
+     * 布控库创建
+     */
+    public static String pathBkrepoCreate;
 
-    public static  String pathBkmemberAdd;
+    /**
+     * 布控目标添加
+     */
+    public static String pathBkmemberAdd;
 
-    public static  String pathBkmemberDelete;
+    /**
+     * 布控目标删除
+     */
+    public static String pathBkmemberDelete;
 
-    public static  String pathBktaskSubmit;
+    /**
+     * 布控任务创建、更新
+     */
+    public static String pathBktaskSubmit;
 
-    public static  String pathBktaskDelete;
+    /**
+     * 布控任务删除
+     */
+    public static String pathBktaskDelete;
 
-    public static  String pathBktaskStart;
+    /**
+     * 布控任务启动
+     */
+    public static String pathBktaskStart;
 
-    public static  String pathBktaskStop;
+    /**
+     * 布控任务停止
+     */
+    public static String pathBktaskStop;
+
+    /**
+     * 设备启流
+     */
+    public static String streamStart;
+
+    /**
+     * 设备停流
+     */
+    public static String streamStop;
 
     public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;
@@ -89,5 +123,21 @@ public class ServiceApiConfig {
 
     public static void setPathBktaskStop(String pathBktaskStop) {
         ServiceApiConfig.pathBktaskStop = pathBktaskStop;
+    }
+
+    public static String getStreamStart() {
+        return streamStart;
+    }
+
+    public static void setStreamStart(String streamStart) {
+        ServiceApiConfig.streamStart = streamStart;
+    }
+
+    public static String getStreamStop() {
+        return streamStop;
+    }
+
+    public static void setStreamStop(String streamStop) {
+        ServiceApiConfig.streamStop = streamStop;
     }
 }

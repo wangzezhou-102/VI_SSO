@@ -1,5 +1,6 @@
 package com.secusoft.web.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.gazhk.ViGazhkSjzyzhQgpqryBean;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,7 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2019/6/10 17:54
  */
 @Mapper
-public interface ViGazhkSjzyzhQgpqryMapper {
+public interface ViGazhkSjzyzhQgpqryMapper extends BaseMapper<ViGazhkSjzyzhQgpqryBean> {
     /**
      * 添加一条新数据
      * @param viGazhkSjzyzhQgpqryBean

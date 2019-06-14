@@ -1,9 +1,10 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.service.ViSurveyTaskService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViSurveyTaskBean;
+import com.secusoft.web.model.ViSurveyTaskRequest;
 import com.secusoft.web.model.ViSurveyTaskVo;
+import com.secusoft.web.service.ViSurveyTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ public class ViSurveyTaskController {
     ViSurveyTaskService viSurveyTaskService;
 
     @RequestMapping("/insertvisurveytask")
-    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
-        ResultVo resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskBean);
+    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest){
+        ResultVo resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskRequest);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

@@ -1,11 +1,12 @@
 package com.secusoft.web.mapper;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViSurveyTaskBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface ViSurveyTaskMapper {
+public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
 
     /**
      * 添加一条布控任务

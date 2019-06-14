@@ -21,6 +21,8 @@ public class NormalConfig {
 
     public static String bkrepoDataTaskTime;
 
+    public static String streamMinute;
+
     public static String getBkrepoTable() {
         return bkrepoTable;
     }
@@ -59,5 +61,13 @@ public class NormalConfig {
 
     public static void setBkrepoDataTaskTime(String bkrepoDataTaskTime) {
         NormalConfig.bkrepoDataTaskTime = bkrepoDataTaskTime;
+    }
+
+    public static String getStreamMinute() {
+        return streamMinute;
+    }
+
+    public static void setStreamMinute(String streamMinute) {
+        NormalConfig.streamMinute = streamMinute;
     }
 }
