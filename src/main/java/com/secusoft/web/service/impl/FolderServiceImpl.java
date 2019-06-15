@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -109,10 +110,15 @@ public class FolderServiceImpl implements FolderService {
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(fid);
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
-        folderBean.setImageSearchList(pictureBeans);
-        folderBean.setDeviceArea(areaBeans);
-        folderBean.setTrackList(trackBeans);
-
+        if (!pictureBeans.isEmpty()){
+            folderBean.setImageSearchList(pictureBeans);
+        }
+        if (!areaBeans.isEmpty()){
+            folderBean.setDeviceArea(areaBeans);
+        }
+       if (!trackBeans.isEmpty()){
+           folderBean.setTrackList(trackBeans);
+       }
         String responStr = JSON.toJSONString(ResultVo.success(folderBean), SerializerFeature.DisableCircularReferenceDetect);
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });

@@ -52,7 +52,7 @@ public class TestController extends BaseController {
     private DeviceMapper deviceMapper;
 
     @RequestMapping("/test")
-    public Object test(){
+    public Object test() {
 //        List<PictureBean> pictureBeans = pictureMapper.selectPictureByTid("2");
 //        String s = JSON.toJSONString(pictureBeans, SerializerFeature.DisableCircularReferenceDetect);
 //        JSONArray objects = JSON.parseArray(s);
@@ -61,7 +61,7 @@ public class TestController extends BaseController {
 //        String s = JSON.toJSONString(trackBeans, SerializerFeature.DisableCircularReferenceDetect);
 //        JSONArray objects = JSON.parseArray(s);
 //        return objects;
-        String fid="2";
+        String fid = "2";
         FolderBean folderBean = folderMapper.selectOneFolder(fid);
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(fid);
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
@@ -71,13 +71,13 @@ public class TestController extends BaseController {
         folderBean.setTrackList(trackBeans);
         String s = JSON.toJSONString(folderBean, SerializerFeature.DisableCircularReferenceDetect);
         JSONObject object = JSON.parseObject(s);
-         return object;
+        return object;
 
     }
 
     @RequestMapping("/testSeach")
-    public Object testSeach(){
-        String akun="{\n" +
+    public Object testSeach() {
+        String akun = "{\n" +
                 "  \"data\": [\n" +
                 "    {\n" +
                 "      \"_index\": \"tt_person_index-20190602\",\n" +
@@ -805,29 +805,30 @@ public class TestController extends BaseController {
                 "  \"errorMsg\": \"\"\n" +
                 "}\n";
 
-        JSONObject ss = (JSONObject)JSON.parse(akun);
+        JSONObject ss = (JSONObject) JSON.parse(akun);
         return ss;
     }
+
     @RequestMapping("/testDevice")
-    public Object testDevice(){
+    public Object testDevice() {
         HashMap<String, String> device1 = new HashMap<>();
-        device1.put("cameraId","1");
-        device1.put("deviceName","爱国路");
+        device1.put("cameraId", "1");
+        device1.put("deviceName", "爱国路");
         HashMap<String, String> device2 = new HashMap<>();
-        device2.put("cameraId","2");
-        device2.put("deviceName","富强路");
+        device2.put("cameraId", "2");
+        device2.put("deviceName", "富强路");
         HashMap<String, String> device3 = new HashMap<>();
-        device3.put("cameraId","3");
-        device3.put("deviceName","民主路");
+        device3.put("cameraId", "3");
+        device3.put("deviceName", "民主路");
         HashMap<String, String> device4 = new HashMap<>();
-        device4.put("cameraId","4");
-        device4.put("deviceName","和谐路");
+        device4.put("cameraId", "4");
+        device4.put("deviceName", "和谐路");
         HashMap<String, String> device5 = new HashMap<>();
-        device5.put("cameraId","5");
-        device5.put("deviceName","友善路");
+        device5.put("cameraId", "5");
+        device5.put("deviceName", "友善路");
         HashMap<String, String> device6 = new HashMap<>();
-        device6.put("cameraId","6");
-        device6.put("deviceName","Akun路");
+        device6.put("cameraId", "6");
+        device6.put("deviceName", "Akun路");
 
         ArrayList<HashMap> deviceBeans = new ArrayList<>();
 
@@ -837,16 +838,16 @@ public class TestController extends BaseController {
         deviceBeans.add(device4);
         deviceBeans.add(device5);
         deviceBeans.add(device6);
-        return  deviceBeans;
+        return deviceBeans;
     }
 
     @RequestMapping("/testSort")
-    public Object testSort(@RequestBody JSONObject jsonObject){
+    public Object testSort(@RequestBody JSONObject jsonObject) {
         //跳过多少个
         Integer from = Integer.parseInt(jsonObject.get("from").toString());
         //请求多少个
         Integer size = Integer.parseInt(jsonObject.get("size").toString());
-        String akun="{\n" +
+        String akun = "{\n" +
                 "  \"data\": [\n" +
                 "    {\n" +
                 "      \"_index\": \"tt_person_index-20190602\",\n" +
@@ -955,7 +956,7 @@ public class TestController extends BaseController {
                 "      \"_id\": \"7c355210fee54806ab246aef91ed9dfc\",\n" +
                 "      \"_score\": 0.88123775,\n" +
                 "      \"_ext\": null\n" +
-                "    }"+
+                "    }" +
                 "  ],\n" +
                 "  \"errorCode\": \"SUCCESS\",\n" +
                 "  \"totalCount\": 20,\n" +
@@ -970,8 +971,8 @@ public class TestController extends BaseController {
         List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
 
         olddatas.forEach(searchData -> {
-            deviceBeans.forEach(deviceBean ->{
-                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
+            deviceBeans.forEach(deviceBean -> {
+                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())) {
                     searchData.getSource().setDeviceBean(deviceBean);
                 }
             });
@@ -980,14 +981,14 @@ public class TestController extends BaseController {
         List<SearchData> olddata = olddatas.subList(from, from + size);
 
         //相似度排序
-        Collections.sort(olddata , new Comparator<SearchData>() {
+        Collections.sort(olddata, new Comparator<SearchData>() {
             @Override
             public int compare(SearchData o1, SearchData o2) {
                 Double score1 = o1.getScore();
                 Double score2 = o2.getScore();
-                if (score1<score2){
+                if (score1 < score2) {
                     return 1;
-                }else{
+                } else {
                     return -1;
                 }
             }
@@ -996,15 +997,15 @@ public class TestController extends BaseController {
         data.addAll(olddata);
 
         // 时间戳排序
-        if (data !=null && data.size()>1){
-            Collections.sort(data , new Comparator<SearchData>() {
+        if (data != null && data.size() > 1) {
+            Collections.sort(data, new Comparator<SearchData>() {
                 @Override
                 public int compare(SearchData o1, SearchData o2) {
                     Long o1Value = o1.getSource().getTimestamp();
                     Long o2Value = o2.getSource().getTimestamp();
-                    if (o1Value<o2Value){
+                    if (o1Value < o2Value) {
                         return 1;
-                    }else{
+                    } else {
                         return -1;
                     }
                 }
@@ -1012,30 +1013,30 @@ public class TestController extends BaseController {
         }
 
         //设备分组排序
-        List<SearchData> dataList =olddata;
+        List<SearchData> dataList = olddata;
         ArrayList<String> deviceIds = new ArrayList<>();
         Set<String> set = new HashSet<String>();
-        Map<String,List> resultMap = new LinkedHashMap<String,List>();
+        Map<String, List> resultMap = new LinkedHashMap<String, List>();
         dataList.forEach(searchData -> {
             SearchSource source = searchData.getSource();
             String cameraId = source.getCameraId();
-            if (set.contains(cameraId)){
+            if (set.contains(cameraId)) {
                 resultMap.get(cameraId).add(searchData);
-            }else {
+            } else {
                 set.add(cameraId);
                 List<SearchData> list1 = new ArrayList<>();
                 list1.add(searchData);
-                resultMap.put(cameraId,list1);
+                resultMap.put(cameraId, list1);
             }
         });
         HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
-        stringSearchDataHashMap.put("score",olddata);
-        stringSearchDataHashMap.put("timestamp",data);
-        stringSearchDataHashMap.put("device",resultMap);
+        stringSearchDataHashMap.put("score", olddata);
+        stringSearchDataHashMap.put("timestamp", data);
+        stringSearchDataHashMap.put("device", resultMap);
 
         Long totalCount = searchResponse.getTotalCount();
 
-        String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap,totalCount), SerializerFeature.DisableCircularReferenceDetect);
+        String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap, totalCount), SerializerFeature.DisableCircularReferenceDetect);
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });
         ResponseEntity<ResultVo> resultVoResponseEntity = new ResponseEntity<>(resultVo, HttpStatus.OK);
@@ -1122,6 +1123,11 @@ public class TestController extends BaseController {
 //        Long totalCount = searchResponse.getTotalCount();
 //        String s = JSON.toJSONString(stringSearchDataHashMap, SerializerFeature.DisableCircularReferenceDetect);
 //        JSONObject object = JSON.parseObject(s);
-  }
 
+    @RequestMapping("test33")
+    public Object test33(){
+        List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid("6");
+        return pictureBeans;
+    }
 
+}

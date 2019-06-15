@@ -11,7 +11,7 @@ Content-Type: application/json
 {
    "Area": {
      "areaName": "区域一",
-     "folderId": 1
+     "folderId": 6
    },
   "devices": [1,2,3]
 
@@ -47,7 +47,7 @@ POST http://localhost:8006/readArea
 Content-Type: application/json
 
 {
-    "id": "7"
+    "id": "1"
 }
 
 ###修改区域名称
@@ -55,8 +55,8 @@ POST http://localhost:8006/updateAreaName
 Content-Type: application/json
 
 {
-    "id": "7",
-  "areaName": "gg"
+    "id": "1",
+  "areaName": "嫌疑人Akun活动范围"
 }
 
 ###

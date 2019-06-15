@@ -5,7 +5,7 @@
 
     <groupId>com.secusoft</groupId>
     <artifactId>web</artifactId>
-    <version>1.0.0-master-SNAPSHOT</version>
+    <version>vi-1.0.0</version>
     <packaging>jar</packaging>
 
     <name>vi_web</name>

@@ -12,6 +12,8 @@
         <result column="port" property="port" />
         <result column="longitude" property="longitude" />
         <result column="latitude" property="latitude" />
+        <result column="play_url" property="playUrl" />
+        <result column="stream_state" property="streamState" />
     </resultMap>
 
     <!-- 数据库中表名为:vi_device的列名,as前是数据库的列名,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
@@ -25,6 +27,8 @@
         ,vi_device.port as port
         ,vi_device.longitude
         ,vi_device.latitude
+        ,vi_device.play_url
+        ,vi_device.stream_state
     </sql>
     <!-- 获得一个Area对象,以参数Area对象中不为空的属性作为条件进行查询-->
     <select id="selectDeviceByObj" parameterType="com.secusoft.web.model.DeviceBean" resultMap="result_Device_Map">

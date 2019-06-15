@@ -80,7 +80,7 @@
         insert into vi_picture(picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{pictureId},#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score})
+            (#{item.pictureId},#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score})
         </foreach>
     </insert>
 
@@ -107,7 +107,9 @@
         where p.id = #{id}
     </select>
 
-    <select id="selectPictureByFid" parameterType="java.lang.String" resultMap="result_Picture_Map">
+
+    <!--查找相应文件夹下的所有的收藏图片-->
+    <select id="selectPictureByFid" parameterType="java.lang.String" resultMap="picture_Device_Map">
         select
         <include refid="vi_picture_Column" />
         from vi_picture

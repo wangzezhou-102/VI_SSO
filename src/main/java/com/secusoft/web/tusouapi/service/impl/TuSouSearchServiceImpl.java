@@ -774,9 +774,9 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         List<SearchData> olddatas = searchResponse.getData();
 
         //获取全部的设备列表
+        //如果设备列表为空
         DeviceBean device = new DeviceBean();
         List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
-
         olddatas.forEach(searchData -> {
             deviceBeans.forEach(deviceBean ->{
                 if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
@@ -838,10 +838,15 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 resultMap.put(cameraId,list1);
             }
         });
+        //前端不会遍历Map,把Map中的value取出来放入List返回
+        ArrayList<List> resultList = new ArrayList<>();
+        resultMap.forEach((k,v)->{
+            resultList.add(v);
+        });
         HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
         stringSearchDataHashMap.put("score",olddata);
         stringSearchDataHashMap.put("timestamp",data);
-        stringSearchDataHashMap.put("device",resultMap);
+        stringSearchDataHashMap.put("device",resultList);
 
         Long totalCount = searchResponse.getTotalCount();
         String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap,totalCount), SerializerFeature.DisableCircularReferenceDetect);

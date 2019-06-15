@@ -10,8 +10,8 @@ Content-Type: application/json
 
 {
   "track":{
-      "trackName": "第三轨迹",
-      "folderId": "2"
+      "trackName": "犯罪嫌疑人轨迹",
+      "folderId": "6"
   },
   "pictureList": [{
     "cropImageSignedUrl": "111",
@@ -19,6 +19,7 @@ Content-Type: application/json
     "cropImageUrl": "111",
     "oriImageSignedUrl": "111",
     "pictureTime": "123456",
+    "pictureId": "8888",
     "deviceId": "7",
     "score": "199"
   },{
@@ -27,6 +28,7 @@ Content-Type: application/json
     "cropImageUrl": "666",
     "oriImageSignedUrl": "666",
     "pictureTime": "123456",
+    "pictureId": "88889",
     "deviceId": "7",
     "score": "199"
   }]
@@ -37,7 +39,7 @@ POST http://localhost:8006/updatetrackname
 Content-Type: application/json
 
 {
-  "trackName": "真实轨迹",
+  "trackName": "Akun轨迹",
   "id": "2"
 }
 
@@ -46,7 +48,7 @@ POST http://localhost:8006/removetrack
 Content-Type: application/json
 
 {
-  "id": "4"
+  "id": "7"
 }
 
 ###

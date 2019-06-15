@@ -11,6 +11,7 @@ public interface TrackMapper {
     int deleteTrackById(String id);
     int deletcTrackPictureById(String id);
     int updateTrackNameById(TrackBean trackBean);
+    int selectCountTrackByName(TrackBean trackBean);
     List<String> selectTrackPictureByTid(String tid);
     List<TrackBean> selectTrackByFid(String fid);
     TrackBean selectTrackById(Object id);
