@@ -19,11 +19,11 @@
         sys_organization
     </sql>
     
-    <!-- 查询根节点 -->
+    <!-- 查询业务组织根节点 -->
     <select id="readOrgDeviceTree" parameterType="sysOrganizationBean" resultMap="sysOrganizationMap">
         select org_id, org_id as nodeId,org_id as value,org_name as title,'org' as type from 
         <include refid="table"/>
-        where pid='root'
+        where pid='root' and org_type=2
     </select>
     
     <!-- 查询组织下级组织 -->
@@ -48,6 +48,6 @@
         where org_id=#{orgId} union all
         select org_id, org_id as nodeId,org_id as value,org_name as title,'org' as type from 
         <include refid="table"/>
-        where pid=#{orgId} 
+        where pid=#{orgId} and org_type=2
     </select>
 </mapper>

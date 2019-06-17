@@ -90,7 +90,7 @@
     
     <!-- 删除不存在的关联组织 -->
     <delete id="deleteOrgDevice">
-        delete from sys_org_device_copy 
-        where device_id not in (select device_id from vi_device_copy)
+	    delete from sys_org_device_copy where not exists 
+	    (select 1 from vi_device_copy dev where dev.device_id=sys_org_device_copy.device_id)
     </delete>
 </mapper>

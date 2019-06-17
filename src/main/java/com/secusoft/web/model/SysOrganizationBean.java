@@ -20,6 +20,12 @@ public class SysOrganizationBean {
     
     // 上级组织ID
     private String pid;
+    
+    // 1-基本组织 2-业务组织
+    private Integer orgType;
+    
+    // camera-设备  org-组织
+    private Integer type;
 
 //    private List<SysOrganizationBean> orgs;
 //    
@@ -73,17 +79,34 @@ public class SysOrganizationBean {
 //        this.devices = devices;
 //    }
 
-    @Override
-    public String toString() {
-        return "SysOrganizationBean [id=" + id + ", orgId=" + orgId + ", orgName=" + orgName + ", pid=" + pid + "]";
+    public void setChildren(List<Map<String, Object>> children) {
+        this.children = children;
     }
 
     public List<Map<String,Object>> getChildren() {
         return children;
     }
-
-    public void setChildrens(List<Map<String,Object>> children) {
-        this.children = children;
-    }
     
+    public Integer getOrgType() {
+        return orgType;
+    }
+
+    public void setOrgType(Integer orgType) {
+        this.orgType = orgType;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "SysOrganizationBean [id=" + id + ", orgId=" + orgId + ", orgName=" + orgName + ", pid=" + pid
+                + ", orgType=" + orgType + ", type=" + type + ", children=" + children + "]";
+    }
+
 }
