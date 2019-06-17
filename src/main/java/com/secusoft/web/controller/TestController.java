@@ -1129,5 +1129,11 @@ public class TestController extends BaseController {
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid("6");
         return pictureBeans;
     }
+//    @Resource SysOperationLogMapper sysOperationLogMapper;
+//    @RequestMapping("testSys")
+//    public  void testSys(){
+//        SysOperationLog sys = sysOperationLogMapper.selectById("1");
+//        System.out.println("sys");
+//    }
 
 }

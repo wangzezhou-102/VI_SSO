@@ -3,7 +3,9 @@ package com.secusoft.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.ResultVo;
+import com.secusoft.web.model.SysOperationLog;
 import com.secusoft.web.shipinapi.service.CameraService;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
@@ -14,13 +16,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
 public class TuSouController {
     @Autowired
     TuSouSearchService tuSouSearchService;
-    private static Logger log = LoggerFactory.getLogger(TuSouController.class);
 
+    @Resource
+    SysOperationLogMapper sysOperationLogMapper;
+    private static Logger log = LoggerFactory.getLogger(TuSouController.class);
 
     @RequestMapping("/tusou_search")
     public JSONObject search(@RequestBody Object request){
@@ -38,11 +44,11 @@ public class TuSouController {
      * @return
      */
     @RequestMapping("/tusou_search_sort")
-    public ResponseEntity<ResultVo> sortSearch(@RequestBody JSONObject request){
+    public ResponseEntity<ResultVo> sortSearch(@RequestBody Object object){
+        JSONObject request =(JSONObject)JSON.toJSON(object);
         ResultVo resultVo = tuSouSearchService.sortsearch(request);
         return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
-
 
 
 }

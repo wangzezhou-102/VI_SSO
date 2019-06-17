@@ -3,7 +3,9 @@ package com.secusoft.web.controller;
 import com.secusoft.web.core.util.ExcelUtil;
 import com.secusoft.web.mapper.PictureMapper;
 import com.secusoft.web.model.PictureBean;
+import com.secusoft.web.model.TrackBean;
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,13 +29,18 @@ public class ExcelController {
     @Resource
     private PictureMapper pictureMapper;
 
+    /**
+     * 导出图片
+     * @param response
+     * @param trackBean
+     */
     @RequestMapping("trackExcel")
-    //public void trackExecl(HttpServletResponse response,@RequestBody TrackBean trackBean){
-    public void trackExecl(HttpServletResponse response){
-        String[] headArray = {"序号","点位位置","设备ID","设备名称","抓拍时间","轨迹图片"};
+    public void trackExecl(HttpServletResponse response,@RequestBody TrackBean trackBean){
+        String[] headArray = {"序号","点位位置","设备ID","设备名称","抓拍时间","图片"};
         List<Object[]> contentList = new ArrayList<>();
         //List<PictureBean> pictureBeans = pictureMapper.selectPictureByTid(trackBean.getId());
-        List<PictureBean> pictureBeans = pictureMapper.selectPictureByTid("8");
+        List<PictureBean> pictureBeans = trackBean.getPictureBeans();
+
         if(!CollectionUtils.isEmpty (pictureBeans)){
             Integer i=1;
             for (PictureBean pictureBean : pictureBeans){

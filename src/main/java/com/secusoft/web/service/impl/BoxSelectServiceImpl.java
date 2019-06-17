@@ -1,5 +1,6 @@
 package com.secusoft.web.service.impl;
 
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.StringUtils;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.model.DeviceBean;
@@ -37,7 +38,7 @@ public class BoxSelectServiceImpl implements BoxSelectService {
         maxLat= Collections.max(lat);
         minLat= Collections.min(lat);
 
-        ArrayList<String> cameraIds = new ArrayList<>();
+        ArrayList<DeviceBean> deviceBeans = new ArrayList<>();
         for (DeviceBean camera : devices) {
             if(StringUtils.isNotEmpty(camera.getLongitude())&&StringUtils.isNotEmpty(camera.getLatitude())) {
                 Double ALon = Double.valueOf(camera.getLongitude());
@@ -78,18 +79,23 @@ public class BoxSelectServiceImpl implements BoxSelectService {
                     }
                 }
                 if ((iSum % 2) != 0) {
-                    cameraIds.add(camera.getDeviceId());
+                    //cameraIds.add(camera.getDeviceId());
+                    deviceBeans.add(camera);
                 }
             }
         }
-        return ResultVo.success(cameraIds);
+
+        return ResultVo.success(deviceBeans);
     }
 
     @Override
     public ResultVo isPtInPoly2(PointBean pointBean, Double radius) {
         DeviceBean deviceBean = new DeviceBean();
         List<DeviceBean> cameras = deviceMapper.readDeviceList(deviceBean);
-        ArrayList<String> cameraIds = new ArrayList<>();
+        ArrayList<DeviceBean> deviceBeans = new ArrayList<>();
+        if(pointBean==null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+        }
         for (DeviceBean camera : cameras) {
             if(StringUtils.isNotEmpty(camera.getLongitude())&&StringUtils.isNotEmpty(camera.getLatitude())) {
                 Double ALon = Double.valueOf(camera.getLongitude());
@@ -98,11 +104,11 @@ public class BoxSelectServiceImpl implements BoxSelectService {
                 double d = Math.hypot((pointBean.getLongitude() - ALon), (pointBean.getLatitude() - ALat));
                 //点到圆心的范围小于半径 即在圆内
                 if (d <= radius) {
-                    cameraIds.add(camera.getDeviceId());
+                    deviceBeans.add(camera);
                 }
             }
         }
-        return ResultVo.success(cameraIds);
+        return ResultVo.success(cameras);
     }
 
 

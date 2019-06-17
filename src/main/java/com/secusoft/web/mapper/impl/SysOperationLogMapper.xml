@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.SysOperationLogMapper">
+    <!-- SysOperationLog的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_SysOperationLog_Map" type="SysOperationLog">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="title" property="title" />
+        <result column="remote_addr" property="remoteAddr" />
+        <result column="request_uri" property="requestUri" />
+        <result column="method" property="method" />
+        <result column="param" property="param" />
+        <result column="result" property="result" />
+        <result column="exception" property="exception" />
+        <result column="user_id" property="userId" />
+        <result column="operate_date" property="operateDate" />
+        <result column="timeout" property="timeout" />
+    </resultMap>
+
+    <!-- 数据库中表名为:sys_operation_log的列名,as前是数据库的列明,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
+    <sql id="sys_operation_log_Column">
+        sys_operation_log.id as id
+        ,sys_operation_log.type as type
+        ,sys_operation_log.title as title
+        ,sys_operation_log.remote_addr as remote_addr
+        ,sys_operation_log.request_uri as request_uri
+        ,sys_operation_log.method as method
+        ,sys_operation_log.param as param
+        ,sys_operation_log.result as result
+        ,sys_operation_log.exception as exception
+        ,sys_operation_log.user_id as user_id
+        ,sys_operation_log.operate_date as operate_date
+        ,sys_operation_log.timeout as timeout
+    </sql>
+    <select id="selectNewLog" resultType="SysOperationLog">
+        select <include refid="sys_operation_log_Column" />
+        from
+        sys_operation_log
+        where operate_date =(select MAX(operate_date) from sys_operation_log)
+    </select>
+
+</mapper>
