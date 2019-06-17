@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -41,6 +42,9 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Autowired
     private UbregionApiConfig ubregionApiConfig;
+    
+    @Value("${ubr.sync.page_size:100}")
+    private Integer pageSize;
     /**
      * 获取设备信息，可分页
      */
@@ -75,7 +79,6 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public ResultVo syncDeviceFromUbr() {
         int pageNum = 1;
-        int pageSize = 100;
         boolean flag = true;
         boolean deleted = false;
         while(flag) {
