@@ -19,6 +19,7 @@ public class DeviceBean extends Page {
     private String source; //0-真实设备  1-自定义设备
     private Integer streamState; //码流状态 0:未启动; 1:已启动
     private String playUrl; //视频播放地址
+    private String description; //描述信息
     public DeviceBean() {
     }
 
@@ -142,11 +143,29 @@ public class DeviceBean extends Page {
         this.playUrl = playUrl;
     }
 
-    @Override
-    public String toString() {
-        return "DeviceBean [id=" + id + ", deviceId=" + deviceId + ", parentId=" + parentId + ", deviceName="
-                + deviceName + ", type=" + type + ", ip=" + ip + ", port=" + port + ", status=" + status
-                + ", longitude=" + longitude + ", latitude=" + latitude + ", civilCode=" + civilCode + ", tqApi="
-                + tqApi + ", source=" + source + ", streamState=" + streamState + ", playUrl=" + playUrl + "]";
-    }
+    /**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "DeviceBean [id=" + id + ", deviceId=" + deviceId + ", parentId=" + parentId + ", deviceName="
+				+ deviceName + ", type=" + type + ", ip=" + ip + ", port=" + port + ", status=" + status
+				+ ", longitude=" + longitude + ", latitude=" + latitude + ", civilCode=" + civilCode + ", tqApi="
+				+ tqApi + ", source=" + source + ", streamState=" + streamState + ", playUrl=" + playUrl
+				+ ", description=" + description + "]";
+	}
 }
