@@ -71,12 +71,12 @@
     </select>
     
     <delete id="deleteDeviceTable">
-        delete from vi_device_copy where source=0
+        delete from vi_device where source=0
     </delete>
     
     <!-- 批量插入数据 -->
     <insert id="insetBatchDevice" parameterType="list">
-        insert into vi_device_copy (device_id,parent_id,device_name,type,status,longitude,
+        insert into vi_device (device_id,parent_id,device_name,type,status,longitude,
         latitude,civil_code,tq_api,stream_state,play_url) values
         <foreach collection="list" item="obj" index="index" separator=",">
             (#{obj.deviceId},#{obj.parentId},#{obj.deviceName},#{obj.type},#{obj.status},
@@ -86,7 +86,7 @@
     
     <!-- 删除不存在的关联组织 -->
     <delete id="deleteOrgDevice">
-	    delete from sys_org_device_copy where not exists 
-	    (select 1 from vi_device_copy dev where dev.device_id=sys_org_device_copy.device_id)
+	    delete from sys_org_device where not exists 
+	    (select 1 from vi_device dev where dev.device_id=sys_org_device.device_id)
     </delete>
 </mapper>
