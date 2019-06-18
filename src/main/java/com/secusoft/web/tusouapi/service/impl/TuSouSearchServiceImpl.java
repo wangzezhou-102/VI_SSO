@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.ResultVo;
@@ -32,12 +33,105 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         String requestStr = JSON.toJSONString(request);
         System.out.println("前台发送的数据"+requestStr);
 
+        //真实给阿里返回的接口
+        String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
+        SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
+        });
+        //如果返回的Data为空，就返回阿里的Msg
+        if(searchResponse.getData()==null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
+        }
+        List<SearchData> olddata = searchResponse.getData();
+        //获取全部的设备列表 与data里进行映射
+        //如果设备列表为空
+        DeviceBean device = new DeviceBean();
+        List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
+        olddata.forEach(searchData -> {
+            deviceBeans.forEach(deviceBean ->{
+                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
+                    searchData.getSource().setDeviceBean(deviceBean);
+                }
+            });
+        });
+        //如果返回的属性里没有相似度 就直接返回 不排序
+        if(olddata.get(0).getScore()==null){
+            return ResultVo.success(olddata,searchResponse.getTotalCount());
+        }
+        //相似度排序
+        Collections.sort(olddata , new Comparator<SearchData>() {
+            @Override
+            public int compare(SearchData o1, SearchData o2) {
+                Double score1 = o1.getScore();
+                Double score2 = o2.getScore();
+                if (score1<score2){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        });
+        ArrayList<SearchData> data = new ArrayList<>();
+        data.addAll(olddata);
+
+        // 时间戳排序
+        if (data !=null && data.size()>1){
+            Collections.sort(data , new Comparator<SearchData>() {
+                @Override
+                public int compare(SearchData o1, SearchData o2) {
+                    Long o1Value = o1.getSource().getTimestamp();
+                    Long o2Value = o2.getSource().getTimestamp();
+                    if (o1Value<o2Value){
+                        return 1;
+                    }else{
+                        return -1;
+                    }
+                }
+            });
+        }
+
+        //设备分组排序
+        List<SearchData> dataList =olddata;
+        ArrayList<String> deviceIds = new ArrayList<>();
+        Set<String> set = new HashSet<String>();
+        Map<String,List> resultMap = new LinkedHashMap<String,List>();
+        dataList.forEach(searchData -> {
+            SearchSource source = searchData.getSource();
+            String cameraId = source.getCameraId();
+            if (set.contains(cameraId)){
+                resultMap.get(cameraId).add(searchData);
+            }else {
+                set.add(cameraId);
+                List<SearchData> list1 = new ArrayList<>();
+                list1.add(searchData);
+                resultMap.put(cameraId,list1);
+            }
+        });
+        //把Map中的value取出来放入List返回
+        ArrayList<List> resultList = new ArrayList<>();
+        resultMap.forEach((k,v)->{
+            resultList.add(v);
+        });
+        HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+        stringSearchDataHashMap.put("score",olddata);
+        stringSearchDataHashMap.put("timestamp",data);
+        stringSearchDataHashMap.put("device",resultList);
+
+        //FastJSon中 重复引用需要关闭
+        Long totalCount = searchResponse.getTotalCount();
+        String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap,totalCount), SerializerFeature.DisableCircularReferenceDetect);
+        ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
+        });
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo testsearch(JSONObject request) {
+        String requestStr = JSON.toJSONString(request);
+        System.out.println("前台发送的数据"+requestStr);
         //跳过多少个
         Integer from = Integer.parseInt(request.get("from").toString());
         //请求多少个
         Integer size = Integer.parseInt(request.get("size").toString());
-//        Integer from=0;
-//        Integer size=20;
         System.out.println(from+" -- "+size);
         String responseStr="{\n" +
                 "  \"data\": [\n" +
@@ -1486,27 +1580,23 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "  \"totalCount\": 40,\n" +
                 "  \"errorMsg\": \"\"\n" +
                 "}\n";
-        //真实给阿里返回的接口
-       // String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
-
         SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
         });
-        List<SearchData> olddatas = searchResponse.getData();
-
+        if(searchResponse.getData()==null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
+        }
+        List<SearchData> olddata = searchResponse.getData();
         //获取全部的设备列表
         //如果设备列表为空
         DeviceBean device = new DeviceBean();
         List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
-        olddatas.forEach(searchData -> {
+        olddata.forEach(searchData -> {
             deviceBeans.forEach(deviceBean ->{
                 if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
                     searchData.getSource().setDeviceBean(deviceBean);
                 }
             });
         });
-
-        //模拟阿里分页
-        List<SearchData> olddata = olddatas.subList(from, from + size);
 
 
         //相似度排序
@@ -1558,7 +1648,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 resultMap.put(cameraId,list1);
             }
         });
-        //前端不会遍历Map,把Map中的value取出来放入List返回
+        //把Map中的value取出来放入List返回
         ArrayList<List> resultList = new ArrayList<>();
         resultMap.forEach((k,v)->{
             resultList.add(v);

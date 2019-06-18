@@ -50,5 +50,16 @@ public class TuSouController {
         return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
 
+    /**
+     * 模拟数据的图搜
+     * @param object
+     * @return
+     */
+    @RequestMapping("/testsearch")
+    public ResponseEntity<ResultVo> testSearch(@RequestBody Object object){
+        JSONObject request =(JSONObject)JSON.toJSON(object);
+        ResultVo resultVo = tuSouSearchService.testsearch(request);
+        return new ResponseEntity<>(resultVo, HttpStatus.OK);
+    }
 
 }

@@ -38,7 +38,6 @@ public class ExcelController {
     public void trackExecl(HttpServletResponse response,@RequestBody TrackBean trackBean){
         String[] headArray = {"序号","点位位置","设备ID","设备名称","抓拍时间","图片"};
         List<Object[]> contentList = new ArrayList<>();
-        //List<PictureBean> pictureBeans = pictureMapper.selectPictureByTid(trackBean.getId());
         List<PictureBean> pictureBeans = trackBean.getPictureBeans();
 
         if(!CollectionUtils.isEmpty (pictureBeans)){
@@ -54,7 +53,7 @@ public class ExcelController {
                 Long time=pictureBean.getPictureTime();
                 Date date = new Date(time);
 
-                byte[] byUrl = getImageFromNetByUrl(pictureBean.getCropImageUrl());
+                byte[] byUrl = getImageFromNetByUrl(pictureBean.getCropImageSignedUrl());
                 Object[] o={
                         i,
                         point,

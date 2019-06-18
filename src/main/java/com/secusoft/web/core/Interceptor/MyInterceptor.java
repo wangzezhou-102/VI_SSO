@@ -95,12 +95,12 @@ public class MyInterceptor implements HandlerInterceptor {
             sysOperationLog.setRequestUri(map.get("alluri"));
             sysOperationLog.setMethod(map.get("requestMethod"));
             sysOperationLog.setParam(map.get("param"));
+            //结果跟当前操作人员 后续添加
             sysOperationLog.setResult("");
             sysOperationLog.setUserId(1);
             sysOperationLog.setTimeout(endtime-starttime);
             sysOperationLogMapper.insert(sysOperationLog);
         }
-        System.out.println("success");
 
     }
 }

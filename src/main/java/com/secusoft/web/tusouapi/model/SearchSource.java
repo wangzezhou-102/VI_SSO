@@ -13,33 +13,33 @@ public class SearchSource {
     private String  cropImage;
     private Double  sexScore;
     private Double  upper_typeScore;
-    private Integer hair;
+    private String  hair;
     private Integer objLeft;
-    private Integer lower_type;
+    private String lower_type;
     private String  objType;
     private Integer objTop;
     private String  objUUId;
     private Long  timestamp;
     private Integer leaveTime;
-    private Integer upper_type;
+    private String upper_type;
     private Integer objBottom;
-    private Integer lower_color;
+    private String lower_color;
     private Double upper_colorScore;
-    private Integer sex;
+    private String sex;
     private Double lower_typeScore;
     private Long   entryTime;
     private Double lower_colorScore;
     private String cameraId;
     private String objId;
     private Integer objRight;
-    private Integer upper_color;
+    private String upper_color;
     private String cropImageSigned;
     private DeviceBean deviceBean;
 
     public SearchSource() {
     }
 
-    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, Integer hair, Integer objLeft, Integer lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, Integer upper_type, Integer objBottom, Integer lower_color, Double upper_colorScore, Integer sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, Integer upper_color, String cropImageSigned, DeviceBean deviceBean) {
+    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, DeviceBean deviceBean) {
         this.origImage = origImage;
         this.oriImageSigned = oriImageSigned;
         this.hairScore = hairScore;
@@ -67,14 +67,6 @@ public class SearchSource {
         this.objRight = objRight;
         this.upper_color = upper_color;
         this.cropImageSigned = cropImageSigned;
-        this.deviceBean = deviceBean;
-    }
-
-    public DeviceBean getDeviceBean() {
-        return deviceBean;
-    }
-
-    public void setDeviceBean(DeviceBean deviceBean) {
         this.deviceBean = deviceBean;
     }
 
@@ -126,11 +118,11 @@ public class SearchSource {
         this.upper_typeScore = upper_typeScore;
     }
 
-    public Integer getHair() {
+    public String getHair() {
         return hair;
     }
 
-    public void setHair(Integer hair) {
+    public void setHair(String hair) {
         this.hair = hair;
     }
 
@@ -138,23 +130,15 @@ public class SearchSource {
         return objLeft;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public void setObjLeft(Integer objLeft) {
         this.objLeft = objLeft;
     }
 
-    public Integer getLower_type() {
+    public String getLower_type() {
         return lower_type;
     }
 
-    public void setLower_type(Integer lower_type) {
+    public void setLower_type(String lower_type) {
         this.lower_type = lower_type;
     }
 
@@ -182,8 +166,13 @@ public class SearchSource {
         this.objUUId = objUUId;
     }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
 
-
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public Integer getLeaveTime() {
         return leaveTime;
@@ -193,11 +182,11 @@ public class SearchSource {
         this.leaveTime = leaveTime;
     }
 
-    public Integer getUpper_type() {
+    public String getUpper_type() {
         return upper_type;
     }
 
-    public void setUpper_type(Integer upper_type) {
+    public void setUpper_type(String upper_type) {
         this.upper_type = upper_type;
     }
 
@@ -209,11 +198,11 @@ public class SearchSource {
         this.objBottom = objBottom;
     }
 
-    public Integer getLower_color() {
+    public String getLower_color() {
         return lower_color;
     }
 
-    public void setLower_color(Integer lower_color) {
+    public void setLower_color(String lower_color) {
         this.lower_color = lower_color;
     }
 
@@ -225,11 +214,11 @@ public class SearchSource {
         this.upper_colorScore = upper_colorScore;
     }
 
-    public Integer getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -281,11 +270,11 @@ public class SearchSource {
         this.objRight = objRight;
     }
 
-    public Integer getUpper_color() {
+    public String getUpper_color() {
         return upper_color;
     }
 
-    public void setUpper_color(Integer upper_color) {
+    public void setUpper_color(String upper_color) {
         this.upper_color = upper_color;
     }
 
@@ -297,6 +286,14 @@ public class SearchSource {
         this.cropImageSigned = cropImageSigned;
     }
 
+    public DeviceBean getDeviceBean() {
+        return deviceBean;
+    }
+
+    public void setDeviceBean(DeviceBean deviceBean) {
+        this.deviceBean = deviceBean;
+    }
+
     @Override
     public String toString() {
         return "SearchSource{" +
@@ -306,26 +303,26 @@ public class SearchSource {
                 ", cropImage='" + cropImage + '\'' +
                 ", sexScore=" + sexScore +
                 ", upper_typeScore=" + upper_typeScore +
-                ", hair=" + hair +
+                ", hair='" + hair + '\'' +
                 ", objLeft=" + objLeft +
-                ", lower_type=" + lower_type +
+                ", lower_type='" + lower_type + '\'' +
                 ", objType='" + objType + '\'' +
                 ", objTop=" + objTop +
                 ", objUUId='" + objUUId + '\'' +
                 ", timestamp=" + timestamp +
                 ", leaveTime=" + leaveTime +
-                ", upper_type=" + upper_type +
+                ", upper_type='" + upper_type + '\'' +
                 ", objBottom=" + objBottom +
-                ", lower_color=" + lower_color +
+                ", lower_color='" + lower_color + '\'' +
                 ", upper_colorScore=" + upper_colorScore +
-                ", sex=" + sex +
+                ", sex='" + sex + '\'' +
                 ", lower_typeScore=" + lower_typeScore +
                 ", entryTime=" + entryTime +
                 ", lower_colorScore=" + lower_colorScore +
                 ", cameraId='" + cameraId + '\'' +
                 ", objId='" + objId + '\'' +
                 ", objRight=" + objRight +
-                ", upper_color=" + upper_color +
+                ", upper_color='" + upper_color + '\'' +
                 ", cropImageSigned='" + cropImageSigned + '\'' +
                 ", deviceBean=" + deviceBean +
                 '}';

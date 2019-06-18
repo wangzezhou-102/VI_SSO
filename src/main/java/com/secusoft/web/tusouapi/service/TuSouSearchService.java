@@ -28,4 +28,6 @@ public interface TuSouSearchService{
     BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request);
 
     ResultVo sortsearch(JSONObject request);
+
+    ResultVo testsearch(JSONObject request);
 }
