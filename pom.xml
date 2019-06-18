@@ -247,6 +247,7 @@
 
 
     <build>
+    	<finalName>vi_web</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
