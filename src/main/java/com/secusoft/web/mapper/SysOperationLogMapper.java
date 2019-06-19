@@ -1,8 +1,8 @@
 package com.secusoft.web.mapper;
 
-import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.SysOperationLog;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,6 +19,14 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
      */
     SysOperationLog selectNewLog();
 
-    List<SysOperationLog> selectThree();
     Integer selectTuSouNumber(@Param("userIds") List<Integer> userIds);
+    /**
+     * 查询最近的三条搜索记录
+     * @return
+     */
+    List<SysOperationLog> selectThreeLog();
+    /**
+     * 目标搜图使用次数
+     */
+    Integer tusouSearchTotal();
 }

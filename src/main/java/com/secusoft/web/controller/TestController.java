@@ -1,6 +1,7 @@
 package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -1129,11 +1130,18 @@ public class TestController extends BaseController {
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid("6");
         return pictureBeans;
     }
-//    @Resource SysOperationLogMapper sysOperationLogMapper;
-//    @RequestMapping("testSys")
-//    public  void testSys(){
-//        SysOperationLog sys = sysOperationLogMapper.selectById("1");
-//        System.out.println("sys");
-//    }
+    @Resource SysOperationLogMapper sysOperationLogMapper;
+    @RequestMapping("testSys")
+    public  Object testSys(){
+
+        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        ArrayList<String> params = new ArrayList<>();
+        sysOperationLogs.forEach(sysOperationLog -> {
+            params.add(sysOperationLog.getParam());
+        });
+        JSONArray jsonObject = JSON.parseArray(params.toString());
+        return  jsonObject;
+
+    }
 
 }

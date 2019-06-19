@@ -7,8 +7,10 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.DeviceMapper;
+import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.ResultVo;
+import com.secusoft.web.model.SysOperationLog;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
@@ -16,12 +18,14 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class TuSouSearchServiceImpl implements TuSouSearchService {
     @Resource
     DeviceMapper deviceMapper;
+
+    @Resource
+    SysOperationLogMapper sysOperationLogMapper;
 
     @Override
     public BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request) {
@@ -38,7 +42,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
         });
         //如果返回的Data为空，就返回阿里的Msg
-        if(searchResponse.getData()==null){
+        if(searchResponse == null || searchResponse.getData()==null){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
         }
         List<SearchData> olddata = searchResponse.getData();
@@ -1663,5 +1667,16 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });
         return resultVo;
+    }
+
+    @Override
+    public ResultVo cacheSearch() {
+        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        ArrayList<String> params = new ArrayList<>();
+        sysOperationLogs.forEach(sysOperationLog -> {
+            params.add(sysOperationLog.getParam());
+        });
+        JSONArray jsonObject = JSON.parseArray(params.toString());
+        return ResultVo.success(jsonObject);
     }
 }

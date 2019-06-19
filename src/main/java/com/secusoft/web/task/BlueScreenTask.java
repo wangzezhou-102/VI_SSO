@@ -18,7 +18,7 @@ public class BlueScreenTask {
     private static final Logger log = LoggerFactory.getLogger(SyncDeviceTask.class);
     @Autowired
     private BlueScreenService blueScreenService;
-    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(cron="0 0 * */1 * ?")
     public void syncDevice() {
         System.out.println("----------------");
         log.info("blue screen start");

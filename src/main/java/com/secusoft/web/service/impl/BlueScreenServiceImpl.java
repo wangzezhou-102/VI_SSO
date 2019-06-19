@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,7 +78,7 @@ public class BlueScreenServiceImpl implements BlueScreenService {
         return null;
     }
 
-    //@Transactional
+    @Transactional
     @Override
     public void updateScreenDateIndicator() {
         Date date = new Date();
@@ -133,7 +134,7 @@ public class BlueScreenServiceImpl implements BlueScreenService {
         todayStart.set(Calendar.SECOND, 0);
         Date time = todayStart.getTime();
         long time1 = time.getTime();
-        String requestStr = "{\"size\":0,\"data\":{\"noFeature\":\"1\",\"uid\":\"hangzhou\",\"type\":\"person\",\"taskId\":\"512041492240442db7462770e968e785\","+"\"startTime\":"+time1+"},\"requestId\":\"request42321\"}";
+        String requestStr = "{\"size\":1,\"data\":{\"noFeature\":\"1\",\"uid\":\"hangzhou\",\"type\":\"person\",\"taskId\":\"512041492240442db7462770e968e785\","+"\"startTime\":"+time1+"},\"requestId\":\"request42321\"}";
         String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
         System.out.println("调用阿里接口参数:"+requestStr);
        /* String test = "{\n" +
@@ -223,6 +224,7 @@ public class BlueScreenServiceImpl implements BlueScreenService {
                 "}";*/
 
         JSONObject jsonObject = JSONArray.parseObject(responseStr);
+        System.out.println(jsonObject);
         String totalCount = jsonObject.getString("totalCount");
         return  totalCount;
     }

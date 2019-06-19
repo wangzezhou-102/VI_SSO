@@ -27,7 +27,14 @@ public interface TuSouSearchService{
      */
     BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request);
 
+    /**
+     * 三种排序的搜索结果
+     * @param request
+     * @return
+     */
     ResultVo sortsearch(JSONObject request);
 
     ResultVo testsearch(JSONObject request);
+
+    ResultVo cacheSearch();
 }

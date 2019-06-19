@@ -47,13 +47,24 @@
         ,sys_operation_log.operate_date as operate_date
         ,sys_operation_log.timeout as timeout
     </sql>
-    <select id="selectNewLog" resultType="SysOperationLog">
+    <select id="selectNewLog" resultType="com.secusoft.web.model.SysOperationLog">
         select <include refid="sys_operation_log_Column" />
         from
         sys_operation_log
         where operate_date =(select MAX(operate_date) from sys_operation_log)
     </select>
 
+    <select id="selectThreeLog" resultType="com.secusoft.web.model.SysOperationLog">
+        select <include refid="sys_operation_log_Column" />
+        from
+        sys_operation_log
+        ORDER BY operate_date DESC LIMIT 3
+    </select>
+    <select id="tusouSearchTotal" resultType="java.lang.Integer">
+      select count(id)
+      from sys_operation_log
+      where title = '图搜功能'
+    </select>
 </mapper>
 
 
