@@ -44,4 +44,12 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
 //     * @return
 //     */
 //    List<ViSurveyTaskBean> getTaskStartOrStopFailedList(ViSurveyTaskBean viSurveyTaskBean);
+
+    /**
+     * 统计当前时间当前账号权限下处于正在执行状态下的布控数量
+     * @author hbxing
+     * @company 视在数科
+     * @date 2019年6月18日
+     */
+    Integer selectExecutingSurveyTaskNumber(@Param("userIds") List<Integer> userIds);
 }

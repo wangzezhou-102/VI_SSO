@@ -2,11 +2,8 @@ package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.SysOperationLog;
-import com.secusoft.web.shipinapi.service.CameraService;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
 import org.slf4j.Logger;
@@ -38,7 +35,6 @@ public class TuSouController {
 
         return JSON.parseObject(responseStr);
     }
-
     /**
      * 排序后的图搜结果
      * @return
@@ -59,6 +55,16 @@ public class TuSouController {
     public ResponseEntity<ResultVo> testSearch(@RequestBody Object object){
         JSONObject request =(JSONObject)JSON.toJSON(object);
         ResultVo resultVo = tuSouSearchService.testsearch(request);
+        return new ResponseEntity<>(resultVo, HttpStatus.OK);
+    }
+
+    /**
+     * 图搜缓存记录接口
+     * @return
+     */
+    @RequestMapping("/cacheSearch")
+    public ResponseEntity<ResultVo> cacheSearch(){
+        ResultVo resultVo = tuSouSearchService.cacheSearch();
         return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
 
