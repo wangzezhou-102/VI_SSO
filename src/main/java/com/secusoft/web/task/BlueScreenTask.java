@@ -20,11 +20,8 @@ public class BlueScreenTask {
     private BlueScreenService blueScreenService;
     @Scheduled(cron="0 0 * */1 * ?")
     public void syncDevice() {
-        System.out.println("----------------");
         log.info("blue screen start");
-
         blueScreenService.updateScreenDateIndicator();
-
         log.info("blue screen end");
     }
 }

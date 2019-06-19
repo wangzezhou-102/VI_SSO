@@ -12,16 +12,26 @@ import javax.sql.DataSource;
 
 @Configuration
 public class DataSourceConfig {
+    @Bean(name = "primaryDataSource")
+    @Qualifier("primaryDataSource")
+    @Primary
+    @ConfigurationProperties(prefix="spring.datasource.primary")
+    public DataSource primaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
     @Bean(name = "secondaryDataSource")
     @Qualifier("secondaryDataSource")
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.secondary")
+    @ConfigurationProperties(prefix="spring.datasource.secondary")
     public DataSource secondaryDataSource() {
         return DataSourceBuilder.create().build();
     }
 
+
+
     @Bean(name = "secondaryJdbcTemplate")
-    public JdbcTemplate secondaryJdbcTemplate(@Qualifier("secondaryDataSource")DataSource secondaryDataSource){
-        return new JdbcTemplate(secondaryDataSource);
+    public JdbcTemplate secondaryJdbcTemplate(
+            @Qualifier("secondaryDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 }
