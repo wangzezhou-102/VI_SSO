@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.SysOperationLogMapper">
+    <select id="selectTuSouNumber" resultType="java.lang.Integer">
+      select count(id)
+      from sys_operation_log
+      <where>
+          request_uri='http://192.168.4.128:8006/tusou_search_sort'
+          and date(operate_date)  = curdate()
+          <if test="userIds!=null">
+              and user_id in
+              <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+                  #{userId}
+              </foreach>
+          </if>
+
+      </where>
+    </select>
     <!-- SysOperationLog的resultMap,column是给数据库列起的别名,它对应property类的属性-->
     <resultMap id="result_SysOperationLog_Map" type="SysOperationLog">
         <id column="id" property="id" />
@@ -40,3 +55,5 @@
     </select>
 
 </mapper>
+
+

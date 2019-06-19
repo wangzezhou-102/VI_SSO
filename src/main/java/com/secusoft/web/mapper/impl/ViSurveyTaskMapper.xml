@@ -120,4 +120,18 @@
         FROM vi_survey_task vst
         where vst.`enable`=1
     </select>
+
+    <select id="selectExecutingSurveyTaskNumber" resultType="java.lang.Integer">
+       select count(id)
+       from vi_survey_task
+       <where>
+           enable = 1
+           <if test="userIds!=null">
+               and user_id in
+               <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+                   #{userId}
+               </foreach>
+           </if>
+       </where>
+    </select>
 </mapper>
