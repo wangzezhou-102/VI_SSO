@@ -120,4 +120,17 @@
         FROM vi_survey_task vst
         where vst.`enable`=1
     </select>
+
+    <!--<select id="getTaskStartOrStopFailedList" parameterType="com.secusoft.web.model.ViSurveyTaskBean" resultMap="com.secusoft.web.model.ViSurveyTaskBean">-->
+        <!--select * FROM  vi_survey_task-->
+        <!--where begin_time &lt;= #{beginTime}-->
+        <!--<where>-->
+            <!--<if test="beginTime!=null">-->
+                <!--AND begin_time &lt;= #{beginTime}-->
+            <!--</if>-->
+            <!--<if test="endTime!=null">-->
+                <!--AND end_time &gt;= #{endTime}-->
+            <!--</if>-->
+        <!--</where>-->
+    <!--</select>-->
 </mapper>

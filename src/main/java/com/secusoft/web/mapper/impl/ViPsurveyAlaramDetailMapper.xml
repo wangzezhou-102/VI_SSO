@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViPsurveyAlaramDetailMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO vi_psurvey_alarm_detail (alarm_id, task_id,
+        bkid, alarm_type, alarm_type_name,
+        feature, oss_url, similarity,
+        object_id, name, picid,
+        time, status, survey_status,
+        alarm_status, ai_status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.alarmId}, #{item.taskId},
+            #{item.bkid}, #{item.alarmType}, #{item.alarmTypeName},
+            #{item.feature}, #{item.ossUrl}, #{item.similarity},
+            #{item.objectId}, #{item.name}, #{item.picid},
+            #{item.time}, #{item.status}, #{item.surveyStatus},
+            #{item.alarmStatus}, #{item.aiStatus})
+        </foreach>
+    </insert>
+
+</mapper>

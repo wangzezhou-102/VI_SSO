@@ -1,11 +1,11 @@
 package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.serviceapi.ServiceApiClient;
+import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKRepoCreateRequest;
 import com.secusoft.web.tusouapi.model.BKRepoMeta;
 import com.secusoft.web.tusouapi.model.BaseRequest;
@@ -29,7 +29,9 @@ public class BkrepoTask implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), "");
+        BaseRequest baseRequest=new BaseRequest();
+        baseRequest.setRequestId(bkrepoConfig.getRequestId());
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), baseRequest);
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -44,14 +46,13 @@ public class BkrepoTask implements ApplicationRunner {
 //                "\t\t}\n" +
 //                "\t}]\n" +
 //                "}" ;
-        responseStr="{\n" +
-                "\t\"errorCode\": \"SUCCESS\",\n" +
-                "\t\"errorMsg\": \"\",\n" +
-                "\t\"data\": \"null\"}" ;
-        JSONObject jsonObject= (JSONObject) JSONObject.parse(responseStr);
-        String code=jsonObject.getString("code");
-        String data=jsonObject.getString("data");
-        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)&&(data.isEmpty()||"null".equals(data))){
+        baseResponse=new BaseResponse();
+        baseResponse.setCode("SUCCESS");
+        baseResponse.setMessage("");
+        String code=baseResponse.getCode();
+        Object data=baseResponse.getData();
+        String message=baseResponse.getMessage();
+        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)&&("null".equals(data))){
             //头部参数
             BaseRequest<BKRepoCreateRequest> bkRepoCreateRequestBaseRequest=new BaseRequest<>();
             bkRepoCreateRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
@@ -76,16 +77,15 @@ public class BkrepoTask implements ApplicationRunner {
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
 
             String requestStr = JSON.toJSONString(bkRepoCreateRequestBaseRequest);
-            String responseBkrepoCreateStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), requestStr);
+            baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), bkRepoCreateRequestBaseRequest);
+
             //解析json
-            jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
-            code=jsonObject.getString("code");
-            if("1001010".equals(code)){
+            code=baseResponse.getCode();
+            if(BizExceptionEnum.OK.getCode()==Integer.parseInt(code)){
                 System.out.println("布控库创建成功");
             }
         }else{
-            String message=jsonObject.getString("message");
-            System.out.println("message");
+            System.out.println(message);
         }
     }
 }

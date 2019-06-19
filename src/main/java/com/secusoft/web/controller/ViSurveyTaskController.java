@@ -48,4 +48,9 @@ public class ViSurveyTaskController {
     public ResponseEntity<ResultVo> listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo) {
         return new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
     }
+
+    @RequestMapping("/startvisurveytask")
+    public ResponseEntity<ResultVo> startViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo) {
+        return new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
+    }
 }

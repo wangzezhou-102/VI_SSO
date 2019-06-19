@@ -56,8 +56,7 @@
          where id=#{id}
     </delete>
 
-    <select id="getAllViRepo" parameterType="com.secusoft.web.model.ViRepoBean"
-            resultType="com.secusoft.web.model.ViRepoBean">
+    <select id="getAllViRepo" parameterType="com.secusoft.web.model.ViRepoBean" resultType="com.secusoft.web.model.ViRepoBean">
         select * from
         <include refid="table"/>
         <include refid="whereSql"/>

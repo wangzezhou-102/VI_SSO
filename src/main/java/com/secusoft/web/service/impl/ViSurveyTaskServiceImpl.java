@@ -12,6 +12,10 @@ import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
+import com.secusoft.web.task.SurveyStartTask;
+import com.secusoft.web.task.SurveyStopTask;
+import com.secusoft.web.task.VideoStreamStartTask;
+import com.secusoft.web.task.VideoStreamStopTask;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.utils.*;
 import org.springframework.stereotype.Service;
@@ -205,5 +209,11 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         calendar.setTime(viSurveyTaskBean.getEndTime());
         calendar.add(Calendar.MINUTE, Integer.parseInt(NormalConfig.getStreamMinute()));
         timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
+    }
+
+    private boolean computing(){
+        boolean result=false;
+
+        return false;
     }
 }

@@ -61,6 +61,11 @@ public class ServiceApiConfig {
      */
     public static String streamStop;
 
+    /**
+     * 获取缓存里的布控告警数据
+     */
+    public static String getViPsurveyAlaram;
+
     public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;
     }
@@ -139,5 +144,13 @@ public class ServiceApiConfig {
 
     public static void setStreamStop(String streamStop) {
         ServiceApiConfig.streamStop = streamStop;
+    }
+
+    public static String getGetViPsurveyAlaram() {
+        return getViPsurveyAlaram;
+    }
+
+    public static void setGetViPsurveyAlaram(String getViPsurveyAlaram) {
+        ServiceApiConfig.getViPsurveyAlaram = getViPsurveyAlaram;
     }
 }

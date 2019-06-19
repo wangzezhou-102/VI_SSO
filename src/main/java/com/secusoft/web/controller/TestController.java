@@ -1,40 +1,30 @@
 package com.secusoft.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.base.controller.BaseController;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
-import com.secusoft.web.service.DeviceService;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.model.SearchData;
 import com.secusoft.web.tusouapi.model.SearchResponse;
 import com.secusoft.web.tusouapi.model.SearchSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import com.secusoft.web.mapper.AreaMapper;
-import com.secusoft.web.mapper.FolderMapper;
-import com.secusoft.web.mapper.PictureMapper;
-import com.secusoft.web.mapper.TrackMapper;
-import com.secusoft.web.model.AreaBean;
-import com.secusoft.web.model.FolderBean;
-import com.secusoft.web.model.PictureBean;
-import com.secusoft.web.model.TrackBean;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -50,6 +40,44 @@ public class TestController extends BaseController {
     private FolderMapper folderMapper;
     @Resource
     private DeviceMapper deviceMapper;
+
+    @Resource
+    private ViPsurveyAlaramMapper viPsurveyAlaramMapper;
+
+    @Resource
+    private ViPsurveyAlaramDetailMapper viPsurveyAlaramDetailMapper;
+
+    @RequestMapping("/testalaram")
+    public Object testAlaram() {
+        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
+
+        JSONObject jsonObject= (JSONObject) JSONObject.parse(responseStr);
+        String code=jsonObject.getString("code");
+        String data=jsonObject.getString("data");
+        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)&&(!data.isEmpty()||!"null".equals(data))) {
+            JSONArray jsonArrayData = (JSONArray) JSONArray.parse(data);
+            JSONObject jsonData = (JSONObject) JSONObject.parse(jsonArrayData.getString(0));
+            String taskId = jsonData.getString("taskId");
+
+            //布控报警
+            String src = jsonData.getString("src");
+            ViPsurveyAlaramBean viPsurveyAlaramBean = (ViPsurveyAlaramBean) JSONObject.parseObject(src, ViPsurveyAlaramBean.class);
+            viPsurveyAlaramBean.setTaskId(taskId);
+            viPsurveyAlaramMapper.insertViPsurveyAlaram(viPsurveyAlaramBean);
+            //人员报警布控图比对
+            String similar = jsonData.getString("similar");
+            List<ViPsurveyAlaramDetailBean> detailBeanList = (List<ViPsurveyAlaramDetailBean>) JSONObject.parseArray(similar, ViPsurveyAlaramDetailBean.class);
+            for (ViPsurveyAlaramDetailBean bean: detailBeanList) {
+                bean.setAlarmId(viPsurveyAlaramBean.getId());
+                bean.setTaskId(taskId);
+                bean.setAlarmType("测试");
+                bean.setAlarmStatus(1);
+            }
+            viPsurveyAlaramDetailMapper.insertBatch(detailBeanList);
+
+        }
+        return null;
+    }
 
     @RequestMapping("/test")
     public Object test() {

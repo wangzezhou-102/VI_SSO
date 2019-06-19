@@ -37,4 +37,11 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * @return
      */
     Integer getEnabledViSurveyTaskCount();
+
+//    /**
+//     *
+//     * @param viSurveyTaskBean
+//     * @return
+//     */
+//    List<ViSurveyTaskBean> getTaskStartOrStopFailedList(ViSurveyTaskBean viSurveyTaskBean);
 }

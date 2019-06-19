@@ -12,6 +12,8 @@ public class ViTaskDeviceBean {
 
     private Integer status;
 
+    private Integer action;
+
     private ViSurveyTaskBean viSurveyTask;
 
     public Integer getId() {
@@ -52,5 +54,13 @@ public class ViTaskDeviceBean {
 
     public void setViSurveyTask(ViSurveyTaskBean viSurveyTask) {
         this.viSurveyTask = viSurveyTask;
+    }
+
+    public Integer getAction() {
+        return action;
+    }
+
+    public void setAction(Integer action) {
+        this.action = action;
     }
 }

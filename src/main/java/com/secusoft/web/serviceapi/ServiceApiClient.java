@@ -177,7 +177,6 @@ public class ServiceApiClient {
      * @return
      */
     public String fetchByPostMethod(String url, String jsonStr) {
-        System.out.println("addrApiService:" + addrApiService);
         String resultStr = null;
         HttpPost httpPost = new HttpPost(addrApiService + url);
         httpPost.setEntity(new StringEntity(jsonStr, ContentType.APPLICATION_JSON));

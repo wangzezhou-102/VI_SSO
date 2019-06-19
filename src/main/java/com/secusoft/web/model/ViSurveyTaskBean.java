@@ -35,6 +35,9 @@ public class ViSurveyTaskBean implements Serializable {
      */
     private Integer areaType;
     private String topic;
+    /**
+     * 是否开启 0-关闭 1-已开启 2-已结束
+     */
     private Integer enable;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date CreateTime;

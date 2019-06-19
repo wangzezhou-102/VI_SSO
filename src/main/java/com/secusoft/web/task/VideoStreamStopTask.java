@@ -1,4 +1,4 @@
-package com.secusoft.web.utils;
+package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSON;
 import com.secusoft.web.core.exception.BizExceptionEnum;
@@ -9,22 +9,20 @@ import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViTaskDeviceBean;
 import com.secusoft.web.shipinapi.model.StreamRequest;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.TimerTask;
 
 /**
- * 启动码流定时任务
+ * 停止码流定时任务
  *
  * @author chjiang
  * @since 2019/6/12 11:27
  */
-public class VideoStreamStartTask extends TimerTask {
+public class VideoStreamStopTask extends TimerTask {
+
 
     private ViSurveyTaskBean viSurveyTaskBean;
 
-    public VideoStreamStartTask(ViSurveyTaskBean viSurveyTaskBean) {
+    public VideoStreamStopTask(ViSurveyTaskBean viSurveyTaskBean) {
         this.viSurveyTaskBean = viSurveyTaskBean;
     }
 
@@ -34,15 +32,9 @@ public class VideoStreamStartTask extends TimerTask {
 
     @Override
     public void run() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("设备启流：" + df.format(new Date()));
         for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTaskBean.getViTaskDeviceList()) {
-            ViTaskDeviceBean bean = new ViTaskDeviceBean();
-            bean.setDeviceId(viTaskDeviceBean.getDeviceId());
-            bean.setStatus(1);
-            List<ViTaskDeviceBean> viTaskDeviceBeanList = viTaskDeviceMapper.getViTaskDeviceBeanByObject(bean);
             //判断设备是否已启用或者状态是否为1
-            if (viTaskDeviceBean.getStatus() != 1 && viTaskDeviceBeanList.size() == 0) {
+            if (viTaskDeviceBean.getStatus() == 1) {
                 StreamRequest streamRequest = new StreamRequest();
                 streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
@@ -53,12 +45,10 @@ public class VideoStreamStartTask extends TimerTask {
 //                String code = jsonObject.getString("code");
 //                String message = jsonObject.getString("message");
                 if (BizExceptionEnum.OK.getCode() == Integer.parseInt("1001010")) {
-                    viTaskDeviceBean.setStatus(1);
+                    viTaskDeviceBean.setStatus(0);
                     viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
                 }
             }
         }
-        System.gc();
-        System.out.println("你指定" + df.format(new Date()) + "执行已经触发！");
     }
 }
