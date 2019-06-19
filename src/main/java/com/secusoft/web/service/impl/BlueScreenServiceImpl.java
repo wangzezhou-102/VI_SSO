@@ -83,7 +83,7 @@ public class BlueScreenServiceImpl implements BlueScreenService {
         Date date = new Date();
         String toDay = DateFormatUtils.format(date, "yyyy-MM-dd");
     //视频巡逻相关
-        operation("tdrywyj","社会治安防控扫描仪-特定人员望远镜","spxl","视频巡逻",getVideoPatrolNumber(),toDay);
+        operation("tdrywyj","社会治安防控扫描仪-特定人员望远镜","spxl","视频巡逻","3245324545",toDay);
     //公共区域监控点位相关
         operation("tdrywyj","社会治安防控扫描仪-特定人员望远镜","ggqyjkdw","公共区域监控点位","72187",toDay);
     //人脸抓拍机建设量相关
