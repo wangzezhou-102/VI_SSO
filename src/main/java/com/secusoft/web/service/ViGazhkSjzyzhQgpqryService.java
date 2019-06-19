@@ -14,7 +14,7 @@ public interface ViGazhkSjzyzhQgpqryService {
      * @param viGazhkSjzyzhQgpqryBean
      * @return
      */
-    ResultVo addViGazhkSjzyzhQgpqry(ViGazhkSjzyzhQgpqryBean viGazhkSjzyzhQgpqryBean,String tableName);
+    ResultVo addViGazhkSjzyzhQgpqry(ViGazhkSjzyzhQgpqryBean viGazhkSjzyzhQgpqryBean, String tableName);
 
      /**
      * 清空表

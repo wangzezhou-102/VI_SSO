@@ -1,4 +1,4 @@
-package com.secusoft.web.controller;
+package com.secusoft.web.task;
 
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
@@ -18,7 +18,7 @@ import java.text.ParseException;
 @Component
 @Configurable
 @EnableScheduling
-public class BkrepoDataTaskController {
+public class BkrepoDataTask {
 
     @Resource
     BkrepoConfig bkrepoConfig;
@@ -32,7 +32,7 @@ public class BkrepoDataTaskController {
     //0 0 */1 * * ? 每小时执行一次
     //0 0/1 * * * ? 每分钟执行一次
     @Scheduled(cron = "0 0 */1 * * ?")//0 0 */1 * * ?
-    public void task() throws ParseException, InterruptedException {
+    public void BkrepoData() throws ParseException, InterruptedException {
 //        String[] bkrepoTable = bkrepoTable.split(",");
 //        ViRepoBean viRepoBean=null;
 //        for (String str : bkrepoTable) {

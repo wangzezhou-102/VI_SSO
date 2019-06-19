@@ -26,58 +26,58 @@
                 column:指定唯一标识用户信息的列
                 property:映射到user的那个属性
             -->
-            <id column="id" property="id" jdbcType="INTEGER" />
-            <result column="task_id" property="taskId" jdbcType="VARCHAR" />
-            <result column="survey_name" property="surveyName" jdbcType="VARCHAR" />
-            <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-            <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-            <result column="survey_type" property="surveyType" jdbcType="TINYINT" />
-            <result column="survey_status" property="surveyStatus" jdbcType="BIT" />
-            <result column="survey_stream_status" property="surveyStreamStatus" jdbcType="BIT" />
-            <result column="area_type" property="areaType" jdbcType="BIT" />
-            <result column="topic" property="topic" jdbcType="VARCHAR" />
-            <result column="enable" property="enable" jdbcType="BIT" />
-            <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-            <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+            <id column="id" property="id" jdbcType="INTEGER"/>
+            <result column="task_id" property="taskId" jdbcType="VARCHAR"/>
+            <result column="survey_name" property="surveyName" jdbcType="VARCHAR"/>
+            <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP"/>
+            <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+            <result column="survey_type" property="surveyType" jdbcType="TINYINT"/>
+            <result column="survey_status" property="surveyStatus" jdbcType="BIT"/>
+            <result column="survey_stream_status" property="surveyStreamStatus" jdbcType="BIT"/>
+            <result column="area_type" property="areaType" jdbcType="BIT"/>
+            <result column="topic" property="topic" jdbcType="VARCHAR"/>
+            <result column="enable" property="enable" jdbcType="BIT"/>
+            <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         </association>
     </resultMap>
 
-    <insert id="insertViTaskDevice" parameterType="com.secusoft.web.model.ViTaskDeviceBean" >
+    <insert id="insertViTaskDevice" parameterType="com.secusoft.web.model.ViTaskDeviceBean">
         insert into vi_task_device
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="taskId != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
                 task_id,
             </if>
-            <if test="deviceId != null" >
+            <if test="deviceId != null">
                 device_id,
             </if>
-            <if test="status != null" >
+            <if test="status != null">
                 status,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="taskId != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">
                 #{taskId},
             </if>
-            <if test="deviceId != null" >
+            <if test="deviceId != null">
                 #{deviceId},
             </if>
-            <if test="status != null" >
+            <if test="status != null">
                 #{status},
             </if>
         </trim>
     </insert>
-    <delete id="deleteViTaskDevice" parameterType="java.lang.Integer" >
+
+    <delete id="deleteViTaskDevice" parameterType="java.lang.Integer">
     delete from vi_task_device
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-
     <insert id="insertBatch" parameterType="java.util.List">
-    INSERT INTO vi_task_device (task_id,device_id) values
+        INSERT INTO vi_task_device (task_id,device_id) values
         <foreach collection="list" item="item" index="index" separator=",">
-        (#{item.taskId},
-        #{item.deviceId})
+            (#{item.taskId},
+            #{item.deviceId})
         </foreach>
     </insert>
 
@@ -94,4 +94,29 @@
          LEFT JOIN vi_survey_task vst on vst.task_id=vtd.task_id
          where vst.enable=1)a
     </select>
+
+    <select id="getViTaskDeviceBeanByObject" parameterType="com.secusoft.web.model.ViTaskDeviceBean" resultMap="ViTaskDeviceResultMap">
+        select * vi_task_device
+        <where>
+            <if test="deviceId !=null">
+                AND device_id=#{deviceId}
+            </if>
+            <if test="taskId !=null">
+                AND task_id=#{taskId}
+            </if>
+            <if test="status !=null">
+                AND status=#{status}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateViTaskDevice" parameterType="com.secusoft.web.model.ViTaskDeviceBean">
+        update vi_task_device
+        <set>
+            <if test="status != null">
+                status=#{status},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

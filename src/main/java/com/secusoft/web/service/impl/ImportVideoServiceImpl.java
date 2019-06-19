@@ -1,14 +1,13 @@
 package com.secusoft.web.service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-
 import com.secusoft.web.config.ImportVideoConfig;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.ImportVideoService;
-import com.secusoft.web.serviceapi.ServiceClient;
+import com.secusoft.web.serviceapi.ServiceApiClient;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ImportVideoServiceImpl implements ImportVideoService {
@@ -19,7 +18,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo createFileClassify(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileClassify, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileClassify, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -30,7 +29,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo modifyFileClassify(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.modifyFileClassify, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.modifyFileClassify, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -41,7 +40,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo deleteFileClassify(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteFileClassify, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteFileClassify, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -52,7 +51,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo createFileCameraRelation(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileCameraRelation, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileCameraRelation, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -63,7 +62,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo modifyFileCameraRelation(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.modifyFileCameraRelation, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.modifyFileCameraRelation, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -74,7 +73,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo deleteOfflineCamera(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteOfflineCamera, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteOfflineCamera, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -85,7 +84,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo dragOfflineCamera(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.dragOfflineCamera, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.dragOfflineCamera, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -96,7 +95,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo deleteOffline(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteOffline, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteOffline, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -107,7 +106,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo createFileStatus(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileStatus, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.createFileStatus, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -118,7 +117,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo updateFileStatus(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.updateFileStatus, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.updateFileStatus, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -129,7 +128,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo queryFileStatus(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.queryFileStatus, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.queryFileStatus, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -140,7 +139,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo deleteFileStatus(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteFileStatus, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.deleteFileStatus, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -151,7 +150,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo describeFileClassifys(Map<String, Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.describeFileClassifys, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.describeFileClassifys, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -163,7 +162,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     public ResultVo chunk() {
         ResultVo resultVo = new ResultVo();
         Map<String,Object> param = new HashMap<String,Object>();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.chunk, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.chunk, param);
         resultVo.setData(result);
         return resultVo;
     }
@@ -174,7 +173,7 @@ public class ImportVideoServiceImpl implements ImportVideoService {
     @Override
     public ResultVo mergeFile(Map<String,Object> param) {
         ResultVo resultVo = new ResultVo();
-        String result = ServiceClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.mergeFile, param);
+        String result = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ImportVideoConfig.mergeFile, param);
         resultVo.setData(result);
         return resultVo;
     }

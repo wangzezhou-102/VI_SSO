@@ -40,6 +40,7 @@ public class ViSurveyTaskBean implements Serializable {
     private Date CreateTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ModifyTime;
+    private Integer userId;
 
     private List<ViTaskRepoBean> viTaskRepoList;
     private List<ViTaskDeviceBean> viTaskDeviceList;
@@ -154,6 +155,14 @@ public class ViSurveyTaskBean implements Serializable {
 
     public void setViTaskDeviceList(List<ViTaskDeviceBean> viTaskDeviceList) {
         this.viTaskDeviceList = viTaskDeviceList;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Override

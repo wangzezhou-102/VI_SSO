@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.secusoft.web.mapper.ViSurveyTaskMapper">
+<mapper namespace="com.secusoft.web.mapper.SysOrgRoadMapper">
 
     <!-- 定义查询订单关联用户的 resultMap,将整个的查询结果映射到com.mybatis.entity.Orders中 -->
     <resultMap type="com.secusoft.web.model.ViSurveyTaskBean" id="viSurveyTaskResultMap">
@@ -51,54 +51,6 @@
             <result column="status" property="status"/>
         </collection>
     </resultMap>
-
-
-    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id" useGeneratedKeys="true">
-        <!-- selectKey 标签表示子查询中主键的提取问题
-                     keyColumn表示查询语句返回结果的列名
-                     keyProperty表示将属性设置到某个列中 此处为empNo 中
-                     order="BEFORE表示在插入语句之前执行
-                     resultType="int"表示返回值得类型为int类型
-                 -->
-      INSERT INTO vi_survey_task(task_id,topic,survey_name,begin_time,end_time,survey_type,area_type)
-        VALUES(#{taskId},#{topic},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType})
-    </insert>
-
-     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
-         update vi_survey_task
-         <set>
-             <if test="surveyName != null">
-                 survey_name=#{surveyName},
-             </if>
-             <if test="beginTime != null">
-                 begin_time=#{beginTime},
-             </if>
-             <if test="endTime != null">
-                 end_time=#{endTime},
-             </if>
-             <if test="surveyStatus != null">
-                 survey_status=#{surveyStatus},
-             </if>
-             <if test="topic != null">
-                 topic=#{topic},
-             </if>
-             <if test="taskId != null">
-                 task_id=#{taskId},
-             </if>
-             <if test="ModifyTime != null">
-                 modify_time=#{ModifyTime},
-             </if>
-             <if test="enable != null">
-                 enable=#{enable},
-             </if>
-         </set>
-         where id=#{id}
-     </update>
-
-    <delete id="delViSurveyTask" parameterType="java.lang.Integer">
-        delete from vi_survey_task
-         where id=#{id}
-    </delete>
     
     <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
          select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
@@ -113,11 +65,5 @@
                 AND vst.id=#{id}
             </if>
         </where>
-    </select>
-
-    <select id="getEnabledViSurveyTaskCount" resultType="java.lang.Integer">
-        SELECT count(*)
-        FROM vi_survey_task vst
-        where vst.`enable`=1
     </select>
 </mapper>

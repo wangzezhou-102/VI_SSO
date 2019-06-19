@@ -13,7 +13,7 @@ import com.secusoft.web.model.ViBasicMemberBean;
 import com.secusoft.web.model.ViRepoBean;
 import com.secusoft.web.model.gazhk.ViGazhkSjzyzhQgpqryBean;
 import com.secusoft.web.service.ViGazhkSjzyzhQgpqryService;
-import com.secusoft.web.serviceapi.ServiceClient;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
 import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +115,7 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
             bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
             bkMemberDeleteRequest.setObjectIds(viBasicMemberBean1.getObjectId());
             String requestStr = JSON.toJSONString(bkMemberDeleteRequest);
-            ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberDelete(), requestStr);
+            ServiceApiClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberDelete(), requestStr);
         }
         BKMemberAddRequest bkMemberAddRequest=new BKMemberAddRequest();
         bkMemberAddRequest.setBkid(bkrepoConfig.getBkid());
@@ -127,7 +127,7 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
             bkMemberAddRequest.setAttribute((JSONObject) JSONObject.parse(viBasicMemberBean.getAttribute()));
         }
         String requestStr = JSON.toJSONString(bkMemberAddRequest);
-        ServiceClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberAdd(), requestStr);
+        ServiceApiClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberAdd(), requestStr);
         return ResultVo.success();
     }
 

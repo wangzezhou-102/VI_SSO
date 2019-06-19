@@ -1,5 +1,6 @@
 package com.secusoft.web.controller;
 
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViSurveyTaskRequest;
@@ -19,26 +20,32 @@ public class ViSurveyTaskController {
     ViSurveyTaskService viSurveyTaskService;
 
     @RequestMapping("/insertvisurveytask")
-    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest){
-        ResultVo resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskRequest);
+    public ResponseEntity<ResultVo> insertViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest) {
+        ResultVo resultVo = null;
+        try {
+            resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskRequest);
+        } catch (Exception ex) {
+            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(),
+                    BizExceptionEnum.TASK_ADD_FAIL.getMessage());
+        }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("/updatevisurveytask")
-    public ResponseEntity<ResultVo> updateViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
+    public ResponseEntity<ResultVo> updateViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean) {
         ResultVo resultVo = viSurveyTaskService.updateViSurveyTask(viSurveyTaskBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("/delvisurveytask")
-    public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean){
+    public ResponseEntity<ResultVo> delViSurveyTask(@RequestBody ViSurveyTaskBean viSurveyTaskBean) {
 
         ResultVo resultVo = viSurveyTaskService.delViSurveyTask(viSurveyTaskBean.getId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @RequestMapping("/listvisurveytask")
-    public ResponseEntity<ResultVo> listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo){
-        return  new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
+    public ResponseEntity<ResultVo> listViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo) {
+        return new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
     }
 }

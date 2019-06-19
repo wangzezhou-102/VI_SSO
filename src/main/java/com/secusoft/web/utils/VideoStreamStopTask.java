@@ -1,6 +1,12 @@
 package com.secusoft.web.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.SpringContextHolder;
+import com.secusoft.web.mapper.ViSurveyTaskMapper;
+import com.secusoft.web.mapper.ViTaskDeviceMapper;
+import com.secusoft.web.model.ViSurveyTaskBean;
+import com.secusoft.web.model.ViTaskDeviceBean;
 import com.secusoft.web.shipinapi.model.StreamRequest;
 
 import java.text.SimpleDateFormat;
@@ -15,25 +21,40 @@ import java.util.TimerTask;
  */
 public class VideoStreamStopTask extends TimerTask {
 
-    private String deviceId;
 
-    public VideoStreamStopTask(String deviceId) {
-        this.deviceId = deviceId;
+    private ViSurveyTaskBean viSurveyTaskBean;
+
+    public VideoStreamStopTask(ViSurveyTaskBean viSurveyTaskBean) {
+        this.viSurveyTaskBean = viSurveyTaskBean;
     }
+
+    private static ViTaskDeviceMapper viTaskDeviceMapper = SpringContextHolder.getBean(ViTaskDeviceMapper.class);
+
+    private static ViSurveyTaskMapper viSurveyTaskMapper = SpringContextHolder.getBean(ViSurveyTaskMapper.class);
 
     @Override
     public void run() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("VideoStreamStopTask：" + df.format(new Date()));
-        System.out.println(new Date());
-        String[] arrDeviceId = deviceId.split(",");
-        for (String str : arrDeviceId) {
-            StreamRequest streamRequest = new StreamRequest();
-            streamRequest.setDeviceId(str);
+        System.out.println("设备停流：" + df.format(new Date()));
+        for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTaskBean.getViTaskDeviceList()) {
+            //判断设备是否已启用或者状态是否为1
+            if (viTaskDeviceBean.getStatus() == 1) {
+                StreamRequest streamRequest = new StreamRequest();
+                streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
-            String requestStr = JSON.toJSONString(streamRequest);
-            //String responseStr = ShiPinClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig
-            // .getStreamStop(), requestStr);
+                String requestStr = JSON.toJSONString(streamRequest);
+//                String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
+//
+//                JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
+//                String code = jsonObject.getString("code");
+//                String message = jsonObject.getString("message");
+                if (BizExceptionEnum.OK.getCode() == Integer.parseInt("1001010")) {
+                    viTaskDeviceBean.setStatus(0);
+                    viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
+                }
+            }
         }
+        System.gc();
+        System.out.println("你指定" + df.format(new Date()) + "执行已经触发！");
     }
 }

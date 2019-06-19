@@ -1,11 +1,11 @@
-package com.secusoft.web.controller;
+package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.serviceapi.ServiceClient;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.model.BKRepoCreateRequest;
 import com.secusoft.web.tusouapi.model.BKRepoMeta;
 import com.secusoft.web.tusouapi.model.BaseRequest;
@@ -18,17 +18,18 @@ import javax.annotation.Resource;
 
 /**
  * 布控库判断
+ * @author chjiang
+ * @since 2019/6/18 15:44
  */
 @Component
-public class BkrepoTaskController implements ApplicationRunner {
+public class BkrepoTask implements ApplicationRunner {
 
     @Resource
     BkrepoConfig bkrepoConfig;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-
-        String responseStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), "");
+    public void run(ApplicationArguments applicationArguments) throws Exception {
+        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), "");
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -75,7 +76,7 @@ public class BkrepoTaskController implements ApplicationRunner {
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
 
             String requestStr = JSON.toJSONString(bkRepoCreateRequestBaseRequest);
-            String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), requestStr);
+            String responseBkrepoCreateStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), requestStr);
             //解析json
             jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
             code=jsonObject.getString("code");

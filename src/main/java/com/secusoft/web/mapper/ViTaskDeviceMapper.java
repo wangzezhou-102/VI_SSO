@@ -40,4 +40,11 @@ public interface ViTaskDeviceMapper extends BaseMapper<ViTaskDeviceBean> {
      * @return
      */
     Integer taskDeviceCount();
+
+    /**
+     * 根据相关条件获取所关联的设备信息
+     * @param viTaskDeviceBean
+     * @return
+     */
+    List<ViTaskDeviceBean> getViTaskDeviceBeanByObject(ViTaskDeviceBean viTaskDeviceBean);
 }

@@ -2,6 +2,7 @@ package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViSurveyTaskBean;
+import com.secusoft.web.model.ViSurveyTaskRequest;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * 获取所有布控任务
      * @return
      */
-    List<ViSurveyTaskBean> getAllViSurveyTask();
+    List<ViSurveyTaskBean> getAllViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest);
 
     /**
      * 正在执行的布控任务

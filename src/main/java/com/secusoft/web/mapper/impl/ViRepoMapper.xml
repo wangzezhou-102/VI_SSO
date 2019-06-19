@@ -34,8 +34,8 @@
     </sql>
     <insert id="insertViRepo" parameterType="com.secusoft.web.model.ViRepoBean" keyProperty="id" useGeneratedKeys="true">
 
-      INSERT INTO vi_repo(bkdesc,bkname,police_station_id,table_name,type)
-        VALUES(#{bkdesc},#{bkname},#{policeStationId},#{tableName},#{type})
+      INSERT INTO vi_repo(bkdesc,bkname,bktype,police_station_id,table_name,type)
+        VALUES(#{bkdesc},#{bkname},#{bktype},#{policeStationId},#{tableName},#{type})
     </insert>
 
     <update id="updateViRepo" parameterType="com.secusoft.web.model.ViRepoBean">

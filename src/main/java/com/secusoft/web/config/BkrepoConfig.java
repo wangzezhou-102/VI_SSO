@@ -15,6 +15,8 @@ public class BkrepoConfig {
 
     private String bkid;
 
+    private Double threshold;
+
     private Meta meta;
 
     public String getRequestId() {
@@ -31,6 +33,14 @@ public class BkrepoConfig {
 
     public void setBkid(String bkid) {
         this.bkid = bkid;
+    }
+
+    public Double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(Double threshold) {
+        this.threshold = threshold;
     }
 
     public Meta getMeta() {

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.tusouapi.model.BaseRequest;
-import com.secusoft.web.tusouapi.model.BaseResponse;
+import com.secusoft.web.serviceapi.model.BaseResponse;
 import org.apache.http.*;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
@@ -30,8 +30,8 @@ import java.util.Map;
 
 @Component
 @Configurable
-public class ServiceClient {
-    private static Logger log = LoggerFactory.getLogger(ServiceClient.class);
+public class ServiceApiClient {
+    private static Logger log = LoggerFactory.getLogger(ServiceApiClient.class);
 
     private String addrApiService = NormalConfig.getAddrApiService();
 
@@ -45,7 +45,7 @@ public class ServiceClient {
 //    //删除布控目标
 //    public static final String Path_BKMEMBER_DELETE = "/bkmemberdelete";
 
-    private volatile static ServiceClient HttpClientConnectionPool;
+    private volatile static ServiceApiClient HttpClientConnectionPool;
 
     private static final String USERAGENT = "SZ-JAVA";
     private static final String CHARSET = "UTF-8";
@@ -112,7 +112,7 @@ public class ServiceClient {
         }
     }
 
-    private ServiceClient() {
+    private ServiceApiClient() {
     }
 
     /**
@@ -120,11 +120,11 @@ public class ServiceClient {
      *
      * @return
      */
-    public static ServiceClient getClientConnectionPool() {
+    public static ServiceApiClient getClientConnectionPool() {
         if (HttpClientConnectionPool == null) {
-            synchronized (ServiceClient.class) {
+            synchronized (ServiceApiClient.class) {
                 if (HttpClientConnectionPool == null) {
-                    HttpClientConnectionPool = new ServiceClient();
+                    HttpClientConnectionPool = new ServiceApiClient();
                 }
             }
         }

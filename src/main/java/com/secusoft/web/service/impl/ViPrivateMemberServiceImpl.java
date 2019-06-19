@@ -11,7 +11,7 @@ import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;
 import com.secusoft.web.service.ViPrivateMemberService;
-import com.secusoft.web.serviceapi.ServiceClient;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
 import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
@@ -69,7 +69,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
-        String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), requestStr);
+        String responseBkrepoCreateStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), requestStr);
         //解析json
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
         String code=jsonObject.getString("code");
@@ -113,7 +113,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
 
         String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
-        String responseBkrepoCreateStr = ServiceClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), requestStr);
+        String responseBkrepoCreateStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), requestStr);
         //解析json
         JSONObject jsonObject= (JSONObject) JSONObject.parse(responseBkrepoCreateStr);
         String code=jsonObject.getString("code");

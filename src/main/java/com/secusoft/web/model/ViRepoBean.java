@@ -12,6 +12,7 @@ public class ViRepoBean implements Serializable {
     private Integer id;
     private String bkdesc;
     private String bkname;
+    private Integer bktype;
     private String policeStationId;
     private String tableName;
     private Integer type;
@@ -42,6 +43,14 @@ public class ViRepoBean implements Serializable {
 
     public void setBkname(String bkname) {
         this.bkname = bkname;
+    }
+
+    public Integer getBktype() {
+        return bktype;
+    }
+
+    public void setBktype(Integer bktype) {
+        this.bktype = bktype;
     }
 
     public String getPoliceStationId() {
@@ -86,13 +95,16 @@ public class ViRepoBean implements Serializable {
 
     @Override
     public String toString() {
-        return "ViRepo{" +
+        return "ViRepoBean{" +
                 "id=" + id +
                 ", bkdesc='" + bkdesc + '\'' +
                 ", bkname='" + bkname + '\'' +
+                ", bktype=" + bktype +
                 ", policeStationId='" + policeStationId + '\'' +
                 ", tableName='" + tableName + '\'' +
                 ", type=" + type +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
                 '}';
     }
 }

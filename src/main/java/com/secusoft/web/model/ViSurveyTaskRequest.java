@@ -10,6 +10,16 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 布控任务Id
+     */
+    private Integer id;
+
+    /**
+     * 布控任务名称
+     */
+    private String taskId;
+
+    /**
      * 布控任务名称
      */
     private String surveyName;
@@ -39,6 +49,26 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
      * 所有布控库信息
      */
     private String surveyRepo;
+    /**
+     * 操作人员编号
+     */
+    private Integer userId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -98,5 +128,11 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
 
     public void setSurveyRepo(String surveyRepo) {
         this.surveyRepo = surveyRepo;
+    }    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

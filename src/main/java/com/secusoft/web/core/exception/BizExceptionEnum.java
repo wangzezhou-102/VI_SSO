@@ -54,35 +54,37 @@ public enum BizExceptionEnum {
 	 * @param code
 	 * @param message
 	 */
-	TASK_DATE_WRONG(670,"开始时间不能大于结束时间"),
-	TASK_DATE_NULL(680,"开始时间或结束时间不能为空"),
-	TASK_NANE_NULL(690,"布控任务名称不能为空"),
+	TASK_DATE_WRONG(701,"添加失败，开始时间不能大于结束时间"),
+	TASK_DATE_NULL(702,"添加失败，开始时间或结束时间不能为空"),
+	TASK_NANE_NULL(703,"添加失败，布控任务名称不能为空"),
+	TASK_NANE_REPEATED(703,"添加失败，该名称已存在，请输入不存在的名称"),
+	TASK_ADD_FAIL(704,"添加布控任务失败"),
 
 	/**
 	 * 布控库相关
 	 */
-	REPO_NAME_NULL(700,"布控库名称不能为空"),
-	RRPO_EXISTS(710,"布控库名称不能为空"),
+	REPO_NAME_NULL(801,"添加失败，布控库名称不能为空"),
+	RRPO_NAME_REPEATED(802,"添加失败，不能输入重复的自定义库名称"),
 
 	/**
 	 * 自定义布控库相关
 	 */
-	PRIVATEREPO_IDENTITYNAME_NULL(720,"姓名不能为空"),
-	PRIVATEREPO_IDENTITYID_NULL(730,"身份证号不能为空"),
-	PRIVATEREPO_IMAGEURL_NULL(740,"图片地址不能为空"),
-	PRIVATEREPO_REPOID_NULL(750,"关联的布控库不能为空"),
+	PRIVATEREPO_IDENTITYNAME_NULL(901,"姓名不能为空"),
+	PRIVATEREPO_IDENTITYID_NULL(902,"身份证号不能为空"),
+	PRIVATEREPO_IMAGEURL_NULL(903,"图片地址不能为空"),
+	PRIVATEREPO_REPOID_NULL(904,"关联的布控库不能为空"),
 
 	/**
 	 * 布控目标相关
 	 */
-	BKMEMBER_FAIL(760,"布控目标删除失败"),;
+	BKMEMBER_FAIL(1001,"布控目标删除失败"),;
 
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;
 		this.friendlyMsg = message;
 	}
 	
-	BizExceptionEnum(int code, String message,String urlPath) {
+	BizExceptionEnum(int code, String message, String urlPath) {
 		this.friendlyCode = code;
 		this.friendlyMsg = message;
 		this.urlPath = urlPath;

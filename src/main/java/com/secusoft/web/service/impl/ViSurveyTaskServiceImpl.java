@@ -1,20 +1,25 @@
 package com.secusoft.web.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.secusoft.web.config.BkrepoConfig;
+import com.secusoft.web.config.NormalConfig;
+import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViSurveyTaskMapper;
 import com.secusoft.web.mapper.ViTaskDeviceMapper;
 import com.secusoft.web.mapper.ViTaskRepoMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
-import com.secusoft.web.utils.PageReturnUtils;
+import com.secusoft.web.serviceapi.ServiceApiClient;
+import com.secusoft.web.serviceapi.model.BaseResponse;
+import com.secusoft.web.tusouapi.model.*;
+import com.secusoft.web.utils.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
@@ -28,6 +33,11 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     @Resource
     ViTaskRepoMapper viTaskRepoMapper;
 
+    @Resource
+    BkrepoConfig bkrepoConfig;
+
+
+    @Transactional
     @Override
     public ResultVo insertViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
         if (viSurveyTaskRequest == null) {
@@ -46,7 +56,12 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             return ResultVo.failure(BizExceptionEnum.TASK_DATE_NULL.getCode(),
                     BizExceptionEnum.TASK_DATE_NULL.getMessage());
         }
-        ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+        List<ViSurveyTaskBean> surveyTaskList = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+        if (surveyTaskList.size() > 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_NANE_REPEATED.getCode(),
+                    BizExceptionEnum.TASK_NANE_REPEATED.getMessage());
+        }
+        ViSurveyTaskBean viSurveyTaskBean = new ViSurveyTaskBean();
         viSurveyTaskBean.setBeginTime(viSurveyTaskRequest.getBeginTime());
         viSurveyTaskBean.setEndTime(viSurveyTaskRequest.getEndTime());
         viSurveyTaskBean.setSurveyName(viSurveyTaskRequest.getSurveyName());
@@ -62,51 +77,64 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         //获取id，重新赋值taskid和topic
         viSurveyTaskBean.setTaskId("t" + viSurveyTaskBean.getId());
         viSurveyTaskBean.setTopic("topict" + viSurveyTaskBean.getId());
-        viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+        //viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
         //设备信息
-        String[] device=viSurveyTaskRequest.getSurveyDevice().split(",");
+        String[] device = viSurveyTaskRequest.getSurveyDevice().split(",");
         List<ViTaskDeviceBean> list = new ArrayList<>();
-        for (String str:device){
-            ViTaskDeviceBean viTaskDeviceBean=new ViTaskDeviceBean();
+        for (String str : device) {
+            ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
             viTaskDeviceBean.setDeviceId(str);
             viTaskDeviceBean.setTaskId(viSurveyTaskBean.getTaskId());
             list.add(viTaskDeviceBean);
         }
         viTaskDeviceMapper.insertBatch(list);
+        viSurveyTaskBean.setViTaskDeviceList(list);
         //布控库信息
-        String[] repo=viSurveyTaskRequest.getSurveyRepo().split(",");
+        String[] repo = viSurveyTaskRequest.getSurveyRepo().split(",");
         List<ViTaskRepoBean> listRepo = new ArrayList<>();
-        for (String str:repo){
-            ViTaskRepoBean viTaskRepoBean=new ViTaskRepoBean();
+        for (String str : repo) {
+            ViTaskRepoBean viTaskRepoBean = new ViTaskRepoBean();
             viTaskRepoBean.setRepoId(Integer.parseInt(str));
             viTaskRepoBean.setTaskId(viSurveyTaskBean.getTaskId());
             listRepo.add(viTaskRepoBean);
         }
         viTaskRepoMapper.insertBatch(listRepo);
+        viSurveyTaskBean.setViTaskRepoList(listRepo);
 
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(viSurveyTaskBean.getBeginTime());
-//        Timer timer = new Timer();
-//        //设备提前5分钟启动码流计划任务
-//        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-//        timer.schedule(new VideoStreamStartTask(viSurveyTaskBean), calendar.getTime());
-//
-//        //布控任务提前2秒开始布控任务
-//        calendar.setTime(viSurveyTaskBean.getBeginTime());
-//        calendar.add(Calendar.SECOND, -2);
-//        timer.schedule(new SurveyStartTask(viSurveyTaskBean), calendar.getTime());
-//
-//        calendar.setTime(viSurveyTaskBean.getEndTime());
-//
-//        //布控任务延后2秒停止布控任务
-//        calendar.setTime(viSurveyTaskBean.getEndTime());
-//        calendar.add(Calendar.SECOND, 2);
-//        timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
-//
-//        //设备延后固定时间停止码流计划任务
-//        calendar.setTime(viSurveyTaskBean.getEndTime());
-//        calendar.add(Calendar.MINUTE, Integer.parseInt(NormalConfig.getStreamMinute()));
-//        timer.schedule(new VideoStreamStopTask(viSurveyTaskRequest.getSurveyDevice()), calendar.getTime());
+        //下发布控任务创建
+        BaseRequest<BKTaskSubmitRequest> bkTaskSubmitRequestBaseRequest = new BaseRequest<>();
+        bkTaskSubmitRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
+        BKTaskSubmitRequest bkTaskSubmitRequest = new BKTaskSubmitRequest();
+        bkTaskSubmitRequest.setTaskId(viSurveyTaskBean.getTaskId());
+        BKTaskMeta bkTaskMeta = new BKTaskMeta();
+        bkTaskMeta.setBkid(bkrepoConfig.getBkid());
+        bkTaskMeta.setBkid(viSurveyTaskRequest.getSurveyName());
+        ArrayList<BKTaskCameraInfo> bkTaskCameraInfos = new ArrayList<>();
+        for (String str : device) {
+            BKTaskCameraInfo bkTaskCameraInfo = new BKTaskCameraInfo();
+            bkTaskCameraInfo.setCameraId(str);
+            bkTaskCameraInfo.setThreshold(bkrepoConfig.getThreshold());
+            bkTaskCameraInfos.add(bkTaskCameraInfo);
+        }
+        bkTaskMeta.setCameraInfo(bkTaskCameraInfos);
+        bkTaskSubmitRequest.setMeta(bkTaskMeta);
+        bkTaskSubmitRequestBaseRequest.setData(bkTaskSubmitRequest);
+
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskSubmitRequestBaseRequest);
+
+        Object dataJson = baseResponse.getData();
+        String errorCode = baseResponse.getCode();
+        String errorMsg = baseResponse.getMessage();
+
+        //判断布控任务添加是否成功
+        if (BizExceptionEnum.OK.getCode() != Integer.parseInt(errorCode)) {
+            throw new RuntimeException("布控任务添加失败！");
+        }
+        //对接天擎下发成功，则更改survey_status为1
+        viSurveyTaskBean.setSurveyStatus(1);
+        viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+
+        TuSouTimeTask(viSurveyTaskBean.getId());
 
         return ResultVo.success();
     }
@@ -126,8 +154,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                         BizExceptionEnum.TASK_DATE_WRONG.getMessage());
             }
         }
-        viSurveyTaskBean.setModifyTime(new Date());
-        viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+
         return ResultVo.success();
     }
 
@@ -144,8 +171,39 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     public ResultVo getAllInformation(ViSurveyTaskVo viSurveyTaskVo) {
         PageHelper.startPage(viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize());
 
-        List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTask();
+        List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTask(null);
 
         return ResultVo.success(PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize()));
+    }
+
+    private void TuSouTimeTask(Integer id){
+        ViSurveyTaskRequest viSurveyTaskRequest=new ViSurveyTaskRequest();
+        viSurveyTaskRequest.setId(id);
+        List<ViSurveyTaskBean> lists = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+
+        ViSurveyTaskBean viSurveyTaskBean=lists.get(0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        Timer timer = new Timer();
+        //设备提前5分钟启动码流计划任务
+        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
+        timer.schedule(new VideoStreamStartTask(viSurveyTaskBean),
+                calendar.getTime());
+
+        //开始布控任务
+        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        timer.schedule(new SurveyStartTask(viSurveyTaskBean), calendar.getTime());
+
+        calendar.setTime(viSurveyTaskBean.getEndTime());
+
+        //停止布控任务
+        calendar.setTime(viSurveyTaskBean.getEndTime());
+        timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
+
+        //设备延后固定时间停止码流计划任务
+        calendar.setTime(viSurveyTaskBean.getEndTime());
+        calendar.add(Calendar.MINUTE, Integer.parseInt(NormalConfig.getStreamMinute()));
+        timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
     }
 }
