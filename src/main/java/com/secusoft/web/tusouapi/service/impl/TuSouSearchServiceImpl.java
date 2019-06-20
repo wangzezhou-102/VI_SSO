@@ -61,9 +61,26 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 }
             });
         });
-        //如果返回的属性里没有相似度 就直接返回 不排序
+        //如果返回的属性里没有相似度 就按时间戳排序
         if(olddata.get(0).getScore()==null){
-            return ResultVo.success(olddata,searchResponse.getTotalCount());
+            // 时间戳排序
+            if (olddata !=null && olddata.size()>1){
+                Collections.sort(olddata , new Comparator<SearchData>() {
+                    @Override
+                    public int compare(SearchData o1, SearchData o2) {
+                        Long o1Value = o1.getSource().getTimestamp();
+                        Long o2Value = o2.getSource().getTimestamp();
+                        if (o1Value<o2Value){
+                            return 1;
+                        }else{
+                            return -1;
+                        }
+                    }
+                });
+            }
+            HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+            stringSearchDataHashMap.put("timestamp",olddata);
+            return ResultVo.success(stringSearchDataHashMap,searchResponse.getTotalCount());
         }
         //相似度排序
         Collections.sort(olddata , new Comparator<SearchData>() {

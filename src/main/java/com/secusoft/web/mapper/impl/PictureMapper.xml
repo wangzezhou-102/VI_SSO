@@ -14,6 +14,8 @@
         <result column="folder_id" property="folderId" />
         <result column="pic_type" property="picType" />
         <result column="score" property="score" />
+        <result column="local_ori_image_url" property="localOriImageUrl" />
+        <result column="local_crop_image_url" property="localCropImageUrl" />
     </resultMap>
 
     <!-- 关联查询映射-->
@@ -28,6 +30,8 @@
         <result column="device_id" property="deviceId" />
         <result column="pic_type" property="picType" />
         <result column="score" property="score" />
+        <result column="local_ori_image_url" property="localOriImageUrl" />
+        <result column="local_crop_image_url" property="localCropImageUrl" />
         <collection column="device_id" property="deviceBean" ofType="deviceBean"
                     select="com.secusoft.web.mapper.DeviceMapper.selectDeviceByPid">
         </collection>
