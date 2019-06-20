@@ -1,13 +1,9 @@
 package com.secusoft.web.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.core.util.ExcelUtil;
 import com.secusoft.web.mapper.PictureMapper;
-import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.TrackBean;
-import com.secusoft.web.tusouapi.model.SearchData;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -41,9 +41,13 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
         SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
         });
-        //如果返回的Data为空，就返回阿里的Msg
-        if(searchResponse == null || searchResponse.getData()==null){
+        //如果返回的状态码为failed，就返回阿里的Msg
+        if(searchResponse == null || searchResponse.getErrorCode().equals("FAILED")){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
+        }
+        //如果查询结果为空并且请求成功
+        if(searchResponse.getData()==null&&searchResponse.getErrorCode().equals("SUCCESS")){
+            return  ResultVo.success();
         }
         List<SearchData> olddata = searchResponse.getData();
         //获取全部的设备列表 与data里进行映射

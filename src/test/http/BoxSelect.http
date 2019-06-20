@@ -5,7 +5,7 @@
 # * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
 # * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
 #多边形
-POST {{host}}:8006/boxselect
+POST localhost:8006/boxselect
 Content-Type: application/json
 
 [
@@ -29,15 +29,15 @@ Content-Type: application/json
 ]
 
 ### 圆形
-POST {{host}}:8006/roundboxselect
+POST localhost:8006/roundboxselect
 Content-Type: application/json
 
 {
-  "point":{
-    "longitude":"120.156",
-    "latitude":"30.256"
+  "pointBean":{
+    "longitude":"120.16402189355016",
+    "latitude":"30.256200718096633"
   },
-  "radius":"0.3"
+  "radius":"0.004002413023"
 }
 
 ###

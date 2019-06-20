@@ -29,7 +29,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class TestController extends BaseController {
+public class TestController<psvm> extends BaseController {
     @Resource
     private PictureMapper pictureMapper;
     @Resource
