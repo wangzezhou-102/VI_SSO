@@ -18,7 +18,9 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
      *   查询最新的一条搜索记录
      */
     SysOperationLog selectNewLog();
-
+    /**
+     *某些用户使用目标搜图的次数
+     */
     Integer selectTuSouNumber(@Param("userIds") List<Integer> userIds);
     /**
      * 查询最近的三条搜索记录
@@ -29,4 +31,7 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
      * 目标搜图使用次数
      */
     Integer tusouSearchTotal();
+
+    Integer selectUseNumberByUserIds(@Param("userIds")List<Integer> userIds);
+
 }

@@ -23,4 +23,6 @@ public interface SysOrganizationMapper extends BaseMapper<SysOrganizationBean> {
     List<SysOrganizationBean> readOrgChildren(@Param("orgId") String orgId);
 
     List<DeviceBean> readDeviceList(@Param("orgId") String orgId);
+
+    String readOrgNameByOrgCode(@Param("orgId") String orgId);
 }

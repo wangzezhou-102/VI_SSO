@@ -65,6 +65,18 @@
       from sys_operation_log
       where title = '图搜功能'
     </select>
+
+    <select id="selectUseNumberByUserIds" resultType="Integer">
+        select count(id)
+        from sys_operation_log
+        <where>
+            YEARWEEK(date_format(operate_date,'%Y-%m-%d')) = YEARWEEK(now())
+                and user_id in
+                <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+        </where>
+    </select>
 </mapper>
 
 

@@ -50,4 +50,8 @@
         <include refid="table"/>
         where pid=#{orgId} and org_type=2
     </select>
+
+    <select id="readOrgNameByOrgCode" resultType="java.lang.String">
+        select org_name from sys_organization where org_id = #{orgId}
+    </select>
 </mapper>

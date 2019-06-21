@@ -94,4 +94,14 @@
 	    delete from sys_org_device where not exists
 	    (select 1 from vi_device dev where dev.device_id=sys_org_device.device_id)
     </delete>
+
+    <!--获得当前账号权限拥有视频监控路数-->
+    <select id="selectDeviceNumberByCivilCodes" resultType="java.lang.Integer">
+        select count(id)
+        from sys_org_device
+        where org_id in
+        <foreach collection="orgIds" index="index" item="orgId" open="(" separator="," close=")">
+            #{orgId}
+        </foreach>
+    </select>
 </mapper>

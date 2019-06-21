@@ -10,4 +10,22 @@
        </where>
     </select>
 
+    <select id="selectOrgUseRoadByOrgCode" resultType="java.lang.Integer">
+        select used_roads from sys_org_road
+        <where>
+            <if test="orgCode!=null and orgCode!=''">
+                org_code = #{orgCode}
+            </if>
+        </where>
+    </select>
+    <select id="selectSysOrgRoadBean" resultType="ScreenSysOrgRoadBean">
+        select id,org_code orgCode,org_name orgName,parent_code patentCode,total_roads totalRoads,used_roads usedRoads,status
+        from sys_org_road
+        <where>
+            <if test="patentCode!=null and patentCode!=''">
+                parent_code = #{patentCode}
+            </if>
+        </where>
+    </select>
+
 </mapper>
