@@ -15,4 +15,23 @@ public interface ViPsurveyAlaramDetailMapper {
      * @param viPsurveyAlaramDetailBeans
      */
     void insertBatch(List<ViPsurveyAlaramDetailBean> viPsurveyAlaramDetailBeans);
+
+    /**
+     * 是否关注该布控
+     * @param viPsurveyAlaramDetailBean
+     */
+    void updateFocusAlaramDetail(ViPsurveyAlaramDetailBean viPsurveyAlaramDetailBean);
+
+    /**
+     * 根据id获取detail对象
+     * @param viPsurveyAlaramDetailBean
+     * @return
+     */
+    ViPsurveyAlaramDetailBean selectById(ViPsurveyAlaramDetailBean viPsurveyAlaramDetailBean);
+
+    /**
+     * 获取所有的detail
+     * @return
+     */
+    List<ViPsurveyAlaramDetailBean> getAllViPsurveyAlaramDetail();
 }

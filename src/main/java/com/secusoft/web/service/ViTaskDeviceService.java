@@ -15,5 +15,5 @@ public interface ViTaskDeviceService {
      * @param viTaskDeviceBean
      * @return
      */
-    ViTaskDeviceBean getViTaskDeviceBeanByObject(ViTaskDeviceBean viTaskDeviceBean);
+    ViTaskDeviceBean getViTaskDeviceByObject(ViTaskDeviceBean viTaskDeviceBean);
 }

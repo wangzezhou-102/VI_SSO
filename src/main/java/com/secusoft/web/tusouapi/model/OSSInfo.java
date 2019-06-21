@@ -8,77 +8,49 @@ public class OSSInfo{
     /**
      * [必须] oss Endpoint信息
      */
-    private String ossEndpoint;
+    private String endpoint;
     /**
      * [必须] oss AccessKeyId信息
      */
-    private String ossAccessKeyId;
+    private String access_id;
     /**
      * [必须] oss AccessKeySecret信息
      */
-    private String ossAccessKeySecret;
+    private String access_key;
     /**
      * [必须] oss的Bucket信息
      */
-    private String ossBucket;
+    private String bucket_name;
 
-    /**
-     * @return the ossEndpoint
-     */
-    public String getOssEndpoint() {
-        return ossEndpoint;
+    public String getEndpoint() {
+        return endpoint;
     }
 
-    /**
-     * @param ossEndpoint the ossEndpoint to set
-     */
-    public void setOssEndpoint(String ossEndpoint) {
-        this.ossEndpoint = ossEndpoint;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
-    /**
-     * @return the ossAccessKeyId
-     */
-    public String getOssAccessKeyId() {
-        return ossAccessKeyId;
+    public String getAccess_id() {
+        return access_id;
     }
 
-    /**
-     * @param ossAccessKeyId the ossAccessKeyId to set
-     */
-    public void setOssAccessKeyId(String ossAccessKeyId) {
-        this.ossAccessKeyId = ossAccessKeyId;
+    public void setAccess_id(String access_id) {
+        this.access_id = access_id;
     }
 
-    /**
-     * @return the ossAccessKeySecret
-     */
-    public String getOssAccessKeySecret() {
-        return ossAccessKeySecret;
+    public String getAccess_key() {
+        return access_key;
     }
 
-    /**
-     * @param ossAccessKeySecret the ossAccessKeySecret to set
-     */
-    public void setOssAccessKeySecret(String ossAccessKeySecret) {
-        this.ossAccessKeySecret = ossAccessKeySecret;
+    public void setAccess_key(String access_key) {
+        this.access_key = access_key;
     }
 
-    /**
-     * @return the ossBucket
-     */
-    public String getOssBucket() {
-        return ossBucket;
+    public String getBucket_name() {
+        return bucket_name;
     }
 
-    /**
-     * @param ossBucket the ossBucket to set
-     */
-    public void setOssBucket(String ossBucket) {
-        this.ossBucket = ossBucket;
+    public void setBucket_name(String bucket_name) {
+        this.bucket_name = bucket_name;
     }
-
-
-
-    
 }

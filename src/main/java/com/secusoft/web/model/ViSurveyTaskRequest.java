@@ -50,6 +50,10 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
      */
     private String surveyRepo;
     /**
+     * 是否开启 0-结束 1-开启
+     */
+    private Integer enable;
+    /**
      * 操作人员编号
      */
     private Integer userId;
@@ -68,10 +72,6 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getSurveyName() {
@@ -128,7 +128,17 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
 
     public void setSurveyRepo(String surveyRepo) {
         this.surveyRepo = surveyRepo;
-    }    public Integer getUserId() {
+    }
+
+    public Integer getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Integer enable) {
+        this.enable = enable;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 

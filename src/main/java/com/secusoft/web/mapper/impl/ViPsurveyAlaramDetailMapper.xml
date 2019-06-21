@@ -2,6 +2,67 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.ViPsurveyAlaramDetailMapper">
 
+    <!-- 定义查询订单关联用户的 resultMap,将整个的查询结果映射到com.mybatis.entity.Orders中 -->
+    <resultMap type="com.secusoft.web.model.ViPsurveyAlaramDetailBean" id="ViPsurveyAlaramDetailResultMap">
+        <!-- 配置映射的订单信息 -->
+
+        <!-- id:查询列中的唯一标识,订单信息中的唯一标识，如果多列组成唯一标识(如：一般数据库设计中的字典表 使用联合主键)，就需要配置多个id
+            column:订单信息的唯一标识 列
+            property:订单信息的唯一标识列所映射到orders中的那个属性(假如：数据库中orders表中的主键为orders_id,而实体属性名称为ordersId,
+                则这个配置应为<id column="orders_id" property="ordersId"/>,类似hibernate实体映射文件配置)。
+        -->
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="alarm_id" property="alarmId" jdbcType="INTEGER" />
+        <result column="vi_psurvey_alaram_id_task_id" property="taskId" jdbcType="VARCHAR" />
+        <result column="bkid" property="bkid" jdbcType="VARCHAR" />
+        <result column="alarm_type" property="alarmType" jdbcType="VARCHAR" />
+        <result column="alarm_type_name" property="alarmTypeName" jdbcType="VARCHAR" />
+        <result column="feature" property="feature" jdbcType="VARCHAR" />
+        <result column="oss_url" property="ossUrl" jdbcType="VARCHAR" />
+        <result column="similarity" property="similarity" jdbcType="DECIMAL" />
+        <result column="object_id" property="objectId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="picid" property="picid" jdbcType="VARCHAR" />
+        <result column="time" property="time" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="survey_status" property="surveyStatus" jdbcType="CHAR" />
+        <result column="alarm_status" property="alarmStatus" jdbcType="INTEGER" />
+        <result column="ai_status" property="aiStatus" jdbcType="INTEGER" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+
+        <!-- 配置映射的关联用户信息 -->
+
+        <!--association:用于映射关联查询单个对象的信息
+            property:要将关联查询的用户信息映射到Orders中那个属性
+          -->
+        <association property="viPsurveyAlaramBean" javaType="com.secusoft.web.model.ViPsurveyAlaramBean">
+            <!-- id:关联查询用户的唯一标识
+                column:指定唯一标识用户信息的列
+                property:映射到user的那个属性
+            -->
+            <id column="vi_psurvey_alaram_id" property="id" jdbcType="INTEGER" />
+            <result column="orig_image" property="origImage" jdbcType="VARCHAR" />
+            <result column="crop_image" property="cropImage" jdbcType="VARCHAR" />
+            <result column="person_image" property="personImage" jdbcType="VARCHAR" />
+            <result column="entry_time" property="entryTime" jdbcType="TIMESTAMP" />
+            <result column="leave_time" property="leaveTime" jdbcType="TIMESTAMP" />
+            <result column="vi_psurvey_alaram_feature" property="feature" jdbcType="VARCHAR" />
+            <result column="camera_id" property="cameraId" jdbcType="VARCHAR" />
+            <result column="obj_top" property="objTop" jdbcType="VARCHAR" />
+            <result column="obj_bottom" property="objBottom" jdbcType="VARCHAR" />
+            <result column="obj_left" property="objLeft" jdbcType="VARCHAR" />
+            <result column="obj_right" property="objRight" jdbcType="VARCHAR" />
+            <result column="obj_id" property="objId" jdbcType="VARCHAR" />
+            <result column="obj_uuid" property="objUuid" jdbcType="VARCHAR" />
+            <result column="timestamp" property="timestamp" jdbcType="BIGINT" />
+            <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+            <result column="vi_psurvey_alaram_status" property="status" jdbcType="INTEGER" />
+            <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+            <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+        </association>
+    </resultMap>
+
     <insert id="insertBatch" parameterType="java.util.List">
         INSERT INTO vi_psurvey_alarm_detail (alarm_id, task_id,
         bkid, alarm_type, alarm_type_name,
@@ -19,4 +80,32 @@
         </foreach>
     </insert>
 
+    <update id="updateFocusAlaramDetail" parameterType="com.secusoft.web.model.ViPsurveyAlaramDetailBean">
+        update vi_psurvey_alarm_detail
+        <set>
+            <if test="alarmStatus">
+                alarm_status=#{alarmStatus}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="getAllViPsurveyAlaramDetail" resultMap="ViPsurveyAlaramDetailResultMap">
+        select vpad.*,vpad.id as vi_psurvey_alaram_id,vpa.orig_image,vpa.crop_image,vpa.person_image,vpa.entry_time,vpa.leave_time,
+        vpa.feature as vi_psurvey_alaram_feature,vpa.camera_id,vpa.obj_top,vpa.obj_bottom,vpa.obj_left,
+        vpa.obj_right,vpa.obj_id,vpa.obj_uuid,vpa.`timestamp`,vpa.`status` as vi_psurvey_alaram_status,vpa.gmt_create,vpa.gmt_modified
+        from vi_psurvey_alarm_detail vpad
+        left join vi_psurvey_alaram vpa
+        on vpad.alarm_id=vpa.id
+    </select>
+
+    <select id="selectById" parameterType="com.secusoft.web.model.ViPsurveyAlaramDetailBean" resultMap="ViPsurveyAlaramDetailResultMap">
+        select vpad.*,vpad.id as vi_psurvey_alaram_id,vpa.orig_image,vpa.crop_image,vpa.person_image,vpa.entry_time,vpa.leave_time,
+        vpa.feature as vi_psurvey_alaram_feature,vpa.camera_id,vpa.obj_top,vpa.obj_bottom,vpa.obj_left,
+        vpa.obj_right,vpa.obj_id,vpa.obj_uuid,vpa.`timestamp`,vpa.`status` as vi_psurvey_alaram_status,vpa.gmt_create,vpa.gmt_modified
+        from vi_psurvey_alarm_detail vpad
+        left join vi_psurvey_alaram vpa
+        on vpad.alarm_id=vpa.id
+        where vpad.id=#{id}
+    </select>
 </mapper>

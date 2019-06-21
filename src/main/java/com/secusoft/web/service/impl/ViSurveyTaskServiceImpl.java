@@ -16,14 +16,20 @@ import com.secusoft.web.task.SurveyStartTask;
 import com.secusoft.web.task.SurveyStopTask;
 import com.secusoft.web.task.VideoStreamStartTask;
 import com.secusoft.web.task.VideoStreamStopTask;
-import com.secusoft.web.tusouapi.model.*;
-import com.secusoft.web.utils.*;
+import com.secusoft.web.tusouapi.model.BKTaskCameraInfo;
+import com.secusoft.web.tusouapi.model.BKTaskMeta;
+import com.secusoft.web.tusouapi.model.BKTaskSubmitRequest;
+import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.utils.PageReturnUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Timer;
 
 @Service
 public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
@@ -72,6 +78,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         viSurveyTaskBean.setSurveyType(viSurveyTaskRequest.getSurveyType());
         viSurveyTaskBean.setAreaType(viSurveyTaskRequest.getAreaType());
         viSurveyTaskBean.setSurveyName(viSurveyTaskRequest.getSurveyName());
+        viSurveyTaskBean.setSurveyStatus(2);
+        viSurveyTaskBean.setEnable(2);
         //由于taskid唯一，先放置一个随机数区别
         int randomNumber = (int) Math.round(Math.random() * (25000 - 1) + 1);
         viSurveyTaskBean.setTaskId("t" + randomNumber);
@@ -81,7 +89,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         //获取id，重新赋值taskid和topic
         viSurveyTaskBean.setTaskId("t" + viSurveyTaskBean.getId());
         viSurveyTaskBean.setTopic("topict" + viSurveyTaskBean.getId());
-        //viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+        viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
         //设备信息
         String[] device = viSurveyTaskRequest.getSurveyDevice().split(",");
         List<ViTaskDeviceBean> list = new ArrayList<>();
@@ -89,6 +97,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
             viTaskDeviceBean.setDeviceId(str);
             viTaskDeviceBean.setTaskId(viSurveyTaskBean.getTaskId());
+            viTaskDeviceBean.setViSurveyTask(viSurveyTaskBean);
+            viTaskDeviceBean.setStatus(2);
+            viTaskDeviceBean.setAction(2);
             list.add(viTaskDeviceBean);
         }
         viTaskDeviceMapper.insertBatch(list);
@@ -100,6 +111,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             ViTaskRepoBean viTaskRepoBean = new ViTaskRepoBean();
             viTaskRepoBean.setRepoId(Integer.parseInt(str));
             viTaskRepoBean.setTaskId(viSurveyTaskBean.getTaskId());
+            viTaskRepoBean.setViSurveyTask(viSurveyTaskBean);
             listRepo.add(viTaskRepoBean);
         }
         viTaskRepoMapper.insertBatch(listRepo);
@@ -112,7 +124,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         bkTaskSubmitRequest.setTaskId(viSurveyTaskBean.getTaskId());
         BKTaskMeta bkTaskMeta = new BKTaskMeta();
         bkTaskMeta.setBkid(bkrepoConfig.getBkid());
-        bkTaskMeta.setBkid(viSurveyTaskRequest.getSurveyName());
+        bkTaskMeta.setDesc(viSurveyTaskBean.getSurveyName());
         ArrayList<BKTaskCameraInfo> bkTaskCameraInfos = new ArrayList<>();
         for (String str : device) {
             BKTaskCameraInfo bkTaskCameraInfo = new BKTaskCameraInfo();
@@ -124,7 +136,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         bkTaskSubmitRequest.setMeta(bkTaskMeta);
         bkTaskSubmitRequestBaseRequest.setData(bkTaskSubmitRequest);
 
-        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskSubmitRequestBaseRequest);
+        BaseResponse baseResponse =
+                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(),
+                        bkTaskSubmitRequestBaseRequest);
 
         Object dataJson = baseResponse.getData();
         String errorCode = baseResponse.getCode();
@@ -134,11 +148,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         if (BizExceptionEnum.OK.getCode() != Integer.parseInt(errorCode)) {
             throw new RuntimeException("布控任务添加失败！");
         }
-        //对接天擎下发成功，则更改survey_status为1
-        viSurveyTaskBean.setSurveyStatus(1);
-        viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
 
-        TuSouTimeTask(viSurveyTaskBean.getId());
+        TuSouTimeTask(viSurveyTaskBean);
 
         return ResultVo.success();
     }
@@ -177,15 +188,32 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
         List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTask(null);
 
-        return ResultVo.success(PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize()));
+        return ResultVo.success(PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(),
+                viSurveyTaskVo.getSize()));
     }
 
-    private void TuSouTimeTask(Integer id){
-        ViSurveyTaskRequest viSurveyTaskRequest=new ViSurveyTaskRequest();
-        viSurveyTaskRequest.setId(id);
-        List<ViSurveyTaskBean> lists = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+    @Override
+    public ResultVo startViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+        //开始任务
+        if (1 == viSurveyTaskRequest.getEnable()) {
 
-        ViSurveyTaskBean viSurveyTaskBean=lists.get(0);
+        } else if (0 == viSurveyTaskRequest.getEnable()) {//停止任务
+
+        }
+        return ResultVo.success();
+    }
+
+    /**
+     * 布控定时任务
+     *
+     * @param id
+     */
+    private void TuSouTimeTask(ViSurveyTaskBean viSurveyTaskBean) {
+//        ViSurveyTaskRequest viSurveyTaskRequest = new ViSurveyTaskRequest();
+//        viSurveyTaskRequest.setId(id);
+//        List<ViSurveyTaskBean> lists = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+//
+//        ViSurveyTaskBean viSurveyTaskBean = lists.get(0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(viSurveyTaskBean.getBeginTime());
@@ -211,8 +239,13 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
     }
 
-    private boolean computing(){
-        boolean result=false;
+    /**
+     * 运力计算
+     *
+     * @return
+     */
+    private boolean computing() {
+        boolean result = false;
 
         return false;
     }

@@ -17,6 +17,8 @@ public class NormalConfig {
 
     public static String addrApiShipin;
 
+    public static String addrApiBk;
+
     public static String addrApiTusou;
 
     public static String bkrepoDataTaskTime;
@@ -45,6 +47,14 @@ public class NormalConfig {
 
     public static void setAddrApiShipin(String addrApiShipin) {
         NormalConfig.addrApiShipin = addrApiShipin;
+    }
+
+    public static String getAddrApiBk() {
+        return addrApiBk;
+    }
+
+    public static void setAddrApiBk(String addrApiBk) {
+        NormalConfig.addrApiBk = addrApiBk;
     }
 
     public static String getAddrApiTusou() {

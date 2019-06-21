@@ -9,6 +9,8 @@ import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKTaskDataTaskIdRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,8 @@ import java.util.List;
 @Configurable
 @EnableScheduling
 public class VideoStreamReStartTask {
+
+    private static Logger log = LoggerFactory.getLogger(VideoStreamReStartTask.class);
 
     @Resource
     BkrepoConfig bkrepoConfig;
@@ -39,21 +43,23 @@ public class VideoStreamReStartTask {
     public void VideoStreamReStart() {
         ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
         viTaskDeviceBean.setStatus(0);
-        List<ViTaskDeviceBean> list = viTaskDeviceMapper.getViTaskDeviceBeanByObject(viTaskDeviceBean);
+        viTaskDeviceBean.setAction(0);
+        List<ViTaskDeviceBean> list = viTaskDeviceMapper.getViTaskDeviceByObject(viTaskDeviceBean);
         for (ViTaskDeviceBean bean : list) {
-            if (0 == bean.getStatus()) {
+            if (0 == bean.getStatus() && 0 == bean.getAction()) {
                 BaseRequest<BKTaskDataTaskIdRequest> bkTaskDataTaskIdRequestBaseResponse = new BaseRequest<>();
                 BKTaskDataTaskIdRequest bkTaskDataTaskIdRequest = new BKTaskDataTaskIdRequest();
                 bkTaskDataTaskIdRequest.setTaskId(bean.getViSurveyTask().getTaskId());
                 bkTaskDataTaskIdRequestBaseResponse.setData(bkTaskDataTaskIdRequest);
-                BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(),
-                        bkTaskDataTaskIdRequestBaseResponse);
+                BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(), bkTaskDataTaskIdRequestBaseResponse);
                 String code = baseResponse.getCode();
                 //判断返回值code，若开启任务成功，则更改布控任务状态为1
                 if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+                    log.info("重启流成功");
                     //若成功，则状态改为开启
                     bean.setStatus(1);
-                }else{
+                } else {
+                    log.info("重启流失败");
                     bean.setStatus(0);
                 }
                 viTaskDeviceMapper.updateViTaskDevice(bean);

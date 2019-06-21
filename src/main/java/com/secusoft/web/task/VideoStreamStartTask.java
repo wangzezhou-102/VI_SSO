@@ -11,8 +11,9 @@ import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViTaskDeviceBean;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.shipinapi.model.StreamRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.TimerTask;
 
 /**
@@ -22,6 +23,8 @@ import java.util.TimerTask;
  * @since 2019/6/12 11:27
  */
 public class VideoStreamStartTask extends TimerTask {
+
+    private static Logger log = LoggerFactory.getLogger(VideoStreamStartTask.class);
 
     private ViSurveyTaskBean viSurveyTaskBean;
 
@@ -36,26 +39,26 @@ public class VideoStreamStartTask extends TimerTask {
     @Override
     public void run() {
         for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTaskBean.getViTaskDeviceList()) {
-            ViTaskDeviceBean bean = new ViTaskDeviceBean();
-            bean.setDeviceId(viTaskDeviceBean.getDeviceId());
-            bean.setStatus(1);
-            List<ViTaskDeviceBean> viTaskDeviceBeanList = viTaskDeviceMapper.getViTaskDeviceBeanByObject(bean);
             //判断设备是否已启用或者状态是否为1
-            if (viTaskDeviceBean.getStatus() != 1 && viTaskDeviceBeanList.size() == 0) {
+            if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
                 StreamRequest streamRequest = new StreamRequest();
                 streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
                 String requestStr = JSON.toJSONString(streamRequest);
-                String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
+                String responseStr =
+                        ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
 
                 JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
                 String code = jsonObject.getString("code");
                 String message = jsonObject.getString("message");
-                if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+                if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
+                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流成功");
                     viTaskDeviceBean.setStatus(1);
-                }else{
+                } else {
+                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败");
                     viTaskDeviceBean.setStatus(0);
                 }
+                viTaskDeviceBean.setAction(0);
                 viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
             }
         }

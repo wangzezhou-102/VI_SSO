@@ -29,12 +29,17 @@
          where id=#{id}
      </update>
 
-    <delete id="delViPrivateMember" parameterType="String">
+    <delete id="delViPrivateMember" parameterType="Integer">
         delete from vi_private_member
-         where object_id=#{objectId}
+         where id=#{id}
     </delete>
     
     <select id="getAllViPrivateMember" resultType="com.secusoft.web.model.ViPrivateMemberBean">
         select * from vi_private_member
+    </select>
+
+    <select id="getViPrivateMemberByObjectId" parameterType="String" resultType="com.secusoft.web.model.ViPrivateMemberBean">
+        select * from vi_private_member
+        where object_id=#{objectId}
     </select>
 </mapper>

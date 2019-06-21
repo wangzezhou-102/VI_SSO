@@ -46,5 +46,12 @@ public interface ViTaskDeviceMapper extends BaseMapper<ViTaskDeviceBean> {
      * @param viTaskDeviceBean
      * @return
      */
-    List<ViTaskDeviceBean> getViTaskDeviceBeanByObject(ViTaskDeviceBean viTaskDeviceBean);
+    List<ViTaskDeviceBean> getViTaskDeviceByObject(ViTaskDeviceBean viTaskDeviceBean);
+
+    /**
+     * 根据id获取对应的设备信息
+     * @param viTaskDeviceBean
+     * @return
+     */
+    List<ViTaskDeviceBean> getAllViTaskDevice(ViTaskDeviceBean viTaskDeviceBean);
 }

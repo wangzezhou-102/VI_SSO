@@ -14,4 +14,6 @@ public interface ViSurveyTaskService {
     ResultVo delViSurveyTask(Integer id);
 
     ResultVo getAllInformation(ViSurveyTaskVo viSurveyTaskVo);
+
+    ResultVo startViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest);
 }

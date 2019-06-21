@@ -9,6 +9,8 @@ import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKTaskDataTaskIdRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.TimerTask;
 
@@ -19,6 +21,7 @@ import java.util.TimerTask;
  * @since 2019/6/12 11:27
  */
 public class SurveyStartTask extends TimerTask {
+    private static Logger log = LoggerFactory.getLogger(SurveyStartTask.class);
 
     private ViSurveyTaskBean viSurveyTaskBean;
 
@@ -30,7 +33,7 @@ public class SurveyStartTask extends TimerTask {
 
     @Override
     public void run() {
-        if (0 == viSurveyTaskBean.getEnable()) {
+        if (2 == viSurveyTaskBean.getEnable()) {
             BaseRequest<BKTaskDataTaskIdRequest> bkTaskDataTaskIdRequestBaseResponse = new BaseRequest<>();
             BKTaskDataTaskIdRequest bkTaskDataTaskIdRequest = new BKTaskDataTaskIdRequest();
             bkTaskDataTaskIdRequest.setTaskId(viSurveyTaskBean.getTaskId());
@@ -38,11 +41,16 @@ public class SurveyStartTask extends TimerTask {
             BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(),
                     bkTaskDataTaskIdRequestBaseResponse);
             String code = baseResponse.getCode();
+            viSurveyTaskBean.setEnable(1);
             //判断返回值code，若开启任务成功，则更改布控任务状态为1
             if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
-                viSurveyTaskBean.setEnable(1);
-                viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+                log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务成功");
+                viSurveyTaskBean.setSurveyStatus(1);
+            }else{
+                log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务失败");
+                viSurveyTaskBean.setSurveyStatus(0);
             }
+            viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
         }
     }
 }

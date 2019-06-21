@@ -1,6 +1,5 @@
 package com.secusoft.web.task;
 
-import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.config.OdpsConfig;
 import com.secusoft.web.config.ServiceApiConfig;
@@ -9,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.text.ParseException;
 
 /**
@@ -19,9 +17,6 @@ import java.text.ParseException;
 @Configurable
 @EnableScheduling
 public class BkrepoDataTask {
-
-    @Resource
-    BkrepoConfig bkrepoConfig;
 
     /**
      * 烽火定时请求数据
@@ -46,9 +41,6 @@ public class BkrepoDataTask {
         System.out.println(OdpsConfig.getAccessId());
         System.out.println(NormalConfig.getAddrApiService());
         System.out.println(ServiceApiConfig.getPathBkmemberAdd());
-        System.out.println(bkrepoConfig.getMeta().getBkdesc());
-        System.out.println(bkrepoConfig.getBkid());
-        System.out.println(bkrepoConfig.getMeta().getOssInfo().getAccess_id());
 //        System.out.println(bkrepoConfig.getMeta().getAlgorithmName());
 //        System.out.println(bkrepoConfig.getMeta().getOssInfo().getAccess_id());
 //        System.out.println(normalConfig.getAddrApiService());

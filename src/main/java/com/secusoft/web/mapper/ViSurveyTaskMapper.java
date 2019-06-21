@@ -38,12 +38,12 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      */
     Integer getEnabledViSurveyTaskCount();
 
-//    /**
-//     *
-//     * @param viSurveyTaskBean
-//     * @return
-//     */
-//    List<ViSurveyTaskBean> getTaskStartOrStopFailedList(ViSurveyTaskBean viSurveyTaskBean);
+    /**
+     * 获取启停中的任务列表
+     * @param viSurveyTaskBean
+     * @return
+     */
+    List<ViSurveyTaskBean> getTaskStartOrStopFailedList(ViSurveyTaskBean viSurveyTaskBean);
 
     /**
      * 统计当前时间当前账号权限下处于正在执行状态下的布控数量

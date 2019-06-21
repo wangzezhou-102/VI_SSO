@@ -25,8 +25,7 @@ public class ViSurveyTaskController {
         try {
             resultVo = viSurveyTaskService.insertViSurveyTask(viSurveyTaskRequest);
         } catch (Exception ex) {
-            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(),
-                    BizExceptionEnum.TASK_ADD_FAIL.getMessage());
+            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(), BizExceptionEnum.TASK_ADD_FAIL.getMessage());
         }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
@@ -50,7 +49,7 @@ public class ViSurveyTaskController {
     }
 
     @RequestMapping("/startvisurveytask")
-    public ResponseEntity<ResultVo> startViSurveyTask(@RequestBody ViSurveyTaskVo viSurveyTaskVo) {
-        return new ResponseEntity<ResultVo>(viSurveyTaskService.getAllInformation(viSurveyTaskVo), HttpStatus.OK);
+    public ResponseEntity<ResultVo> startViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest) {
+        return new ResponseEntity<ResultVo>(viSurveyTaskService.startViSurveyTask(viSurveyTaskRequest), HttpStatus.OK);
     }
 }

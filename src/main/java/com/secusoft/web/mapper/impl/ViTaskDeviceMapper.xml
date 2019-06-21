@@ -15,6 +15,7 @@
         <result column="task_id" property="taskId"/>
         <result column="device_id" property="deviceId"/>
         <result column="status" property="status"/>
+        <result column="action" property="action"/>
 
         <!-- 配置映射的关联用户信息 -->
 
@@ -26,7 +27,7 @@
                 column:指定唯一标识用户信息的列
                 property:映射到user的那个属性
             -->
-            <id column="id" property="id" jdbcType="INTEGER"/>
+            <id column="vi_survey_task_id" property="id" jdbcType="INTEGER"/>
             <result column="task_id" property="taskId" jdbcType="VARCHAR"/>
             <result column="survey_name" property="surveyName" jdbcType="VARCHAR"/>
             <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP"/>
@@ -73,7 +74,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
 
-    <insert id="insertBatch" parameterType="java.util.List">
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO vi_task_device (task_id,device_id) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.taskId},
@@ -81,11 +82,17 @@
         </foreach>
     </insert>
 
-    <select id="getAllViTaskDevice" resultMap="ViTaskDeviceResultMap">
-        select vtd.*,vst.survey_name,vst.begin_time,vst.end_time,vst.survey_type,vst.survey_status,vst.area_type,vst.`enable`,vst.create_time,vst.modify_time from
-        vi_task_device vtd,
-        vi_survey_task vst
-        where vtd.task_id=vst.task_id
+    <select id="getAllViTaskDevice" parameterType="com.secusoft.web.model.ViTaskDeviceBean" resultMap="ViTaskDeviceResultMap">
+        select vtd.*,vst.id as vi_survey_task_id,vst.survey_name,vst.begin_time,vst.end_time,vst.survey_type,vst.survey_status,vst.area_type,vst.`enable`,vst.create_time,vst.modify_time from
+        vi_task_device vtd
+        left join vi_survey_task vst
+        on vtd.task_id=vst.task_id
+        <where>
+            <if test="id!=null">
+                and vtd.id=#{id}
+            </if>
+
+        </where>
     </select>
 
     <select id="taskDeviceCount" resultType="Integer">
@@ -95,8 +102,11 @@
          where vst.enable=1)a
     </select>
 
-    <select id="getViTaskDeviceBeanByObject" parameterType="com.secusoft.web.model.ViTaskDeviceBean" resultMap="ViTaskDeviceResultMap">
-        select * vi_task_device
+    <select id="getViTaskDeviceByObject" parameterType="com.secusoft.web.model.ViTaskDeviceBean" resultMap="ViTaskDeviceResultMap">
+        select vtd.*,vst.id as vi_survey_task_id,vst.survey_name,vst.begin_time,vst.end_time,vst.survey_type,vst.survey_status,vst.area_type,vst.`enable`,vst.create_time,vst.modify_time from
+        vi_task_device vtd
+        left join vi_survey_task vst
+        on vtd.task_id=vst.task_id
         <where>
             <if test="deviceId !=null">
                 AND device_id=#{deviceId}
@@ -107,6 +117,9 @@
             <if test="status !=null">
                 AND status=#{status}
             </if>
+            <if test="action !=null">
+                AND action=#{action}
+            </if>
         </where>
     </select>
 
@@ -115,6 +128,9 @@
         <set>
             <if test="status != null">
                 status=#{status},
+            </if>
+            <if test="action != null">
+                action=#{action},
             </if>
         </set>
         where id=#{id}

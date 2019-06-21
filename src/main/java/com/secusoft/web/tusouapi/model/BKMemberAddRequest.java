@@ -16,13 +16,13 @@ public class BKMemberAddRequest{
      */
     private String objectId;
     /**
-     * 图像内容; base64 编码;与 imageUrls ⼆选⼀;优先级:imageUrls>contents
+     * 图像内容; base64 编码;与 ossUrls ⼆选⼀;优先级:ossUrls>contents
      */
     private String contents;
     /**
-     * 图像内容; base64 编码;与 imageUrls ⼆选⼀;优先级:imageUrls>contents
+     * 图像内容; base64 编码;与 ossUrls ⼆选⼀;优先级:ossUrls>contents
      */
-    private String imageUrls;
+    private String ossUrl;
     /**
      * 图像特征信息
      */
@@ -74,18 +74,12 @@ public class BKMemberAddRequest{
         this.contents = contents;
     }
 
-    /**
-     * @return the imageUrls
-     */
-    public String getImageUrls() {
-        return imageUrls;
+    public String getOssUrl() {
+        return ossUrl;
     }
 
-    /**
-     * @param imageUrls the imageUrls to set
-     */
-    public void setImageUrls(String imageUrls) {
-        this.imageUrls = imageUrls;
+    public void setOssUrl(String ossUrl) {
+        this.ossUrl = ossUrl;
     }
 
     /**

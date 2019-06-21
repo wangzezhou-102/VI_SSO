@@ -19,8 +19,8 @@ public class ViTaskDeviceServiceImpl implements ViTaskDeviceService {
 
 
     @Override
-    public ViTaskDeviceBean getViTaskDeviceBeanByObject(ViTaskDeviceBean viTaskDeviceBean) {
-        viTaskDeviceMapper.getViTaskDeviceBeanByObject(viTaskDeviceBean);
+    public ViTaskDeviceBean getViTaskDeviceByObject(ViTaskDeviceBean viTaskDeviceBean) {
+        viTaskDeviceMapper.getViTaskDeviceByObject(viTaskDeviceBean);
         return null;
     }
 }

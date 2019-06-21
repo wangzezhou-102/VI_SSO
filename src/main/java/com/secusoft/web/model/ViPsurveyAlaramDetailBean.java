@@ -45,6 +45,8 @@ public class ViPsurveyAlaramDetailBean {
 
     private Date gmtModified;
 
+    private ViPsurveyAlaramBean viPsurveyAlaramBean;
+
     public Integer getId() {
         return id;
     }
@@ -195,5 +197,13 @@ public class ViPsurveyAlaramDetailBean {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public ViPsurveyAlaramBean getViPsurveyAlaramBean() {
+        return viPsurveyAlaramBean;
+    }
+
+    public void setViPsurveyAlaramBean(ViPsurveyAlaramBean viPsurveyAlaramBean) {
+        this.viPsurveyAlaramBean = viPsurveyAlaramBean;
     }
 }

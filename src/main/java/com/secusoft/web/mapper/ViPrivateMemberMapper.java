@@ -27,11 +27,18 @@ public interface ViPrivateMemberMapper extends BaseMapper<ViPrivateMemberBean> {
     /**
      * 删除一条自定义库信息
      */
-    void delViPrivateMember(@Param("objectId") String objectId);
+    void delViPrivateMember(@Param("id") Integer id);
 
     /**
      * 获取所有自定义库信息
      * @return
      */
     List<ViPrivateMemberBean> getAllViPrivateMember();
+
+    /**
+     * 根据ObjectId获取ViPrivateMemberBean
+     * @param objectId
+     * @return
+     */
+    ViPrivateMemberBean getViPrivateMemberByObjectId(@Param("objectId") String objectId);
 }

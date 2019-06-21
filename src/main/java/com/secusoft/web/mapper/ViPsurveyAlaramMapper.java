@@ -13,4 +13,5 @@ public interface ViPsurveyAlaramMapper {
      * @param viPsurveyAlaramBean
      */
     void insertViPsurveyAlaram(ViPsurveyAlaramBean viPsurveyAlaramBean);
+
 }

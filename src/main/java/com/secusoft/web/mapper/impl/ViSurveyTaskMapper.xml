@@ -11,19 +11,19 @@
             property:订单信息的唯一标识列所映射到orders中的那个属性(假如：数据库中orders表中的主键为orders_id,而实体属性名称为ordersId,
                 则这个配置应为<id column="orders_id" property="ordersId"/>,类似hibernate实体映射文件配置)。
         -->
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="task_id" property="taskId" jdbcType="VARCHAR" />
-        <result column="survey_name" property="surveyName" jdbcType="VARCHAR" />
-        <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-        <result column="survey_type" property="surveyType" jdbcType="TINYINT" />
-        <result column="survey_status" property="surveyStatus" jdbcType="BIT" />
-        <result column="survey_stream_status" property="surveyStreamStatus" jdbcType="BIT" />
-        <result column="area_type" property="areaType" jdbcType="BIT" />
-        <result column="topic" property="topic" jdbcType="VARCHAR" />
-        <result column="enable" property="enable" jdbcType="BIT" />
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="task_id" property="taskId" jdbcType="VARCHAR"/>
+        <result column="survey_name" property="surveyName" jdbcType="VARCHAR"/>
+        <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="survey_type" property="surveyType" jdbcType="TINYINT"/>
+        <result column="survey_status" property="surveyStatus" jdbcType="BIT"/>
+        <result column="survey_stream_status" property="surveyStreamStatus" jdbcType="BIT"/>
+        <result column="area_type" property="areaType" jdbcType="BIT"/>
+        <result column="topic" property="topic" jdbcType="VARCHAR"/>
+        <result column="enable" property="enable" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <!-- 配置映射的关联用户信息 -->
 
         <!--association:用于映射关联查询单个对象的信息
@@ -53,64 +53,69 @@
     </resultMap>
 
 
-    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id"
+            useGeneratedKeys="true">
         <!-- selectKey 标签表示子查询中主键的提取问题
                      keyColumn表示查询语句返回结果的列名
                      keyProperty表示将属性设置到某个列中 此处为empNo 中
                      order="BEFORE表示在插入语句之前执行
                      resultType="int"表示返回值得类型为int类型
                  -->
-      INSERT INTO vi_survey_task(task_id,topic,survey_name,begin_time,end_time,survey_type,area_type)
+        INSERT INTO vi_survey_task(task_id,topic,survey_name,begin_time,end_time,survey_type,area_type)
         VALUES(#{taskId},#{topic},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType})
     </insert>
 
-     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
-         update vi_survey_task
-         <set>
-             <if test="surveyName != null">
-                 survey_name=#{surveyName},
-             </if>
-             <if test="beginTime != null">
-                 begin_time=#{beginTime},
-             </if>
-             <if test="endTime != null">
-                 end_time=#{endTime},
-             </if>
-             <if test="surveyStatus != null">
-                 survey_status=#{surveyStatus},
-             </if>
-             <if test="topic != null">
-                 topic=#{topic},
-             </if>
-             <if test="taskId != null">
-                 task_id=#{taskId},
-             </if>
-             <if test="ModifyTime != null">
-                 modify_time=#{ModifyTime},
-             </if>
-             <if test="enable != null">
-                 enable=#{enable},
-             </if>
-         </set>
-         where id=#{id}
-     </update>
+    <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
+        update vi_survey_task
+        <set>
+            <if test="surveyName != null">
+                survey_name=#{surveyName},
+            </if>
+            <if test="beginTime != null">
+                begin_time=#{beginTime},
+            </if>
+            <if test="endTime != null">
+                end_time=#{endTime},
+            </if>
+            <if test="surveyStatus != null">
+                survey_status=#{surveyStatus},
+            </if>
+            <if test="topic != null">
+                topic=#{topic},
+            </if>
+            <if test="taskId != null">
+                task_id=#{taskId},
+            </if>
+            <if test="ModifyTime != null">
+                modify_time=#{ModifyTime},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 
     <delete id="delViSurveyTask" parameterType="java.lang.Integer">
         delete from vi_survey_task
          where id=#{id}
     </delete>
-    
-    <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
-         select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
-         from vi_survey_task vst
-         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
+
+    <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest"
+            resultMap="viSurveyTaskResultMap">
+        select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
+        from vi_survey_task vst
+        LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
         <where>
             <if test="surveyName!=null">
-            AND vst.survey_name=#{surveyName}
+                AND vst.survey_name=#{surveyName}
             </if>
             <if test="id!=null">
                 AND vst.id=#{id}
+            </if>
+            <if test="taskId!=null">
+                AND vst.task_id=#{taskId}
             </if>
         </where>
     </select>
@@ -121,30 +126,38 @@
         where vst.`enable`=1
     </select>
 
-    <!--<select id="getTaskStartOrStopFailedList" parameterType="com.secusoft.web.model.ViSurveyTaskBean" resultMap="com.secusoft.web.model.ViSurveyTaskBean">-->
-        <!--select * FROM  vi_survey_task-->
-        <!--where begin_time &lt;= #{beginTime}-->
-        <!--<where>-->
-            <!--<if test="beginTime!=null">-->
-                <!--AND begin_time &lt;= #{beginTime}-->
-            <!--</if>-->
-            <!--<if test="endTime!=null">-->
-                <!--AND end_time &gt;= #{endTime}-->
-            <!--</if>-->
-        <!--</where>-->
-    <!--</select>-->
+    <select id="getTaskStartOrStopFailedList" parameterType="com.secusoft.web.model.ViSurveyTaskBean"
+            resultType="com.secusoft.web.model.ViSurveyTaskBean">
+        select * FROM vi_survey_task
+        where begin_time &lt;= #{beginTime}
+        <where>
+            <if test="beginTime!=null">
+                AND begin_time &lt;= #{beginTime}
+            </if>
+            <if test="endTime!=null">
+                AND end_time &gt;= #{endTime}
+            </if>
+            <if test="surveyStatus!=null">
+                AND survey_status = #{surveyStatus}
+            </if>
+            <if test="enable!=null">
+                AND enable = #{enable}
+            </if>
+        </where>
+    </select>
 
     <select id="selectExecutingSurveyTaskNumber" resultType="java.lang.Integer">
-       select count(id)
-       from vi_survey_task
-       <where>
-           enable = 1
-           <if test="userIds!=null">
-               and user_id in
-               <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
-                   #{userId}
-               </foreach>
-           </if>
-       </where>
+        select count(id)
+        from vi_survey_task
+        <where>
+            enable = 1
+            <if test="userIds!=null">
+                and user_id in
+                <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+        </where>
     </select>
+
 </mapper>
