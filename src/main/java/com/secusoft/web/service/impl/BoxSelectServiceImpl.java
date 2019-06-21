@@ -108,7 +108,7 @@ public class BoxSelectServiceImpl implements BoxSelectService {
                 }
             }
         }
-        return ResultVo.success(cameras);
+        return ResultVo.success(deviceBeans,Long.valueOf(deviceBeans.size()));
     }
 
 

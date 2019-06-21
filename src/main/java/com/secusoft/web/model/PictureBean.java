@@ -21,14 +21,21 @@ public class PictureBean implements Serializable {
      * 相似程度
      */
     private String score;
-
+    /**
+     * 本地原图地址
+     */
+    private String localOriImageUrl;
+    /**
+     * 本地小图地址
+     */
+    private String localCropImageUrl;
     private DeviceBean deviceBean;
 
     public PictureBean() {
         super();
     }
 
-    public PictureBean(String id, String pictureId, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, DeviceBean deviceBean) {
+    public PictureBean(String id, String pictureId, String origImageUrl, String cropImageUrl, String oriImageSignedUrl, String cropImageSignedUrl, Long pictureTime, String deviceId, String folderId, Integer picType, String score, String localOriImageUrl, String localCropImageUrl, DeviceBean deviceBean) {
         this.id = id;
         this.pictureId = pictureId;
         this.origImageUrl = origImageUrl;
@@ -40,6 +47,8 @@ public class PictureBean implements Serializable {
         this.folderId = folderId;
         this.picType = picType;
         this.score = score;
+        this.localOriImageUrl = localOriImageUrl;
+        this.localCropImageUrl = localCropImageUrl;
         this.deviceBean = deviceBean;
     }
 
@@ -137,6 +146,22 @@ public class PictureBean implements Serializable {
 
     public void setDeviceBean(DeviceBean deviceBean) {
         this.deviceBean = deviceBean;
+    }
+
+    public String getLocalOriImageUrl() {
+        return localOriImageUrl;
+    }
+
+    public void setLocalOriImageUrl(String localOriImageUrl) {
+        this.localOriImageUrl = localOriImageUrl;
+    }
+
+    public String getLocalCropImageUrl() {
+        return localCropImageUrl;
+    }
+
+    public void setLocalCropImageUrl(String localCropImageUrl) {
+        this.localCropImageUrl = localCropImageUrl;
     }
 
     @Override

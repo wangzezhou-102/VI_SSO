@@ -25,7 +25,7 @@ public class TotalInfoController {
      * 信息统计接口详情
      * @return
      */
-    @RequestMapping("totalInfo")
+    @RequestMapping("/totalInfo")
     public ResponseEntity<ResultVo> readFolder(){
         ResultVo resultVo = totalInfoService.getTotalInfo();
         return new ResponseEntity<>(resultVo, HttpStatus.OK);

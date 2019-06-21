@@ -41,9 +41,13 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
         SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
         });
-        //如果返回的Data为空，就返回阿里的Msg
-        if(searchResponse == null || searchResponse.getData()==null){
+        //如果返回的状态码为failed，就返回阿里的Msg
+        if(searchResponse == null || searchResponse.getErrorCode().equals("FAILED")){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
+        }
+        //如果查询结果为空并且请求成功
+        if(searchResponse.getData()==null&&searchResponse.getErrorCode().equals("SUCCESS")){
+            return  ResultVo.success();
         }
         List<SearchData> olddata = searchResponse.getData();
         //获取全部的设备列表 与data里进行映射
@@ -57,9 +61,26 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 }
             });
         });
-        //如果返回的属性里没有相似度 就直接返回 不排序
+        //如果返回的属性里没有相似度 就按时间戳排序
         if(olddata.get(0).getScore()==null){
-            return ResultVo.success(olddata,searchResponse.getTotalCount());
+            // 时间戳排序
+            if (olddata !=null && olddata.size()>1){
+                Collections.sort(olddata , new Comparator<SearchData>() {
+                    @Override
+                    public int compare(SearchData o1, SearchData o2) {
+                        Long o1Value = o1.getSource().getTimestamp();
+                        Long o2Value = o2.getSource().getTimestamp();
+                        if (o1Value<o2Value){
+                            return 1;
+                        }else{
+                            return -1;
+                        }
+                    }
+                });
+            }
+            HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+            stringSearchDataHashMap.put("timestamp",olddata);
+            return ResultVo.success(stringSearchDataHashMap,searchResponse.getTotalCount());
         }
         //相似度排序
         Collections.sort(olddata , new Comparator<SearchData>() {

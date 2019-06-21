@@ -71,4 +71,10 @@ Content-Type: application/json
   "status": 0
 }
 
+###总和信息接口
+POST http://localhost:8006/totalInfo
+Content-Type: application/json
+
+{}
+
 ###
