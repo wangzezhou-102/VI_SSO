@@ -41,13 +41,14 @@ public class SurveyStartTask extends TimerTask {
             BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(),
                     bkTaskDataTaskIdRequestBaseResponse);
             String code = baseResponse.getCode();
+            String message = baseResponse.getMessage();
             viSurveyTaskBean.setEnable(1);
             //判断返回值code，若开启任务成功，则更改布控任务状态为1
             if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
                 log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务成功");
                 viSurveyTaskBean.setSurveyStatus(1);
             }else{
-                log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务失败");
+                log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务失败，原因：" + message);
                 viSurveyTaskBean.setSurveyStatus(0);
             }
             viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);

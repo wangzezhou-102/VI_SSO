@@ -68,15 +68,13 @@
         bkid, alarm_type, alarm_type_name,
         feature, oss_url, similarity,
         object_id, name, picid,
-        time, status, survey_status,
-        alarm_status, ai_status) values
+        time, status) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.alarmId}, #{item.taskId},
             #{item.bkid}, #{item.alarmType}, #{item.alarmTypeName},
             #{item.feature}, #{item.ossUrl}, #{item.similarity},
             #{item.objectId}, #{item.name}, #{item.picid},
-            #{item.time}, #{item.status}, #{item.surveyStatus},
-            #{item.alarmStatus}, #{item.aiStatus})
+            #{item.time}, #{item.status})
         </foreach>
     </insert>
 

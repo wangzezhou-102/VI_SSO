@@ -1,5 +1,6 @@
 package com.secusoft.web.task;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.ServiceApiConfig;
@@ -9,12 +10,15 @@ import com.secusoft.web.mapper.ViPsurveyAlaramMapper;
 import com.secusoft.web.model.ViPsurveyAlaramBean;
 import com.secusoft.web.model.ViPsurveyAlaramDetailBean;
 import com.secusoft.web.serviceapi.ServiceApiClient;
+import com.secusoft.web.websocket.WebSock;
+import com.secusoft.web.websocket.WebSocketMessageVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,8 +37,12 @@ public class ViPsurveyAlaramTask {
     @Resource
     ViPsurveyAlaramDetailMapper viPsurveyAlaramDetailMapper;
 
-    @Scheduled(cron = "0 0 */1 * * ?")
-    public void ViPsurveyAlaram(){
+    @Autowired
+    WebSock webSock;
+
+    //@Scheduled(cron = "0 0 */1 * * ?")
+    //@Scheduled(cron="0/20 * * * * ?")
+    public void ViPsurveyAlaram() throws IOException {
 
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
 
@@ -57,8 +65,18 @@ public class ViPsurveyAlaramTask {
             for (ViPsurveyAlaramDetailBean bean: detailBeanList) {
                 bean.setAlarmId(viPsurveyAlaramBean.getId());
                 bean.setTaskId(taskId);
+                bean.setAlarmId(viPsurveyAlaramBean.getId());
+                bean.setAlarmType("312312");
+                bean.setViPsurveyAlaramBean(viPsurveyAlaramBean);
             }
+            viPsurveyAlaramDetailMapper.insertBatch(detailBeanList);
 
+            if(detailBeanList.size()>0){
+                WebSocketMessageVO webSocketMessageVO=new WebSocketMessageVO();
+                webSocketMessageVO.setData(detailBeanList);
+
+                webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
+            }
         }
     }
 }

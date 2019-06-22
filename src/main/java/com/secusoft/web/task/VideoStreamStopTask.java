@@ -66,12 +66,11 @@ public class VideoStreamStopTask extends TimerTask {
                 JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
                 String code = jsonObject.getString("code");
                 String message = jsonObject.getString("message");
-                if (BizExceptionEnum.OK.getCode() == Integer.parseInt("1001010")) {
-
+                if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
                     log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流成功");
                     viTaskDeviceBean.setStatus(1);
                 } else {
-                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流失败");
+                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流失败，原因："+message);
                     viTaskDeviceBean.setStatus(0);
                 }
 

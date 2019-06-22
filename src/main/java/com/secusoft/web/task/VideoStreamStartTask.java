@@ -45,9 +45,7 @@ public class VideoStreamStartTask extends TimerTask {
                 streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
                 String requestStr = JSON.toJSONString(streamRequest);
-                String responseStr =
-                        ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
-
+                String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
                 JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
                 String code = jsonObject.getString("code");
                 String message = jsonObject.getString("message");
@@ -55,7 +53,7 @@ public class VideoStreamStartTask extends TimerTask {
                     log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流成功");
                     viTaskDeviceBean.setStatus(1);
                 } else {
-                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败");
+                    log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败，原因："+message);
                     viTaskDeviceBean.setStatus(0);
                 }
                 viTaskDeviceBean.setAction(0);
