@@ -37,9 +37,22 @@
         <ehcache.core.version>2.6.11</ehcache.core.version>
         <mysql-connector-java.version>5.1.38</mysql-connector-java.version>
         <jwt.version>0.7.0</jwt.version>
+        <swagger.version>2.7.0</swagger.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
