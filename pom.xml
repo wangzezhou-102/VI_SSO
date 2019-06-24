@@ -40,8 +40,10 @@
     </properties>
 
     <dependencies>
-
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
         <!--spring boot依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

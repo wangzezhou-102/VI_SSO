@@ -3,14 +3,12 @@ package com.secusoft.web.service.impl;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
-import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViSurveyTaskMapper;
 import com.secusoft.web.mapper.ViTaskDeviceMapper;
 import com.secusoft.web.mapper.ViTaskRepoMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
-import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.task.SurveyStartTask;
 import com.secusoft.web.task.SurveyStopTask;
@@ -136,16 +134,18 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         bkTaskSubmitRequest.setMeta(bkTaskMeta);
         bkTaskSubmitRequestBaseRequest.setData(bkTaskSubmitRequest);
 
-        BaseResponse baseResponse =
-                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(),
-                        bkTaskSubmitRequestBaseRequest);
+//        BaseResponse baseResponse =
+//                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(),
+//                        bkTaskSubmitRequestBaseRequest);
 
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         Object dataJson = baseResponse.getData();
         String errorCode = baseResponse.getCode();
         String errorMsg = baseResponse.getMessage();
 
         //判断布控任务添加是否成功
-        if (BizExceptionEnum.OK.getCode() != Integer.parseInt(errorCode)) {
+        if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
             throw new RuntimeException("布控任务添加失败！");
         }
 
@@ -206,7 +206,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     /**
      * 布控定时任务
      *
-     * @param id
+     * @param viSurveyTaskBean
      */
     private void TuSouTimeTask(ViSurveyTaskBean viSurveyTaskBean) {
 //        ViSurveyTaskRequest viSurveyTaskRequest = new ViSurveyTaskRequest();

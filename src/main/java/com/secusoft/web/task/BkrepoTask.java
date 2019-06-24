@@ -97,7 +97,7 @@ public class BkrepoTask implements ApplicationRunner {
                 System.out.println("布控库创建成功");
             }
         } else {
-            System.out.println(message);
+            System.out.println("布控库已创建");
         }
     }
 }

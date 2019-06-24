@@ -5,7 +5,6 @@ import com.secusoft.web.config.OdpsConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -26,7 +25,7 @@ public class BkrepoDataTask {
      */
     //0 0 */1 * * ? 每小时执行一次
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0 0 */1 * * ?")//0 0 */1 * * ?
+    //@Scheduled(cron = "0 0 */1 * * ?")//0 0 */1 * * ?
     public void BkrepoData() throws ParseException, InterruptedException {
 //        String[] bkrepoTable = bkrepoTable.split(",");
 //        ViRepoBean viRepoBean=null;
