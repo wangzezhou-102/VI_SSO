@@ -45,4 +45,5 @@ public interface TuSouBKMemberService{
      * 获取当前⽬标库的布控⽬标
      */
     BaseResponse<JSONArray> bkmemberList(BaseRequest<BKMemberListRequest> request);
+
 }

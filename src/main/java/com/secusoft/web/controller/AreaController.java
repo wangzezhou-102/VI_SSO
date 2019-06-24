@@ -85,4 +85,5 @@ public class AreaController {
         ResultVo resultVo = areaService.readArea(areaBean);
         return new ResponseEntity<ResultVo>(resultVo,HttpStatus.OK);
     }
+
 }

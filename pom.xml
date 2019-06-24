@@ -236,15 +236,12 @@
           <artifactId>pagehelper-spring-boot-starter</artifactId>
           <version>1.2.5</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-
 
     <build>
     	<finalName>vi_web</finalName>
