@@ -45,6 +45,7 @@
 
     <select id="selectAllFolder" resultType="com.secusoft.web.model.FolderBean">
         select id,folder_name ,status from vi_folder
+        ORDER BY gmt_create
     </select>
     <select id="selectOneFolder" resultType="com.secusoft.web.model.FolderBean">
         select id,folder_name ,status from vi_folder

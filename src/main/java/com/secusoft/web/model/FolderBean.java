@@ -1,5 +1,7 @@
 package com.secusoft.web.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class FolderBean extends Page  {
     private static final long serialVersionUID = 1L;
 
     private String id;
+    @ApiModelProperty(value="文件夹名称",notes = "文件夹名称")
     private String folderName;
     //文件夹状态 ：0未结案  1结案
     private Integer status;
