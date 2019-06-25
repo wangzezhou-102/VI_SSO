@@ -1003,6 +1003,8 @@ public class TestController<psvm> extends BaseController {
             deviceBeans.forEach(deviceBean -> {
                 if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())) {
                     searchData.getSource().setDeviceBean(deviceBean);
+                }else{
+                    searchData.getSource().setDeviceBean(new DeviceBean());
                 }
             });
         });

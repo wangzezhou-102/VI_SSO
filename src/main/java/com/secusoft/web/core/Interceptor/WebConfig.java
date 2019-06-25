@@ -18,7 +18,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //添加拦截规则
-        registry.addInterceptor(interceptor).addPathPatterns("/tusou_search_sort")
+        registry.addInterceptor(interceptor).addPathPatterns("/tusou_search_sort","/testsearch")
         .excludePathPatterns("/test/no");
     }
 }

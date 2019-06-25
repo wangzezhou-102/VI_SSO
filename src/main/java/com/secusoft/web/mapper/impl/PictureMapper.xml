@@ -108,7 +108,7 @@
 
     <!-- 通过Picture的id获得对应数据库中表的数据对象-->
     <select id="selectPictureById" parameterType="java.lang.String" resultMap="result_Picture_Map">
-        SELECT p.id,p.picture_id,p.orig_image_url,p.crop_image_url,p.ori_image_signed_url,p.crop_image_signed_url,p.picture_time,folder_id,p.pic_type,score,d.id as did,d.device_id,d.parent_id,device_name,type,ip,`port`,longitude,latitude
+        SELECT p.id,p.picture_id,p.orig_image_url,p.crop_image_url,p.ori_image_signed_url,p.crop_image_signed_url,p.picture_time,folder_id,p.pic_type,score,d.id as did,d.device_id,d.parent_id,device_name,type,ip,`port`,longitude,latitude,local_ori_image_url,local_crop_image_url
         FROM vi_picture p LEFT JOIN vi_device d on p.device_id = d.device_id
         where p.id = #{id}
     </select>
