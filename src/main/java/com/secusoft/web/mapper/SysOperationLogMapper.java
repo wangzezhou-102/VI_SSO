@@ -34,4 +34,5 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
 
     Integer selectUseNumberByUserIds(@Param("userIds")List<Integer> userIds);
 
+    List<SysOperationLog> getList();
 }

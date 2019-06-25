@@ -58,7 +58,7 @@ public class SurveyReStopTask {
                 BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStop(), bkTaskDataTaskIdRequestBaseResponse);
                 String code = baseResponse.getCode();
                 //判断返回值code，若关闭任务成功，则更改布控任务状态为1
-                if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+                if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) ) {
                     log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，重结束任务成功");
                     viSurveyTaskBean.setSurveyStatus(1);
                 }else{

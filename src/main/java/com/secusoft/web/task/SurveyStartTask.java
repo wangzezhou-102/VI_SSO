@@ -38,13 +38,13 @@ public class SurveyStartTask extends TimerTask {
             BKTaskDataTaskIdRequest bkTaskDataTaskIdRequest = new BKTaskDataTaskIdRequest();
             bkTaskDataTaskIdRequest.setTaskId(viSurveyTaskBean.getTaskId());
             bkTaskDataTaskIdRequestBaseResponse.setData(bkTaskDataTaskIdRequest);
-            BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(),
-                    bkTaskDataTaskIdRequestBaseResponse);
+            BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(),bkTaskDataTaskIdRequestBaseResponse);
+
             String code = baseResponse.getCode();
             String message = baseResponse.getMessage();
             viSurveyTaskBean.setEnable(1);
             //判断返回值code，若开启任务成功，则更改布控任务状态为1
-            if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+            if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) ) {
                 log.info("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务成功");
                 viSurveyTaskBean.setSurveyStatus(1);
             }else{
@@ -52,6 +52,9 @@ public class SurveyStartTask extends TimerTask {
                 viSurveyTaskBean.setSurveyStatus(0);
             }
             viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+            if (0 == viSurveyTaskBean.getSurveyStatus()) {
+                throw new RuntimeException("任务号：" + viSurveyTaskBean.getTaskId() + "，开启任务失败，原因：" + message);
+            }
         }
     }
 }
