@@ -1,7 +1,7 @@
 package com.secusoft.web.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;

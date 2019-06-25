@@ -54,7 +54,7 @@ public class VideoStreamReStartTask {
                 BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStart(), bkTaskDataTaskIdRequestBaseResponse);
                 String code = baseResponse.getCode();
                 //判断返回值code，若开启任务成功，则更改布控任务状态为1
-                if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+                if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) ) {
                     log.info("重启流成功");
                     //若成功，则状态改为开启
                     bean.setStatus(1);

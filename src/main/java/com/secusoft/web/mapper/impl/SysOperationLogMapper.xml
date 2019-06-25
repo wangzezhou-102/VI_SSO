@@ -77,6 +77,24 @@
                 </foreach>
         </where>
     </select>
+
+    <select id="getList" resultType="com.secusoft.web.model.SysOperationLog">
+        select sys_operation_log.id as id
+        ,sys_operation_log.type as type
+        ,sys_operation_log.title as title
+        ,sys_operation_log.remote_addr as remote_addr
+        ,sys_operation_log.request_uri as request_uri
+        ,sys_operation_log.method as method
+        ,sys_operation_log.param as param
+        ,sys_operation_log.result as result
+        ,sys_operation_log.exception as exception
+        ,sys_operation_log.user_id as user_id
+        ,sys_operation_log.operate_date as operate_date
+        ,sys_operation_log.timeout as timeout
+        from
+        sys_operation_log
+        ORDER BY operate_date
+    </select>
 </mapper>
 
 

@@ -47,6 +47,7 @@ public class TestController<psvm> extends BaseController {
     @Resource
     private ViPsurveyAlaramDetailMapper viPsurveyAlaramDetailMapper;
 
+
     @RequestMapping("/testalaram")
     public Object testAlaram() {
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");

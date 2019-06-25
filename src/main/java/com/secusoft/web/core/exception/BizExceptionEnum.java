@@ -54,11 +54,15 @@ public enum BizExceptionEnum {
 	 * @param code
 	 * @param message
 	 */
-	TASK_DATE_WRONG(701,"添加失败，开始时间不能大于结束时间"),
-	TASK_DATE_NULL(702,"添加失败，开始时间或结束时间不能为空"),
-	TASK_NANE_NULL(703,"添加失败，布控任务名称不能为空"),
-	TASK_NANE_REPEATED(703,"添加失败，该名称已存在，请输入不存在的名称"),
+	TASK_DATE_WRONG(701,"开始时间不能大于结束时间"),
+	TASK_DATE_NULL(702,"开始时间或结束时间不能为空"),
+	TASK_NANE_NULL(703,"布控任务名称不能为空"),
+	TASK_NANE_REPEATED(703,"该名称已存在，请输入不存在的名称"),
 	TASK_ADD_FAIL(704,"添加布控任务失败"),
+	TASK_ID_NULL(705,"布控任务id为null或0"),
+	TASK_START_FAIL(706,"开始布控任务失败"),
+	TASK_STOP_FAIL(707,"停止布控任务失败"),
+	TASK_DELETE_FAIL(708,"删除布控任务失败"),
 
 	/**
 	 * 布控库相关

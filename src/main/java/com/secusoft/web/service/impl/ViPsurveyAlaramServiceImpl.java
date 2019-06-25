@@ -1,6 +1,6 @@
 package com.secusoft.web.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.github.pagehelper.PageHelper;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViPsurveyAlaramDetailMapper;
 import com.secusoft.web.model.ResultVo;

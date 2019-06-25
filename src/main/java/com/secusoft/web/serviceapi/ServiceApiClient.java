@@ -207,6 +207,12 @@ public class ServiceApiClient {
         BaseResponse<JSONArray> response = new BaseResponse<>();
         response = JSON.parseObject(responseStr, (Class<BaseResponse<JSONArray>>) response.getClass());
         return response;
+    }
 
+    public BaseResponse fetchByPostMethod(String url) {
+        String responseStr = fetchByPostMethod(url, "");
+        BaseResponse<JSONArray> response = new BaseResponse<>();
+        response = JSON.parseObject(responseStr, (Class<BaseResponse<JSONArray>>) response.getClass());
+        return response;
     }
 }

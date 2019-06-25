@@ -1,23 +1,22 @@
 package com.secusoft.web.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
+import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
+import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViSurveyTaskMapper;
 import com.secusoft.web.mapper.ViTaskDeviceMapper;
 import com.secusoft.web.mapper.ViTaskRepoMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.task.SurveyStartTask;
 import com.secusoft.web.task.SurveyStopTask;
 import com.secusoft.web.task.VideoStreamStartTask;
 import com.secusoft.web.task.VideoStreamStopTask;
-import com.secusoft.web.tusouapi.model.BKTaskCameraInfo;
-import com.secusoft.web.tusouapi.model.BKTaskMeta;
-import com.secusoft.web.tusouapi.model.BKTaskSubmitRequest;
-import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.utils.PageReturnUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,7 +116,6 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
         //下发布控任务创建
         BaseRequest<BKTaskSubmitRequest> bkTaskSubmitRequestBaseRequest = new BaseRequest<>();
-        bkTaskSubmitRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
         BKTaskSubmitRequest bkTaskSubmitRequest = new BKTaskSubmitRequest();
         bkTaskSubmitRequest.setTaskId(viSurveyTaskBean.getTaskId());
         BKTaskMeta bkTaskMeta = new BKTaskMeta();
@@ -132,14 +130,14 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         }
         bkTaskMeta.setCameraInfo(bkTaskCameraInfos);
         bkTaskSubmitRequest.setMeta(bkTaskMeta);
+
         bkTaskSubmitRequestBaseRequest.setData(bkTaskSubmitRequest);
+        bkTaskSubmitRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
 
-//        BaseResponse baseResponse =
-//                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(),
-//                        bkTaskSubmitRequestBaseRequest);
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskSubmitRequestBaseRequest);
 
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+//        BaseResponse baseResponse = new BaseResponse();
+//        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         Object dataJson = baseResponse.getData();
         String errorCode = baseResponse.getCode();
         String errorMsg = baseResponse.getMessage();
@@ -155,30 +153,61 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     }
 
     @Override
-    public ResultVo updateViSurveyTask(ViSurveyTaskBean viSurveyTaskBean) {
-        if (viSurveyTaskBean == null) {
+    public ResultVo updateViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+        if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        if (!StringUtils.hasLength(viSurveyTaskBean.getSurveyName())) {
-            return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(),
-                    BizExceptionEnum.TASK_NANE_NULL.getMessage());
+        if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        if (viSurveyTaskBean.getBeginTime() != null && viSurveyTaskBean.getEndTime() != null) {
-            if (viSurveyTaskBean.getBeginTime().compareTo(viSurveyTaskBean.getEndTime()) > 0) {
-                return ResultVo.failure(BizExceptionEnum.TASK_DATE_WRONG.getCode(),
-                        BizExceptionEnum.TASK_DATE_WRONG.getMessage());
+        if (!StringUtils.hasLength(viSurveyTaskRequest.getSurveyName())) {
+            return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
+        }
+        if (viSurveyTaskRequest.getBeginTime() != null && viSurveyTaskRequest.getEndTime() != null) {
+            if (viSurveyTaskRequest.getBeginTime().compareTo(viSurveyTaskRequest.getEndTime()) > 0) {
+                return ResultVo.failure(BizExceptionEnum.TASK_DATE_WRONG.getCode(), BizExceptionEnum.TASK_DATE_WRONG.getMessage());
             }
         }
+        ViSurveyTaskBean bean = viSurveyTaskMapper.selectById(viSurveyTaskRequest.getId());
+        if (!viSurveyTaskRequest.getSurveyName().equals(bean.getSurveyName())) {
+            bean.setSurveyName(bean.getSurveyName());
+        }
+        if (viSurveyTaskRequest.getBeginTime().compareTo(bean.getBeginTime()) != 0) {
+            bean.setBeginTime(bean.getBeginTime());
+        }
+        if (viSurveyTaskRequest.getEndTime().compareTo(bean.getEndTime()) != 0) {
+            bean.setEndTime(bean.getEndTime());
+        }
+
 
         return ResultVo.success();
     }
 
     @Override
-    public ResultVo delViSurveyTask(Integer id) {
-        if (id == 0) {
+    public ResultVo delViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+        if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        viSurveyTaskMapper.delViSurveyTask(id);
+        if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
+        }
+        //组装数据下发天擎
+        BaseRequest<BKTaskDeleteRequest> bkTaskDeleteRequestBaseRequest = new BaseRequest<>();
+        BKTaskDeleteRequest bkTaskDeleteRequest = new BKTaskDeleteRequest();
+        bkTaskDeleteRequest.setTaskIds(viSurveyTaskRequest.getTaskId());
+        bkTaskDeleteRequestBaseRequest.setData(bkTaskDeleteRequest);
+        bkTaskDeleteRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
+
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskDeleteRequestBaseRequest);
+        Object dataJson = baseResponse.getData();
+        String errorCode = baseResponse.getCode();
+        String errorMsg = baseResponse.getMessage();
+
+        //判断布控任务是否删除成功
+        if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
+            return ResultVo.failure(BizExceptionEnum.TASK_DELETE_FAIL.getCode(), StringUtils.hasLength(errorMsg) ? errorMsg : BizExceptionEnum.TASK_DELETE_FAIL.getMessage());
+        }
+        viSurveyTaskMapper.delViSurveyTask(viSurveyTaskRequest.getId());
         return ResultVo.success();
     }
 
@@ -192,13 +221,60 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                 viSurveyTaskVo.getSize()));
     }
 
+    /**
+     * 开始任务
+     *
+     * @param viSurveyTaskRequest
+     * @return
+     */
     @Override
     public ResultVo startViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
-        //开始任务
-        if (1 == viSurveyTaskRequest.getEnable()) {
+        if (viSurveyTaskRequest == null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
+        }
+        List<ViSurveyTaskBean> allViSurveyTask = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
 
-        } else if (0 == viSurveyTaskRequest.getEnable()) {//停止任务
+        if (allViSurveyTask.size() == 0) {
+            return ResultVo.failure(BizExceptionEnum.NOT_FOUND.getCode(), BizExceptionEnum.NOT_FOUND.getMessage());
+        }
+        try {
+            SurveyStartTask surveyStartTask = new SurveyStartTask(allViSurveyTask.get(0));
+            surveyStartTask.run();
+        } catch (Exception ex) {
+            return ResultVo.failure(BizExceptionEnum.TASK_START_FAIL.getCode(), BizExceptionEnum.TASK_START_FAIL.getMessage());
+        }
+        return ResultVo.success();
+    }
 
+    /**
+     * 结束任务
+     *
+     * @param viSurveyTaskRequest
+     * @return
+     */
+    @Override
+    public ResultVo stopViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+
+        if (null == viSurveyTaskRequest) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
+        }
+        List<ViSurveyTaskBean> allViSurveyTask = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+
+        if (allViSurveyTask.size() == 0) {
+            return ResultVo.failure(BizExceptionEnum.NOT_FOUND.getCode(), BizExceptionEnum.NOT_FOUND.getMessage());
+        }
+
+        try {
+            SurveyStopTask surveyStopTask = new SurveyStopTask(allViSurveyTask.get(0));
+            surveyStopTask.run();
+        } catch (Exception ex) {
+            return ResultVo.failure(BizExceptionEnum.TASK_STOP_FAIL.getCode(), BizExceptionEnum.TASK_STOP_FAIL.getMessage());
         }
         return ResultVo.success();
     }

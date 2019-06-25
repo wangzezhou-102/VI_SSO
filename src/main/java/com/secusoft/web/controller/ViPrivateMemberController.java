@@ -56,7 +56,6 @@ public class ViPrivateMemberController {
 
     @RequestMapping("/listviprivatemember")
     public ResponseEntity<ResultVo> listViPrivateMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo) {
-        return new ResponseEntity<ResultVo>(viPrivateMemberService.getAllViPrivateMember(viPrivateMemberVo),
-                HttpStatus.OK);
+        return new ResponseEntity<ResultVo>(viPrivateMemberService.getAllViPrivateMember(viPrivateMemberVo), HttpStatus.OK);
     }
 }

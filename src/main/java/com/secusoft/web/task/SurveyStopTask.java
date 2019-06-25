@@ -48,9 +48,7 @@ public class SurveyStopTask extends TimerTask {
             BKTaskDataTaskIdRequest bkTaskDataTaskIdRequest = new BKTaskDataTaskIdRequest();
             bkTaskDataTaskIdRequest.setTaskId(viSurveyTaskBean.getTaskId());
             bkTaskDataTaskIdRequestBaseResponse.setData(bkTaskDataTaskIdRequest);
-            BaseResponse baseResponse =
-                    ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStop()
-                            , bkTaskDataTaskIdRequestBaseResponse);
+            BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskStop() , bkTaskDataTaskIdRequestBaseResponse);
             String code = baseResponse.getCode();
             String message = baseResponse.getMessage();
             viSurveyTaskBean.setEnable(0);
@@ -63,6 +61,9 @@ public class SurveyStopTask extends TimerTask {
                 viSurveyTaskBean.setSurveyStatus(0);
             }
             viSurveyTaskMapper.updateViSurveyTask(viSurveyTaskBean);
+            if (0 == viSurveyTaskBean.getSurveyStatus()) {
+                throw new RuntimeException("任务号：" + viSurveyTaskBean.getTaskId() + "，结束任务失败，原因：" + message);
+            }
         }
     }
 }

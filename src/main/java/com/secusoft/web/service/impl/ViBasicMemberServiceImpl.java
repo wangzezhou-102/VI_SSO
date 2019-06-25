@@ -1,11 +1,11 @@
 package com.secusoft.web.service.impl;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.secusoft.web.service.ViBasicMemberService;
+import com.github.pagehelper.PageHelper;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViBasicMemberBean;
 import com.secusoft.web.model.ViBasicMemberVo;
+import com.secusoft.web.service.ViBasicMemberService;
 import com.secusoft.web.utils.PageReturnUtils;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,6 @@ public class ViBasicMemberServiceImpl implements ViBasicMemberService {
 
     @Override
     public ResultVo getAllViBasicMember(ViBasicMemberBean viBasicMemberBean) {
-
         List<ViBasicMemberBean> list=viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean.getObjectId());
         return ResultVo.success(list);
     }

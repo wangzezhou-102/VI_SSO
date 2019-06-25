@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "normal")
 public class NormalConfig {
 
-    public static String bkrepoTable;
-
     public static String addrApiService;
 
     public static String addrApiShipin;
@@ -25,13 +23,20 @@ public class NormalConfig {
 
     public static String streamMinute;
 
-    public static String getBkrepoTable() {
-        return bkrepoTable;
-    }
+    /**
+     * 基础库数据源  1-烽火 2-视频专网orcal
+     */
+    public static Integer bkrepoType;
 
-    public static void setBkrepoTable(String bkrepoTable) {
-        NormalConfig.bkrepoTable = bkrepoTable;
-    }
+    /**
+     * 基础库数据源烽火表
+     */
+    public static String bkrepoTable1;
+
+    /**
+     * 基础库数据源视频专网orcal表
+     */
+    public static String bkrepoTable2;
 
     public static String getAddrApiService() {
         return addrApiService;
@@ -79,5 +84,29 @@ public class NormalConfig {
 
     public static void setStreamMinute(String streamMinute) {
         NormalConfig.streamMinute = streamMinute;
+    }
+
+    public static Integer getBkrepoType() {
+        return bkrepoType;
+    }
+
+    public static void setBkrepoType(Integer bkrepoType) {
+        NormalConfig.bkrepoType = bkrepoType;
+    }
+
+    public static String getBkrepoTable1() {
+        return bkrepoTable1;
+    }
+
+    public static void setBkrepoTable1(String bkrepoTable1) {
+        NormalConfig.bkrepoTable1 = bkrepoTable1;
+    }
+
+    public static String getBkrepoTable2() {
+        return bkrepoTable2;
+    }
+
+    public static void setBkrepoTable2(String bkrepoTable2) {
+        NormalConfig.bkrepoTable2 = bkrepoTable2;
     }
 }
