@@ -1,6 +1,7 @@
 package com.secusoft.web.core.Interceptor;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,4 +43,9 @@ public class HttpHelper {
         }
         return sb.toString();
     }
+    public static String getBodyString(HttpServletResponse response)  {
+        StringBuilder sb = new StringBuilder();
+        return sb.toString();
+    }
+
 }
