@@ -13,4 +13,5 @@ public interface TrackService {
     ResultVo updateTrackName(TrackBean trackBean);
     ResultVo updateTrack(TrackBean trackBean, List<PictureBean> pictureBeans);
     ResultVo readTrack(TrackBean trackBean);
+
 }

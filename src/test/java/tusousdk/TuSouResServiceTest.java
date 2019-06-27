@@ -20,4 +20,9 @@ public class TuSouResServiceTest {
 
         assert "SUCCESS".equals(response.getErrorCode()):"请求异常:"+response.getErrorMsg();
     }
+    @Test
+    public void testOfflineTask(){
+
+
+    }
 }

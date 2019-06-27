@@ -39,7 +39,6 @@ import java.util.regex.Pattern;
 public class MyHttpClientPool {
 	private static final Logger log = LoggerFactory.getLogger(MyHttpClientPool.class);
 	private volatile static MyHttpClientPool HttpClientConnectionPool;
-
 	//	public static final int MAX_TOTAL_CONNECTIONS = 50;
 //	public static final int MAX_ROUTE_CONNECTIONS = 20;
 //	public static final int CONNECT_TIMEOUT = 3000; // 连接时间
@@ -51,7 +50,6 @@ public class MyHttpClientPool {
 
 	private static PoolingHttpClientConnectionManager cm = null;
 	private static CloseableHttpClient httpclient;
-
 
 	/**
 	 * 初始化连接池
@@ -133,7 +131,6 @@ public class MyHttpClientPool {
 		return httpclient;
 	}
 
-
 	/**
 	 * 关闭整个连接池
 	 */
@@ -150,9 +147,6 @@ public class MyHttpClientPool {
 			}
 		}
 	}
-
-
-
 
 	/**
 	 * Get方法封装，发get送请求，获取响应内容

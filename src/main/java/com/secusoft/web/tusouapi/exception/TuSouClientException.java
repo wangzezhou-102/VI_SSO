@@ -25,4 +25,5 @@ public class TuSouClientException extends RuntimeException {
     public TuSouClientException(Throwable t) {
         super(t);
     }
+
 }
