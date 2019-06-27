@@ -7,7 +7,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @author huanghao
  * @date 2019-06-12
  */
-public class SearchData {
+public class SearchResponseData {
     @JSONField(name="_index")
     private String index;
 
@@ -26,10 +26,10 @@ public class SearchData {
     @JSONField(name="_ext")
     private String ext;
 
-    public SearchData() {
+    public SearchResponseData() {
     }
 
-    public SearchData(String index, String type, SearchSource source, String id, Double score, String ext) {
+    public SearchResponseData(String index, String type, SearchSource source, String id, Double score, String ext) {
         this.index = index;
         this.type = type;
         this.source = source;
@@ -88,7 +88,7 @@ public class SearchData {
 
     @Override
     public String toString() {
-        return "SearchData{" +
+        return "SearchResponseData{" +
                 "index='" + index + '\'' +
                 ", type='" + type + '\'' +
                 ", source=" + source +

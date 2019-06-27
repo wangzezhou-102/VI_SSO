@@ -11,9 +11,11 @@ import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.SysOperationLog;
+import com.secusoft.web.tusouapi.SemanticSearchClient;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,8 +29,11 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     @Resource
     SysOperationLogMapper sysOperationLogMapper;
 
+    @Autowired
+    TuSouSearchService tuSouSearchService;
+
     @Override
-    public BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request) {
+    public BaseResponse<JSONArray> search(BaseRequest<SearchRequestData> request) {
         return TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH,request);
     }
 
@@ -37,10 +42,19 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         String requestStr = JSON.toJSONString(request);
         System.out.println("前台发送的数据"+requestStr);
 
-        //真实给阿里返回的接口
-        String responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
+        //判断是否是语义搜索
+        BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(request.toJSONString(), new TypeReference<BaseRequest<SearchRequestData>>() {
+        });
+        String responseStr=null;
+        if(searchRequestBaseRequest.getData().getText()!=null){
+            responseStr = SemanticSearchClient.getClientConnectionPool().fetchByPostMethod(SemanticSearchClient.Path_SEARCH, requestStr);
+        }else {
+            responseStr = TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH, requestStr);
+        }
         SearchResponse searchResponse = JSON.parseObject(responseStr, new TypeReference<SearchResponse>() {
         });
+        //真实给阿里返回的接口
+
         //如果返回的状态码为failed，就返回阿里的Msg
         if(searchResponse == null || searchResponse.getErrorCode().equals("FAILED")){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
@@ -49,30 +63,30 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         if(searchResponse.getData()==null&&searchResponse.getErrorCode().equals("SUCCESS")){
             return  ResultVo.success();
         }
-        List<SearchData> olddata = searchResponse.getData();
+        List<SearchResponseData> olddata = searchResponse.getData();
         //获取全部的设备列表 与data里进行映射
         //如果设备列表为空
         DeviceBean device = new DeviceBean();
         List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
-        olddata.forEach(searchData -> {
+        olddata.forEach(searchResponseData -> {
             deviceBeans.forEach(deviceBean ->{
-                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
-                    searchData.getSource().setDeviceBean(deviceBean);
+                if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+                    searchResponseData.getSource().setDeviceBean(deviceBean);
                 }
             });
-            if(searchData.getSource().getDeviceBean()==null){
+            if(searchResponseData.getSource().getDeviceBean()==null){
                 DeviceBean deviceBean = new DeviceBean();
                 deviceBean.setDeviceName("未命名");
-                searchData.getSource().setDeviceBean(deviceBean);
+                searchResponseData.getSource().setDeviceBean(deviceBean);
             }
         });
         //如果返回的属性里没有相似度 就按时间戳排序
         if(olddata.get(0).getScore()==null){
             // 时间戳排序
             if (olddata !=null && olddata.size()>1){
-                Collections.sort(olddata , new Comparator<SearchData>() {
+                Collections.sort(olddata , new Comparator<SearchResponseData>() {
                     @Override
-                    public int compare(SearchData o1, SearchData o2) {
+                    public int compare(SearchResponseData o1, SearchResponseData o2) {
                         Long o1Value = o1.getSource().getTimestamp();
                         Long o2Value = o2.getSource().getTimestamp();
                         if (o1Value<o2Value){
@@ -92,9 +106,9 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             return resultVo;
         }
         //相似度排序
-        Collections.sort(olddata , new Comparator<SearchData>() {
+        Collections.sort(olddata , new Comparator<SearchResponseData>() {
             @Override
-            public int compare(SearchData o1, SearchData o2) {
+            public int compare(SearchResponseData o1, SearchResponseData o2) {
                 Double score1 = o1.getScore();
                 Double score2 = o2.getScore();
                 if (score1<score2){
@@ -104,14 +118,14 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 }
             }
         });
-        ArrayList<SearchData> data = new ArrayList<>();
+        ArrayList<SearchResponseData> data = new ArrayList<>();
         data.addAll(olddata);
 
         // 时间戳排序
         if (data !=null && data.size()>1){
-            Collections.sort(data , new Comparator<SearchData>() {
+            Collections.sort(data , new Comparator<SearchResponseData>() {
                 @Override
-                public int compare(SearchData o1, SearchData o2) {
+                public int compare(SearchResponseData o1, SearchResponseData o2) {
                     Long o1Value = o1.getSource().getTimestamp();
                     Long o2Value = o2.getSource().getTimestamp();
                     if (o1Value<o2Value){
@@ -124,19 +138,19 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         }
 
         //设备分组排序
-        List<SearchData> dataList =olddata;
+        List<SearchResponseData> dataList =olddata;
         ArrayList<String> deviceIds = new ArrayList<>();
         Set<String> set = new HashSet<String>();
         Map<String,List> resultMap = new LinkedHashMap<String,List>();
-        dataList.forEach(searchData -> {
-            SearchSource source = searchData.getSource();
+        dataList.forEach(searchResponseData -> {
+            SearchSource source = searchResponseData.getSource();
             String cameraId = source.getCameraId();
             if (set.contains(cameraId)){
-                resultMap.get(cameraId).add(searchData);
+                resultMap.get(cameraId).add(searchResponseData);
             }else {
                 set.add(cameraId);
-                List<SearchData> list1 = new ArrayList<>();
-                list1.add(searchData);
+                List<SearchResponseData> list1 = new ArrayList<>();
+                list1.add(searchResponseData);
                 resultMap.put(cameraId,list1);
             }
         });
@@ -1586,31 +1600,31 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         if(searchResponse.getData()==null){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
         }
-        List<SearchData> olddatas = searchResponse.getData();
+        List<SearchResponseData> olddatas = searchResponse.getData();
         //获取全部的设备列表
         //如果设备列表为空
         DeviceBean device = new DeviceBean();
         List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
-        olddatas.forEach(searchData -> {
+        olddatas.forEach(searchResponseData -> {
             deviceBeans.forEach(deviceBean ->{
-                if (deviceBean.getDeviceId().equals(searchData.getSource().getCameraId())){
-                    searchData.getSource().setDeviceBean(deviceBean);
+                if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+                    searchResponseData.getSource().setDeviceBean(deviceBean);
                 }
             });
-            if(searchData.getSource().getDeviceBean()==null){
+            if(searchResponseData.getSource().getDeviceBean()==null){
                 DeviceBean deviceBean = new DeviceBean();
                 deviceBean.setDeviceName("未命名");
-                searchData.getSource().setDeviceBean(deviceBean);
+                searchResponseData.getSource().setDeviceBean(deviceBean);
             }
         });
-        List<SearchData> olddata = olddatas.subList(from, from + size);
+        List<SearchResponseData> olddata = olddatas.subList(from, from + size);
         System.out.println(olddata.size());
 
 
         //相似度排序
-        Collections.sort(olddata , new Comparator<SearchData>() {
+        Collections.sort(olddata , new Comparator<SearchResponseData>() {
             @Override
-            public int compare(SearchData o1, SearchData o2) {
+            public int compare(SearchResponseData o1, SearchResponseData o2) {
                 Double score1 = o1.getScore();
                 Double score2 = o2.getScore();
                 if (score1<score2){
@@ -1620,14 +1634,14 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 }
             }
         });
-        ArrayList<SearchData> data = new ArrayList<>();
+        ArrayList<SearchResponseData> data = new ArrayList<>();
         data.addAll(olddata);
 
         // 时间戳排序
         if (data !=null && data.size()>1){
-            Collections.sort(data , new Comparator<SearchData>() {
+            Collections.sort(data , new Comparator<SearchResponseData>() {
                 @Override
-                public int compare(SearchData o1, SearchData o2) {
+                public int compare(SearchResponseData o1, SearchResponseData o2) {
                     Long o1Value = o1.getSource().getTimestamp();
                     Long o2Value = o2.getSource().getTimestamp();
                     if (o1Value<o2Value){
@@ -1640,19 +1654,19 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         }
 
         //设备分组排序
-        List<SearchData> dataList =olddata;
+        List<SearchResponseData> dataList =olddata;
         ArrayList<String> deviceIds = new ArrayList<>();
         Set<String> set = new HashSet<String>();
         Map<String,List> resultMap = new LinkedHashMap<String,List>();
-        dataList.forEach(searchData -> {
-            SearchSource source = searchData.getSource();
+        dataList.forEach(searchResponseData -> {
+            SearchSource source = searchResponseData.getSource();
             String cameraId = source.getCameraId();
             if (set.contains(cameraId)){
-                resultMap.get(cameraId).add(searchData);
+                resultMap.get(cameraId).add(searchResponseData);
             }else {
                 set.add(cameraId);
-                List<SearchData> list1 = new ArrayList<>();
-                list1.add(searchData);
+                List<SearchResponseData> list1 = new ArrayList<>();
+                list1.add(searchResponseData);
                 resultMap.put(cameraId,list1);
             }
         });
@@ -1675,11 +1689,63 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
 
     @Override
     public ResultVo cacheSearch() {
+        //返回时 需要将ids里面图片转化为OssUrl
         List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        List<ArrayList<SearchRequestData>> searchRequests =new ArrayList<>();
+        ArrayList<String> strings = new ArrayList<>();
+        int j=0;
+        HashMap<Integer, StringBuilder> map = new HashMap<Integer, StringBuilder>();
+        for (SysOperationLog sysOperationLog:sysOperationLogs) {
+            String param = sysOperationLog.getParam();
+            BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
+            });
+            if(searchRequestBaseRequest.getData().getIds()!=null){
+                String ids = searchRequestBaseRequest.getData().getIds();
+                String[] split = ids.split(",");
+                //重新查询id对应的 ossurl
+                for (int i = 0; i <split.length ; i++) {
+                    BaseRequest<SearchRequestData> searchDataBaseRequest = new BaseRequest<>();
+                    SearchRequestData searchRequestData = new SearchRequestData();
+                    searchRequestData.setUid("hangzhou");
+                    searchRequestData.setTaskId("512041492240442db7462770e968e785");
+                    searchRequestData.setType("person");
+                    searchRequestData.setNoFeature("1");
+                    searchRequestData.setIds(split[i]);
+                    searchDataBaseRequest.setData(searchRequestData);
+                    //返回参数取出oss
+                    BaseResponse<JSONArray> search = tuSouSearchService.search(searchDataBaseRequest);
+                    JSONArray data = search.getData();
+                    ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(data.toString(), new TypeReference<ArrayList<SearchResponseData>>() {
+                    });
+                    strings.add(searchResponseData.get(0).getSource().getCropImageSigned());
+                }
+                StringBuilder sb=new StringBuilder();
+                for (String cropurl:strings) {
+                    if(sb==null){
+                        sb.append(cropurl);
+                    }else{
+                        sb.append(",");
+                        sb.append(cropurl);
+                    }
+                }
+                map.put(j,sb);
+            }
+            j++;
+        };
         ArrayList<String> params = new ArrayList<>();
         sysOperationLogs.forEach(sysOperationLog -> {
             params.add(sysOperationLog.getParam());
         });
+        //把有ids的参数增加Ossurls参数
+        if(map!=null){
+            for (Integer in : map.keySet()) {
+                String param = sysOperationLogs.get(in).getParam();
+                BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
+                });
+                searchRequestBaseRequest.getData().setOssUrls(map.get(in).toString());
+                params.add(in,JSON.toJSONString(searchRequestBaseRequest.getData()));
+            }
+        }
         JSONArray jsonObject = JSON.parseArray(params.toString());
         return ResultVo.success(jsonObject);
     }

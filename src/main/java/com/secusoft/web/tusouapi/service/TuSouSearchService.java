@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.tusouapi.model.BaseResponse;
-import com.secusoft.web.tusouapi.model.SearchRequest;
+import com.secusoft.web.tusouapi.model.SearchRequestData;
 /**
  * 图像搜索（图搜）服务接⼝
  * 
@@ -25,7 +25,7 @@ public interface TuSouSearchService{
      * @param request
      * @return
      */
-    BaseResponse<JSONArray> search(BaseRequest<SearchRequest> request);
+    BaseResponse<JSONArray> search(BaseRequest<SearchRequestData> request);
 
     /**
      * 三种排序的搜索结果

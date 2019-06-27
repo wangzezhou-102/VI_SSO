@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class SearchResponse {
     @JSONField(name="data")
-    private List<SearchData> data;
+    private List<SearchResponseData> data;
     private String errorCode;
     private Long totalCount;
     private String errorMsg;
@@ -19,18 +19,18 @@ public class SearchResponse {
     public SearchResponse() {
     }
 
-    public SearchResponse(List<SearchData> data, String errorCode, Long totalCount, String errorMsg) {
+    public SearchResponse(List<SearchResponseData> data, String errorCode, Long totalCount, String errorMsg) {
         this.data = data;
         this.errorCode = errorCode;
         this.totalCount = totalCount;
         this.errorMsg = errorMsg;
     }
 
-    public List<SearchData> getData() {
+    public List<SearchResponseData> getData() {
         return data;
     }
 
-    public void setData(List<SearchData> data) {
+    public void setData(List<SearchResponseData> data) {
         this.data = data;
     }
 

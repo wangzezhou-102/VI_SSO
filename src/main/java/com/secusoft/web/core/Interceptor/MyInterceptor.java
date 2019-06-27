@@ -85,7 +85,7 @@ public class MyInterceptor implements HandlerInterceptor {
             }else {
                 sysOperationLog.setType(0);
             }
-            if(map.get("uri").equals("/tusou_search_sort")||map.get("uri").equals("/testsearch")){
+            if(map.get("uri").indexOf("/tusou_search_sort")>-1||map.get("uri").equals("/testsearch")){
                 sysOperationLog.setTitle("图搜功能");
             }
             if(e!=null){
@@ -101,7 +101,6 @@ public class MyInterceptor implements HandlerInterceptor {
             sysOperationLog.setTimeout(endtime-starttime);
             sysOperationLogMapper.insert(sysOperationLog);
         }
-
     }
 }
 

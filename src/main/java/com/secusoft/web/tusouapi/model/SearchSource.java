@@ -34,12 +34,18 @@ public class SearchSource {
     private Integer objRight;
     private String upper_color;
     private String cropImageSigned;
+    private String year;
+    private String hat_type;
+    private String hat_color;
+    private String bag_type;
+    private String bag_color;
+
     private DeviceBean deviceBean;
 
     public SearchSource() {
     }
 
-    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, DeviceBean deviceBean) {
+    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, String year, String hat_type, String hat_color, String bag_type, String bag_color, DeviceBean deviceBean) {
         this.origImage = origImage;
         this.oriImageSigned = oriImageSigned;
         this.hairScore = hairScore;
@@ -67,6 +73,11 @@ public class SearchSource {
         this.objRight = objRight;
         this.upper_color = upper_color;
         this.cropImageSigned = cropImageSigned;
+        this.year = year;
+        this.hat_type = hat_type;
+        this.hat_color = hat_color;
+        this.bag_type = bag_type;
+        this.bag_color = bag_color;
         this.deviceBean = deviceBean;
     }
 
@@ -294,6 +305,46 @@ public class SearchSource {
         this.deviceBean = deviceBean;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getHat_type() {
+        return hat_type;
+    }
+
+    public void setHat_type(String hat_type) {
+        this.hat_type = hat_type;
+    }
+
+    public String getHat_color() {
+        return hat_color;
+    }
+
+    public void setHat_color(String hat_color) {
+        this.hat_color = hat_color;
+    }
+
+    public String getBag_type() {
+        return bag_type;
+    }
+
+    public void setBag_type(String bag_type) {
+        this.bag_type = bag_type;
+    }
+
+    public String getBag_color() {
+        return bag_color;
+    }
+
+    public void setBag_color(String bag_color) {
+        this.bag_color = bag_color;
+    }
+
     @Override
     public String toString() {
         return "SearchSource{" +
@@ -324,6 +375,11 @@ public class SearchSource {
                 ", objRight=" + objRight +
                 ", upper_color='" + upper_color + '\'' +
                 ", cropImageSigned='" + cropImageSigned + '\'' +
+                ", year='" + year + '\'' +
+                ", hat_type='" + hat_type + '\'' +
+                ", hat_color='" + hat_color + '\'' +
+                ", bag_type='" + bag_type + '\'' +
+                ", bag_color='" + bag_color + '\'' +
                 ", deviceBean=" + deviceBean +
                 '}';
     }
