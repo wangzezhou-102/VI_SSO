@@ -33,7 +33,7 @@ public class TotalInfoServiceImpl implements TotalInfoService {
         //摄像头并发路数暂定5000
         TotalInfoVo  totalInfoVo1= new TotalInfoVo("摄像头并发路数",5000,"路",null,false);
         TotalInfoVo  totalInfoVo2= new TotalInfoVo("摄像头使用次数",taskDeviceCount,"个",null,false);
-        TotalInfoVo  totalInfoVo3= new TotalInfoVo("目标搜图使用次数",sysOperationLogMapper.tusouSearchTotal(),"个",null,false);
+        TotalInfoVo  totalInfoVo3= new TotalInfoVo("目标搜图使用次数",sysOperationLogMapper.tusouSearchTotal(),"次",null,false);
         TotalInfoVo  totalInfoVo4= new TotalInfoVo("布控追踪执行任务数",viSurveyTaskMapper.getEnabledViSurveyTaskCount(),"个",0,true);
         TotalInfoVo  totalInfoVo5= new TotalInfoVo("安保护航执行任务数",0,"个",0,true);
         TotalInfoVo  totalInfoVo6= new TotalInfoVo("区域巡逻执行任务数",0,"个",0,true);

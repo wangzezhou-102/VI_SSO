@@ -38,6 +38,11 @@ public class NormalConfig {
      */
     public static String bkrepoTable2;
 
+    /**
+     * 语义搜索地址
+     */
+    public static String addrApiSemanticSearch;
+
     public static String getAddrApiService() {
         return addrApiService;
     }
@@ -108,5 +113,13 @@ public class NormalConfig {
 
     public static void setBkrepoTable2(String bkrepoTable2) {
         NormalConfig.bkrepoTable2 = bkrepoTable2;
+    }
+
+    public static String getAddrApiSemanticSearch() {
+        return addrApiSemanticSearch;
+    }
+
+    public static void setAddrApiSemanticSearch(String addrApiSemanticSearch) {
+        NormalConfig.addrApiSemanticSearch = addrApiSemanticSearch;
     }
 }
