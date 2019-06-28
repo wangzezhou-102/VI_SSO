@@ -15,6 +15,7 @@ import com.secusoft.web.tusouapi.SemanticSearchClient;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
+import com.secusoft.web.utils.SearchSortUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,22 +84,10 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         //如果返回的属性里没有相似度 就按时间戳排序
         if(olddata.get(0).getScore()==null){
             // 时间戳排序
-            if (olddata !=null && olddata.size()>1){
-                Collections.sort(olddata , new Comparator<SearchResponseData>() {
-                    @Override
-                    public int compare(SearchResponseData o1, SearchResponseData o2) {
-                        Long o1Value = o1.getSource().getTimestamp();
-                        Long o2Value = o2.getSource().getTimestamp();
-                        if (o1Value<o2Value){
-                            return 1;
-                        }else{
-                            return -1;
-                        }
-                    }
-                });
-            }
+            List<SearchResponseData> timeStampData = SearchSortUtils.timeStampSort(olddata);
+
             HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
-            stringSearchDataHashMap.put("timestamp",olddata);
+            stringSearchDataHashMap.put("timestamp",timeStampData);
             Long totalCount = searchResponse.getTotalCount();
             String responStr = JSON.toJSONString(ResultVo.success(stringSearchDataHashMap,totalCount), SerializerFeature.DisableCircularReferenceDetect);
             ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
@@ -106,62 +95,21 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             return resultVo;
         }
         //相似度排序
-        Collections.sort(olddata , new Comparator<SearchResponseData>() {
-            @Override
-            public int compare(SearchResponseData o1, SearchResponseData o2) {
-                Double score1 = o1.getScore();
-                Double score2 = o2.getScore();
-                if (score1<score2){
-                    return 1;
-                }else{
-                    return -1;
-                }
-            }
-        });
-        ArrayList<SearchResponseData> data = new ArrayList<>();
-        data.addAll(olddata);
+        List<SearchResponseData> scoreData = SearchSortUtils.scoreSort(olddata);
 
         // 时间戳排序
-        if (data !=null && data.size()>1){
-            Collections.sort(data , new Comparator<SearchResponseData>() {
-                @Override
-                public int compare(SearchResponseData o1, SearchResponseData o2) {
-                    Long o1Value = o1.getSource().getTimestamp();
-                    Long o2Value = o2.getSource().getTimestamp();
-                    if (o1Value<o2Value){
-                        return 1;
-                    }else{
-                        return -1;
-                    }
-                }
-            });
-        }
+        List<SearchResponseData> timeStampData = SearchSortUtils.timeStampSort(olddata);
 
         //设备分组排序
-        List<SearchResponseData> dataList =olddata;
-        ArrayList<String> deviceIds = new ArrayList<>();
-        Set<String> set = new HashSet<String>();
-        Map<String,List> resultMap = new LinkedHashMap<String,List>();
-        dataList.forEach(searchResponseData -> {
-            SearchSource source = searchResponseData.getSource();
-            String cameraId = source.getCameraId();
-            if (set.contains(cameraId)){
-                resultMap.get(cameraId).add(searchResponseData);
-            }else {
-                set.add(cameraId);
-                List<SearchResponseData> list1 = new ArrayList<>();
-                list1.add(searchResponseData);
-                resultMap.put(cameraId,list1);
-            }
-        });
+        Map<String, List> resultMap = SearchSortUtils.deviceSort(olddata);
         //把Map中的value取出来放入List返回
         ArrayList<List> resultList = new ArrayList<>();
         resultMap.forEach((k,v)->{
             resultList.add(v);
         });
         HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
-        stringSearchDataHashMap.put("score",olddata);
-        stringSearchDataHashMap.put("timestamp",data);
+        stringSearchDataHashMap.put("score",scoreData);
+        stringSearchDataHashMap.put("timestamp",timeStampData);
         stringSearchDataHashMap.put("device",resultList);
 
         //FastJSon中 重复引用需要关闭
