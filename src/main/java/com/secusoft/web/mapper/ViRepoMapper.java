@@ -34,4 +34,9 @@ public interface ViRepoMapper extends BaseMapper<ViRepoBean> {
      * @return
      */
     List<ViRepoBean> getAllViRepo(ViRepoBean viRepoBean);
+    /**
+     * 根据ID获取布控库
+     * @return
+     */
+    ViRepoBean selectViRepoById(ViRepoBean viRepoBean);
 }

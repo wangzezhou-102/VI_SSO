@@ -24,7 +24,7 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
     /**
      * 删除一条布控任务
      */
-    void delViSurveyTask(@Param("id") Integer id);
+    void delViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest);
 
     /**
      * 获取所有布控任务
@@ -58,5 +58,5 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * @company 视在数科
      * @date 2019年6月20日
      */
-    List<String> selectIdByUserIds(@Param("userIds")List<Integer> userIds);
+    List<String> selectIdByUserIds(@Param("userIds") List<Integer> userIds);
 }

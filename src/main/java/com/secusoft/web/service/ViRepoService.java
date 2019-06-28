@@ -14,7 +14,7 @@ public interface ViRepoService {
 
     ResultVo updateViRepo(ViRepoBean viRepoBean);
 
-    ResultVo delViRepo(Integer id);
+    ResultVo delViRepo(ViRepoBean viRepoBean);
 
     ResultVo getAllViRepo(ViRepoVo viRepoVo);
 }

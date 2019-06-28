@@ -96,9 +96,16 @@
          where id=#{id}
      </update>
 
-    <delete id="delViSurveyTask" parameterType="java.lang.Integer">
+    <delete id="delViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest">
         delete from vi_survey_task
-         where id=#{id}
+         <where>
+             <if test="id!=null">
+                 and id=#{id}
+             </if>
+             <if test="taskId!=null">
+                 and task_id=#{taskId}
+             </if>
+         </where>
     </delete>
     
     <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
@@ -116,7 +123,11 @@
             <if test="taskId!=null">
                 AND vst.task_id=#{taskId}
             </if>
+            <if test="surveyType!=null">
+                AND vst.survey_type=#{surveyType}
+            </if>
         </where>
+        order by vst.create_time desc,vst.modify_time desc
     </select>
 
     <select id="getEnabledViSurveyTaskCount" resultType="java.lang.Integer">
