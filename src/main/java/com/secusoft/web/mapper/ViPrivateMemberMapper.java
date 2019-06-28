@@ -2,6 +2,7 @@ package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViPrivateMemberBean;
+import com.secusoft.web.model.ViPrivateMemberVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public interface ViPrivateMemberMapper extends BaseMapper<ViPrivateMemberBean> {
      * 获取所有自定义库信息
      * @return
      */
-    List<ViPrivateMemberBean> getAllViPrivateMember();
+    List<ViPrivateMemberBean> getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
 
     /**
      * 根据ObjectId获取ViPrivateMemberBean

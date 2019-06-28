@@ -30,6 +30,9 @@
             <if test="bkname!=null">
                 and bkname=#{bkname}
             </if>
+            <if test="bktype!=null">
+                and bktype=#{bktype}
+            </if>
         </where>
     </sql>
     <insert id="insertViRepo" parameterType="com.secusoft.web.model.ViRepoBean" keyProperty="id" useGeneratedKeys="true">
@@ -60,5 +63,18 @@
         select * from
         <include refid="table"/>
         <include refid="whereSql"/>
+        order by gmt_create desc,gmt_modified desc
+    </select>
+
+
+    <select id="selectViRepoById" parameterType="com.secusoft.web.model.ViRepoBean" resultType="com.secusoft.web.model.ViRepoBean">
+        select * from
+        <include refid="table"/>
+        <where>
+            <if test="id!=null">
+                id=#{id}
+            </if>
+        </where>
+        order by gmt_create desc,gmt_modified desc
     </select>
 </mapper>

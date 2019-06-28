@@ -1,9 +1,9 @@
 package com.secusoft.web.controller;
 
-import com.secusoft.web.service.ViRepoService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViRepoBean;
 import com.secusoft.web.model.ViRepoVo;
+import com.secusoft.web.service.ViRepoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class ViRepoController {
 
     @RequestMapping("/delvirepo")
     public ResponseEntity<ResultVo> delViRepo(@RequestBody ViRepoBean viRepoBean){
-        ResultVo resultVo = viRepoService.delViRepo(viRepoBean.getId());
+        ResultVo resultVo = viRepoService.delViRepo(viRepoBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

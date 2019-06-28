@@ -60,7 +60,6 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         //由于object_id唯一，先放置一个随机数区别
         int randomNumber = (int) Math.round(Math.random() * (25000 - 1) + 1);
         viPrivateMemberBean.setObjectId("vi_private_" + randomNumber);
-
         viPrivateMemberMapper.insertViPrivateMember(viPrivateMemberBean);
         viPrivateMemberBean.setObjectId("vi_private_" + viPrivateMemberBean.getId());
 
@@ -207,7 +206,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
     public ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo) {
         PageHelper.startPage(viPrivateMemberVo.getCurrent(), viPrivateMemberVo.getSize());
 
-        List<ViPrivateMemberBean> list = viPrivateMemberMapper.getAllViPrivateMember();
+        List<ViPrivateMemberBean> list = viPrivateMemberMapper.getAllViPrivateMember(viPrivateMemberVo);
 
         return ResultVo.success(PageReturnUtils.getPageMap(list, viPrivateMemberVo.getCurrent(),
                 viPrivateMemberVo.getSize()));

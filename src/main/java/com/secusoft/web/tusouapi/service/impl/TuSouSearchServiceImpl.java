@@ -1721,7 +1721,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 }
                 StringBuilder sb=new StringBuilder();
                 for (String cropurl:strings) {
-                    if(sb==null){
+                    if(sb.length()==0){
                         sb.append(cropurl);
                     }else{
                         sb.append(",");
@@ -1734,16 +1734,18 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         };
         ArrayList<String> params = new ArrayList<>();
         sysOperationLogs.forEach(sysOperationLog -> {
-            params.add(sysOperationLog.getParam());
+            BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(sysOperationLog.getParam(), new TypeReference<BaseRequest<SearchRequestData>>() {
+            });
+            params.add(JSON.toJSONString(searchRequestBaseRequest.getData()));
         });
         //把有ids的参数增加Ossurls参数
-        if(map!=null){
+        if(!map.isEmpty()){
             for (Integer in : map.keySet()) {
                 String param = sysOperationLogs.get(in).getParam();
                 BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
                 });
                 searchRequestBaseRequest.getData().setOssUrls(map.get(in).toString());
-                params.add(in,JSON.toJSONString(searchRequestBaseRequest.getData()));
+                params.set(in,JSON.toJSONString(searchRequestBaseRequest.getData()));
             }
         }
         JSONArray jsonObject = JSON.parseArray(params.toString());

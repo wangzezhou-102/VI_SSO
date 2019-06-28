@@ -1,13 +1,15 @@
 package com.secusoft.web.service.impl;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.secusoft.web.service.ViRepoService;
+import com.secusoft.web.core.emuns.ViRepoBkTypeEnum;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViRepoMapper;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViRepoBean;
 import com.secusoft.web.model.ViRepoVo;
+import com.secusoft.web.service.ViRepoService;
 import com.secusoft.web.utils.PageReturnUtils;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -28,16 +30,20 @@ public class ViRepoServiceImpl implements ViRepoService {
 
     /**
      * 添加布控库
+     *
      * @param viRepoBean
      * @return
      */
     @Override
     public ResultVo insertViRepo(ViRepoBean viRepoBean) {
-        if(!StringUtils.hasLength(viRepoBean.getBkname())){
+        if (viRepoBean == null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (!StringUtils.hasLength(viRepoBean.getBkname())) {
             return ResultVo.failure(BizExceptionEnum.REPO_NAME_NULL.getCode(), BizExceptionEnum.REPO_NAME_NULL.getMessage());
         }
         List<ViRepoBean> list = viRepoMapper.getAllViRepo(viRepoBean);
-        if(list.size()>0){
+        if (list.size() > 0) {
             return ResultVo.failure(BizExceptionEnum.RRPO_NAME_REPEATED.getCode(), BizExceptionEnum.RRPO_NAME_REPEATED.getMessage());
         }
         viRepoBean.setType(1);
@@ -48,39 +54,64 @@ public class ViRepoServiceImpl implements ViRepoService {
 
     /**
      * 更新布控库
+     *
      * @param viRepoBean
      * @return
      */
     @Override
     public ResultVo updateViRepo(ViRepoBean viRepoBean) {
-        if(!StringUtils.hasLength(viRepoBean.getBkname())){
+        if (viRepoBean == null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (viRepoBean.getId() == null || viRepoBean.getId() <= 0) {
+            return ResultVo.failure(BizExceptionEnum.RRPO_ID_EXISTED.getCode(), BizExceptionEnum.RRPO_ID_EXISTED.getMessage());
+        }
+        if (!StringUtils.hasLength(viRepoBean.getBkname())) {
             return ResultVo.failure(BizExceptionEnum.REPO_NAME_NULL.getCode(), BizExceptionEnum.REPO_NAME_NULL.getMessage());
         }
-        viRepoBean.setGmtModified(new Date());
-        viRepoMapper.updateViRepo(viRepoBean);
+        ViRepoBean bean = viRepoMapper.selectViRepoById(viRepoBean);
+        if (bean==null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        bean.setBkname(viRepoBean.getBkname());
+        if (StringUtils.hasLength(viRepoBean.getBkdesc())) {
+            bean.setBkdesc(viRepoBean.getBkdesc());
+        }
+        bean.setGmtModified(new Date());
+        viRepoMapper.updateViRepo(bean);
         return ResultVo.success();
     }
 
     /**
      * 删除布控库
+     *
      * @param id
      * @return
      */
     @Override
-    public ResultVo delViRepo(Integer id) {
-        if(id==0){
+    public ResultVo delViRepo(ViRepoBean viRepoBean) {
+        if (viRepoBean == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        viRepoMapper.delViRepo(id);
+        List<ViRepoBean> allViRepo = viRepoMapper.getAllViRepo(viRepoBean);
+        if (allViRepo.size() == 0) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        viRepoMapper.delViRepo(viRepoBean.getId());
         return ResultVo.success();
     }
 
     @Override
     public ResultVo getAllViRepo(ViRepoVo viRepoVo) {
-        PageHelper.startPage(viRepoVo.getCurrent(),viRepoVo.getSize());
+        PageHelper.startPage(viRepoVo.getCurrent(), viRepoVo.getSize());
+        ViRepoBean viRepoBean= new ViRepoBean();
+        BeanCopier beanCopier = BeanCopier.create(ViRepoVo.class, ViRepoBean.class, false);
+        beanCopier.copy(viRepoVo,viRepoBean, null);
+        List<ViRepoBean> list = viRepoMapper.getAllViRepo(viRepoBean);
 
-        List<ViRepoBean> list=viRepoMapper.getAllViRepo(viRepoVo.getViRepoBean());
-
-        return ResultVo.success(PageReturnUtils.getPageMap(list,viRepoVo.getCurrent(),viRepoVo.getSize()));
+        for (ViRepoBean bean :list){
+            bean.setBktypeValue(ViRepoBkTypeEnum.getDescByType(bean.getBktype()));
+        }
+        return ResultVo.success(PageReturnUtils.getPageMap(list, viRepoVo.getCurrent(), viRepoVo.getSize()));
     }
 }
