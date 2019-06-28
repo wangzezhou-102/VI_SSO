@@ -1,4 +1,4 @@
-package com.secusoft.web.service;
+package com.secusoft.web.tusouapi.service;
 
 import com.secusoft.web.model.RecordOfflineTaskBean;
 import com.secusoft.web.model.RecordOfflineTaskRequest;
