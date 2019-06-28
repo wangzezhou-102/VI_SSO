@@ -69,9 +69,7 @@ public class BkrepoConfig {
             return bkdesc;
         }
 
-        public void setBkdesc(String bkdesc) {
-            this.bkdesc = bkdesc;
-        }
+        public void setBkdesc(String bkdesc) { this.bkdesc = bkdesc; }
 
         public String getBkname() {
             return bkname;

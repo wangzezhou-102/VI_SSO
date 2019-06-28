@@ -13,15 +13,20 @@ public interface RecordOfflineTaskMapper {
      */
     void addOfflineTask(RecordOfflineTaskBean recordOfflineTaskBean);
     /**
-     * 查询所有执行状态的任务
+     * 查询不同执行状态的任务
      */
-    List<RecordOfflineTaskBean> getOfflineTaskProgress(RecordOfflineTaskBean recordOfflineTaskBean);
+    List<RecordOfflineTaskBean> getOfflineTaskByEnable(RecordOfflineTaskBean recordOfflineTaskBean);
+    /**
+     * 查询任务的详细信息
+     */
+    RecordOfflineTaskBean getOfflineTaskByTaskId(RecordOfflineTaskBean recordOfflineTaskBean);
     /**
      * 修改一条离线分析任务的状态
      */
-    void updateOfflineTaskEnableById(RecordOfflineTaskBean recordOfflineTaskBean);
+    void updateOfflineTaskEnableByTaskId(RecordOfflineTaskBean recordOfflineTaskBean);
     /**
      * 修改一条离线分析任务的进度
      */
-    void updateOfflineTaskProgressById(RecordOfflineTaskBean recordOfflineTaskBean);
+    void updateOfflineTaskProgressByTaskId(RecordOfflineTaskBean recordOfflineTaskBean);
+
 }

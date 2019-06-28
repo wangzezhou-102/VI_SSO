@@ -46,6 +46,6 @@ public class MainApplication extends WebMvcConfigurerAdapter {
         }
 
         logger.info("Application is success!");
-        System.out.println("");
+
     }
 }

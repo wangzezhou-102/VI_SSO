@@ -34,7 +34,6 @@ public class OdpsUtils {
     public OdpsUtils(ViGazhkSjzyzhQgpqryService viGazhkSjzyzhQgpqryService){
         this.viGazhkSjzyzhQgpqryService = viGazhkSjzyzhQgpqryService;
     }
-
 //    @PostConstruct
 //    //通过@PostConstruct实现初始化bean之前进行的操作
 //    public void init(){
@@ -42,14 +41,11 @@ public class OdpsUtils {
 //        odpsUtils.viGazhkSjzyzhQgpqryService=this.viGazhkSjzyzhQgpqryService;
 //        // 初使化时将已静态化的testService实例化
 //    }
-
-
 //    public static void main(String[] args) {
 //        System.out.println(table);
 //        runSql();
 //        tunnel();
 //    }
-
     /*
      * 把SQLTask的结果下载过来
      * */
@@ -73,7 +69,6 @@ public class OdpsUtils {
             e1.printStackTrace();
         }
     }
-
     /*
      * 保存这条数据
      * 数据量少的话直接打印后拷贝走也是一种取巧的方法。实际场景可以用Java.io写到本地文件，或者写到远端数据等各种目标保存起来。
@@ -86,7 +81,6 @@ public class OdpsUtils {
                 break;
         }
     }
-
     /*
      * 运行SQL，把查询结果保存成临时表，方便后面用Tunnel下载
      * 这里保存数据的lifecycle为1天，所以哪怕删除步骤出了问题，也不会太浪费存储空间
@@ -104,7 +98,6 @@ public class OdpsUtils {
             e.printStackTrace();
         }
     }
-
     public static void dropTable(){
         Instance i;
         StringBuilder sb = new StringBuilder("Drop Table ").append(table)

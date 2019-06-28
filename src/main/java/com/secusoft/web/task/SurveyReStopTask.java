@@ -66,6 +66,7 @@ public class SurveyReStopTask {
                     viSurveyTaskBean.setSurveyStatus(0);
                 }
                 viSurveyTaskMapper.updateViSurveyTask(bean);
+
             }
         }
     }

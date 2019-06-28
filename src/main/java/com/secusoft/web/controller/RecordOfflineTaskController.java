@@ -31,7 +31,7 @@ public class RecordOfflineTaskController {
     RecordOfflineTaskService recordOfflineTaskService;
 
     @RequestMapping("/addOfflineTask")
-    public ResponseEntity<ResultVo> addOfflineTask( @RequestBody RecordOfflineTaskRequest requestOfflineTaskRequest){
+    public ResponseEntity<ResultVo> addOfflineTask( RecordOfflineTaskRequest requestOfflineTaskRequest){
        if(!requestOfflineTaskRequest.validate()){
             //没有可执行设备
             throw new BussinessException(BizExceptionEnum.PARAM_NULL);
@@ -43,7 +43,7 @@ public class RecordOfflineTaskController {
     }
 
     @RequestMapping("/getOfflineTaskProgress")
-    public ResponseEntity<ResultVo> getOfflineTaskProgress( @RequestBody RecordOfflineTaskBean recordOfflineTaskBean) {
+    public ResponseEntity<ResultVo> getOfflineTaskProgress(RecordOfflineTaskBean recordOfflineTaskBean) {
         if(!recordOfflineTaskBean.getEnable().equals("0")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
         }
@@ -53,9 +53,10 @@ public class RecordOfflineTaskController {
 
     @RequestMapping("/enableOfflineTask")
     public ResponseEntity<ResultVo> enableOfflineTask(@RequestBody RecordOfflineTaskBean recordOfflineTaskBean){
-        if(!recordOfflineTaskBean.getEnable().equals("1")){
+        System.out.println(recordOfflineTaskBean);
+       /* if(!recordOfflineTaskBean.getEnable().equals("1")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
-        }
+        }*/
         ResultVo resultVo = recordOfflineTaskService.enableOfflineTask(recordOfflineTaskBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }

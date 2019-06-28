@@ -22,7 +22,6 @@ public class NormalConfig {
     public static String bkrepoDataTaskTime;
 
     public static String streamMinute;
-
     /**
      * 基础库数据源  1-烽火 2-视频专网orcal
      */

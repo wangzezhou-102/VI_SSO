@@ -40,7 +40,6 @@ public class SemanticSearchClient {
     public static final String Path_SEARCH = "/textsearch";
 
     private volatile static SemanticSearchClient HttpClientConnectionPool;
-
     private static final String USERAGENT = "SZ-JAVA";
     private static final String CHARSET = "UTF-8";
     private static final int MAX_TOTAL_CONNECTIONS = 50;
@@ -50,7 +49,6 @@ public class SemanticSearchClient {
 
     private static PoolingHttpClientConnectionManager cm = null;
     private static CloseableHttpClient httpclient;
-
 
     /**
      * 初始化连接池

@@ -336,7 +336,6 @@ public class ScreenServiceImpl implements ScreenService {
         operationBlueScreenFloatingFrame("spzn","浮框-视频智能","fjpcsbzsyxt5","分局/派出所本周使用系统Top5","63",toDay);
         operationBlueScreenFloatingFrame("spzn","浮框-视频智能","fjpcsbzsyxt6","分局/派出所本周使用系统Top6","42",toDay);
     }
-
     /**
      * 操作白屏数据库封装的方法
      */
