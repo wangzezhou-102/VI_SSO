@@ -33,20 +33,27 @@
             <if test="enable != null">#{enable}</if>
         </trim>
     </insert>
-    <!--  查询 执行的离线任务列表  -->
-    <select id="getOfflineTaskProgress" parameterType="com.secusoft.web.model.RecordOfflineTaskBean" resultMap="vi_Offline_Task_Map">
-        select task_id,progress from vi_offline_task
+    <!--  查询 不同执行状态的离线任务列表  -->
+    <select id="getOfflineTaskByEnable" parameterType="com.secusoft.web.model.RecordOfflineTaskBean" resultMap="vi_Offline_Task_Map">
+        select task_id,device_id,progress from vi_offline_task
         where enable = #{ enable }
     </select>
+    <!-- 根据任务Id 查询该条任务信息  -->
+    <select id="getOfflineTaskByTaskId" parameterType="com.secusoft.web.model.RecordOfflineTaskBean" resultType="com.secusoft.web.model.RecordOfflineTaskBean">
+        select device_id,progress from vi_offline_task
+        where task_id = #{taskId}
+    </select>
     <!--  修改离线任务的状态  -->
-    <update id="updateOfflineTaskEnableById" parameterType="com.secusoft.web.model.RecordOfflineTaskBean">
+    <update id="updateOfflineTaskEnableByTaskId" parameterType="com.secusoft.web.model.RecordOfflineTaskBean">
         update vi_offline_task set
         enable = #{ enable }
-       ,end_time = #{ endTime }
+        <if test="endTime != null">
+            ,end_time = #{ endTime }
+        </if>
         where task_id = #{ taskId }
     </update>
     <!--  修改离线任务的进度  -->
-    <update id="updateOfflineTaskProgressById" parameterType="com.secusoft.web.model.RecordOfflineTaskBean">
+    <update id="updateOfflineTaskProgressByTaskId" parameterType="com.secusoft.web.model.RecordOfflineTaskBean">
         update vi_offline_task set
         progress = #{ progress }
         where task_id = #{taskId}

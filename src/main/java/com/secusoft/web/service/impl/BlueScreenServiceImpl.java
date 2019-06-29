@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +50,7 @@ public class BlueScreenServiceImpl implements BlueScreenService {
         /**
          * 2.获得目标搜图API调用次数
          *      (1).获得当前系统登录人的组织code
-         *      (2).获得该组织code下所有组织的人员id   List<Integer>
+         *      (2).获得该组织code下所有组织的人员id  List<Integer>
          *      (3).去统计该组织所有人员的调用图搜api的数量
          */
         List<Integer> userIds = new ArrayList<>();

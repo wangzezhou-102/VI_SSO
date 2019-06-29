@@ -12,7 +12,6 @@ public class TuSouClientException extends RuntimeException {
     public TuSouClientException(String message, Throwable t) {
         super(message, t);
     }
-
     /**
      * Creates a new TuSouClientException with the specified message.
      *
@@ -25,5 +24,6 @@ public class TuSouClientException extends RuntimeException {
     public TuSouClientException(Throwable t) {
         super(t);
     }
+
 
 }

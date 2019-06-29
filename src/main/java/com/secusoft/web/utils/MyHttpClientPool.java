@@ -47,7 +47,6 @@ public class MyHttpClientPool {
 	public static final int MAX_ROUTE_CONNECTIONS = 20;
 	public static final int CONNECT_TIMEOUT = 3000; // 连接时间
 	public static final int SOCKET_TIMEOUT = 10000; // 获取内容时间
-
 	private static PoolingHttpClientConnectionManager cm = null;
 	private static CloseableHttpClient httpclient;
 

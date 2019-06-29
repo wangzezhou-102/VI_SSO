@@ -7,12 +7,12 @@ import com.secusoft.web.core.util.ResponseUtil;
 import com.secusoft.web.model.RecordOfflineTaskBean;
 import com.secusoft.web.model.RecordOfflineTaskRequest;
 import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.service.RecordOfflineTaskService;
+import com.secusoft.web.tusouapi.service.RecordOfflineTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -22,16 +22,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019/6/24 14:47
  */
 
-@CrossOrigin(value = "*", maxAge = 3600)
 @RestController
+@CrossOrigin(value = "*", maxAge = 3600)
 public class RecordOfflineTaskController {
 
 
     @Autowired
     RecordOfflineTaskService recordOfflineTaskService;
 
-    @RequestMapping("/addOfflineTask")
-    public ResponseEntity<ResultVo> addOfflineTask( @RequestBody RecordOfflineTaskRequest requestOfflineTaskRequest){
+    @PostMapping("/addOfflineTask")
+    public ResponseEntity<ResultVo> addOfflineTask(@RequestBody RecordOfflineTaskRequest requestOfflineTaskRequest){
        if(!requestOfflineTaskRequest.validate()){
             //没有可执行设备
             throw new BussinessException(BizExceptionEnum.PARAM_NULL);
@@ -42,8 +42,10 @@ public class RecordOfflineTaskController {
 
     }
 
-    @RequestMapping("/getOfflineTaskProgress")
-    public ResponseEntity<ResultVo> getOfflineTaskProgress( @RequestBody RecordOfflineTaskBean recordOfflineTaskBean) {
+    @PostMapping("/getOfflineTaskProgress")
+    public ResponseEntity<ResultVo> getOfflineTaskProgress(@RequestBody RecordOfflineTaskBean recordOfflineTaskBean) {
+        System.out.println(recordOfflineTaskBean);
+        System.out.println(recordOfflineTaskBean.getEnable()+recordOfflineTaskBean.getTaskId());
         if(!recordOfflineTaskBean.getEnable().equals("0")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
         }
@@ -51,8 +53,11 @@ public class RecordOfflineTaskController {
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
-    @RequestMapping("/enableOfflineTask")
-    public ResponseEntity<ResultVo> enableOfflineTask(@RequestBody RecordOfflineTaskBean recordOfflineTaskBean){
+    @PostMapping("/enableOfflineTask1")
+    public ResponseEntity<ResultVo> enableOfflineTask( RecordOfflineTaskBean recordOfflineTaskBean){
+        System.out.println(recordOfflineTaskBean);
+        System.out.println(recordOfflineTaskBean.getEnable()+"---"+recordOfflineTaskBean.getTaskId()+"===="+recordOfflineTaskBean.getDeviceId());
+        System.out.println(recordOfflineTaskBean.getEnable()+"---任务id : "+recordOfflineTaskBean.getTaskId()+"==== 设备Id:"+recordOfflineTaskBean.getDeviceId());
         if(!recordOfflineTaskBean.getEnable().equals("1")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
         }
