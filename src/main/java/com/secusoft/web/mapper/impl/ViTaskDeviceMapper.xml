@@ -91,7 +91,9 @@
             <if test="id!=null">
                 and vtd.id=#{id}
             </if>
-
+            <if test="taskId!=null">
+                and task_id not in (#{taskId})
+            </if>
         </where>
     </select>
 

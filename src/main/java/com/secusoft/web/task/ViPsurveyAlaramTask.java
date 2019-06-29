@@ -70,11 +70,12 @@ public class ViPsurveyAlaramTask {
                 bean.setViPsurveyAlaramBean(viPsurveyAlaramBean);
             }
             viPsurveyAlaramDetailMapper.insertBatch(detailBeanList);
-
+//            Map<String ,Object> map=new HashMap<>();
+//            map.put("anbao", new Object());
+//            map.put("Bktask", new Object());
             if(detailBeanList.size()>0){
                 WebSocketMessageVO webSocketMessageVO=new WebSocketMessageVO();
                 webSocketMessageVO.setData(detailBeanList);
-
                 webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
             }
         }

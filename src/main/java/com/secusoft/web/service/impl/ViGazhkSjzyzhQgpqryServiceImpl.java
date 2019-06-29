@@ -120,7 +120,7 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
         BKMemberAddRequest bkMemberAddRequest=new BKMemberAddRequest();
         bkMemberAddRequest.setBkid(bkrepoConfig.getBkid());
         bkMemberAddRequest.setBkid(viBasicMemberBean.getObjectId());
-        bkMemberAddRequest.setContents(viBasicMemberBean.getContent());
+        bkMemberAddRequest.setContent(viBasicMemberBean.getContent());
         bkMemberAddRequest.setOssUrl(viBasicMemberBean.getImageUrl());
         bkMemberAddRequest.setFeature(viBasicMemberBean.getFeature());
         if(StringUtils.isNotEmpty(viBasicMemberBean.getAttribute())) {

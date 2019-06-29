@@ -49,7 +49,7 @@ public class ViRepoServiceImpl implements ViRepoService {
         viRepoBean.setType(1);
         viRepoBean.setBktype(1);
         viRepoMapper.insertViRepo(viRepoBean);
-        return ResultVo.success();
+        return ResultVo.success(viRepoBean);
     }
 
     /**

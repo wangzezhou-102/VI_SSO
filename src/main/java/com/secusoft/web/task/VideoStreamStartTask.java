@@ -56,7 +56,7 @@ public class VideoStreamStartTask extends TimerTask {
                     log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败，原因："+message);
                     viTaskDeviceBean.setStatus(0);
                 }
-                viTaskDeviceBean.setAction(0);
+                viTaskDeviceBean.setAction(1);
                 viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
             }
         }

@@ -16,11 +16,11 @@ public class BKMemberAddRequest{
      */
     private String objectId;
     /**
-     * 图像内容; base64 编码;与 ossUrls ⼆选⼀;优先级:ossUrls>contents
+     * 图像内容; base64 编码;与 ossUrls ⼆选⼀;优先级:ossUrls>content
      */
-    private String contents;
+    private String content;
     /**
-     * 图像内容; base64 编码;与 ossUrls ⼆选⼀;优先级:ossUrls>contents
+     * 图像内容; ossUrl;与 ossUrls ⼆选⼀;优先级:ossUrls>content
      */
     private String ossUrl;
     /**
@@ -61,17 +61,17 @@ public class BKMemberAddRequest{
     }
 
     /**
-     * @return the contents
+     * @return the content
      */
-    public String getContents() {
-        return contents;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * @param contents the contents to set
+     * @param content the content to set
      */
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getOssUrl() {

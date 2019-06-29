@@ -8,6 +8,8 @@ import java.util.Date;
  */
 public class ZdryBean {
 
+    private Integer id;
+
     private String picId;
 
     private String humanName;
@@ -17,6 +19,14 @@ public class ZdryBean {
     private Date updateTime;
 
     private String status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getPicId() {
         return picId;

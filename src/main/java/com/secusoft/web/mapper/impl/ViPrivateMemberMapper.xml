@@ -40,6 +40,9 @@
             <if test="repoId!=null">
                 and repo_id=#{repoId}
             </if>
+            <if test="searchValue!=null">
+                and identityName like CONCAT(CONCAT('%', #{searchValue}), '%')
+            </if>
         </where>
     </select>
 

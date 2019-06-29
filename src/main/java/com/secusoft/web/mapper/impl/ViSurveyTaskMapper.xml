@@ -61,8 +61,8 @@
                      order="BEFORE表示在插入语句之前执行
                      resultType="int"表示返回值得类型为int类型
                  -->
-      INSERT INTO vi_survey_task(task_id,topic,survey_name,begin_time,end_time,survey_type,area_type)
-        VALUES(#{taskId},#{topic},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType})
+      INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,area_type)
+        VALUES(#{taskId},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType})
     </insert>
 
      <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">

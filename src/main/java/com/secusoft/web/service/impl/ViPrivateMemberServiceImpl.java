@@ -76,10 +76,9 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
         System.out.println(requestStr);
-        BaseResponse baseResponse =
-                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(),
-                        bkMemberAddRequestBaseRequest);
-
+        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+        BaseResponse baseResponse =new BaseResponse();
+        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         String code = baseResponse.getCode();
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
             throw new RuntimeException("布控目标创建失败");
