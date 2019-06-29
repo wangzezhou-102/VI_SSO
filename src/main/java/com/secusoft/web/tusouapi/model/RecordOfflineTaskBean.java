@@ -1,7 +1,8 @@
-package com.secusoft.web.model;
+package com.secusoft.web.tusouapi.model;
 
 
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -22,6 +23,12 @@ public class RecordOfflineTaskBean {
     private Integer progress;
     //任务状态
     private String enable;
+    //任务创建时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    //任务删除（取消）时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date destoryTime;
 
     public Integer getId() { return id; }
 
@@ -51,17 +58,26 @@ public class RecordOfflineTaskBean {
 
     public void setEnable(String enable) { this.enable = enable; }
 
+    public Date getCreateTime() { return createTime; }
+
+    public void setCreateTime(Date createTime) { this.createTime = createTime; }
+
+    public Date getDestoryTime() { return destoryTime; }
+
+    public void setDestoryTime(Date destoryTime) { this.destoryTime = destoryTime; }
+
     @Override
     public String toString() {
-        return "ViOfflineTaskBean{" +
+        return "RecordOfflineTaskBean{" +
                 "id=" + id +
                 ", taskId='" + taskId + '\'' +
                 ", deviceId='" + deviceId + '\'' +
-                ", beigntime=" + beginTime +
-                ", endtime=" + endTime +
-                ", status=" + progress +
-                ", isDelete='" + enable + '\'' +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", progress=" + progress +
+                ", enable='" + enable + '\'' +
+                ", createTime=" + createTime +
+                ", destoryTime='" + destoryTime + '\'' +
                 '}';
-
     }
 }

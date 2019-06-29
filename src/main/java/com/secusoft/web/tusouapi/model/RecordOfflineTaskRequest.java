@@ -1,5 +1,6 @@
-package com.secusoft.web.model;
+package com.secusoft.web.tusouapi.model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,27 +17,27 @@ public class RecordOfflineTaskRequest {
     /**
      *视频开始时间
      */
-    private String beginTime;
+    private Date beginTime;
     /**
      *视频结束时间
      */
-    private String endTime;
+    private Date endTime;
 
     public List<String> getDeviceIds() { return deviceIds; }
 
     public void setDeviceIds(List<String> deviceIds) { this.deviceIds = deviceIds; }
 
-    public String getBeginTime() { return beginTime; }
+    public Date getBeginTime() { return beginTime; }
 
-    public void setBeginTime(String beginTime) { this.beginTime = beginTime; }
+    public void setBeginTime(Date beginTime) { this.beginTime = beginTime; }
 
-    public String getEndTime() { return endTime; }
+    public Date getEndTime() { return endTime; }
 
-    public void setEndTime(String endTime) { this.endTime = endTime; }
+    public void setEndTime(Date endTime) { this.endTime = endTime; }
 
     public boolean validate(){
         //判断所需参数是否完成
-        if(deviceIds.isEmpty() || beginTime.isEmpty() || endTime.isEmpty()){
+        if(deviceIds.isEmpty() || beginTime.toString().isEmpty() || endTime.toString().isEmpty()){
            return false;
         }
         return true;
