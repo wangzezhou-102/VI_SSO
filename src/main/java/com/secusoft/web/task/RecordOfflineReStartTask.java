@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +21,7 @@ public class RecordOfflineReStartTask {
     /*
     * 离线任务重新下发
     * */
-    @Scheduled(cron="0 0/1 * * * ?")
+    //@Scheduled(cron="0 0/1 * * * ?")
     public void offlineTaskReStart(){
        logger.info("离线任务重新下发");
         recordOfflineTaskService.addRecordOfflineTaskReStart();
@@ -30,5 +29,6 @@ public class RecordOfflineReStartTask {
         recordOfflineTaskService.enableRecordOfflineTaskReStart();
         logger.info("离线任务下发结束");
     }
+
 
 }
