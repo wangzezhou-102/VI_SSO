@@ -9,6 +9,7 @@ import java.util.List;
 public interface DeviceMapper extends BaseMapper<DeviceBean> {
     List<DeviceBean> selectDeviceByPid(String id);
     DeviceBean selectDeviceById(String id);
+    DeviceBean selectDeviceByDeviceId(String deviceId);
     List<DeviceBean> selectDeviceByAreaId(String id);
 
     List<DeviceBean> readDeviceList(DeviceBean queryBean);

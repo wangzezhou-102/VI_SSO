@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.PatrolRouteDeviceMapper">
+
+    <resultMap id="PatrolRouteDeviceResultMap" type="com.secusoft.web.model.PatrolRouteDeviceBean">
+        <id column="id" property="Id"/>
+        <result column="route_id" property="routeId"/>
+        <result column="device_id" property="deviceId"/>
+        <result column="status" property="status"/>
+        <association column="device_id" property="deviceBean" select="com.secusoft.web.mapper.DeviceMapper.selectDeviceByDeviceId"/>
+    </resultMap>
+    <!-- 查看路线对应设备 -->
+    <select id="selectPatrolRouteDeviceByRouteId" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean" resultMap="PatrolRouteDeviceResultMap">
+        select device_id from vi_patrol_route_device
+        where route_id=#{routeId} and status=#{status}
+    </select>
+    <!-- 增加路线设备 -->
+    <insert id="insertPatrolRouteDevice" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
+        insert into vi_patrol_route_device(route_id,device_id) values(#{routeId},#{deviceId})
+    </insert>
+    <!-- 删除路线对应设备 -->
+    <delete id="deletePatrolRoute" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
+        delete from vi_patrol_route_device
+        <where>
+            <if test="routeId != null">
+                route_id=#{routeId}
+            </if>
+            <if test="deviceId != null">
+                and device_id=#{deviceId}
+            </if>
+        </where>
+    </delete>
+    <!-- 修改路线状态 -->
+    <update id="updatePatrolRouteDevice" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
+        update vi_patrol_route_device
+        set status=#{status}
+        where route_id=#{routeId}
+    </update>
+
+
+</mapper>
