@@ -16,14 +16,15 @@ public class SysOperationLog {
     private String param;//请求参数{}，即入参
     private String result;//返回结果{}
     private String exception;//异常信息
-    private Integer userId;//用户账号ID
+    private String userId;//用户账号ID
     private java.util.Date operateDate;//记录时间
     private Long timeout;//毫秒级响应时间
+    private String orgId;//用户组织ID
 
     public SysOperationLog() {
     }
 
-    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, Integer userId, Date operateDate, Long timeout) {
+    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, String userId, Date operateDate, Long timeout, String orgId) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -36,6 +37,7 @@ public class SysOperationLog {
         this.userId = userId;
         this.operateDate = operateDate;
         this.timeout = timeout;
+        this.orgId = orgId;
     }
 
     public Integer getId() {
@@ -110,12 +112,20 @@ public class SysOperationLog {
         this.exception = exception;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public Date getOperateDate() {

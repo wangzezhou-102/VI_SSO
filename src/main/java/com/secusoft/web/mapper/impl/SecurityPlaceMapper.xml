@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.SecurityPlaceMapper">
+    
+    <resultMap id="security_place_Map" type="com.secusoft.web.model.SecurityTaskPlaceBean">
+        <id column="id" property="id" />
+        <result column="place_name" property="placeName" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="radius" property="radius" />
+    </resultMap>
+
+    <resultMap id="security_place_MapA" type="com.secusoft.web.model.SecurityPlaceBean">
+        <id column="task_type_id" property="parentId" />
+        <collection property="list" ofType="SecurityTaskPlaceBean">
+            <id column="id" property="id" />
+            <result column="place_name" property="placeName" />
+            <result column="longitude" property="longitude" />
+            <result column="latitude" property="latitude" />
+            <result column="radius" property="radius" />
+        </collection>
+    </resultMap>
+
+
+    <!--关联查询-->
+    <select id="selectSecirityTaskPlaceByTypeId" parameterType="java.lang.Integer" resultMap="security_place_Map">
+        select p.id ,place_name,longitude,latitude,radius,ttp.task_type_id
+        from vi_security_place p right join vi_security_task_type_place ttp on p.id = ttp.place_id
+        where task_type_id = #{id}
+    </select>
+
+    <!--关联查询-->
+    <select id="selectSecirityTaskPlace" parameterType="java.lang.Integer" resultMap="security_place_MapA">
+        select p.id ,place_name,longitude,latitude,radius,ttp.task_type_id
+        from vi_security_place p right join vi_security_task_type_place ttp on p.id = ttp.place_id
+    </select>
+</mapper>
