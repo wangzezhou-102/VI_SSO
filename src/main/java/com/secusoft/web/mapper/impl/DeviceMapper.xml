@@ -16,7 +16,6 @@
         <result column="stream_state" property="streamState" />
     </resultMap>
 
-
     <!-- 数据库中表名为:vi_device的列名,as前是数据库的列名,as后是列的别名用于映射成实体类中的属性,需要注意的是别名必须与resultMap中的column别名一致 -->
     <sql id="vi_device_Column">
         vi_device.id as id
@@ -45,7 +44,15 @@
             <if test="areaName != null "> and vi_area.area_name = #{areaName}</if>
             <if test="id != null "> and vi_area.id = #{id}</if>
         </where>
-    </select> 
+    </select>
+
+    <!-- 通过deviceId获得对应数据库中表的数据对象-->
+    <select id="selectDeviceByDeviceId" parameterType="java.lang.String" resultMap="result_Device_Map">
+        select
+        <include refid="vi_device_Column" />
+        from vi_device
+        where vi_device.device_id = #{deviceId}
+    </select>
 
     <!-- 通过Device的id获得对应数据库中表的数据对象-->
     <select id="selectDeviceById" parameterType="java.lang.String" resultMap="result_Device_Map">

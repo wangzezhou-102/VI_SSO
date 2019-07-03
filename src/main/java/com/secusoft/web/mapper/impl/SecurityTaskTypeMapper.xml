@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.SecurityTaskTypeMapper">
+
+    <resultMap id="security_type_place_MapA" type="com.secusoft.web.model.SecurityTaskTypeBean">
+        <id column="id" property="id" />
+        <result column="type_name" property="typeName" />
+    </resultMap>
+    <resultMap id="security_type_place_MapB" type="com.secusoft.web.model.SecurityTaskTypeBean">
+        <id column="id" property="id" />
+        <result column="type_name" property="typeName" />
+
+        <collection property="subsetType" ofType="securityTaskTypeBean">
+            <id column="chirldren_id" property="id"/>
+            <result column="children_type" property="typeName"/>
+        </collection>
+
+    </resultMap>
+
+    <resultMap id="security_type_place_Map" type="com.secusoft.web.model.SecurityTaskTypeBean">
+        <id column="id" property="id" />
+        <result column="type_name" property="typeName" />
+
+        <collection property="subsetType" ofType="securityTaskTypeBean">
+            <id column="chirldren_id" property="id"/>
+            <result column="children_type" property="typeName"/>
+            <collection column="chirldren_id" property="securityTaskPlaces" ofType="securityTaskPlaceBean"
+                        select="com.secusoft.web.mapper.SecurityPlaceMapper.selectSecirityTaskPlaceByTypeId">
+            </collection>
+        </collection>
+
+        <collection column="id" property="securityTaskPlaces" ofType="securityTaskPlaceBean"
+                    select="com.secusoft.web.mapper.SecurityPlaceMapper.selectSecirityTaskPlaceByTypeId">
+        </collection>
+    </resultMap>
+
+
+    <!--类型地点关联查询-->
+    <select id="selectsecurityTaskType"  resultMap="security_type_place_Map">
+        select vs.id , vs.type_name,vst.type_name as children_type,vst.id as chirldren_id from
+        vi_security_task_type vs left Join vi_security_task_type vst on vs.id = vst.parent_id
+        where vs.parent_id = 0
+    </select>
+
+    <select id="selectsecurityTaskTypeA" resultMap="security_type_place_MapB">
+        select vs.id , vs.type_name,vst.type_name as children_type,vst.id as chirldren_id from
+        vi_security_task_type vs left Join vi_security_task_type vst on vs.id = vst.parent_id
+        where vs.parent_id = 0 and vs.id=1
+    </select>
+
+    <select id="selectsecurityTaskTypeB" resultMap="security_type_place_MapA">
+        select id , type_name from
+        vi_security_task_type
+        where parent_id = 0 and id!=1
+    </select>
+
+
+</mapper>
