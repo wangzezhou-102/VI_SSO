@@ -67,24 +67,9 @@ public class ServiceApiConfig {
     public static String getViPsurveyAlaram;
 
     /**
-     * 全国在逃人员列表
+     * 重点人员库
      */
-    public static String viewQgztList;
-
-    /**
-     * 省高院布控人员列表
-     */
-    public static String viewSgyList;
-
-    /**
-     * 临控人员列表
-     */
-    public static String viewLkList;
-
-    /**
-     * 涉毒脱失人员列表
-     */
-    public static String viewSdtsList;
+    public static String viewZdryList;
 
     public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;
@@ -174,35 +159,11 @@ public class ServiceApiConfig {
         ServiceApiConfig.getViPsurveyAlaram = getViPsurveyAlaram;
     }
 
-    public static String getViewQgztList() {
-        return viewQgztList;
+    public static String getViewZdryList() {
+        return viewZdryList;
     }
 
-    public static void setViewQgztList(String viewQgztList) {
-        ServiceApiConfig.viewQgztList = viewQgztList;
-    }
-
-    public static String getViewSgyList() {
-        return viewSgyList;
-    }
-
-    public static void setViewSgyList(String viewSgyList) {
-        ServiceApiConfig.viewSgyList = viewSgyList;
-    }
-
-    public static String getViewLkList() {
-        return viewLkList;
-    }
-
-    public static void setViewLkList(String viewLkList) {
-        ServiceApiConfig.viewLkList = viewLkList;
-    }
-
-    public static String getViewSdtsList() {
-        return viewSdtsList;
-    }
-
-    public static void setViewSdtsList(String viewSdtsList) {
-        ServiceApiConfig.viewSdtsList = viewSdtsList;
+    public static void setViewZdryList(String viewZdryList) {
+        ServiceApiConfig.viewZdryList = viewZdryList;
     }
 }

@@ -42,6 +42,11 @@ public class NormalConfig {
      */
     public static String addrApiSemanticSearch;
 
+    /**
+     * 布控任务启停流AppId
+     */
+    public static String szBkAppId;
+
     public static String getAddrApiService() {
         return addrApiService;
     }
@@ -120,5 +125,13 @@ public class NormalConfig {
 
     public static void setAddrApiSemanticSearch(String addrApiSemanticSearch) {
         NormalConfig.addrApiSemanticSearch = addrApiSemanticSearch;
+    }
+
+    public static String getSzBkAppId() {
+        return szBkAppId;
+    }
+
+    public static void setSzBkAppId(String szBkAppId) {
+        NormalConfig.szBkAppId = szBkAppId;
     }
 }

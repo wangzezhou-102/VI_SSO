@@ -2,10 +2,11 @@ package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.SpringContextHolder;
-import com.secusoft.web.mapper.ViSurveyTaskMapper;
+import com.secusoft.web.mapper.SysOrgRoadMapper;
 import com.secusoft.web.mapper.ViTaskDeviceMapper;
 import com.secusoft.web.model.ViSurveyTaskBean;
 import com.secusoft.web.model.ViTaskDeviceBean;
@@ -34,7 +35,7 @@ public class VideoStreamStartTask extends TimerTask {
 
     private static ViTaskDeviceMapper viTaskDeviceMapper = SpringContextHolder.getBean(ViTaskDeviceMapper.class);
 
-    private static ViSurveyTaskMapper viSurveyTaskMapper = SpringContextHolder.getBean(ViSurveyTaskMapper.class);
+    private static SysOrgRoadMapper sysOrgRoadMapper = SpringContextHolder.getBean(SysOrgRoadMapper.class);
 
     @Override
     public void run() {
@@ -42,6 +43,7 @@ public class VideoStreamStartTask extends TimerTask {
             //判断设备是否已启用或者状态是否为1
             if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
                 StreamRequest streamRequest = new StreamRequest();
+                streamRequest.setAppId(NormalConfig.getSzBkAppId());
                 streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
                 String requestStr = JSON.toJSONString(streamRequest);

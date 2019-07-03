@@ -25,29 +25,55 @@
              <if test="objectId != null">
                  object_id=#{objectId},
              </if>
+             <if test="validState != null">
+                 valid_state=#{validState},
+             </if>
          </set>
          where id=#{id}
      </update>
 
-    <delete id="delViPrivateMember" parameterType="Integer">
-        delete from vi_private_member
+    <update id="delViPrivateMember" parameterType="Integer">
+        update vi_private_member set valid_state=0
          where id=#{id}
-    </delete>
+    </update>
     
-    <select id="getAllViPrivateMember" parameterType="com.secusoft.web.model.ViPrivateMemberVo" resultType="com.secusoft.web.model.ViPrivateMemberBean">
+    <select id="getAllViPrivateMember" parameterType="com.secusoft.web.model.ViPrivateMemberVo" resultType="com.secusoft.web.model.ViMemberVo">
         select * from vi_private_member
         <where>
+            valid_state=1
             <if test="repoId!=null">
                 and repo_id=#{repoId}
             </if>
             <if test="searchValue!=null">
-                and identityName like CONCAT(CONCAT('%', #{searchValue}), '%')
+                and identity_name like CONCAT(CONCAT('%', #{searchValue}), '%')
             </if>
         </where>
     </select>
 
-    <select id="getViPrivateMemberByObjectId" parameterType="String" resultType="com.secusoft.web.model.ViPrivateMemberBean">
+    <select id="getViPrivateMemberByBean" parameterType="com.secusoft.web.model.ViPrivateMemberBean" resultType="com.secusoft.web.model.ViPrivateMemberBean">
         select * from vi_private_member
-        where object_id=#{objectId}
+        <where>
+            <if test="objectId!=null">
+               and object_id=#{objectId}
+            </if>
+            <if test="id!=null">
+                and id=#{id}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getInfoSearchMember" parameterType="com.secusoft.web.model.ViPrivateMemberVo" resultType="com.secusoft.web.model.ViMemberVo">
+        select content,image_url,identity_id,identity_name,repo_id,create_time,vr.bkname,vr.type from
+        ((select content,image_url,identity_id,identity_name,repo_id,create_time from vi_basic_member)union all
+        (select "" as content,image_url,identity_id,identity_name,repo_id,create_time from vi_private_member))a
+        left join vi_repo vr on vr.id=a.repo_id
+        <where>
+            <if test="searchValue!=null">
+                or identity_id like CONCAT(CONCAT('%', #{searchValue}), '%')
+                or identity_name like CONCAT(CONCAT('%', #{searchValue}), '%')
+            </if>
+        </where>
+        order by create_time desc
     </select>
 </mapper>

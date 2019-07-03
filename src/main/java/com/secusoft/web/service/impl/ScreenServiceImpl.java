@@ -30,7 +30,7 @@ public class ScreenServiceImpl implements ScreenService {
     @Autowired
     private ViSurveyTaskMapper viSurveyTaskMapper;
     @Autowired
-    private ViPsurveyAlaramMapper viPsurveyAlaramMapper;
+    private ViPsurveyAlarmMapper viPsurveyAlarmMapper;
     @Autowired
     private DeviceMapper deviceMapper;
     @Autowired
@@ -46,6 +46,8 @@ public class ScreenServiceImpl implements ScreenService {
     @Override
     @Transactional
     public void readVideoApplication() {
+
+
         /**1.获取当前账号天擎支持的并发总算力对应的路数
          *      (1).获得当前系统登录人的组织code
          *      (2).获得该组织的并发总算李对应的路数
@@ -99,7 +101,7 @@ public class ScreenServiceImpl implements ScreenService {
 
         Integer surveyAlaramNumber;
         if(taskIds!=null&&taskIds.size()!=0){
-            surveyAlaramNumber = viPsurveyAlaramMapper.selectIdNumberBytaskId(taskIds);
+            surveyAlaramNumber = viPsurveyAlarmMapper.selectIdNumberBytaskId(taskIds);
 
         }else{
             surveyAlaramNumber = 0 ;
@@ -494,7 +496,7 @@ public class ScreenServiceImpl implements ScreenService {
             taskIds = viSurveyTaskMapper.selectIdByUserIds(userIds);
         }
         if(taskIds!=null&&taskIds.size()!=0){
-            screenAlaramInfoBean.setSurveyAlarmTotal(viPsurveyAlaramMapper.selectIdNumberBytaskId(taskIds));
+            screenAlaramInfoBean.setSurveyAlarmTotal(viPsurveyAlarmMapper.selectIdNumberBytaskId(taskIds));
         }else{
             screenAlaramInfoBean.setSurveyAlarmTotal(0);
         }

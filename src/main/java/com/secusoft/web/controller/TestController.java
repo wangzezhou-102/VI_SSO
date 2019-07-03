@@ -12,12 +12,16 @@ import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.SemanticSearchClient;
-import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.model.BaseResponse;
+import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,10 +48,26 @@ public class TestController<psvm> extends BaseController {
     private DeviceMapper deviceMapper;
 
     @Resource
-    private ViPsurveyAlaramMapper viPsurveyAlaramMapper;
+    private ViPsurveyAlarmMapper viPsurveyAlarmMapper;
 
     @Resource
-    private ViPsurveyAlaramDetailMapper viPsurveyAlaramDetailMapper;
+    private ViPsurveyAlarmDetailMapper viPsurveyAlarmDetailMapper;
+
+    @Autowired
+    @Qualifier("threedaryJdbcTemplate")
+    private JdbcTemplate jdbcTemplate;
+
+    @RequestMapping("/testoracle")
+    public Object testOracle() {
+        String sql="select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME from VIEW_QGZT";
+
+        RowMapper<ZdryBean> rowMapper=new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
+        List<ZdryBean> users= jdbcTemplate.query(sql, rowMapper);
+        for (ZdryBean user : users) {
+            System.out.println(user.toString());
+        }
+        return true;
+    }
 
 
     @RequestMapping("/testalaram")
@@ -64,19 +84,19 @@ public class TestController<psvm> extends BaseController {
 
             //布控报警
             String src = jsonData.getString("src");
-            ViPsurveyAlaramBean viPsurveyAlaramBean = (ViPsurveyAlaramBean) JSONObject.parseObject(src, ViPsurveyAlaramBean.class);
-            viPsurveyAlaramBean.setTaskId(taskId);
-            viPsurveyAlaramMapper.insertViPsurveyAlaram(viPsurveyAlaramBean);
+            ViPsurveyAlarmBean viPsurveyAlarmBean = (ViPsurveyAlarmBean) JSONObject.parseObject(src, ViPsurveyAlarmBean.class);
+            viPsurveyAlarmBean.setTaskId(taskId);
+            viPsurveyAlarmMapper.insertViPsurveyAlaram(viPsurveyAlarmBean);
             //人员报警布控图比对
             String similar = jsonData.getString("similar");
-            List<ViPsurveyAlaramDetailBean> detailBeanList = (List<ViPsurveyAlaramDetailBean>) JSONObject.parseArray(similar, ViPsurveyAlaramDetailBean.class);
-            for (ViPsurveyAlaramDetailBean bean: detailBeanList) {
-                bean.setAlarmId(viPsurveyAlaramBean.getId());
+            List<ViPsurveyAlarmDetailBean> detailBeanList = (List<ViPsurveyAlarmDetailBean>) JSONObject.parseArray(similar, ViPsurveyAlarmDetailBean.class);
+            for (ViPsurveyAlarmDetailBean bean: detailBeanList) {
+                bean.setAlarmId(viPsurveyAlarmBean.getId());
                 bean.setTaskId(taskId);
                 bean.setAlarmType("测试");
                 bean.setAlarmStatus(1);
             }
-            viPsurveyAlaramDetailMapper.insertBatch(detailBeanList);
+            viPsurveyAlarmDetailMapper.insertBatch(detailBeanList);
 
         }
         return null;

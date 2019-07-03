@@ -33,4 +33,19 @@ public class DataSourceConfig {
             @Qualifier("secondaryDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
+
+
+    @Bean(name = "threedaryDataSource")
+    @Qualifier("threedaryDataSource")
+    @ConfigurationProperties(prefix="spring.datasource.threedary")
+    public DataSource threedaryDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+
+    @Bean(name = "threedaryJdbcTemplate")
+    public JdbcTemplate threedaryJdbcTemplate(
+            @Qualifier("threedaryDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
 }

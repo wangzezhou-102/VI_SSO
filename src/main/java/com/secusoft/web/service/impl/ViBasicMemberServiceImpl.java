@@ -1,10 +1,12 @@
 package com.secusoft.web.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViBasicMemberBean;
 import com.secusoft.web.model.ViBasicMemberVo;
+import com.secusoft.web.model.ViMemberVo;
 import com.secusoft.web.service.ViBasicMemberService;
 import com.secusoft.web.utils.PageReturnUtils;
 import org.springframework.stereotype.Service;
@@ -42,15 +44,17 @@ public class ViBasicMemberServiceImpl implements ViBasicMemberService {
 
     @Override
     public ResultVo getAllViBasicMember(ViBasicMemberBean viBasicMemberBean) {
-        List<ViBasicMemberBean> list=viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean.getObjectId());
+        List<ViMemberVo> list=viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean);
         return ResultVo.success(list);
     }
 
     @Override
     public ResultVo getPagedViBasicMember(ViBasicMemberVo viBasicMemberVo) {
-        PageHelper.startPage(viBasicMemberVo.getCurrent(),viBasicMemberVo.getSize());
+        ViBasicMemberBean viBasicMemberBean=new ViBasicMemberBean();
+        viBasicMemberBean.setObjectId(viBasicMemberVo.getObjectId());
 
-        List<ViBasicMemberBean> list=viBasicMemberMapper.getAllViBasicMember(viBasicMemberVo.getObjectId());
+        PageHelper.startPage(viBasicMemberVo.getCurrent(),viBasicMemberVo.getSize());
+        List<ViMemberVo> list=viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean);
 
         return ResultVo.success(PageReturnUtils.getPageMap(list,viBasicMemberVo.getCurrent(),viBasicMemberVo.getSize()));
     }
@@ -62,6 +66,12 @@ public class ViBasicMemberServiceImpl implements ViBasicMemberService {
      */
     @Override
     public ResultVo updateFocusMenber(ViBasicMemberBean viBasicMemberBean) {
+        if(null==viBasicMemberBean){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if(viBasicMemberBean.getId()==null){
+            return ResultVo.failure(BizExceptionEnum.BKMEMBER_ID_NULL.getCode(), BizExceptionEnum.BKMEMBER_ID_NULL.getMessage());
+        }
         viBasicMemberMapper.updateFocusMenber(viBasicMemberBean);
         return ResultVo.success();
     }

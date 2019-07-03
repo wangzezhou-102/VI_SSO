@@ -12,6 +12,12 @@ public class ViPrivateMemberVo extends PageReqAbstractModel {
 
     private String searchValue;
 
+    private Integer type = 0;
+
+    private String[] delIds;
+
+    private String file;
+
     public Integer getRepoId() {
         return repoId;
     }
@@ -26,5 +32,29 @@ public class ViPrivateMemberVo extends PageReqAbstractModel {
 
     public void setSearchValue(String searchValue) {
         this.searchValue = searchValue;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String[] getDelIds() {
+        return delIds;
+    }
+
+    public void setDelIds(String[] delIds) {
+        this.delIds = delIds;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 }

@@ -1,11 +1,12 @@
 package com.secusoft.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 布控报警表
  */
-public class ViPsurveyAlaramBean {
+public class ViPsurveyAlarmBean {
     private Integer id;
 
     private String origImage;
@@ -43,6 +44,8 @@ public class ViPsurveyAlaramBean {
     private Date gmtCreate;
 
     private Date gmtModified;
+
+    private List<ViPsurveyAlarmBean> viPsurveyAlarmBeans;
 
     public Integer getId() {
         return id;
@@ -194,5 +197,13 @@ public class ViPsurveyAlaramBean {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public List<ViPsurveyAlarmBean> getViPsurveyAlarmBeans() {
+        return viPsurveyAlarmBeans;
+    }
+
+    public void setViPsurveyAlarmBeans(List<ViPsurveyAlarmBean> viPsurveyAlarmBeans) {
+        this.viPsurveyAlarmBeans = viPsurveyAlarmBeans;
     }
 }

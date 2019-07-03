@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 人员报警布控图比对表
  */
-public class ViPsurveyAlaramDetailBean {
+public class ViPsurveyAlarmDetailBean {
     private Integer id;
 
     private Integer alarmId;
@@ -45,7 +45,7 @@ public class ViPsurveyAlaramDetailBean {
 
     private Date gmtModified;
 
-    private ViPsurveyAlaramBean viPsurveyAlaramBean;
+    private ViPsurveyAlarmBean viPsurveyAlarmBean;
 
     public Integer getId() {
         return id;
@@ -199,11 +199,11 @@ public class ViPsurveyAlaramDetailBean {
         this.gmtModified = gmtModified;
     }
 
-    public ViPsurveyAlaramBean getViPsurveyAlaramBean() {
-        return viPsurveyAlaramBean;
+    public ViPsurveyAlarmBean getViPsurveyAlarmBean() {
+        return viPsurveyAlarmBean;
     }
 
-    public void setViPsurveyAlaramBean(ViPsurveyAlaramBean viPsurveyAlaramBean) {
-        this.viPsurveyAlaramBean = viPsurveyAlaramBean;
+    public void setViPsurveyAlarmBean(ViPsurveyAlarmBean viPsurveyAlarmBean) {
+        this.viPsurveyAlarmBean = viPsurveyAlarmBean;
     }
 }

@@ -28,11 +28,17 @@
          where id=#{id}
     </delete>
     
-    <select id="getAllViBasicMember" parameterType="String" resultType="com.secusoft.web.model.ViBasicMemberBean">
+    <select id="getAllViBasicMember" parameterType="com.secusoft.web.model.ViBasicMemberBean" resultType="com.secusoft.web.model.ViMemberVo">
         select * from vi_basic_member
         <where>
             <if test="objectId != null">
-                object_id LIKE concat(#{objectId},'%')
+                and object_id LIKE concat(#{objectId},'%')
+            </if>
+            <if test="repoId != null">
+                and repo_id =#{repoId}
+            </if>
+            <if test="identityName!=null">
+                and identity_name like CONCAT(CONCAT('%', #{identityName}), '%')
             </if>
         </where>
     </select>
@@ -41,4 +47,16 @@
         update vi_basic_member set status=#{status}
         where id=#{id}
     </update>
+
+    <select id="getViBasicMemberByObjectId" parameterType="com.secusoft.web.model.ViBasicMemberBean" resultType="com.secusoft.web.model.ViBasicMemberBean">
+        select * from vi_basic_member
+        <where>
+            <if test="objectId != null">
+                and object_id LIKE concat(#{objectId},'%')
+            </if>
+            <if test="repoId != null">
+                and repo_id =#{repoId}
+            </if>
+        </where>
+    </select>
 </mapper>

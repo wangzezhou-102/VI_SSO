@@ -92,12 +92,16 @@
              <if test="enable != null">
                  enable=#{enable},
              </if>
+             <if test="validState != null">
+                 valid_state=#{validState},
+             </if>
          </set>
          where id=#{id}
      </update>
 
-    <delete id="delViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest">
-        delete from vi_survey_task
+    <update id="delViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest">
+        update vi_survey_task
+        set valid_state=0
          <where>
              <if test="id!=null">
                  and id=#{id}
@@ -106,7 +110,7 @@
                  and task_id=#{taskId}
              </if>
          </where>
-    </delete>
+    </update>
     
     <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
          select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
@@ -114,8 +118,9 @@
          LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
         <where>
+            vst.valid_state=1
             <if test="surveyName!=null">
-            AND vst.survey_name=#{surveyName}
+               AND vst.survey_name=#{surveyName}
             </if>
             <if test="id!=null">
                 AND vst.id=#{id}
@@ -160,5 +165,18 @@
                 </foreach>
             </if>
         </where>
+    </select>
+
+    <select id="selectBeanById" parameterType="java.lang.Integer" resultMap="viSurveyTaskResultMap">
+        select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
+        from vi_survey_task vst
+        LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
+        LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
+        <where>
+            <if test="id!=null">
+                AND vst.id=#{id}
+            </if>
+        </where>
+        order by vst.create_time desc,vst.modify_time desc
     </select>
 </mapper>

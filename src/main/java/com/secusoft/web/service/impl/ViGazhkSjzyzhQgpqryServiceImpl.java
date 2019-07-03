@@ -96,24 +96,23 @@ public class ViGazhkSjzyzhQgpqryServiceImpl implements ViGazhkSjzyzhQgpqryServic
         viBasicMemberBean.setIdentityName(viGazhkSjzyzhQgpqryBean.getXm().trim());
         viBasicMemberBean.setStatus(1);
 
-        List<ViBasicMemberBean> allViBasicMember = viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean.getObjectId());
-        if (allViBasicMember.size() == 0) {
+        ViBasicMemberBean bean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+        if (null==bean) {
             viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
         } else {
-            ViBasicMemberBean viBasicMemberBean1 = allViBasicMember.get(0);
             //判断身份证号是否有变化
-            if (viBasicMemberBean1.getIdentityId() != viBasicMemberBean.getIdentityId()) {
-                viBasicMemberBean1.setIdentityId(viBasicMemberBean.getIdentityId());
+            if (bean.getIdentityId() != viBasicMemberBean.getIdentityId()) {
+                bean.setIdentityId(viBasicMemberBean.getIdentityId());
             }
             //判断姓名是否有变化
-            if (viBasicMemberBean1.getIdentityName() != viBasicMemberBean.getIdentityName()) {
-                viBasicMemberBean1.setIdentityName(viBasicMemberBean.getIdentityName());
+            if (bean.getIdentityName() != viBasicMemberBean.getIdentityName()) {
+                bean.setIdentityName(viBasicMemberBean.getIdentityName());
             }
-            viBasicMemberMapper.updateViBasicMember(viBasicMemberBean1);
+            viBasicMemberMapper.updateViBasicMember(bean);
             //删除布控人员接口
             BKMemberDeleteRequest bkMemberDeleteRequest=new BKMemberDeleteRequest();
             bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
-            bkMemberDeleteRequest.setObjectIds(viBasicMemberBean1.getObjectId());
+            bkMemberDeleteRequest.setObjectIds(bean.getObjectId());
             String requestStr = JSON.toJSONString(bkMemberDeleteRequest);
             ServiceApiClient.getClientConnectionPool().fetchByPostMethod(serviceApiConfig.getPathBkmemberDelete(), requestStr);
         }

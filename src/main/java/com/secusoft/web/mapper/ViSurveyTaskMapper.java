@@ -59,4 +59,11 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * @date 2019年6月20日
      */
     List<String> selectIdByUserIds(@Param("userIds") List<Integer> userIds);
+
+    /**
+     * 根据布控任务ID获取布控任务
+     * @param userIds
+     * @return
+     */
+    ViSurveyTaskBean selectBeanById(@Param("id") Integer userIds);
 }

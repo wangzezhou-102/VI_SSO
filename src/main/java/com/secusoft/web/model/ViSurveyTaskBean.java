@@ -43,7 +43,10 @@ public class ViSurveyTaskBean implements Serializable {
     private Date CreateTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date ModifyTime;
-    private Integer userId;
+    private String userId;
+    private Integer validState;
+
+    private String orgCode;
 
     private List<ViTaskRepoBean> viTaskRepoList;
     private List<ViTaskDeviceBean> viTaskDeviceList;
@@ -112,20 +115,20 @@ public class ViSurveyTaskBean implements Serializable {
         this.areaType = areaType;
     }
 
-    public Integer getEnable() {
-        return enable;
-    }
-
-    public void setEnable(Integer enable) {
-        this.enable = enable;
-    }
-
     public String getTopic() {
         return topic;
     }
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public Integer getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Integer enable) {
+        this.enable = enable;
     }
 
     public Date getCreateTime() {
@@ -144,6 +147,14 @@ public class ViSurveyTaskBean implements Serializable {
         ModifyTime = modifyTime;
     }
 
+    public Integer getValidState() {
+        return validState;
+    }
+
+    public void setValidState(Integer validState) {
+        this.validState = validState;
+    }
+
     public List<ViTaskRepoBean> getViTaskRepoList() {
         return viTaskRepoList;
     }
@@ -160,29 +171,19 @@ public class ViSurveyTaskBean implements Serializable {
         this.viTaskDeviceList = viTaskDeviceList;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        return "ViSurveyTask{" +
-                "id=" + id +
-                ", taskId='" + taskId + '\'' +
-                ", surveyName='" + surveyName + '\'' +
-                ", beginTime=" + beginTime +
-                ", endTime=" + endTime +
-                ", surveyType=" + surveyType +
-                ", surveyStatus=" + surveyStatus +
-                ", areaType=" + areaType +
-                ", topic='" + topic + '\'' +
-                ", enable=" + enable +
-                ", CreateTime=" + CreateTime +
-                ", ModifyTime=" + ModifyTime +
-                '}';
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
     }
 }

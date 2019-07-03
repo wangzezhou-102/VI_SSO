@@ -9,7 +9,9 @@ import java.util.Date;
 @TableName("vi_basic_member")
 public class ViBasicMemberBean implements Serializable {
     private Integer id;
-
+    /**
+     * 对象ID，数据来源库+id，若为自定义数据，则定义为vi_private+id
+     */
     private String objectId;
 
     private Integer repoId;
@@ -17,10 +19,14 @@ public class ViBasicMemberBean implements Serializable {
     private String realObjectId;
 
     private String realTableName;
-
-    private String identityId;
-
+    /**
+     * 姓名
+     */
     private String identityName;
+    /**
+     * 身份证号
+     */
+    private String identityId;
 
     private String content;
 
@@ -30,7 +36,10 @@ public class ViBasicMemberBean implements Serializable {
 
     private String attribute;
 
-    private Integer status;
+    /**
+     * 状态值 1-默认关注  0-无视
+     */
+    private Integer status = 1;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;

@@ -1,26 +1,26 @@
 package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
-import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.mapper.SyncZdryLogMapper;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
 import com.secusoft.web.mapper.ZdryMapper;
 import com.secusoft.web.model.*;
-import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
-import com.secusoft.web.serviceapi.model.ZdryResponse;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.utils.ImageUtils;
 import com.secusoft.web.utils.OdpsUtils;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -57,6 +57,10 @@ public class BkrepoDataTask {
     @Autowired
     BkrepoConfig bkrepoConfig;
 
+    @Autowired
+    @Qualifier("threedaryJdbcTemplate")
+    private JdbcTemplate jdbcTemplate;
+
     /**
      * 烽火定时请求数据
      *
@@ -67,7 +71,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "0 23 19 * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "30 34 16 * * ?")//0 0 */1 * * ?
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -93,6 +97,7 @@ public class BkrepoDataTask {
                 syncZdryLogBean.setTableName(str);
                 SyncZdryLogBean syncBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
                 ZdryVo zdryVo = new ZdryVo();
+                zdryVo.setTableName(str);
                 //判断是否是首次同步 1首次，0非首次
                 log.info("是否是首次同步：" + (null == syncBean));
                 zdryVo.setIsFirst(null == syncBean ? 1 : 0);
@@ -109,8 +114,13 @@ public class BkrepoDataTask {
                             viRepoBean = addViRepo("全国在逃人员布控库", "全国在逃人员布控库", "vi_" + str);
                         }
                     }
-                    syncQgztPeople(zdryVo, syncBean, syncZdryLogBean, viRepoBean);
-
+                    boolean result = true;
+                    Integer syncNum = 1;
+                    while (result) {
+                        zdryVo.setSyncNum(syncNum);
+                        result = syncQgztPeople(zdryVo, syncBean, syncZdryLogBean, viRepoBean);
+                        syncNum++;
+                    }
                 } else if ("view_sgy".equals(str)) {
 //                    baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewSgyList());
 //                    ZdryResponse zdryResponse = JSON.parseObject(JSON.toJSONString(baseResponse.getData()), ZdryResponse.class);
@@ -153,7 +163,6 @@ public class BkrepoDataTask {
     /**
      * 添加基础布控库
      *
-     * @param tableName
      * @param viRepoBean
      * @param bean
      * @return
@@ -168,21 +177,10 @@ public class BkrepoDataTask {
         viBasicMemberBean.setRealTableName(viRepoBean.getTableName());
         viBasicMemberBean.setIdentityId(bean.getPicId());
         viBasicMemberBean.setIdentityName(bean.getHumanName());
-        viBasicMemberBean.setContent(byteToBase64(bean.getPic()));
+        viBasicMemberBean.setContent(ImageUtils.encode(bean.getPic()));
         viBasicMemberBean.setRepoId(viRepoBean.getId());
         viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
         return viBasicMemberBean;
-    }
-
-    public String byteToBase64(byte[] aryByte) {
-        if (aryByte == null) return "";
-        String strBase64 = "";
-        try {
-            strBase64 = Base64.encodeBase64String(aryByte);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return strBase64;
     }
 
     /**
@@ -201,8 +199,10 @@ public class BkrepoDataTask {
         bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
-        System.out.println(requestStr);
-        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+        log.info(requestStr);
+        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+        BaseResponse baseResponse = new BaseResponse();
+
         return baseResponse;
     }
 
@@ -214,51 +214,56 @@ public class BkrepoDataTask {
      * @param syncZdryLogBean
      */
     @Transactional
-    public void syncQgztPeople(ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean, ViRepoBean viRepoBean) {
-        ZdryResponse zdryResponse = getZdryResponse(zdryVo);
+    public boolean syncQgztPeople(ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean, ViRepoBean viRepoBean) {
+        List<ZdryBean> zdryList = getZdryResponse(zdryVo);
         if (null == syncBean) {
-            for (ZdryBean bean : zdryResponse.getRecords()) {
-                //zdryMapper.insertQgzt(bean);
+            for (ZdryBean bean : zdryList) {
+                zdryMapper.insertQgzt(bean);
                 ViBasicMemberBean viBasicMemberBean = addViBasicMember(viRepoBean, bean);
+                //下发天擎
                 BaseResponse baseResponse = memberSendToTQ(viBasicMemberBean);
             }
-            syncZdryLogBean.setSyncCount(zdryResponse.getRecords().size());
-            syncZdryLogBean.setLastSyncTime(zdryResponse.getRecords().get(zdryResponse.getRecords().size() - 1).getUpdateTime());
+            syncZdryLogBean.setSyncCount(zdryList.size());
+            syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
             syncZdryLogBean.setLastEndTime(new Date());
             //syncZdryLogMapper.insertSyncZdryLog(syncZdryLogBean);
-            for (int i = 2; i < zdryResponse.getPages(); i++) {
-                zdryVo.setCurrent(i);
-                zdryResponse = getZdryResponse(zdryVo);
-                for (ZdryBean bean : zdryResponse.getRecords()) {
-                   // zdryMapper.insertQgzt(bean);
-                    ViBasicMemberBean viBasicMemberBean = addViBasicMember(viRepoBean, bean);
-                    BaseResponse baseResponse = memberSendToTQ(viBasicMemberBean);
-                }
-
-                syncZdryLogBean.setSyncCount(zdryResponse.getRecords().size());
-                syncZdryLogBean.setLastSyncTime(zdryResponse.getRecords().get(zdryResponse.getRecords().size() - 1).getUpdateTime());
-                syncZdryLogBean.setLastEndTime(new Date());
-                //syncZdryLogMapper.updateSyncZdryLog(syncZdryLogBean);
-            }
+//            for (int i = 2; i < zdryResponse.getPages(); i++) {
+//                zdryVo.setCurrent(i);
+//                zdryResponse = getZdryResponse(zdryVo);
+//                for (ZdryBean bean : zdryResponse.getRecords()) {
+//                    // zdryMapper.insertQgzt(bean);
+//                    ViBasicMemberBean viBasicMemberBean = addViBasicMember(viRepoBean, bean);
+//                    BaseResponse baseResponse = memberSendToTQ(viBasicMemberBean);
+//                }
+//
+//                syncZdryLogBean.setSyncCount(zdryResponse.getRecords().size());
+//                syncZdryLogBean.setLastSyncTime(zdryResponse.getRecords().get(zdryResponse.getRecords().size() - 1).getUpdateTime());
+//                syncZdryLogBean.setLastEndTime(new Date());
+//                //syncZdryLogMapper.updateSyncZdryLog(syncZdryLogBean);
+//            }
         } else {
-            for (ZdryBean bean : zdryResponse.getRecords()) {
+            for (ZdryBean bean : zdryList) {
 
             }
-            syncZdryLogBean.setLastSyncTime(zdryResponse.getRecords().get(zdryResponse.getRecords().size() - 1).getUpdateTime());
+            syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
         }
-
+        return zdryList.size() > 0 ? true : false;
     }
 
-    private ZdryResponse getZdryResponse(ZdryVo zdryVo) {
+    private List<ZdryBean> getZdryResponse(ZdryVo zdryVo) {
 
         log.info("开始获取基础库数据");
-        String requestStr = JSON.toJSONString(zdryVo);
-        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewQgztList(), requestStr);
-        JSONObject jsonObjects = (JSONObject) JSONObject.parse(responseStr);
-        String dataJson = jsonObjects.getString("data");
-        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
+//        String requestStr = JSON.toJSONString(zdryVo);
+//        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewZdryList(), requestStr);
+//        JSONObject jsonObjects = (JSONObject) JSONObject.parse(responseStr);
+//        String dataJson = jsonObjects.getString("data");
+//        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
+        String sql = "select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME from VIEW_QGZT where rownum between " + ((zdryVo.getSyncNum() - 1) * 30 + 1) + " and " + zdryVo.getSyncNum() * 30;
+
+        RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
+        List<ZdryBean> users = jdbcTemplate.query(sql, rowMapper);
         log.info("结束获取基础库数据");
-        return zdryResponse;
+        return users;
     }
 
     private void databaseInsertOrUpdate(String tableName, SyncZdryLogBean syncZdryLogBean) {

@@ -3,10 +3,9 @@ package com.secusoft.web.service.impl;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.secusoft.web.core.emuns.ViRepoBkTypeEnum;
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
-import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.ViRepoBean;
-import com.secusoft.web.model.ViRepoVo;
+import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViRepoService;
 import com.secusoft.web.utils.PageReturnUtils;
 import org.springframework.cglib.beans.BeanCopier;
@@ -27,6 +26,9 @@ public class ViRepoServiceImpl implements ViRepoService {
 
     @Resource
     ViRepoMapper viRepoMapper;
+
+    @Resource
+    ViPrivateMemberMapper viPrivateMemberMapper;
 
     /**
      * 添加布控库
@@ -70,7 +72,7 @@ public class ViRepoServiceImpl implements ViRepoService {
             return ResultVo.failure(BizExceptionEnum.REPO_NAME_NULL.getCode(), BizExceptionEnum.REPO_NAME_NULL.getMessage());
         }
         ViRepoBean bean = viRepoMapper.selectViRepoById(viRepoBean);
-        if (bean==null) {
+        if (bean == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         bean.setBkname(viRepoBean.getBkname());
@@ -97,6 +99,13 @@ public class ViRepoServiceImpl implements ViRepoService {
         if (allViRepo.size() == 0) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
+        ViPrivateMemberVo bean = new ViPrivateMemberVo();
+        bean.setRepoId(viRepoBean.getId());
+        List<ViMemberVo> allViPrivateMember = viPrivateMemberMapper.getAllViPrivateMember(bean);
+
+        if (allViPrivateMember.size() > 0) {
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_DELETED_FAILED.getCode(), BizExceptionEnum.PRIVATEREPO_DELETED_FAILED.getMessage());
+        }
         viRepoMapper.delViRepo(viRepoBean.getId());
         return ResultVo.success();
     }
@@ -104,12 +113,13 @@ public class ViRepoServiceImpl implements ViRepoService {
     @Override
     public ResultVo getAllViRepo(ViRepoVo viRepoVo) {
         PageHelper.startPage(viRepoVo.getCurrent(), viRepoVo.getSize());
-        ViRepoBean viRepoBean= new ViRepoBean();
+        ViRepoBean viRepoBean = new ViRepoBean();
+        //复制对象
         BeanCopier beanCopier = BeanCopier.create(ViRepoVo.class, ViRepoBean.class, false);
-        beanCopier.copy(viRepoVo,viRepoBean, null);
+        beanCopier.copy(viRepoVo, viRepoBean, null);
         List<ViRepoBean> list = viRepoMapper.getAllViRepo(viRepoBean);
 
-        for (ViRepoBean bean :list){
+        for (ViRepoBean bean : list) {
             bean.setBktypeValue(ViRepoBkTypeEnum.getDescByType(bean.getBktype()));
         }
         return ResultVo.success(PageReturnUtils.getPageMap(list, viRepoVo.getCurrent(), viRepoVo.getSize()));

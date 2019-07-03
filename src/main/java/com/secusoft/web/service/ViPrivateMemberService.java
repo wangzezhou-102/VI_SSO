@@ -14,7 +14,18 @@ public interface ViPrivateMemberService {
 
     ResultVo updateViPrivateMember(ViPrivateMemberBean viPrivateMemberBean);
 
-    ResultVo delViPrivateMember(ViPrivateMemberBean viPrivateMemberBean);
+    ResultVo delViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
 
     ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
+
+    /**
+     * 上传图片
+     * @param file
+     * @param request
+     * @param response
+     * @return
+     */
+    ResultVo uploadImg(ViPrivateMemberVo viPrivateMemberVo);
+
+    ResultVo getInfoSearchMember(ViPrivateMemberVo viPrivateMemberVo);
 }

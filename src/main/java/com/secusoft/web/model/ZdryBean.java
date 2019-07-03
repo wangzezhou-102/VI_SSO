@@ -67,4 +67,15 @@ public class ZdryBean {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "ZdryBean{" +
+                "id=" + id +
+                ", picId='" + picId + '\'' +
+                ", humanName='" + humanName + '\'' +
+                ", updateTime=" + updateTime +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -88,12 +88,11 @@ public class BkrepoTask implements ApplicationRunner {
             bkRepoCreateRequest.setMeta(bkRepoMeta);
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
 
-            baseResponse =
-                    ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), bkRepoCreateRequestBaseRequest);
+            baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), bkRepoCreateRequestBaseRequest);
 
             //解析json
             code = baseResponse.getCode();
-            if (BizExceptionEnum.OK.getCode() == Integer.parseInt(code)) {
+            if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
                 System.out.println("布控库创建成功");
             }
         } else {

@@ -33,6 +33,9 @@
             <if test="bktype!=null">
                 and bktype=#{bktype}
             </if>
+            <if test="validState!=null">
+                and valid_state=#{validState}
+            </if>
         </where>
     </sql>
     <insert id="insertViRepo" parameterType="com.secusoft.web.model.ViRepoBean" keyProperty="id" useGeneratedKeys="true">

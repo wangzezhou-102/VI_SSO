@@ -22,6 +22,14 @@ public class ZdryVo extends PageReqAbstractModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    private Integer syncNum;
+
+    private Integer startNum;
+
+    private Integer endNum;
+
+    private String tableName;
+
     public Integer getIsFirst() {
         return isFirst;
     }
@@ -36,5 +44,37 @@ public class ZdryVo extends PageReqAbstractModel {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getSyncNum() {
+        return syncNum;
+    }
+
+    public void setSyncNum(Integer syncNum) {
+        this.syncNum = syncNum;
+    }
+
+    public Integer getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(Integer startNum) {
+        this.startNum = startNum;
+    }
+
+    public Integer getEndNum() {
+        return endNum;
+    }
+
+    public void setEndNum(Integer endNum) {
+        this.endNum = endNum;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }

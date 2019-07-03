@@ -1,15 +1,15 @@
 package com.secusoft.web.controller;
 
 import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.service.ViPrivateMemberService;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;
+import com.secusoft.web.service.ViPrivateMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,7 +24,7 @@ public class ViPrivateMemberController {
     @Autowired
     ViPrivateMemberService viPrivateMemberService;
 
-    @RequestMapping("/insertviprivatemember")
+    @PostMapping("/insertviprivatemember")
     public ResponseEntity<ResultVo> insertViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean) {
         ResultVo resultVo = null;
         try {
@@ -36,7 +36,7 @@ public class ViPrivateMemberController {
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/updateviprivatemember")
+    @PostMapping("/updateviprivatemember")
     public ResponseEntity<ResultVo> updateViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean) {
         ResultVo resultVo = null;
         try {
@@ -48,14 +48,25 @@ public class ViPrivateMemberController {
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/delviprivatemember")
-    public ResponseEntity<ResultVo> delViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean) {
-        ResultVo resultVo = viPrivateMemberService.delViPrivateMember(viPrivateMemberBean);
+    @PostMapping(value = "/delviprivatemember")
+    public ResponseEntity<ResultVo> delViPrivateMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo) {
+        ResultVo resultVo = viPrivateMemberService.delViPrivateMember(viPrivateMemberVo);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
-    @RequestMapping("/listviprivatemember")
+    @PostMapping("/listviprivatemember")
     public ResponseEntity<ResultVo> listViPrivateMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo) {
         return new ResponseEntity<ResultVo>(viPrivateMemberService.getAllViPrivateMember(viPrivateMemberVo), HttpStatus.OK);
     }
+
+    @PostMapping("/uploadimg")
+    public ResponseEntity<ResultVo> uploadImg(@RequestBody ViPrivateMemberVo viPrivateMemberVo){
+        return new ResponseEntity<ResultVo>(viPrivateMemberService.uploadImg(viPrivateMemberVo), HttpStatus.OK);
+    }
+
+    @PostMapping("/listinfosearchmember")
+    public ResponseEntity<ResultVo> listInfoSearchMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo) {
+        return new ResponseEntity<ResultVo>(viPrivateMemberService.getInfoSearchMember(viPrivateMemberVo), HttpStatus.OK);
+    }
+
 }

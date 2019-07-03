@@ -80,4 +80,12 @@
         vi_survey_task vst
         where vtr.task_id=vst.task_id
     </select>
+
+    <delete id="delBatchViTaskRepo" >
+        delete from vi_task_repo
+        where in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

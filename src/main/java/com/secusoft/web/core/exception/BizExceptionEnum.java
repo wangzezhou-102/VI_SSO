@@ -63,6 +63,8 @@ public enum BizExceptionEnum {
 	TASK_START_FAIL(706,"开始布控任务失败"),
 	TASK_STOP_FAIL(707,"停止布控任务失败"),
 	TASK_DELETE_FAIL(708,"删除布控任务失败"),
+	TASK_CALUATE_FAIL(709,"算力不足，新增布控任务失败"),
+	TASK_CALUATE_UPDATE_FAIL(710,"算力不足，修改布控任务失败"),
 
 	/**
 	 * 布控库相关
@@ -78,13 +80,14 @@ public enum BizExceptionEnum {
 	PRIVATEREPO_IDENTITYID_NULL(902,"身份证号不能为空"),
 	PRIVATEREPO_IMAGEURL_NULL(903,"图片地址不能为空"),
 	PRIVATEREPO_REPOID_NULL(904,"关联的布控库不能为空"),
+	PRIVATEREPO_DELETED_FAILED(905,"布控库还存在布控目标，删除失败"),
 
 	/**
 	 * 布控目标相关
 	 */
 	BKMEMBER_DELETE_FAIL(1001,"布控目标删除失败"),
 	BKMEMBER_ADD_FAIL(1002,"布控目标添加失败"),
-	BKMEMBER_DELETE_NULL(1003,"id/objectId 为空"),
+	BKMEMBER_ID_NULL(1003,"id/objectId 为空"),
 	BKMEMBER_UPDATE_FAIL(1004,"布控目标更新失败"),
 	BKMEMBER_EXISTED(1005,"布控目标不存在"),;
 

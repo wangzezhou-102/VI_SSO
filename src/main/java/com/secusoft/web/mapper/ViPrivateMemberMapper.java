@@ -1,6 +1,7 @@
 package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.secusoft.web.model.ViMemberVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;
 import org.apache.ibatis.annotations.Param;
@@ -34,12 +35,19 @@ public interface ViPrivateMemberMapper extends BaseMapper<ViPrivateMemberBean> {
      * 获取所有自定义库信息
      * @return
      */
-    List<ViPrivateMemberBean> getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
+    List<ViMemberVo> getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
 
     /**
-     * 根据ObjectId获取ViPrivateMemberBean
-     * @param objectId
+     * 根据bean获取ViPrivateMemberBean
+     * @param viPrivateMemberBean
      * @return
      */
-    ViPrivateMemberBean getViPrivateMemberByObjectId(@Param("objectId") String objectId);
+    ViPrivateMemberBean getViPrivateMemberByBean(ViPrivateMemberBean viPrivateMemberBean);
+
+    /**
+     * 获取信息检索
+     * @param viPrivateMemberVo
+     * @return
+     */
+    List<ViMemberVo> getInfoSearchMember(ViPrivateMemberVo viPrivateMemberVo);
 }

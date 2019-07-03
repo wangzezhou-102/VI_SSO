@@ -137,4 +137,17 @@
         </set>
         where id=#{id}
     </update>
+
+    <delete id="delBatchViTaskDevice" >
+        delete from vi_task_device
+        where in 
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getActionDevice" parameterType="String" resultType="com.secusoft.web.model.ViTaskDeviceBean">
+        select DISTINCT device_id from vi_task_device
+        where action=1 and device_id in (#{deviceId})
+    </select>
 </mapper>

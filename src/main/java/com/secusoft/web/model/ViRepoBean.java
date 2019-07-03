@@ -1,7 +1,6 @@
 package com.secusoft.web.model;
 
 import com.baomidou.mybatisplus.annotations.TableName;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -18,22 +17,21 @@ public class ViRepoBean implements Serializable {
     /**
      * 分局编号
      */
-    @Value("0")
-    private String policeStationId;
+    private String policeStationId = "0";
     /**
      * 表名
      */
-    @Value("vi_private_member")
-    private String tableName;
+    private String tableName = "vi_private_member";
     /**
      * 0-基础库 1-自定义库
      */
-    @Value("1")
-    private Integer type;
+    private Integer type = 1;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtCreate;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtModified;
+
+    private Integer validState;
 
     public Integer getId() {
         return id;
@@ -113,6 +111,14 @@ public class ViRepoBean implements Serializable {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public Integer getValidState() {
+        return validState;
+    }
+
+    public void setValidState(Integer validState) {
+        this.validState = validState;
     }
 
     @Override

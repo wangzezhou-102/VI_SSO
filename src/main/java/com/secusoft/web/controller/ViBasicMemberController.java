@@ -27,7 +27,7 @@ public class ViBasicMemberController {
      * @param viBasicMemberBean
      * @return
      */
-    @RequestMapping("/updatefocusmenber")
+    @RequestMapping("/focusmenber")
     public ResponseEntity<ResultVo> updateFocusMenber(@RequestBody ViBasicMemberBean viBasicMemberBean) {
         ResultVo resultVo = viBasicMemberService.updateFocusMenber(viBasicMemberBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);

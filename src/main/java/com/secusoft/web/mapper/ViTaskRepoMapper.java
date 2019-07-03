@@ -33,4 +33,10 @@ public interface ViTaskRepoMapper {
      * @param list
      */
     void insertBatch(List<ViTaskRepoBean> list);
+
+    /**
+     * 批量删除关联布控库
+     * @param list
+     */
+    void delBatchViTaskRepo(List<ViTaskRepoBean> list);
 }
