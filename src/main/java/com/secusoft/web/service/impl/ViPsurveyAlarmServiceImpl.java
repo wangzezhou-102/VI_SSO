@@ -41,7 +41,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
         viPsurveyAlarmDetailBean.setGmtModified(new Date());
 
-        viPsurveyAlarmDetailMapper.updateFocusAlaramDetail(viPsurveyAlarmDetailBean);
+        viPsurveyAlarmDetailMapper.updateFocusAlarmDetail(viPsurveyAlarmDetailBean);
 
         return ResultVo.success();
     }
@@ -51,8 +51,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
         PageHelper.startPage(viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
-        List<ViPsurveyAlarmDetailBean> list =
-                viPsurveyAlarmDetailMapper.getAllViPsurveyAlaramDetail();
+        List<ViPsurveyAlarmDetailBean> list = viPsurveyAlarmDetailMapper.getAllViPsurveyAlarmDetail();
 
         return ResultVo.success(PageReturnUtils.getPageMap(list, viPsurveyAlarmDetailRequest.getCurrent(),
                 viPsurveyAlarmDetailRequest.getSize()));

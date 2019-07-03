@@ -9,4 +9,6 @@ import com.secusoft.web.model.SyncZdryLogBean;
 public interface SyncZdryLogMapper {
 
     SyncZdryLogBean selectByBean(SyncZdryLogBean syncZdryLogBean);
+
+    void insertSyncZdryLog(SyncZdryLogBean syncZdryLogBean);
 }

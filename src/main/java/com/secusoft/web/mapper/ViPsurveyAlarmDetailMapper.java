@@ -20,7 +20,7 @@ public interface ViPsurveyAlarmDetailMapper {
      * 是否关注该布控
      * @param viPsurveyAlarmDetailBean
      */
-    void updateFocusAlaramDetail(ViPsurveyAlarmDetailBean viPsurveyAlarmDetailBean);
+    void updateFocusAlarmDetail(ViPsurveyAlarmDetailBean viPsurveyAlarmDetailBean);
 
     /**
      * 根据id获取detail对象
@@ -33,5 +33,5 @@ public interface ViPsurveyAlarmDetailMapper {
      * 获取所有的detail
      * @return
      */
-    List<ViPsurveyAlarmDetailBean> getAllViPsurveyAlaramDetail();
+    List<ViPsurveyAlarmDetailBean> getAllViPsurveyAlarmDetail();
 }

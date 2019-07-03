@@ -1,14 +1,12 @@
 package com.secusoft.web.utils;
 
 import org.apache.commons.codec.binary.Base64;
-import sun.misc.BASE64Decoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -94,23 +92,11 @@ public class ImageUtils {
      */
     public static byte[] decode(String base64Str){
         byte[] b = null;
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
-            b = decoder.decodeBuffer(replaceEnter(base64Str));
-        } catch (IOException e) {
+            b = Base64.decodeBase64(replaceEnter(base64Str));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return b;
-    }
-
-    public static ByteBuffer decodeBuffer(String base64Str) {
-        ByteBuffer buffer = null;
-        BASE64Decoder decoder = new BASE64Decoder();
-        try {
-            buffer = decoder.decodeBufferToByteBuffer(base64Str);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return buffer;
     }
 }

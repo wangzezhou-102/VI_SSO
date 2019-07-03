@@ -71,7 +71,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "30 34 16 * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "00 25 19 * * ?")//0 0 */1 * * ?
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -169,8 +169,6 @@ public class BkrepoDataTask {
      */
     private ViBasicMemberBean addViBasicMember(ViRepoBean viRepoBean, ZdryBean bean) {
         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
-        //由于object_id唯一，先放置一个随机数区别
-        int randomNumber = (int) Math.round(Math.random() * (25000 - 1) + 1);
         viBasicMemberBean.setObjectId(viRepoBean.getTableName() + "_" + bean.getPicId());
         viBasicMemberBean.setRepoId(viRepoBean.getId());
         viBasicMemberBean.setRealObjectId(String.valueOf(bean.getId()));
@@ -226,7 +224,7 @@ public class BkrepoDataTask {
             syncZdryLogBean.setSyncCount(zdryList.size());
             syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
             syncZdryLogBean.setLastEndTime(new Date());
-            //syncZdryLogMapper.insertSyncZdryLog(syncZdryLogBean);
+            syncZdryLogMapper.insertSyncZdryLog(syncZdryLogBean);
 //            for (int i = 2; i < zdryResponse.getPages(); i++) {
 //                zdryVo.setCurrent(i);
 //                zdryResponse = getZdryResponse(zdryVo);
@@ -258,7 +256,7 @@ public class BkrepoDataTask {
 //        JSONObject jsonObjects = (JSONObject) JSONObject.parse(responseStr);
 //        String dataJson = jsonObjects.getString("data");
 //        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
-        String sql = "select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME from VIEW_QGZT where rownum between " + ((zdryVo.getSyncNum() - 1) * 30 + 1) + " and " + zdryVo.getSyncNum() * 30;
+        String sql = "select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from VIEW_QGZT where rownum between " + ((zdryVo.getSyncNum() - 1) * 30 + 1) + " and " + zdryVo.getSyncNum() * 30;
 
         RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
         List<ZdryBean> users = jdbcTemplate.query(sql, rowMapper);

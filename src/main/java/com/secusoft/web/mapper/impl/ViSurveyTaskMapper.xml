@@ -53,8 +53,7 @@
     </resultMap>
 
 
-    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id"
-            useGeneratedKeys="true">
+    <insert id="insertViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean" keyProperty="id" useGeneratedKeys="true">
         <!-- selectKey 标签表示子查询中主键的提取问题
                      keyColumn表示查询语句返回结果的列名
                      keyProperty表示将属性设置到某个列中 此处为empNo 中

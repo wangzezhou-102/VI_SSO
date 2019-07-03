@@ -1,9 +1,16 @@
 package com.secusoft.web.core.util;
 
+import com.secusoft.web.utils.ImageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,6 +19,9 @@ import java.util.Date;
  * @date 2019-06-20
  */
 public class UploadUtil {
+
+    private static Logger log = LoggerFactory.getLogger(UploadUtil.class);
+    private static String basePath = System.getProperty("user.dir") + "/src/main/resources";
 
     /**
      * 获得文件名
@@ -94,31 +104,52 @@ public class UploadUtil {
         if (inputStream != null) {
             inputStream.close();
         }
-        System.out.println("info:" + url + " download success");
+        log.info("info:" + url + " download success");
     }
 
     /**
-     * 将byte[]数组存为图片文件的形式
+     * 将base64存为图片文件的形式
      *
      * @param getData
-     * @param fileName
-     * @param savePath
+     * @param type
      * @throws IOException
      */
-    public static void downLoadFromByte(byte[] getData, String fileName, String savePath) throws IOException {
+    public static String downLoadFromBase64(String getData, String type) throws IOException {
 
-        //文件保存位置
-        File saveDir = new File(savePath);
-        if (!saveDir.exists()) {
-            saveDir.mkdir();
+        //图片收藏需要下载到本地
+        String folderName = "/static/" + type + getFolder();
+        String fullName = basePath + folderName;
+        //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
+        String ImgName = UUIDUtil.getUid(type + "_") + ".jpg";
+        try {
+
+            //创建并下载到相应的文件夹
+            Files.createDirectories(Paths.get(fullName));
+
+            //文件保存位置
+            File saveDir = new File(fullName);
+            if (!saveDir.exists()) {
+                saveDir.mkdir();
+            }
+            File file = new File(saveDir + File.separator + ImgName);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(ImageUtils.decode(getData));
+            if (fos != null) {
+                fos.close();
+            }
+
+            log.info("info:" + ImgName + " save img success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Path path1 = Paths.get(fullName, ImgName);
+            try {
+                Files.deleteIfExists(path1);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return null;
         }
-        File file = new File(saveDir + File.separator + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(getData);
-        if (fos != null) {
-            fos.close();
-        }
-        System.out.println("info:" + fileName + " save img success");
+        return folderName + ImgName;
     }
 
 

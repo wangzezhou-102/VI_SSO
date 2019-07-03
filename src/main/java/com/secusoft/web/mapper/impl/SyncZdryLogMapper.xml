@@ -10,4 +10,31 @@
             </if>
         </where>
     </select>
+
+    <insert id="insertSyncZdryLog" parameterType="com.secusoft.web.model.SyncZdryLogBean"  keyProperty="id" useGeneratedKeys="true">
+        insert into sync_zdry_log (table_name,sync_count,sync_edit_count,last_sync_time,last_end_time)values
+        (#{tableName},#{syncCount},#{syncEditCount},#{lastSyncTime},#{lastEndTime})
+    </insert>
+
+    <update id="updateSyncZdryLog" parameterType="com.secusoft.web.model.SyncZdryLogBean">
+        update sync_zdry_log
+        <set>
+            <if test="tableName!=null">
+                table_name=#{tableName},
+            </if>
+            <if test="syncCount!=null">
+                sync_count=#{syncCount},
+            </if>
+            <if test="syncEditCount!=null">
+                sync_edit_count=#{syncEditCount},
+            </if>
+            <if test="lastSyncTime!=null">
+                last_sync_time=#{lastSyncTime},
+            </if>
+            <if test="lastEndTime!=null">
+                last_end_time=#{lastEndTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

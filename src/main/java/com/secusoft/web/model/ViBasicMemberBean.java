@@ -47,6 +47,8 @@ public class ViBasicMemberBean implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
 
+    private ViRepoBean viRepoBean;
+
     public Integer getId() {
         return id;
     }
@@ -157,6 +159,14 @@ public class ViBasicMemberBean implements Serializable {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public ViRepoBean getViRepoBean() {
+        return viRepoBean;
+    }
+
+    public void setViRepoBean(ViRepoBean viRepoBean) {
+        this.viRepoBean = viRepoBean;
     }
 
     @Override

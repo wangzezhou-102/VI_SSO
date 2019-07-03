@@ -20,6 +20,9 @@ public class ViPrivateMemberBean implements Serializable {
     private Date createTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
+    private Integer validState;
+
+    private ViRepoBean viRepoBean;
 
     public Integer getId() {
         return id;
@@ -91,6 +94,22 @@ public class ViPrivateMemberBean implements Serializable {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Integer getValidState() {
+        return validState;
+    }
+
+    public void setValidState(Integer validState) {
+        this.validState = validState;
+    }
+
+    public ViRepoBean getViRepoBean() {
+        return viRepoBean;
+    }
+
+    public void setViRepoBean(ViRepoBean viRepoBean) {
+        this.viRepoBean = viRepoBean;
     }
 
     @Override

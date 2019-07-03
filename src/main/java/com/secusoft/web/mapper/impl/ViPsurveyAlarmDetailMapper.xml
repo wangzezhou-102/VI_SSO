@@ -36,7 +36,7 @@
         <!--association:用于映射关联查询单个对象的信息
             property:要将关联查询的用户信息映射到Orders中那个属性
           -->
-        <association property="viPsurveyAlaramBean" javaType="com.secusoft.web.model.ViPsurveyAlarmBean">
+        <association property="viPsurveyAlarmBean" javaType="com.secusoft.web.model.ViPsurveyAlarmBean">
             <!-- id:关联查询用户的唯一标识
                 column:指定唯一标识用户信息的列
                 property:映射到user的那个属性
@@ -88,13 +88,12 @@
         where id=#{id}
     </update>
 
-    <select id="getAllViPsurveyAlaramDetail" resultMap="ViPsurveyAlaramDetailResultMap">
+    <select id="getAllViPsurveyAlarmDetail" resultMap="ViPsurveyAlaramDetailResultMap">
         select vpad.*,vpad.id as vi_psurvey_alaram_id,vpa.orig_image,vpa.crop_image,vpa.person_image,vpa.entry_time,vpa.leave_time,
         vpa.feature as vi_psurvey_alaram_feature,vpa.camera_id,vpa.obj_top,vpa.obj_bottom,vpa.obj_left,
         vpa.obj_right,vpa.obj_id,vpa.obj_uuid,vpa.`timestamp`,vpa.`status` as vi_psurvey_alaram_status,vpa.gmt_create,vpa.gmt_modified
         from vi_psurvey_alarm_detail vpad
-        left join vi_psurvey_alaram vpa
-        on vpad.alarm_id=vpa.id
+        left join vi_psurvey_alarm vpa on vpad.alarm_id=vpa.id
     </select>
 
     <select id="selectById" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean" resultMap="ViPsurveyAlaramDetailResultMap">
@@ -102,7 +101,7 @@
         vpa.feature as vi_psurvey_alaram_feature,vpa.camera_id,vpa.obj_top,vpa.obj_bottom,vpa.obj_left,
         vpa.obj_right,vpa.obj_id,vpa.obj_uuid,vpa.`timestamp`,vpa.`status` as vi_psurvey_alaram_status,vpa.gmt_create,vpa.gmt_modified
         from vi_psurvey_alarm_detail vpad
-        left join vi_psurvey_alaram vpa
+        left join vi_psurvey_alarm vpa
         on vpad.alarm_id=vpa.id
         where vpad.id=#{id}
     </select>

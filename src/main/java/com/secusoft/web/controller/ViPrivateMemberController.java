@@ -5,12 +5,16 @@ import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;
 import com.secusoft.web.service.ViPrivateMemberService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 自定义布控库
@@ -20,30 +24,31 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ViPrivateMemberController {
+    private static Logger log = LoggerFactory.getLogger(ViPrivateMemberController.class);
 
     @Autowired
     ViPrivateMemberService viPrivateMemberService;
 
     @PostMapping("/insertviprivatemember")
-    public ResponseEntity<ResultVo> insertViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean) {
+    public ResponseEntity<ResultVo> insertViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean, HttpServletRequest request) {
         ResultVo resultVo = null;
         try {
-            resultVo = viPrivateMemberService.insertViPrivateMember(viPrivateMemberBean);
+            resultVo = viPrivateMemberService.insertViPrivateMember(viPrivateMemberBean, request);
         } catch (Exception ex) {
-            resultVo = ResultVo.failure(BizExceptionEnum.BKMEMBER_ADD_FAIL.getCode(),
-                    BizExceptionEnum.BKMEMBER_ADD_FAIL.getMessage());
+            log.info(ex.getMessage());
+            resultVo = ResultVo.failure(BizExceptionEnum.BKMEMBER_ADD_FAIL.getCode(), BizExceptionEnum.BKMEMBER_ADD_FAIL.getMessage());
         }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @PostMapping("/updateviprivatemember")
-    public ResponseEntity<ResultVo> updateViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean) {
+    public ResponseEntity<ResultVo> updateViPrivateMember(@RequestBody ViPrivateMemberBean viPrivateMemberBean, HttpServletRequest request) {
         ResultVo resultVo = null;
         try {
-            resultVo = viPrivateMemberService.updateViPrivateMember(viPrivateMemberBean);
+            resultVo = viPrivateMemberService.updateViPrivateMember(viPrivateMemberBean, request);
         } catch (Exception ex) {
-            ResultVo.failure(BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getCode(),
-                    BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getMessage());
+            log.info(ex.getMessage());
+            ResultVo.failure(BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getCode(), BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getMessage());
         }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }

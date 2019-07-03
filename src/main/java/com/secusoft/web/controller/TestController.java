@@ -15,6 +15,8 @@ import com.secusoft.web.tusouapi.SemanticSearchClient;
 import com.secusoft.web.tusouapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
+import com.secusoft.web.websocket.WebSock;
+import com.secusoft.web.websocket.WebSocketMessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -53,16 +56,48 @@ public class TestController<psvm> extends BaseController {
     @Resource
     private ViPsurveyAlarmDetailMapper viPsurveyAlarmDetailMapper;
 
+    @Resource
+    private ViPrivateMemberMapper viPrivateMemberMapper;
+
+    @Autowired
+    WebSock webSock;
+
     @Autowired
     @Qualifier("threedaryJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
+
+    @RequestMapping("/testprivatemember")
+    public Object testPrivateMember() {
+        ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
+        viPrivateMemberBean.setObjectId("vi_private_fb9b41240f23473e9e95a171ec71cafd");
+        ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+        System.out.println(viPrivateMemberByBean);
+        return true;
+    }
+
+    @RequestMapping("/testwebsocket")
+    public Object testWebsocket() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("anbao", new Object());
+        map.put("Bktask", new Object());
+        WebSocketMessageVO webSocketMessageVO = new WebSocketMessageVO();
+        webSocketMessageVO.setData(map);
+        try {
+            webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
     @RequestMapping("/testoracle")
     public Object testOracle() {
-        String sql="select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME from VIEW_QGZT";
+        String sql = "select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME from VIEW_QGZT";
 
-        RowMapper<ZdryBean> rowMapper=new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
-        List<ZdryBean> users= jdbcTemplate.query(sql, rowMapper);
+        RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
+        List<ZdryBean> users = jdbcTemplate.query(sql, rowMapper);
         for (ZdryBean user : users) {
             System.out.println(user.toString());
         }
@@ -74,10 +109,10 @@ public class TestController<psvm> extends BaseController {
     public Object testAlaram() {
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
 
-        JSONObject jsonObject= (JSONObject) JSONObject.parse(responseStr);
-        String code=jsonObject.getString("code");
-        String data=jsonObject.getString("data");
-        if(String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)&&(!data.isEmpty()||!"null".equals(data))) {
+        JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
+        String code = jsonObject.getString("code");
+        String data = jsonObject.getString("data");
+        if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && (!data.isEmpty() || !"null".equals(data))) {
             JSONArray jsonArrayData = (JSONArray) JSONArray.parse(data);
             JSONObject jsonData = (JSONObject) JSONObject.parse(jsonArrayData.getString(0));
             String taskId = jsonData.getString("taskId");
@@ -90,7 +125,7 @@ public class TestController<psvm> extends BaseController {
             //人员报警布控图比对
             String similar = jsonData.getString("similar");
             List<ViPsurveyAlarmDetailBean> detailBeanList = (List<ViPsurveyAlarmDetailBean>) JSONObject.parseArray(similar, ViPsurveyAlarmDetailBean.class);
-            for (ViPsurveyAlarmDetailBean bean: detailBeanList) {
+            for (ViPsurveyAlarmDetailBean bean : detailBeanList) {
                 bean.setAlarmId(viPsurveyAlarmBean.getId());
                 bean.setTaskId(taskId);
                 bean.setAlarmType("测试");
@@ -1025,7 +1060,7 @@ public class TestController<psvm> extends BaseController {
             deviceBeans.forEach(deviceBean -> {
                 if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())) {
                     searchResponseData.getSource().setDeviceBean(deviceBean);
-                }else{
+                } else {
                     searchResponseData.getSource().setDeviceBean(new DeviceBean());
                 }
             });
@@ -1181,28 +1216,31 @@ public class TestController<psvm> extends BaseController {
     TuSouSearchService tuSouSearchService;
 
     @RequestMapping("test33")
-    public Object test33(){
+    public Object test33() {
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid("6");
         return pictureBeans;
     }
-    @Resource SysOperationLogMapper sysOperationLogMapper;
+
+    @Resource
+    SysOperationLogMapper sysOperationLogMapper;
+
     @RequestMapping("testSys")
-    public  Object testSys(){
+    public Object testSys() {
         List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
 
-        System.out.println("一共几条数据"+sysOperationLogs.size());
-        List<ArrayList<SearchRequestData>> searchRequests =new ArrayList<>();
+        System.out.println("一共几条数据" + sysOperationLogs.size());
+        List<ArrayList<SearchRequestData>> searchRequests = new ArrayList<>();
         sysOperationLogs.forEach(sysOperationLog -> {
             String param = sysOperationLog.getParam();
-           // SearchRequestData data = (SearchRequestData)param.getData();
+            // SearchRequestData data = (SearchRequestData)param.getData();
             BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
             });
-            System.out.println("有ids吗"+searchRequestBaseRequest.getData().getIds());
-            if(searchRequestBaseRequest.getData().getIds()!=null){
-                System.out.println("ids"+searchRequestBaseRequest.getData().getIds());
+            System.out.println("有ids吗" + searchRequestBaseRequest.getData().getIds());
+            if (searchRequestBaseRequest.getData().getIds() != null) {
+                System.out.println("ids" + searchRequestBaseRequest.getData().getIds());
                 String ids = searchRequestBaseRequest.getData().getIds();
                 String[] split = ids.split(",");
-                System.out.println("分割后"+split);
+                System.out.println("分割后" + split);
 
                 BaseRequest<SearchRequestData> searchDataBaseRequest = new BaseRequest<>();
                 SearchRequestData searchRequestData = new SearchRequestData();
@@ -1225,11 +1263,11 @@ public class TestController<psvm> extends BaseController {
             }
         });
         //JSONArray jsonObject = JSON.parseArray(params.toString());
-        return ResultVo.success(searchRequests.size()>0?searchRequests.get(0):null);
+        return ResultVo.success(searchRequests.size() > 0 ? searchRequests.get(0) : null);
     }
 
     @RequestMapping("testHttp")
-    public  Object testSyss(@RequestBody JSONObject jsonObject){
+    public Object testSyss(@RequestBody JSONObject jsonObject) {
         System.out.println(jsonObject);
         String s = SemanticSearchClient.getClientConnectionPool().fetchByPostMethod(SemanticSearchClient.Path_SEARCH, JSON.toJSONString(jsonObject));
         SearchResponse searchResponse = JSON.parseObject(s, new TypeReference<SearchResponse>() {
