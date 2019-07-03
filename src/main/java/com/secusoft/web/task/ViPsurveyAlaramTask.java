@@ -59,14 +59,14 @@ public class ViPsurveyAlaramTask {
 
                 ViPsurveyAlarmBean viPsurveyAlarmBean = new ViPsurveyAlarmBean();
                 viPsurveyAlarmBean.setTaskId(taskId);
-                ViPsurveyAlarmBean bean = viPsurveyAlarmMapper.getViPsurveyAlaramByBean(viPsurveyAlarmBean);
+                ViPsurveyAlarmBean bean = viPsurveyAlarmMapper.getViPsurveyAlarmByBean(viPsurveyAlarmBean);
                 //布控报警
                 alaramVo.setTaskId(taskId);
                 //复制对象
                 BeanCopier beanCopier = BeanCopier.create(ViPsurveyAlaramVo.class, ViPsurveyAlarmBean.class, false);
                 beanCopier.copy(alaramVo, viPsurveyAlarmBean, null);
                 if (null == bean) {
-                    viPsurveyAlarmMapper.insertViPsurveyAlaram(viPsurveyAlarmBean);
+                    viPsurveyAlarmMapper.insertViPsurveyAlarm(viPsurveyAlarmBean);
                 }
                 //人员报警布控图比对
                 for (ViPsurveyAlarmDetailBean beans : alaramVo.getSimilar()) {

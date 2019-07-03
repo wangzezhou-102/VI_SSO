@@ -86,7 +86,7 @@ public class TestController<psvm> extends BaseController {
             String src = jsonData.getString("src");
             ViPsurveyAlarmBean viPsurveyAlarmBean = (ViPsurveyAlarmBean) JSONObject.parseObject(src, ViPsurveyAlarmBean.class);
             viPsurveyAlarmBean.setTaskId(taskId);
-            viPsurveyAlarmMapper.insertViPsurveyAlaram(viPsurveyAlarmBean);
+            viPsurveyAlarmMapper.insertViPsurveyAlarm(viPsurveyAlarmBean);
             //人员报警布控图比对
             String similar = jsonData.getString("similar");
             List<ViPsurveyAlarmDetailBean> detailBeanList = (List<ViPsurveyAlarmDetailBean>) JSONObject.parseArray(similar, ViPsurveyAlarmDetailBean.class);

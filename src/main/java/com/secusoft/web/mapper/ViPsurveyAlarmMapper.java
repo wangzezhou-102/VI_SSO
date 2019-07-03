@@ -15,7 +15,7 @@ public interface ViPsurveyAlarmMapper {
      *
      * @param viPsurveyAlarmBean
      */
-    void insertViPsurveyAlaram(ViPsurveyAlarmBean viPsurveyAlarmBean);
+    void insertViPsurveyAlarm(ViPsurveyAlarmBean viPsurveyAlarmBean);
 
 
     /**
@@ -23,5 +23,5 @@ public interface ViPsurveyAlarmMapper {
      */
     Integer selectIdNumberBytaskId(@Param("taskIds") List<String> taskIds);
 
-    ViPsurveyAlarmBean getViPsurveyAlaramByBean(ViPsurveyAlarmBean viPsurveyAlarmBean);
+    ViPsurveyAlarmBean getViPsurveyAlarmByBean(ViPsurveyAlarmBean viPsurveyAlarmBean);
 }
