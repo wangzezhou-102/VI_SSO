@@ -10,6 +10,7 @@ import com.secusoft.web.core.base.controller.BaseController;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
+import com.secusoft.web.service.ZdryService;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.tusouapi.SemanticSearchClient;
 import com.secusoft.web.tusouapi.model.BaseResponse;
@@ -60,11 +61,21 @@ public class TestController<psvm> extends BaseController {
     private ViPrivateMemberMapper viPrivateMemberMapper;
 
     @Autowired
+    private ZdryService zdryService;
+
+    @Autowired
     WebSock webSock;
 
     @Autowired
     @Qualifier("threedaryJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
+
+
+    @RequestMapping("/testguolv")
+    public Object testguolv() {
+        Map<String, Object> stringObjectMap = zdryService.orderbyPartitionSdzt(new ZdryBeanVo());
+        return stringObjectMap;
+    }
 
 
     @RequestMapping("/testprivatemember")

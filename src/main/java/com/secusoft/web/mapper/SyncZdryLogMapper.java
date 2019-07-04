@@ -11,4 +11,6 @@ public interface SyncZdryLogMapper {
     SyncZdryLogBean selectByBean(SyncZdryLogBean syncZdryLogBean);
 
     void insertSyncZdryLog(SyncZdryLogBean syncZdryLogBean);
+
+    void updateSyncZdryLog(SyncZdryLogBean syncZdryLogBean);
 }
