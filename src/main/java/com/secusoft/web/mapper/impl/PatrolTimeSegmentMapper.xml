@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.PatrolTimeSegmentMapper">
+    <resultMap id="PatrolTimeSegmentResultMap" type="com.secusoft.web.model.PatrolTimeSegmentBean">
+        <id column="time_segment_id" property="timeSegmentId"/>
+        <result column="time_template_id" property="timeTemplateId"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="week" property="week"/>
+    </resultMap>
+    <!-- 根据时间模板查询相关时间段信息 -->
+    <select id="selectPatroltTimeSegment" parameterType="com.secusoft.web.model.PatrolTimeSegmentBean" resultMap="PatrolTimeSegmentResultMap">
+        select time_segment_id,begin_time,end_time,week from vi_patrol_time_segment
+        where time_template_id=#{timeTemplateId}
+    </select>
+    <insert id="insertPatrolTimeSegment" parameterType="com.secusoft.web.model.PatrolTimeSegmentBean">
+        insert into vi_patrol_time_segment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="timeSegmentId != null">time_segment_id,</if>
+            <if test="timeTemplateId != null">time_template_id,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="week != null">week</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="timeSegmentId != null">#{timeSegmentId},</if>
+            <if test="timeTemplateId != null">#{timeTemplateId},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="week != null">#{week}</if>
+        </trim>
+    </insert>
+    <!-- 删除时间模板关联时间段 -->
+    <delete id="deletePatrolTimeSegment" parameterType="com.secusoft.web.model.PatrolTimeSegmentBean">
+        delete from vi_patrol_time_segment
+        <where>
+            <if test="timeTemplateId != null">
+                time_tempate_id=#{timeTemplateId}
+            </if>
+        </where>
+    </delete>
+
+
+</mapper>

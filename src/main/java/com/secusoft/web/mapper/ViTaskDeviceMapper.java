@@ -30,6 +30,10 @@ public interface ViTaskDeviceMapper extends BaseMapper<ViTaskDeviceBean> {
     void deleteViTaskDevice(@Param("id") Integer id);
 
     /**
+     * 删除布控任务相关所有设备 关联表
+     */
+    void deleteViTaskDeviceByTaskId(@Param("taskId") String taskId);
+    /**
      * 批量插入
      * @param list
      */

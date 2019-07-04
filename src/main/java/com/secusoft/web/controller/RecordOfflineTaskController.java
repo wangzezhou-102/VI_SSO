@@ -18,15 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 离线视频分析任务
  *
- * @author zzwang
+ * @author Wangzezhou
  * @since 2019/6/24 14:47
  */
-
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 public class RecordOfflineTaskController {
-
-
     @Autowired
     RecordOfflineTaskService recordOfflineTaskService;
 
@@ -37,15 +34,11 @@ public class RecordOfflineTaskController {
             throw new BussinessException(BizExceptionEnum.PARAM_NULL);
        }
         ResultVo resultVo = recordOfflineTaskService.addRecordOfflineTask(requestOfflineTaskRequest);
-
         return ResponseUtil.handle(Constants.OK, resultVo);
-
     }
 
     @PostMapping("/getOfflineTaskProgress")
     public ResponseEntity<ResultVo> getOfflineTaskProgress(@RequestBody RecordOfflineTaskBean recordOfflineTaskBean) {
-        System.out.println(recordOfflineTaskBean);
-        System.out.println(recordOfflineTaskBean.getEnable()+recordOfflineTaskBean.getTaskId());
         if(!recordOfflineTaskBean.getEnable().equals("0")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
         }
@@ -54,10 +47,7 @@ public class RecordOfflineTaskController {
     }
 
     @PostMapping("/enableOfflineTask1")
-    public ResponseEntity<ResultVo> enableOfflineTask( RecordOfflineTaskBean recordOfflineTaskBean){
-        System.out.println(recordOfflineTaskBean);
-        System.out.println(recordOfflineTaskBean.getEnable()+"---"+recordOfflineTaskBean.getTaskId()+"===="+recordOfflineTaskBean.getDeviceId());
-        System.out.println(recordOfflineTaskBean.getEnable()+"---任务id : "+recordOfflineTaskBean.getTaskId()+"==== 设备Id:"+recordOfflineTaskBean.getDeviceId());
+    public ResponseEntity<ResultVo> enableOfflineTask(@RequestBody RecordOfflineTaskBean recordOfflineTaskBean){
         if(!recordOfflineTaskBean.getEnable().equals("1")){
             throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
         }

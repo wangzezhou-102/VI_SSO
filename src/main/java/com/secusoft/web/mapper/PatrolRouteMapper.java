@@ -22,6 +22,8 @@ public interface PatrolRouteMapper {
     int updatePatrolRouteByPrimaryKey(PatrolRouteBean patrolRouteBean);
     //查看路线
     PatrolRouteBean selectPatrolRouteByPrimaryKey(@Param("Id")Integer Id);
+    //查看路线id
+    PatrolRouteBean selectPatrolRouteByRouteName(PatrolRouteBean patrolRouteBean);
     //查看所有路线（未被删除的路线）
     List<PatrolRouteBean> selectPatrolRouteByStatus(PatrolRouteBean patrolRouteBean);
 }

@@ -66,11 +66,11 @@ public class RecordOfflineTaskServiceImpl implements RecordOfflineTaskService {
             datamap.put("taskId", map.get(deviceId));
             datamap.put("deviceId",deviceId);
             datamap.put("beginTime",recordOfflineTaskRequest.getBeginTime().toString());
-            System.out.println(recordOfflineTaskRequest.getBeginTime().toString());
+
             datamap.put("endTime",recordOfflineTaskRequest.getEndTime().toString());
-            System.out.println(recordOfflineTaskRequest.getEndTime().toString());
+
             StringEntity paramsEntity = new StringEntity(JSON.toJSONString(datamap),"UTF-8");
-            System.out.println("发送任务");
+
             String fetchByPostMethod = myHttpClientPool.fetchByPostMethod(testurl+"/Start",paramsEntity);
 
             if( fetchByPostMethod != null){

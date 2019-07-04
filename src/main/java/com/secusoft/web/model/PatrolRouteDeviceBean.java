@@ -7,7 +7,6 @@ package com.secusoft.web.model;
  * @date 2019年7月1日
  */
 public class PatrolRouteDeviceBean {
-
     private Integer id;
 
     private Integer routeId;

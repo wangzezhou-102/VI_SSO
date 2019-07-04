@@ -61,10 +61,13 @@
         </trim>
     </insert>
     <delete id="deleteViTaskRepo" parameterType="java.lang.Integer" >
-    delete from vi_task_repo
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-
+        delete from vi_task_repo
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteViTaskRepoByTaskId" parameterType="java.lang.String" >
+        delete from vi_task_repo
+        where task_id = #{taskId,jdbcType=String}
+    </delete>
 
     <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO vi_task_repo (task_id,repo_id) values

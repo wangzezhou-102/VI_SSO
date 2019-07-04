@@ -1,6 +1,5 @@
 package com.secusoft.web.mapper;
 
-import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.PatrolRouteDeviceBean;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,5 +20,5 @@ public interface PatrolRouteDeviceMapper {
     //修改路线状态
     int updatePatrolRouteDevice(PatrolRouteDeviceBean patrolRouteDeviceBean);
     //查看路线对应设备
-    List<DeviceBean> selectPatrolRouteDeviceByRouteId(PatrolRouteDeviceBean patrolRouteDeviceBean);
+    List<PatrolRouteDeviceBean> selectPatrolRouteDeviceByRouteId(PatrolRouteDeviceBean patrolRouteDeviceBean);
 }

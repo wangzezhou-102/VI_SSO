@@ -1,16 +1,5 @@
 package com.secusoft.web.controller;
 
-import java.util.List;
-
-import org.apache.shiro.util.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.secusoft.web.core.common.Constants;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
@@ -18,6 +7,12 @@ import com.secusoft.web.core.util.ResponseUtil;
 import com.secusoft.web.model.OfflineVideoBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.OfflineVideoService;
+import org.apache.shiro.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 离线视频接口
@@ -32,7 +27,6 @@ public class OfflineVideoController {
 
     @Autowired
     private OfflineVideoService offlineVideoService;
-    
     /**
      * 增加离线视频
      * @author ChenDong
@@ -49,7 +43,6 @@ public class OfflineVideoController {
         result = offlineVideoService.addOfflineVideo(bean);
         return ResponseUtil.handle(Constants.OK, result);
     }
-    
     /**
      * 删除离线视频
      * @author ChenDong

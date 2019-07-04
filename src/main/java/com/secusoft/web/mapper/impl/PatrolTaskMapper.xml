@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.PatrolTaskMapper">
+    <resultMap id="PatrolTaskResultMap" type="com.secusoft.web.model.PatrolTaskBean">
+        <id column="task_id" property="taskId"/>
+        <result column="patrol_name" property="patrolName"/>
+        <result column="status" property="status"/>
+        <result column="time_template_id" property="timeTemplateId"/>
+        <result column="enable" property="enable"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="create_id" property="createId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_id" property="updateId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="org_code" property="orgCode"/>
+        <association column="time_template_id" property="patrolTimeTemplateBean" select="com.secusoft.web.mapper.PatrolTimeTemplateMapper.selectPatroltTimeTemplate"/>
+    </resultMap>
+    <!-- 根据主键(task_id)查询 -->
+    <select id="selectPatrolTaskByPrimaryKey" parameterType="java.lang.Integer" resultMap="PatrolTaskResultMap">
+        select task_id,patrol_name,status,enable from vi_patrol_task
+        where task_id=#{taskId}
+    </select>
+    <!-- 根据状态查询不相关所有任务 -->
+    <select id="selectPatrolTaskAll" parameterType="com.secusoft.web.model.PatrolTaskBean"
+            resultMap="PatrolTaskResultMap">
+        select task_id,patrol_name,status,enable,time_template_id from vi_patrol_task
+        where status!=#{status}
+    </select>
+    <!-- 根据任务名称查询任务id -->
+    <select id="selectPatrolTaskByPatrolName" parameterType="com.secusoft.web.model.PatrolTaskBean"
+            resultMap="PatrolTaskResultMap">
+        select task_id,status from vi_patrol_task
+        where patrol_name=#{patrolName} and status!=#{status}
+    </select>
+    <insert id="insertPatrolTask" parameterType="com.secusoft.web.model.PatrolTaskBean">
+        insert into vi_patrol_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">task_id,</if>
+            <if test="patrolName != null">patrol_name,</if>
+            <if test="status != null">status,</if>
+            <if test="timeTemplateId != null">time_template_id,</if>
+            <if test="enable != null">enable,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="orgCode != null">org_code</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="taskId != null">#{taskId},</if>
+            <if test="patrolName != null">#{patrolName},</if>
+            <if test="status != null">#{status},</if>
+            <if test="timeTemplateId != null">#{timeTemplateId},</if>
+            <if test="enable != null">#{enable},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="orgCode != null">#{orgCode}</if>
+        </trim>
+    </insert>
+    <!-- 删除任务信息 -->
+    <delete id="deletePatrolTask" parameterType="java.lang.Integer">
+        delete from vi_patrol_task
+        <where>
+            <if test="taskId != null">
+                task_id=#{taskId}
+            </if>
+        </where>
+    </delete>
+    <!-- 修改路线信息 -->
+    <update id="updatePatrolTask" parameterType="com.secusoft.web.model.PatrolTaskBean">
+        update vi_patrol_task
+        <set>
+            <if test="patrolName != null">
+                patrol_name=#{patrolName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable}
+            </if>
+            <if test="status != null">
+                status=#{status},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime}
+            </if>
+            <if test="updateId != null">
+                update_id=#{updateId}
+            </if>
+        </set>
+        <where>
+            <if test="taskId != null">
+                task_id=#{taskId}
+            </if>
+        </where>
+    </update>
+
+</mapper>

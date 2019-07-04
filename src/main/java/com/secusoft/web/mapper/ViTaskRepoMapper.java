@@ -27,7 +27,10 @@ public interface ViTaskRepoMapper {
      * 删除一条布控任务关联的库
      */
     void deleteViTaskRepo(@Param("id") Integer id);
-
+    /**
+     * 删除布控任务关联的所有库
+     */
+    void deleteViTaskRepoByTaskId(@Param("taskId") String taskId);
     /**
      * 批量插入
      * @param list

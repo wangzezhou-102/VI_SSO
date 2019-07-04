@@ -7,19 +7,19 @@
         <result column="route_id" property="routeId"/>
         <result column="device_id" property="deviceId"/>
         <result column="status" property="status"/>
-        <association column="device_id" property="deviceBean" select="com.secusoft.web.mapper.DeviceMapper.selectDeviceByDeviceId"/>
+        <association column="device_id" property="deviceBean" select="com.secusoft.web.mapper.DeviceMapper.selectDeviceByDeviceId" />
     </resultMap>
     <!-- 查看路线对应设备 -->
     <select id="selectPatrolRouteDeviceByRouteId" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean" resultMap="PatrolRouteDeviceResultMap">
-        select device_id from vi_patrol_route_device
-        where route_id=#{routeId} and status=#{status}
+        select route_id,device_id from vi_patrol_route_device
+        where route_id=#{routeId}
     </select>
     <!-- 增加路线设备 -->
     <insert id="insertPatrolRouteDevice" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
         insert into vi_patrol_route_device(route_id,device_id) values(#{routeId},#{deviceId})
     </insert>
     <!-- 删除路线对应设备 -->
-    <delete id="deletePatrolRoute" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
+    <delete id="deletePatrolRouteDevice" parameterType="com.secusoft.web.model.PatrolRouteDeviceBean">
         delete from vi_patrol_route_device
         <where>
             <if test="routeId != null">
