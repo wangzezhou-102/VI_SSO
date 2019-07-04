@@ -44,11 +44,11 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
     /**
      * 所有设备信息
      */
-    private String surveyDevice;
+    private String[] surveyDevice;
     /**
      * 所有布控库信息
      */
-    private String surveyRepo;
+    private String[] surveyRepo;
     /**
      * 是否开启 0-结束 1-开启
      */
@@ -114,19 +114,19 @@ public class ViSurveyTaskRequest implements Serializable,Cloneable {
         this.areaType = areaType;
     }
 
-    public String getSurveyDevice() {
+    public String[] getSurveyDevice() {
         return surveyDevice;
     }
 
-    public void setSurveyDevice(String surveyDevice) {
+    public void setSurveyDevice(String[] surveyDevice) {
         this.surveyDevice = surveyDevice;
     }
 
-    public String getSurveyRepo() {
+    public String[] getSurveyRepo() {
         return surveyRepo;
     }
 
-    public void setSurveyRepo(String surveyRepo) {
+    public void setSurveyRepo(String[] surveyRepo) {
         this.surveyRepo = surveyRepo;
     }
 
