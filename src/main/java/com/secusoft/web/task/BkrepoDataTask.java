@@ -8,8 +8,10 @@ import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
 import com.secusoft.web.mapper.ZdryMapper;
 import com.secusoft.web.model.*;
+import com.secusoft.web.service.ZdryService;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
+import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
 import com.secusoft.web.utils.ImageUtils;
 import com.secusoft.web.utils.OdpsUtils;
@@ -29,8 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -55,6 +60,9 @@ public class BkrepoDataTask {
     ViBasicMemberMapper viBasicMemberMapper;
 
     @Autowired
+    ZdryService zdryService;
+
+    @Autowired
     BkrepoConfig bkrepoConfig;
 
     @Autowired
@@ -71,7 +79,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "00 25 19 * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "30 33 17 * * ?")//0 0 */1 * * ?
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -87,56 +95,59 @@ public class BkrepoDataTask {
                 return;
             }
         } else if (NormalConfig.getBkrepoType() == 2) {
-            SyncZdryLogBean syncZdryLogBean = new SyncZdryLogBean();
             BaseResponse baseResponse = null;
-            ViRepoBean viRepoBean = null;
             bkrepoTable = NormalConfig.getBkrepoTable2().split(",");
             for (String str : bkrepoTable) {
-
+                SyncZdryLogBean syncZdryLogBean = new SyncZdryLogBean();
                 log.info("开始同步基础库数据：" + str);
                 syncZdryLogBean.setTableName(str);
                 SyncZdryLogBean syncBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
                 ZdryVo zdryVo = new ZdryVo();
                 zdryVo.setTableName(str);
+                zdryVo.setUpdateTime(new Date());
+                zdryVo.setIsFirst(null == syncBean ? 1 : 0);
                 //判断是否是首次同步 1首次，0非首次
                 log.info("是否是首次同步：" + (null == syncBean));
-                zdryVo.setIsFirst(null == syncBean ? 1 : 0);
-                zdryVo.setUpdateTime(null == syncBean ? new Date() : syncBean.getLastSyncTime());
                 if ("view_qgzt".equals(str)) {
-                    if (null == syncBean) {
-                        viRepoBean = addViRepo("全国在逃人员布控库", "全国在逃人员布控库", "vi_" + str);
-                    } else {
-                        List<ViRepoBean> list = viRepoMapper.getAllViRepo(null).stream().filter((ViRepoBean viRepo) -> viRepo.getTableName().equals(
-                                "vi_view_qgzt")).collect(Collectors.toList());
-                        if (list.size() > 0) {
-                            viRepoBean = list.get(0);
-                        } else {
-                            viRepoBean = addViRepo("全国在逃人员布控库", "全国在逃人员布控库", "vi_" + str);
-                        }
-                    }
-                    boolean result = true;
-                    Integer syncNum = 1;
-                    while (result) {
-                        zdryVo.setSyncNum(syncNum);
-                        result = syncQgztPeople(zdryVo, syncBean, syncZdryLogBean, viRepoBean);
-                        syncNum++;
-                    }
+                    //asycBkrepo("全国在逃人员布控库", zdryVo, syncBean, syncZdryLogBean);
                 } else if ("view_sgy".equals(str)) {
-//                    baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewSgyList());
-//                    ZdryResponse zdryResponse = JSON.parseObject(JSON.toJSONString(baseResponse.getData()), ZdryResponse.class);
-
-                } else if ("view_lk".equals(str)) {
-//                    baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewLkList());
-//                    ZdryResponse zdryResponse = JSON.parseObject(JSON.toJSONString(baseResponse.getData()), ZdryResponse.class);
+                    //asycBkrepo("省高院布控库", zdryVo, syncBean, syncZdryLogBean);
 
                 } else if ("view_sdts".equals(str)) {
-//                    baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewSdtsList());
-//                    ZdryResponse zdryResponse = JSON.parseObject(JSON.toJSONString(baseResponse.getData()), ZdryResponse.class);
-
+                    asycBkrepo("涉毒脱失人员布控库", zdryVo, syncBean, syncZdryLogBean);
                 }
             }
-
             log.info("结束同步基础库数据");
+        }
+    }
+
+    /**
+     * 同步数据总方法
+     */
+    private void asycBkrepo(String bkname, ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean) {
+
+        ViRepoBean viRepoBean = null;
+        if (null == syncBean) {
+            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+        } else {
+            List<ViRepoBean> list = viRepoMapper.getAllViRepo(null).stream().filter((ViRepoBean viRepo) -> viRepo.getTableName().equals(
+                    "vi_" + zdryVo.getTableName())).collect(Collectors.toList());
+            if (list.size() > 0) {
+                viRepoBean = list.get(0);
+            } else {
+                viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+            }
+        }
+        boolean result = true;
+        Integer syncNum = 1;
+        while (result) {
+            zdryVo.setSyncNum(syncNum);
+            result = syncPeople(zdryVo, syncBean, syncZdryLogBean, viRepoBean);
+            syncNum++;
+            syncZdryLogBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
+        }
+        if (null == syncBean) {
+            orderbyPartitionData(zdryVo, viRepoBean);
         }
     }
 
@@ -171,22 +182,23 @@ public class BkrepoDataTask {
         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
         viBasicMemberBean.setObjectId(viRepoBean.getTableName() + "_" + bean.getPicId());
         viBasicMemberBean.setRepoId(viRepoBean.getId());
-        viBasicMemberBean.setRealObjectId(String.valueOf(bean.getId()));
+        viBasicMemberBean.setRealObjectId(bean.getPicId());
         viBasicMemberBean.setRealTableName(viRepoBean.getTableName());
         viBasicMemberBean.setIdentityId(bean.getPicId());
         viBasicMemberBean.setIdentityName(bean.getHumanName());
         viBasicMemberBean.setContent(ImageUtils.encode(bean.getPic()));
         viBasicMemberBean.setRepoId(viRepoBean.getId());
         viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
+        memberSendToTQAdd(viBasicMemberBean);
         return viBasicMemberBean;
     }
 
     /**
-     * 下发到天擎
+     * 下发到天擎添加布控目标
      *
      * @param viBasicMemberBean
      */
-    private BaseResponse memberSendToTQ(ViBasicMemberBean viBasicMemberBean) {
+    private BaseResponse memberSendToTQAdd(ViBasicMemberBean viBasicMemberBean) {
         //添加布控目标
         BaseRequest<BKMemberAddRequest> bkMemberAddRequestBaseRequest = new BaseRequest<>();
         bkMemberAddRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
@@ -205,6 +217,28 @@ public class BkrepoDataTask {
     }
 
     /**
+     * 下发到天擎删除
+     *
+     * @param viBasicMemberBean
+     */
+    private BaseResponse memberSendToTQDelete(ViBasicMemberBean viBasicMemberBean) {
+        //删除布控目标
+        BaseRequest<BKMemberDeleteRequest> bkMemberDeleteRequestBaseRequest = new BaseRequest<>();
+        bkMemberDeleteRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
+        BKMemberDeleteRequest bkMemberDeleteRequest = new BKMemberDeleteRequest();
+        bkMemberDeleteRequest.setObjectIds(viBasicMemberBean.getObjectId());
+        bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
+        bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
+
+        String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
+        log.info(requestStr);
+        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
+        BaseResponse baseResponse = new BaseResponse();
+
+        return baseResponse;
+    }
+
+    /**
      * 同步全国在逃人员
      *
      * @param zdryVo
@@ -212,71 +246,155 @@ public class BkrepoDataTask {
      * @param syncZdryLogBean
      */
     @Transactional
-    public boolean syncQgztPeople(ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean, ViRepoBean viRepoBean) {
-        List<ZdryBean> zdryList = getZdryResponse(zdryVo);
+    public boolean syncPeople(ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean, ViRepoBean viRepoBean) {
+        List<ZdryBean> zdryList = null;
+        String tableName = zdryVo.getTableName();
+        zdryList = getZdryResponse(zdryVo, syncBean);
         if (null == syncBean) {
             for (ZdryBean bean : zdryList) {
-                zdryMapper.insertQgzt(bean);
-                ViBasicMemberBean viBasicMemberBean = addViBasicMember(viRepoBean, bean);
-                //下发天擎
-                BaseResponse baseResponse = memberSendToTQ(viBasicMemberBean);
-            }
-            syncZdryLogBean.setSyncCount(zdryList.size());
-            syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
-            syncZdryLogBean.setLastEndTime(new Date());
-            syncZdryLogMapper.insertSyncZdryLog(syncZdryLogBean);
-//            for (int i = 2; i < zdryResponse.getPages(); i++) {
-//                zdryVo.setCurrent(i);
-//                zdryResponse = getZdryResponse(zdryVo);
-//                for (ZdryBean bean : zdryResponse.getRecords()) {
-//                    // zdryMapper.insertQgzt(bean);
-//                    ViBasicMemberBean viBasicMemberBean = addViBasicMember(viRepoBean, bean);
-//                    BaseResponse baseResponse = memberSendToTQ(viBasicMemberBean);
-//                }
-//
-//                syncZdryLogBean.setSyncCount(zdryResponse.getRecords().size());
-//                syncZdryLogBean.setLastSyncTime(zdryResponse.getRecords().get(zdryResponse.getRecords().size() - 1).getUpdateTime());
-//                syncZdryLogBean.setLastEndTime(new Date());
-//                //syncZdryLogMapper.updateSyncZdryLog(syncZdryLogBean);
-//            }
-        } else {
-            for (ZdryBean bean : zdryList) {
+                if (tableName.equals("view_qgzt")) {
+                    zdryMapper.insertQgzt(bean);
+                } else if (tableName.equals("view_sgy")) {
+                    zdryMapper.insertSgy(bean);
+                } else if (tableName.equals("view_sdts")) {
+                    zdryMapper.insertSdts(bean);
+                }
 
             }
-            syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
+            if (syncZdryLogBean.getId() == null) {
+                if (zdryList.size() > 0) {
+                    syncZdryLogBean.setSyncCount(zdryList.size());
+                    syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
+                    syncZdryLogBean.setLastEndTime(new Date());
+                    syncZdryLogMapper.insertSyncZdryLog(syncZdryLogBean);
+                }
+            } else {
+                if (zdryList.size() > 0) {
+                    updateSyncZdryLog(syncZdryLogBean, zdryList);
+                }
+            }
+        } else {
+            for (ZdryBean bean : zdryList) {
+                ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
+                if (tableName.equals("view_qgzt")) {
+                    viBasicMemberBean.setObjectId("view_qgzt_" + bean.getPicId());
+                    zdryMapper.insertQgzt(bean);
+                } else if (tableName.equals("view_sgy")) {
+                    viBasicMemberBean.setObjectId("view_sgy_" + bean.getPicId());
+                    zdryMapper.insertSgy(bean);
+                } else if (tableName.equals("view_sdts")) {
+                    viBasicMemberBean.setObjectId("view_sdts_" + bean.getPicId());
+                    zdryMapper.insertSdts(bean);
+                }
+                ViBasicMemberBean viBasicMemberByObjectId = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+                if (bean.getStatus().equals("1")) {
+                    memberSendToTQDelete(viBasicMemberByObjectId);
+                    viBasicMemberMapper.delViBasicMember(viBasicMemberByObjectId.getId());
+                } else {
+                    addViBasicMember(viRepoBean,bean);
+                }
+            }
+            if (zdryList.size() > 0) {
+                updateSyncZdryLog(syncZdryLogBean, zdryList);
+            }
         }
         return zdryList.size() > 0 ? true : false;
     }
 
-    private List<ZdryBean> getZdryResponse(ZdryVo zdryVo) {
+    /**
+     * 首次更新过滤后数据处理1
+     *
+     * @param zdryVo
+     * @param viRepoBean
+     */
+    private void orderbyPartitionData(ZdryVo zdryVo, ViRepoBean viRepoBean) {
+        String tableName = zdryVo.getTableName();
+        log.info("开始过滤：" + tableName);
 
-        log.info("开始获取基础库数据");
+        ZdryBeanVo zdryBeanVo = new ZdryBeanVo();
+        zdryBeanVo.setCurrent(1);
+        zdryBeanVo.setSize(50);
+        Map<String, Object> stringObjectMap = null;
+        if (tableName.equals("view_qgzt")) {
+            stringObjectMap = zdryService.orderbyPartitionQgzt(zdryBeanVo);
+            basicMemberDue(stringObjectMap, zdryBeanVo, viRepoBean, tableName);
+        } else if (tableName.equals("view_sgy")) {
+            stringObjectMap = zdryService.orderbyPartitionSgy(zdryBeanVo);
+            basicMemberDue(stringObjectMap, zdryBeanVo, viRepoBean, tableName);
+        } else if (tableName.equals("view_sdts")) {
+            stringObjectMap = zdryService.orderbyPartitionSdzt(zdryBeanVo);
+            basicMemberDue(stringObjectMap, zdryBeanVo, viRepoBean, tableName);
+        }
+    }
+
+    /**
+     * 首次更新过滤后数据处理2
+     *
+     * @param stringObjectMaps
+     * @param zdryBeanVo
+     * @param viRepoBean
+     * @param tableName
+     */
+    private void basicMemberDue(Map<String, Object> stringObjectMaps, ZdryBeanVo zdryBeanVo, ViRepoBean viRepoBean, String tableName) {
+        Map<String, Object> stringObjectMap = null;
+        Integer total = null;
+        Integer pages = null;
+
+        List<ZdryBean> list = null;
+        total = Integer.parseInt(String.valueOf(stringObjectMaps.get("total")));
+        log.info(tableName + "过滤后数量：" + total);
+        pages = Integer.parseInt(String.valueOf(stringObjectMaps.get("pages")));
+        log.info(tableName + "过滤后需执行次数：" + pages);
+        list = (ArrayList<ZdryBean>) stringObjectMaps.get("records");
+        for (ZdryBean zdryBean : list) {
+            //本地新增
+            addViBasicMember(viRepoBean, zdryBean);
+        }
+        for (int i = 2; i <= pages; i++) {
+            zdryBeanVo.setCurrent(i);
+            stringObjectMap = zdryService.orderbyPartitionQgzt(zdryBeanVo);
+            list = (ArrayList<ZdryBean>) stringObjectMap.get("records");
+            for (ZdryBean zdryBean : list) {
+
+                //本地新增
+                addViBasicMember(viRepoBean, zdryBean);
+            }
+        }
+    }
+
+    /**
+     * 更新同步日志
+     *
+     * @param syncZdryLogBean
+     * @param zdryList
+     */
+    private void updateSyncZdryLog(SyncZdryLogBean syncZdryLogBean, List<ZdryBean> zdryList) {
+        syncZdryLogBean.setSyncCount(zdryList.size());
+        syncZdryLogBean.setLastSyncTime(zdryList.get(zdryList.size() - 1).getUpdateTime());
+        syncZdryLogBean.setLastEndTime(new Date());
+        syncZdryLogMapper.updateSyncZdryLog(syncZdryLogBean);
+    }
+
+    /**
+     * 获取基础库数据信息
+     * @param zdryVo
+     * @param syncZdryLogBean
+     * @return
+     */
+    private List<ZdryBean> getZdryResponse(ZdryVo zdryVo, SyncZdryLogBean syncZdryLogBean) {
+        log.info("开始获取基础库数据：" + zdryVo.getTableName() + "，" + zdryVo.getSyncNum());
 //        String requestStr = JSON.toJSONString(zdryVo);
 //        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getViewZdryList(), requestStr);
 //        JSONObject jsonObjects = (JSONObject) JSONObject.parse(responseStr);
 //        String dataJson = jsonObjects.getString("data");
 //        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
-        String sql = "select HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from VIEW_QGZT where rownum between " + ((zdryVo.getSyncNum() - 1) * 30 + 1) + " and " + zdryVo.getSyncNum() * 30;
-
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = formatter.format(zdryVo.getIsFirst() == 1 ? zdryVo.getUpdateTime() : syncZdryLogBean.getLastSyncTime());
+        String sql = "select * from (select ROWNUM AS num,HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from  " + zdryVo.getTableName() + "  where rownum <= " + (zdryVo.getSyncNum() * 40) + " and UPDATE_TIME>=to_date('" + dateString + "','yyyy-MM-dd HH24:mi:ss')  order by UPDATE_TIME) a where a.num>=" + ((zdryVo.getSyncNum() - 1) * 40 + 1);
+        log.info(sql);
         RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
-        List<ZdryBean> users = jdbcTemplate.query(sql, rowMapper);
-        log.info("结束获取基础库数据");
-        return users;
-    }
-
-    private void databaseInsertOrUpdate(String tableName, SyncZdryLogBean syncZdryLogBean) {
-        if ("view_qgzt".equals(tableName)) {
-
-
-        } else if ("view_sgy".equals(tableName)) {
-
-
-        } else if ("view_lk".equals(tableName)) {
-
-
-        } else if ("view_sdts".equals(tableName)) {
-
-
-        }
+        List<ZdryBean> zdryList = jdbcTemplate.query(sql, rowMapper);
+        log.info("结束获取基础库数据：" + zdryVo.getTableName() + "，数量：" + zdryList.size());
+        return zdryList;
     }
 }

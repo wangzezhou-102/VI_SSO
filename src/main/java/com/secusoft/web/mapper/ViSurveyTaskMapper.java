@@ -62,8 +62,14 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
 
     /**
      * 根据布控任务ID获取布控任务
-     * @param userIds
+     * @param viSurveyTaskRequest
      * @return
      */
-    ViSurveyTaskBean selectBeanById(@Param("id") Integer userIds);
+    ViSurveyTaskBean selectBeanByIdOrObjectId(ViSurveyTaskRequest viSurveyTaskRequest);
+
+    /**
+     * 获取所有布控任务分页
+     * @return
+     */
+    List<ViSurveyTaskBean> getAllViSurveyTaskByPage(ViSurveyTaskRequest viSurveyTaskRequest);
 }

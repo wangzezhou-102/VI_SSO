@@ -1,5 +1,6 @@
 package com.secusoft.web.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
@@ -50,6 +51,10 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     @Transactional
     @Override
     public ResultVo insertViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+
+        String requestStr = JSON.toJSONString(viSurveyTaskRequest);
+
+        log.info("viSurveyTaskRequest：" + requestStr);
         if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
@@ -87,7 +92,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         viSurveyTaskMapper.insertViSurveyTask(viSurveyTaskBean);
 
         //设备信息
-        String[] device = viSurveyTaskRequest.getSurveyDevice().split(",");
+        String[] device = viSurveyTaskRequest.getSurveyDevice();
         List<ViTaskDeviceBean> list = new ArrayList<>();
         for (String str : device) {
             ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
@@ -101,7 +106,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         viTaskDeviceMapper.insertBatch(list);
         viSurveyTaskBean.setViTaskDeviceList(list);
         //布控库信息
-        String[] repo = viSurveyTaskRequest.getSurveyRepo().split(",");
+        String[] repo = viSurveyTaskRequest.getSurveyRepo();
         List<ViTaskRepoBean> listRepo = new ArrayList<>();
         for (String str : repo) {
             ViTaskRepoBean viTaskRepoBean = new ViTaskRepoBean();
@@ -135,13 +140,16 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     @Transactional
     @Override
     public ResultVo updateViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+        String requestStr = JSON.toJSONString(viSurveyTaskRequest);
+
+        log.info(requestStr);
         if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() <= 0) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        ViSurveyTaskBean bean = viSurveyTaskMapper.selectBeanById(viSurveyTaskRequest.getId());
+        ViSurveyTaskBean bean = viSurveyTaskMapper.selectBeanByIdOrObjectId(viSurveyTaskRequest);
 
         if (!StringUtils.hasLength(viSurveyTaskRequest.getSurveyName())) {
             return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
@@ -165,8 +173,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         }
         //取新增设备列表
         List<ViTaskDeviceBean> cutDeviceList = null;
-        if (StringUtils.hasLength(viSurveyTaskRequest.getSurveyDevice())) {
-            List<String> listDevice = Arrays.asList(viSurveyTaskRequest.getSurveyDevice().split(","));
+        if (viSurveyTaskRequest.getSurveyDevice().length > 0) {
+            List<String> listDevice = Arrays.asList(viSurveyTaskRequest.getSurveyDevice());
             List<ViTaskDeviceBean> newDevice = new ArrayList<>();
             for (String str : listDevice) {
                 ViTaskDeviceBean beans = new ViTaskDeviceBean();
@@ -199,18 +207,21 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 //                VideoStreamStopTask videoStreamStopTask = new VideoStreamStopTask(taskBean);
 //                videoStreamStopTask.run();
             }
-
-            viTaskDeviceMapper.insertBatch(diffrientDevice);
             log.info("ViTaskDeviceList size：" + bean.getViTaskDeviceList().size());
-            bean.getViTaskDeviceList().removeAll(cutDeviceList);
-            viTaskDeviceMapper.delBatchViTaskDevice(cutDeviceList);
-            log.info("ViTaskDeviceList removeAll：" + bean.getViTaskDeviceList().size());
-            bean.getViTaskDeviceList().addAll(diffrientDevice);
-            log.info("ViTaskDeviceList addAll：" + bean.getViTaskDeviceList().size());
+            if (diffrientDevice.size() > 0) {
+                viTaskDeviceMapper.insertBatch(diffrientDevice);
+                bean.getViTaskDeviceList().addAll(diffrientDevice);
+                log.info("ViTaskDeviceList addAll：" + bean.getViTaskDeviceList().size());
+            }
+            if (cutDeviceList.size() > 0) {
+                viTaskDeviceMapper.delBatchViTaskDevice(cutDeviceList);
+                bean.getViTaskDeviceList().removeAll(cutDeviceList);
+                log.info("ViTaskDeviceList removeAll：" + bean.getViTaskDeviceList().size());
+            }
         }
 
-        if (StringUtils.hasLength(viSurveyTaskRequest.getSurveyRepo())) {
-            List<String> listRepo = Arrays.asList(viSurveyTaskRequest.getSurveyRepo().split(","));
+        if (viSurveyTaskRequest.getSurveyRepo().length > 0) {
+            List<String> listRepo = Arrays.asList(viSurveyTaskRequest.getSurveyRepo());
             List<ViTaskRepoBean> newRepo = new ArrayList<>();
             for (String str : listRepo) {
                 Integer repoId = null;
@@ -227,13 +238,17 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             List<ViTaskRepoBean> cutRepoList = removeToRepo(bean.getViTaskRepoList(), newRepo, true);
             List<ViTaskRepoBean> diffrientRepo = removeToRepo(bean.getViTaskRepoList(), newRepo, false);
 
-            viTaskRepoMapper.insertBatch(diffrientRepo);
+            if(diffrientRepo.size()>0) {
+                viTaskRepoMapper.insertBatch(diffrientRepo);
+                bean.getViTaskRepoList().addAll(diffrientRepo);
+                log.info("ViTaskRepoList addAll：" + bean.getViTaskRepoList().size());
+            }
             log.info("ViTaskRepoList size：" + bean.getViTaskRepoList().size());
-            bean.getViTaskRepoList().removeAll(cutRepoList);
-            viTaskRepoMapper.delBatchViTaskRepo(cutRepoList);
-            log.info("ViTaskRepoList removeAll：" + bean.getViTaskRepoList().size());
-            bean.getViTaskRepoList().addAll(diffrientRepo);
-            log.info("ViTaskRepoList addAll：" + bean.getViTaskRepoList().size());
+            if(cutRepoList.size()>0) {
+                viTaskRepoMapper.delBatchViTaskRepo(cutRepoList);
+                bean.getViTaskRepoList().removeAll(cutRepoList);
+                log.info("ViTaskRepoList removeAll：" + bean.getViTaskRepoList().size());
+            }
         }
         viSurveyTaskMapper.updateViSurveyTask(bean);
         if (cutDeviceList != null && cutDeviceList.size() > 0) {
@@ -289,7 +304,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
         ViSurveyTaskRequest viSurveyTaskRequest = new ViSurveyTaskRequest();
         viSurveyTaskRequest.setSurveyType(viSurveyTaskVo.getSurveyType());
-        List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+        List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTaskByPage(viSurveyTaskRequest);
 
         return ResultVo.success(PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize()));
     }
@@ -363,10 +378,11 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private boolean validUpdateCalute(ViSurveyTaskRequest viSurveyTaskRequest, List<ViTaskDeviceBean> cutDeviceList, List<ViTaskDeviceBean> diffrientDevice) {
 
+        log.info("原先的设备：" + StringUtils.arrayToDelimitedString(viSurveyTaskRequest.getSurveyDevice(), ","));
         //活动中的设备
-        List<ViTaskDeviceBean> actionDeviceList = viTaskDeviceMapper.getActionDevice(viSurveyTaskRequest.getSurveyDevice());
+        List<ViTaskDeviceBean> actionDeviceList = viTaskDeviceMapper.getActionDevice(StringUtils.arrayToDelimitedString(viSurveyTaskRequest.getSurveyDevice(), ","));
         //新增设备数
-        Integer inactiveDevice = viSurveyTaskRequest.getSurveyDevice().split(",").length;
+        Integer inactiveDevice = viSurveyTaskRequest.getSurveyDevice().length;
         //准备布控的设备数
         Integer readyDevice = inactiveDevice - actionDeviceList.size();
         SysOrgRoadBean sysOrgRoadBean = new SysOrgRoadBean();
@@ -395,14 +411,14 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     private List<ViTaskDeviceBean> removeToDevice(List<ViTaskDeviceBean> oldList, List<ViTaskDeviceBean> newList, boolean type) {
         List<ViTaskDeviceBean> returnNewList = new ArrayList<>();//拟新增的设备
         Set<ViTaskDeviceBean> beanSet = new HashSet<>();//拟去除的设备
-
+        Set<ViTaskDeviceBean> beanSameSet = new HashSet<>();
         for (ViTaskDeviceBean newBean : newList) {
             boolean result = true;
             for (ViTaskDeviceBean oldBean : oldList) {
                 //判断是否新老设备列表中的ID一致，若不一致则加入set集合，一致则不加入需要新增的集合，切移除原先已加入的设备信息
                 if (newBean.getDeviceId().equals(oldBean.getDeviceId())) {
                     result = false;
-                    beanSet.remove(oldBean);
+                    beanSameSet.add(oldBean);
                 } else {
                     beanSet.add(oldBean);
                 }
@@ -411,6 +427,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                 returnNewList.add(newBean);
             }
         }
+
+        beanSet.removeAll(beanSameSet);
         return type ? new ArrayList<>(beanSet) : returnNewList;
     }
 
@@ -425,13 +443,14 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     private List<ViTaskRepoBean> removeToRepo(List<ViTaskRepoBean> oldList, List<ViTaskRepoBean> newList, boolean type) {
         List<ViTaskRepoBean> returnNewList = new ArrayList<>();
         Set<ViTaskRepoBean> beanSet = new HashSet<>();
+        Set<ViTaskRepoBean> beanSameSet = new HashSet<>();
 
         for (ViTaskRepoBean newBean : newList) {
             boolean result = true;
             for (ViTaskRepoBean oldBean : oldList) {
-                if (newBean.getId().equals(oldBean.getId())) {
+                if (newBean.getRepoId().equals(oldBean.getRepoId())) {
                     result = false;
-                    beanSet.remove(oldBean);
+                    beanSameSet.add(oldBean);
                 } else {
                     beanSet.add(oldBean);
                 }
@@ -440,6 +459,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                 returnNewList.add(newBean);
             }
         }
+        beanSet.removeAll(beanSameSet);
         return type ? new ArrayList<>(beanSet) : returnNewList;
     }
 
@@ -522,17 +542,6 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
         timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
-    }
-
-    /**
-     * 运力计算
-     *
-     * @return
-     */
-    private boolean computing() {
-        boolean result = false;
-
-        return false;
     }
 
     /**

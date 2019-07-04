@@ -67,7 +67,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         }
         String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();//访问路径
         String base64=viPrivateMemberBean.getImageUrl();
-        viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
+        viPrivateMemberBean.setObjectId("vi_private_" + viPrivateMemberBean.getIdentityId());
         try {
             viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl().split(",")[1], "Bkmember"));
         } catch (IOException e) {
