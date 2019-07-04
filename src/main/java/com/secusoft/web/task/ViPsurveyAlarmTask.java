@@ -14,6 +14,8 @@ import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.websocket.WebSock;
 import com.secusoft.web.websocket.WebSocketMessageVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cglib.beans.BeanCopier;
@@ -38,6 +40,7 @@ import java.util.Map;
 @Configurable
 @EnableScheduling
 public class ViPsurveyAlarmTask {
+    private static Logger log = LoggerFactory.getLogger(ViPsurveyAlarmTask.class);
 
     @Resource
     ViPsurveyAlarmMapper viPsurveyAlarmMapper;
@@ -55,9 +58,9 @@ public class ViPsurveyAlarmTask {
     WebSock webSock;
 
     //@Scheduled(cron = "0 0 */1 * * ?")
-    @Scheduled(cron = "30 13 19 * * ?")
+    @Scheduled(cron = "30 16 10 * * ?")
     public void ViPsurveyAlaram() throws IOException {
-
+        log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
 
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
@@ -106,21 +109,28 @@ public class ViPsurveyAlarmTask {
                         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
                         viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
                         ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
-                        viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
+                        if(null!=basicMemberBean) {
+                            viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
+                        }else{
+                            viPsurveyAlarmDetailResponse.setBkname("测试人员库");
+                        }
                     } else {
                         viPsurveyAlarmDetailResponse.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
                     }
+                    viPsurveyAlarmDetailMapper.insertViPsurveyAlarmDetail(beans);
+                    viPsurveyAlarmDetailResponse.setAlarmDetailId(beans.getId());
+                    viPsurveyAlarmDetailResponse.setAlarmStatus(beans.getAlarmStatus());
                     detailResponses.add(viPsurveyAlarmDetailResponse);
                 }
-                viPsurveyAlarmDetailMapper.insertBatch(alaramVo.getSimilar());
             }
             Map<String, Object> map = new HashMap<>();
-            map.put("psurveAlarm", detailResponses);
+            map.put("psurveAlarmBk", detailResponses);
 
             WebSocketMessageVO webSocketMessageVO = new WebSocketMessageVO();
             webSocketMessageVO.setData(map);
             webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
 
+            log.info("结束获取实时告警数据");
         }
     }
 }

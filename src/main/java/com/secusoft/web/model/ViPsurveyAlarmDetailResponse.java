@@ -7,6 +7,12 @@ import java.util.Date;
  * @since 2019/7/3 19:57
  */
 public class ViPsurveyAlarmDetailResponse {
+
+    /**
+     * 告警详情编号
+     */
+    private Integer alarmDetailId;
+
     /**
      * 图片地址
      */
@@ -53,14 +59,22 @@ public class ViPsurveyAlarmDetailResponse {
     private String objectId;
 
     /**
-     * 处理状态 0-忽略 1-关注
+     * 处理状态 0-忽略 1-关注 2-无操作
      */
-    private Integer surveyStatus;
+    private Integer alarmStatus=2;
 
     /**
      * 所在库名称
      */
     private String bkname;
+
+    public Integer getAlarmDetailId() {
+        return alarmDetailId;
+    }
+
+    public void setAlarmDetailId(Integer alarmDetailId) {
+        this.alarmDetailId = alarmDetailId;
+    }
 
     public String getOssUrl() {
         return ossUrl;
@@ -134,12 +148,12 @@ public class ViPsurveyAlarmDetailResponse {
         this.objectId = objectId;
     }
 
-    public Integer getSurveyStatus() {
-        return surveyStatus;
+    public Integer getAlarmStatus() {
+        return alarmStatus;
     }
 
-    public void setSurveyStatus(Integer surveyStatus) {
-        this.surveyStatus = surveyStatus;
+    public void setAlarmStatus(Integer alarmStatus) {
+        this.alarmStatus = alarmStatus;
     }
 
     public String getBkname() {

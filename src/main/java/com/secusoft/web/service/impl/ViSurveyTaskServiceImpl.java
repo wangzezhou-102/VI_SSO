@@ -370,7 +370,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         //准备布控的设备数
         Integer readyDevice = inactiveDevice - actionDeviceList.size();
         SysOrgRoadBean sysOrgRoadBean = new SysOrgRoadBean();
-        sysOrgRoadBean.setOrgCode("330405");
+        sysOrgRoadBean.setOrgCode("330401");
         SysOrgRoadBean sysOrgRoadByOrgCode = sysOrgRoadMapper.getSysOrgRoadByOrgCode(sysOrgRoadBean);
         if (cutDeviceList == null || diffrientDevice == null) {
             if ((sysOrgRoadByOrgCode.getUsedRoads() + readyDevice) > sysOrgRoadByOrgCode.getTotalRoads()) {

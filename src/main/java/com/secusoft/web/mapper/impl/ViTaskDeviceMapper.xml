@@ -92,7 +92,7 @@
                 and vtd.id=#{id}
             </if>
             <if test="taskId!=null">
-                and task_id not in (#{taskId})
+                and vtd.task_id not in (#{taskId})
             </if>
         </where>
     </select>
@@ -114,13 +114,13 @@
                 AND device_id=#{deviceId}
             </if>
             <if test="taskId !=null">
-                AND task_id=#{taskId}
+                AND vtd.task_id=#{taskId}
             </if>
             <if test="status !=null">
-                AND status=#{status}
+                AND vtd.status=#{status}
             </if>
             <if test="action !=null">
-                AND action=#{action}
+                AND vtd.action=#{action}
             </if>
         </where>
     </select>

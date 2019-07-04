@@ -63,7 +63,7 @@
         </association>
     </resultMap>
 
-    <insert id="insertBatch" parameterType="java.util.List">
+    <insert id="insertBatch" parameterType="java.util.List" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO vi_psurvey_alarm_detail (alarm_id, task_id,
         bkid, alarm_type, alarm_type_name,
         feature, oss_url, similarity,
@@ -76,6 +76,19 @@
             #{item.objectId}, #{item.name}, #{item.picid},
             #{item.time}, #{item.status})
         </foreach>
+    </insert>
+
+    <insert id="insertViPsurveyAlarmDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO vi_psurvey_alarm_detail (alarm_id, task_id,
+        bkid, alarm_type, alarm_type_name,
+        feature, oss_url, similarity,
+        object_id, name, picid,
+        time, status) values
+            (#{alarmId}, #{taskId},
+            #{bkid}, #{alarmType}, #{alarmTypeName},
+            #{feature}, #{ossUrl}, #{similarity},
+            #{objectId}, #{name}, #{picid},
+            #{time}, #{status})
     </insert>
 
     <update id="updateFocusAlaramDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean">

@@ -40,7 +40,7 @@
             <result column="type" property="type" jdbcType="INTEGER" />
             <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
             <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
-            <result column="valid_state" property="validState" jdbcType="INTEGER" />
+            <result column="viRepo_valid_state" property="validState" jdbcType="INTEGER" />
         </association>
     </resultMap>
 
@@ -97,7 +97,7 @@
     </select>
 
     <select id="getViPrivateMemberByBean" parameterType="com.secusoft.web.model.ViPrivateMemberBean" resultMap="ViPrivateMemberResultMap">
-        select vpm.*,vr.id as viRepo_id,vr.bkdesc,vr.bktype,vr.bkname,vr.police_station_id,vr.table_name,vr.type,vr.gmt_create,vr.gmt_modified,vr.valid_state
+        select vpm.*,vr.id as viRepo_id,vr.bkdesc,vr.bktype,vr.bkname,vr.police_station_id,vr.table_name,vr.type,vr.gmt_create,vr.gmt_modified,vr.valid_state as viRepo_valid_state
         from vi_private_member vpm
         left join vi_repo vr on vpm.repo_id=vr.id
         <where>
@@ -105,7 +105,7 @@
                and object_id=#{objectId}
             </if>
             <if test="id!=null">
-                and id=#{id}
+                and vpm.id=#{id}
             </if>
         </where>
     </select>

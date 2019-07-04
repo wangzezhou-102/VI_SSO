@@ -9,6 +9,8 @@ package com.secusoft.web.websocket;
  * @version $Id WebSock.java, v 0.1 2019-05-26 19:13 Administrator Exp $$
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -23,6 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @ServerEndpoint("/socketServer")
 @Component
 public class WebSock {
+
+    private static Logger log = LoggerFactory.getLogger(WebSock.class);
+
     private static int onlineCount=0;
     private static CopyOnWriteArrayList<WebSock> webSocketSet=new CopyOnWriteArrayList<WebSock>();
     private static Session session;
@@ -32,14 +37,14 @@ public class WebSock {
         this.session=session;
         webSocketSet.add(this);//加入set中
         addOnlineCount();
-        System.out.println("有新连接加入！当前在线人数为"+getOnlineCount());
+        log.info("有新连接加入！当前在线人数为"+getOnlineCount());
     }
 
     @OnClose
     public void onClose(){
         webSocketSet.remove(this);
         subOnlineCount();
-        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        log.info("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
 
     public   void main(String[] args) {
@@ -48,7 +53,7 @@ public class WebSock {
 
     @OnMessage
     public void onMessage(String message,Session session){
-        System.out.println("来自客户端的消息："+message);
+        log.info("来自客户端的消息："+message);
 //        群发消息
         for (WebSock item:webSocketSet){
             try {
@@ -62,7 +67,7 @@ public class WebSock {
 
     @OnError
     public  void onError(Session session,Throwable throwable){
-        System.out.println("发生错误！");
+        log.info("发生错误！");
         throwable.printStackTrace();
     }
     //   下面是自定义的一些方法
@@ -73,7 +78,7 @@ public class WebSock {
                 for (WebSock s : webSocketSet) {
                     if (s != null) {
                         // 判断是否为终端信息。如果是终端信息则查询数据库获取detail
-                        System.out.println("webSocket发送消息开始：");
+                        log.info("webSocket发送消息开始：");
                         s.session.getBasicRemote().sendText(message);
                     }
                 }

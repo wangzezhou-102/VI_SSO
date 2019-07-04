@@ -34,4 +34,10 @@ public interface ViPsurveyAlarmDetailMapper {
      * @return
      */
     List<ViPsurveyAlarmDetailBean> getAllViPsurveyAlarmDetail();
+
+    /**
+     * 单个插入告警详情
+     * @param viPsurveyAlarmDetailBean
+     */
+    void insertViPsurveyAlarmDetail(ViPsurveyAlarmDetailBean viPsurveyAlarmDetailBean);
 }

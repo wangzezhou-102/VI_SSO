@@ -102,7 +102,7 @@
         left join vi_repo vr on vbm.repo_id=vr.id
         <where>
             <if test="objectId != null">
-                and vbm.object_id LIKE concat(#{objectId},'%')
+                and vbm.object_id=#{objectId}
             </if>
             <if test="repoId != null">
                 and vbm.repo_id =#{repoId}
