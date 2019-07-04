@@ -37,4 +37,34 @@
         INSERT INTO vi_view_sdts (pic_id,human_name,pic,update_time,status) values
             (#{picId}, #{humanName}, #{pic}, #{updateTime}, #{status})
     </insert>
+
+    <select id="orderbyPartitionQgzt" resultType="com.secusoft.web.model.ZdryBean">
+        select * from (select vvg.*,@rownum:=@rownum+1,
+        if(@pic_id=vvg.pic_id and @human_name=vvg.human_name, @rank:=@rank+1,@rank:=1) as no,
+        @pic_id:=vvg.pic_id,
+        @human_name:=vvg.human_name
+        from (select * from vi_view_qgzt order by pic_id,update_time desc) vvg,
+        (select @rownum :=0,@pic_id :=null,@human_name :=null,@rank:=0) a)result
+        where result.no=1 and result.status=0
+    </select>
+
+    <select id="orderbyPartitionSgy" resultType="com.secusoft.web.model.ZdryBean">
+        select * from (select vvg.*,@rownum:=@rownum+1,
+        if(@pic_id=vvg.pic_id and @human_name=vvg.human_name, @rank:=@rank+1,@rank:=1) as no,
+        @pic_id:=vvg.pic_id,
+        @human_name:=vvg.human_name
+        from (select * from vi_view_sgy order by pic_id,update_time desc) vvg,
+        (select @rownum :=0,@pic_id :=null,@human_name :=null,@rank:=0) a)result
+        where result.no=1 and result.status=0
+    </select>
+
+    <select id="orderbyPartitionSdzt" resultType="com.secusoft.web.model.ZdryBean">
+        select * from (select vvg.*,@rownum:=@rownum+1,
+        if(@pic_id=vvg.pic_id and @human_name=vvg.human_name, @rank:=@rank+1,@rank:=1) as no,
+        @pic_id:=vvg.pic_id,
+        @human_name:=vvg.human_name
+        from (select * from vi_view_sdts order by pic_id,update_time desc) vvg,
+        (select @rownum :=0,@pic_id :=null,@human_name :=null,@rank:=0) a)result
+        where result.no=1 and result.status=0
+    </select>
 </mapper>

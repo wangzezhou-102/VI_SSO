@@ -375,6 +375,12 @@ public class BkrepoDataTask {
         syncZdryLogMapper.updateSyncZdryLog(syncZdryLogBean);
     }
 
+    /**
+     * 获取基础库数据信息
+     * @param zdryVo
+     * @param syncZdryLogBean
+     * @return
+     */
     private List<ZdryBean> getZdryResponse(ZdryVo zdryVo, SyncZdryLogBean syncZdryLogBean) {
         log.info("开始获取基础库数据：" + zdryVo.getTableName() + "，" + zdryVo.getSyncNum());
 //        String requestStr = JSON.toJSONString(zdryVo);
