@@ -25,8 +25,8 @@
                 column:指定唯一标识用户信息的列
                 property:映射到user的那个属性
             -->
-            <id column="id" property="id" jdbcType="INTEGER" />
-            <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+            <id column="vst_id" property="id" jdbcType="INTEGER" />
+            <result column="vst_task_id" property="taskId" jdbcType="VARCHAR" />
             <result column="survey_name" property="surveyName" jdbcType="VARCHAR" />
             <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
             <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
@@ -75,17 +75,17 @@
     </insert>
 
     <select id="getAllViTaskRepo" resultMap="ViTaskRepoResultMap">
-        select vtr.*,vst.survey_name,vst.begin_time,vst.end_time,vst.survey_type,vst.survey_status,vst.area_type,vst.`enable`,vst.create_time,vst.modify_time from
+        select vtr.*,vst.id as vst_id,vst.task_id as vst_task_id,vst.survey_name,vst.begin_time,vst.end_time,vst.survey_type,vst.survey_status,vst.area_type,vst.`enable`,vst.create_time,vst.modify_time from
         vi_task_repo vtr,
         vi_survey_task vst
         where vtr.task_id=vst.task_id
     </select>
 
-    <delete id="delBatchViTaskRepo" >
+    <delete id="delBatchViTaskRepo">
         delete from vi_task_repo
-        where in
-        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
-            #{id}
+        where id in
+        <foreach collection="list" item="param" index="index" open="(" close=")" separator=",">
+            #{param.id}
         </foreach>
     </delete>
 </mapper>

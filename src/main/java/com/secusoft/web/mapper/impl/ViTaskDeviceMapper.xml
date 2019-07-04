@@ -140,9 +140,9 @@
 
     <delete id="delBatchViTaskDevice" >
         delete from vi_task_device
-        where in 
-        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
-            #{id}
+        where id in
+        <foreach collection="list" item="param" index="index" open="(" close=")" separator=",">
+            #{param.id}
         </foreach>
     </delete>
 

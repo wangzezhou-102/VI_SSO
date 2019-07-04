@@ -60,66 +60,68 @@
                      order="BEFORE表示在插入语句之前执行
                      resultType="int"表示返回值得类型为int类型
                  -->
-      INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,area_type)
+        INSERT INTO vi_survey_task(task_id,survey_name,begin_time,end_time,survey_type,area_type)
         VALUES(#{taskId},#{surveyName},#{beginTime},#{endTime},#{surveyType},#{areaType})
     </insert>
 
-     <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
-         update vi_survey_task
-         <set>
-             <if test="surveyName != null">
-                 survey_name=#{surveyName},
-             </if>
-             <if test="beginTime != null">
-                 begin_time=#{beginTime},
-             </if>
-             <if test="endTime != null">
-                 end_time=#{endTime},
-             </if>
-             <if test="surveyStatus != null">
-                 survey_status=#{surveyStatus},
-             </if>
-             <if test="topic != null">
-                 topic=#{topic},
-             </if>
-             <if test="taskId != null">
-                 task_id=#{taskId},
-             </if>
-             <if test="ModifyTime != null">
-                 modify_time=#{ModifyTime},
-             </if>
-             <if test="enable != null">
-                 enable=#{enable},
-             </if>
-             <if test="validState != null">
-                 valid_state=#{validState},
-             </if>
-         </set>
-         where id=#{id}
-     </update>
+    <update id="updateViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskBean">
+        update vi_survey_task
+        <set>
+            <if test="surveyName != null">
+                survey_name=#{surveyName},
+            </if>
+            <if test="beginTime != null">
+                begin_time=#{beginTime},
+            </if>
+            <if test="endTime != null">
+                end_time=#{endTime},
+            </if>
+            <if test="surveyStatus != null">
+                survey_status=#{surveyStatus},
+            </if>
+            <if test="topic != null">
+                topic=#{topic},
+            </if>
+            <if test="taskId != null">
+                task_id=#{taskId},
+            </if>
+            <if test="ModifyTime != null">
+                modify_time=#{ModifyTime},
+            </if>
+            <if test="enable != null">
+                enable=#{enable},
+            </if>
+            <if test="validState != null">
+                valid_state=#{validState},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 
     <update id="delViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest">
         update vi_survey_task
         set valid_state=0
-         <where>
-             <if test="id!=null">
-                 and id=#{id}
-             </if>
-             <if test="taskId!=null">
-                 and task_id=#{taskId}
-             </if>
-         </where>
+        <where>
+            <if test="id!=null">
+                and id=#{id}
+            </if>
+            <if test="taskId!=null">
+                and task_id=#{taskId}
+            </if>
+        </where>
     </update>
-    
+
     <select id="getAllViSurveyTask" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
-         select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
-         from vi_survey_task vst
-         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
+        select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
+        from vi_survey_task vst
+        LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
         <where>
-            vst.valid_state=1
+            <if test="1==1">
+                AND vst.valid_state=1
+            </if>
             <if test="surveyName!=null">
-               AND vst.survey_name=#{surveyName}
+                AND vst.survey_name=#{surveyName}
             </if>
             <if test="id!=null">
                 AND vst.id=#{id}
@@ -141,17 +143,17 @@
     </select>
 
     <select id="selectExecutingSurveyTaskNumber" resultType="java.lang.Integer">
-       select count(id)
-       from vi_survey_task
-       <where>
-           enable = 1
-           <if test="userIds!=null">
-               and user_id in
-               <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
-                   #{userId}
-               </foreach>
-           </if>
-       </where>
+        select count(id)
+        from vi_survey_task
+        <where>
+            enable = 1
+            <if test="userIds!=null">
+                and user_id in
+                <foreach collection="userIds" index="index" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+        </where>
     </select>
     <select id="selectIdByUserIds" resultType="java.lang.String">
         select task_id
@@ -166,7 +168,7 @@
         </where>
     </select>
 
-    <select id="selectBeanById" parameterType="java.lang.Integer" resultMap="viSurveyTaskResultMap">
+    <select id="selectBeanByIdOrObjectId" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
         select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
         from vi_survey_task vst
         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
@@ -174,6 +176,30 @@
         <where>
             <if test="id!=null">
                 AND vst.id=#{id}
+            </if>
+            <if test="taskId!=null">
+                AND vst.task_id=#{taskId}
+            </if>
+        </where>
+        order by vst.create_time desc,vst.modify_time desc
+    </select>
+
+    <select id="getAllViSurveyTaskByPage" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultType="com.secusoft.web.model.ViSurveyTaskBean">
+        select vst.*
+        from vi_survey_task vst
+        <where>
+                vst.valid_state=1
+            <if test="surveyName!=null">
+                AND vst.survey_name=#{surveyName}
+            </if>
+            <if test="id!=null">
+                AND vst.id=#{id}
+            </if>
+            <if test="taskId!=null">
+                AND vst.task_id=#{taskId}
+            </if>
+            <if test="surveyType!=null">
+                AND vst.survey_type=#{surveyType}
             </if>
         </where>
         order by vst.create_time desc,vst.modify_time desc
