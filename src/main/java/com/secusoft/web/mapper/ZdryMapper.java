@@ -41,4 +41,22 @@ public interface ZdryMapper {
      * @param zdryBean
      */
     void insertSdts(ZdryBean zdryBean);
+
+    /**
+     * 过滤后的全国在逃布控库人员
+     * @return
+     */
+    List<ZdryBean> orderbyPartitionQgzt();
+
+    /**
+     * 过滤后的省高院布控库人员
+     * @return
+     */
+    List<ZdryBean> orderbyPartitionSgy();
+
+    /**
+     * 过滤后的涉毒脱失布控库人员
+     * @return
+     */
+    List<ZdryBean> orderbyPartitionSdzt();
 }

@@ -49,8 +49,8 @@
 
     <insert id="insertViBasicMember" parameterType="com.secusoft.web.model.ViBasicMemberBean" keyProperty="id" useGeneratedKeys="true">
 
-      INSERT INTO vi_basic_member(object_id,repo_id,real_object_id,real_table_name,identity_id,identity_name,content,image_url,feature,attribute,status)
-        VALUES(#{objectId},#{repoId},#{realObjectId},#{realTableName},#{identityId},#{identityName},#{content},#{imageUrl},#{feature},#{attribute},#{status})
+      INSERT INTO vi_basic_member(object_id,repo_id,real_object_id,real_table_name,identity_id,identity_name,content,image_url,feature,attribute)
+        VALUES(#{objectId},#{repoId},#{realObjectId},#{realTableName},#{identityId},#{identityName},#{content},#{imageUrl},#{feature},#{attribute})
     </insert>
 
      <update id="updateViBasicMember" parameterType="com.secusoft.web.model.ViBasicMemberBean">
