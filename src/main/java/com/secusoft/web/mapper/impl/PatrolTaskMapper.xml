@@ -17,8 +17,8 @@
         <association column="time_template_id" property="patrolTimeTemplateBean" select="com.secusoft.web.mapper.PatrolTimeTemplateMapper.selectPatroltTimeTemplate"/>
     </resultMap>
     <!-- 根据主键(task_id)查询 -->
-    <select id="selectPatrolTaskByPrimaryKey" parameterType="java.lang.Integer" resultMap="PatrolTaskResultMap">
-        select task_id,patrol_name,status,enable from vi_patrol_task
+    <select id="selectPatrolTaskByPrimaryKey" parameterType="com.secusoft.web.model.PatrolTaskBean" resultMap="PatrolTaskResultMap">
+        select task_id,patrol_name,time_template_id,status,enable from vi_patrol_task
         where task_id=#{taskId}
     </select>
     <!-- 根据状态查询不相关所有任务 -->

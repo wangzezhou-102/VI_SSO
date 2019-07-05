@@ -71,4 +71,11 @@ public interface ViTaskDeviceMapper extends BaseMapper<ViTaskDeviceBean> {
      * @return
      */
     List<ViTaskDeviceBean> getActionDevice(@Param("deviceId") String deviceId);
+    /**
+     * 获取任务关联设备
+     * @param taskId
+     * @return
+     */
+    List<ViTaskDeviceBean> selectViTaskRepoByTaskId(@Param("taskId") String taskId);
+
 }

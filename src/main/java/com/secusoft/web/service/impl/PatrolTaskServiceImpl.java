@@ -1,11 +1,12 @@
 package com.secusoft.web.service.impl;
 
-
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.PatrolTaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Service
 public class PatrolTaskServiceImpl implements PatrolTaskService {
+    private static Logger log = LoggerFactory.getLogger(PatrolTaskServiceImpl.class);
     @Resource
     private PatrolTaskMapper patrolTaskMapper;
     @Resource
@@ -31,10 +33,19 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     private ViTaskDeviceMapper viTaskDeviceMapper;
     @Resource
     private ViTaskRepoMapper viTaskRepoMapper;
+    @Resource
+    private PatrolRouteMapper patrolRouteMapper;
+    @Resource
+    private SysOrgRoadMapper sysOrgRoadMapper;
 
     @Override
     @Transactional
     public ResultVo insertPatrolTak(PatrolTaskRequest patrolTaskRequest) {
+      /*  //判断算力
+        if (!validUpdateCalute(patrolTaskRequest, null, null)) {
+            return ResultVo.failure(BizExceptionEnum.TASK_CALUATE_FAIL.getCode(), BizExceptionEnum.TASK_CALUATE_FAIL.getMessage());
+        }*/
+
         PatrolTaskBean patrolTaskBean = new PatrolTaskBean();
         patrolTaskBean.setStatus(3);
         //任务名称重复异常
@@ -193,6 +204,10 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
                 deviceIds.add(deviceBean.getDeviceId());
             }
         }
+     /*   //判断算力
+        if (!validUpdateCalute(viSurveyTaskRequest, cutDeviceList, diffrientDevice)) {
+            return ResultVo.failure(BizExceptionEnum.TASK_CALUATE_UPDATE_FAIL.getCode(), BizExceptionEnum.TASK_CALUATE_UPDATE_FAIL.getMessage());
+        }*/
         viTaskDeviceMapper.deleteViTaskDeviceByTaskId(patrolTaskRequest.getTaskId());//删除之前任务关联所有设备信息，重新添加
         ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
         for (String deviceId:deviceIds) {
@@ -227,16 +242,108 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         return ResultVo.success();
     }
     //巡逻任务查询
+    @Override
+    @Transactional
     public ResultVo selectPatrolTask(PatrolTaskBean patrolTaskBean){
-
-        return ResultVo.success();
+        //获取任务直接信息
+        PatrolTaskBean patrolTaskBean1 = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
+        PatrolTaskRequest patrolTaskRequest = new PatrolTaskRequest();
+        patrolTaskRequest.setTaskId(patrolTaskBean1.getTaskId());
+        patrolTaskRequest.setPatrolName(patrolTaskBean1.getPatrolName());
+        patrolTaskRequest.setEnable(patrolTaskBean1.getEnable());
+        patrolTaskRequest.setStatus(patrolTaskBean1.getStatus());
+        patrolTaskRequest.setTimeTemplateId(patrolTaskBean1.getTimeTemplateId());
+        //获取时间模板信息
+        PatrolTimeTemplateBean patrolTimeTemplateBean = new PatrolTimeTemplateBean();
+        patrolTimeTemplateBean.setTimeTemplateId(patrolTaskBean1.getTimeTemplateId());
+        PatrolTimeTemplateBean patrolTimeTemplateBean1 = patrolTimeTemplateMapper.selectPatroltTimeTemplate(patrolTimeTemplateBean);
+        patrolTaskRequest.setPatrolTimeSegmentBeans(patrolTimeTemplateBean1.getPatrolTimeSegmentBeans());
+        //获取关联预置路线
+        PatrolTaskRouteBean patrolTaskRouteBean = new PatrolTaskRouteBean();
+        patrolTaskRouteBean.setTaskId(patrolTaskRequest.getTaskId());
+        List<PatrolTaskRouteBean> patrolTaskRouteBeans = patrolTaskRouteMapper.selectPatroltTaskRoute(patrolTaskRouteBean);
+        List<PatrolRouteBean> patrolRouteBeans = new ArrayList<>();
+        PatrolRouteBean patrolRouteBean = new PatrolRouteBean();
+        for (PatrolTaskRouteBean patrolTaskRouteBean1:patrolTaskRouteBeans) {
+            patrolRouteBean.setId(patrolTaskRouteBean1.getRouteId());
+            patrolRouteBeans.add(patrolRouteBean);
+        }
+        patrolTaskRequest.setPatrolRouteBeans(patrolRouteBeans);
+        //获取关联设备列表
+        List<ViTaskDeviceBean> viTaskDeviceBeans = viTaskDeviceMapper.selectViTaskRepoByTaskId(patrolTaskRequest.getTaskId());
+        List<DeviceBean> deviceBeans = new ArrayList<>();
+        DeviceBean deviceBean = new DeviceBean();
+        for (ViTaskDeviceBean viTaskDeviceBean:viTaskDeviceBeans) {
+            deviceBean.setDeviceId(viTaskDeviceBean.getDeviceId());
+            deviceBeans.add(deviceBean);
+        }
+        patrolTaskRequest.setDeviceBeans(deviceBeans);
+        //获取关联布控库
+        List<ViTaskRepoBean> viTaskRepoBeans = viTaskRepoMapper.selectViTaskRepo(patrolTaskRequest.getTaskId());
+        List<ViRepoBean> viRepoBeans = new ArrayList<>();
+        ViRepoBean viRepoBean = new ViRepoBean();
+        for (ViTaskRepoBean viTaskRepoBean:viTaskRepoBeans) {
+            viRepoBean.setId(viTaskRepoBean.getRepoId());
+            viRepoBeans.add(viRepoBean);
+        }
+        patrolTaskRequest.setViRepoBeans(viRepoBeans);
+        return ResultVo.success(patrolTaskRequest);
     }
     //查询多条巡逻任务
+    @Override
     public ResultVo selectPatrolTaskAll( ){
         PatrolTaskBean patrolTaskBean = new PatrolTaskBean();
         patrolTaskBean.setStatus(3);
         List<PatrolTaskBean> patrolTaskBeans = patrolTaskMapper.selectPatrolTaskAll(patrolTaskBean);
         return ResultVo.success(patrolTaskBeans);
     }
+    //开启任务
+    @Override
+    public ResultVo startPatrolTask(PatrolTaskBean patrolTaskBean) {
+        //修改任务状态 1
+        patrolTaskMapper.updatePatrolTask(patrolTaskBean);
+        return ResultVo.success();
+    }
+
+    //终止任务
+    @Override
+    public ResultVo stopPatrolTask(PatrolTaskBean patrolTaskBean){
+        //修改任务状态 2
+        patrolTaskMapper.updatePatrolTask(patrolTaskBean);
+        return ResultVo.success();
+    }
+
+   /* *//**
+     * 新增/更新巡逻任务验证算力是否充足
+     *
+     * @param patrolTaskRequest 请求参数
+     * @param cutDeviceList       拟去除的设备
+     * @param diffrientDevice     拟新增的设备
+     * @return
+     *//*
+    private boolean validUpdateCalute(ViSurveyTaskRequest viSurveyTaskRequest, List<ViTaskDeviceBean> cutDeviceList, List<ViTaskDeviceBean> diffrientDevice) {
+
+        log.info("原先的设备：" + StringUtils.arrayToDelimitedString(viSurveyTaskRequest.getSurveyDevice(), ","));
+        //活动中的设备
+        List<ViTaskDeviceBean> actionDeviceList = viTaskDeviceMapper.getActionDevice(StringUtils.arrayToDelimitedString(viSurveyTaskRequest.getSurveyDevice(), ","));
+        //新增设备数
+        Integer inactiveDevice = viSurveyTaskRequest.getSurveyDevice().length;
+        //准备布控的设备数
+        Integer readyDevice = inactiveDevice - actionDeviceList.size();
+        SysOrgRoadBean sysOrgRoadBean = new SysOrgRoadBean();
+        sysOrgRoadBean.setOrgCode("330401");
+        SysOrgRoadBean sysOrgRoadByOrgCode = sysOrgRoadMapper.getSysOrgRoadByOrgCode(sysOrgRoadBean);
+        if (cutDeviceList == null || diffrientDevice == null) {
+            if ((sysOrgRoadByOrgCode.getUsedRoads() + readyDevice) > sysOrgRoadByOrgCode.getTotalRoads()) {
+                return false;
+            }
+        } else {
+            if ((sysOrgRoadByOrgCode.getUsedRoads() - cutDeviceList.size() + diffrientDevice.size()) > sysOrgRoadByOrgCode.getTotalRoads()) {
+                return false;
+            }
+        }
+        return true;
+    }*/
+
 
 }

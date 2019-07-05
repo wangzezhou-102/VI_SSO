@@ -23,7 +23,6 @@ import java.util.List;
 @Service
 public class ViRepoServiceImpl implements ViRepoService {
 
-
     @Resource
     ViRepoMapper viRepoMapper;
 
