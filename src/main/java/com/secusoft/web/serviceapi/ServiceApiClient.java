@@ -184,7 +184,6 @@ public class ServiceApiClient {
 //      httpPost.addHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
 //      httpPost.addHeader(HttpHeaders.ACCEPT,"Application/json");
 //      httpPost.addHeader(HttpHeaders.CONNECTION,"keep-alive");
-
         HttpResponse response;
         try {
             response = httpclient.execute(httpPost);

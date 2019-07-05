@@ -20,7 +20,7 @@ public interface PatrolTaskRouteMapper {
     //修改任务对应路线
     int updatePatrolTaskRoute(PatrolTaskRouteBean patrolTaskRouteBean);
     //查询路线
-    PatrolTaskRouteBean selectPatroltTaskRoute(PatrolTaskRouteBean patrolTaskRouteBean);
+    List<PatrolTaskRouteBean> selectPatroltTaskRoute(PatrolTaskRouteBean patrolTaskRouteBean);
     //查询所有路线
     List<PatrolTaskRouteBean> selectPatrolTaskRouteAll(PatrolTaskRouteBean patrolTaskRouteBean);
 }

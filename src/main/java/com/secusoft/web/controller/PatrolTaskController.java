@@ -71,7 +71,6 @@ public class PatrolTaskController {
 
     @PostMapping("/selectpatroltask")
     public ResponseEntity selectPatrolTask(@RequestBody PatrolTaskBean patrolTaskBean){
-        //TODO
         if(!patrolTaskBean.validateTaskId()){
             throw new BussinessException(BizExceptionEnum.PARAM_NULL);
         }
@@ -84,4 +83,28 @@ public class PatrolTaskController {
         ResultVo resultVo = patrolTaskService.selectPatrolTaskAll();
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
+
+    @PostMapping("/stoppatroltask")
+    public ResponseEntity stopPatrolTask(@RequestBody PatrolTaskBean patrolTaskBean){
+        if(!patrolTaskBean.validateStatus()) {
+            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
+        }
+        if(!patrolTaskBean.validateTaskId()){
+            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
+        }
+        ResultVo resultVo = patrolTaskService.stopPatrolTask(patrolTaskBean);
+        return ResponseUtil.handle(Constants.OK, resultVo);
+    }
+    @PostMapping("/startpatroltask")
+    public ResponseEntity startpatroltask(@RequestBody PatrolTaskBean patrolTaskBean){
+        if(!patrolTaskBean.validateTaskId()){
+            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
+        }
+        if(!patrolTaskBean.validateStatus()){
+            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
+        }
+        ResultVo resultVo = patrolTaskService.startPatrolTask(patrolTaskBean);
+        return ResponseUtil.handle(Constants.OK, resultVo);
+    }
+
 }

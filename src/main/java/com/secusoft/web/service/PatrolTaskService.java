@@ -22,5 +22,9 @@ public interface PatrolTaskService {
     ResultVo selectPatrolTask(PatrolTaskBean patrolTaskBean);
     //查询多条巡逻任务
     ResultVo selectPatrolTaskAll();
+    //开启巡逻任务
+    ResultVo startPatrolTask(PatrolTaskBean patrolTaskBean);
+    //终止巡逻任务
+    ResultVo stopPatrolTask(PatrolTaskBean patrolTaskBean);
 
 }

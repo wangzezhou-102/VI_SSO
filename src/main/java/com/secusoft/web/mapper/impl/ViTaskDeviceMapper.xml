@@ -159,4 +159,8 @@
         select DISTINCT device_id from vi_task_device
         where action=1 and device_id in (#{deviceId})
     </select>
+    <select id="selectViTaskRepoByTaskId" parameterType="String" resultType="com.secusoft.web.model.ViTaskDeviceBean">
+        select task_id,device_id from vi_task_device
+        where task_id=#{taskId}
+    </select>
 </mapper>

@@ -42,4 +42,9 @@ public interface ViTaskRepoMapper {
      * @param list
      */
     void delBatchViTaskRepo(List<ViTaskRepoBean> list);
+    /**
+     * 查询任务关联布控库
+     * @param
+     */
+    List<ViTaskRepoBean> selectViTaskRepo(@Param("taskId") String taskId);
 }

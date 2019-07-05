@@ -83,6 +83,11 @@
         vi_survey_task vst
         where vtr.task_id=vst.task_id
     </select>
+    <select id="selectViTaskRepo" resultMap="ViTaskRepoResultMap">
+        select id,task_id,repo_id
+        from vi_task_repo
+        where task_id=#{taskId}
+    </select>
 
     <delete id="delBatchViTaskRepo">
         delete from vi_task_repo
