@@ -7,7 +7,6 @@ import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.PointBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.BoxSelectService;
-import com.secusoft.web.shipinapi.model.Camera;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,9 +22,6 @@ public class BoxSelectServiceImpl implements BoxSelectService {
         //获取设备列表待改进
         DeviceBean deviceBean = new DeviceBean();
         List<DeviceBean> devices = deviceMapper.readDeviceList(deviceBean);
-        //List<Camera> cameras=JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),new TypeReference<ArrayList<Camera>>(){});
-        //List<Camera> cameraList = new ArrayList<>();
-        //JSON.parseObject(CameraServiceImpl.getAllCamera().toString(),(Class<ArrayList<Camera>>) cameraList.getClass());
         Double maxLon,minLon,maxLat,minLat;
         List<Double> lon=new ArrayList<>();
         List<Double> lat=new ArrayList<>();

@@ -15,4 +15,10 @@ public class Constants {
     
     // 成功信息
     public static final String SUCCESS = "SUCCESS";
+    
+    // 设备流状态信息 已启动
+    public static final int STREAM_STATE_VALID = 1;
+    
+    // 设备流状态信息 未启动
+    public static final int STREAM_STATE_NOT_VALID = 0;
 }

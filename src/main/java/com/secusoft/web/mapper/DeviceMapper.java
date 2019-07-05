@@ -27,4 +27,7 @@ public interface DeviceMapper extends BaseMapper<DeviceBean> {
      * @date 2019年6月20日
      */
     Integer selectDeviceNumberByCivilCodes(@Param("orgIds") List<String> orgIds);
+    
+    void updateStreamState(@Param("streamState") Integer streamState, @Param("devices") List<String> devices);
+    
 }

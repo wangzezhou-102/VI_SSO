@@ -111,4 +111,14 @@
             #{orgId}
         </foreach>
     </select>
+    
+   	<update id="updateStreamState">
+   		<if test="devices != null and devices.size()>0">
+   		update vi_device set stream_state=#{streamState}
+   			where device_id in
+   			<foreach collection="devices" index="index" item="deviceId" open="(" separator="," close=")">
+   				#{deviceId}
+   			</foreach>
+   		</if>
+   	</update>
 </mapper>

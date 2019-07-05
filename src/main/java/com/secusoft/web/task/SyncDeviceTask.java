@@ -22,10 +22,23 @@ public class SyncDeviceTask {
     @Autowired
     private DeviceService deviceService;
     
+    /**
+     * 全量更新，每天凌晨3点
+     */
     @Scheduled(cron="0 0 3 * * ?")
     public void syncDevice() {
         log.info("sync device start");
         deviceService.syncDeviceFromUbr();
         log.info("sync device end");
+    }
+    
+    /**
+     * 增量更新，每10分钟执行一次
+     */
+    @Scheduled(cron="0 */10 * * * ?")
+    public void syncStreamState() {
+    	log.info("sync streamState start");
+    	deviceService.syncStreamState();
+    	log.info("sync streamState end");
     }
 }
