@@ -68,9 +68,10 @@ public class PatrolTaskController {
         ResultVo resultVo = patrolTaskService.updatePatrolTask(patrolTaskRequest);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
-    //TODO
+
     @PostMapping("/selectpatroltask")
     public ResponseEntity selectPatrolTask(@RequestBody PatrolTaskBean patrolTaskBean){
+        //TODO
         if(!patrolTaskBean.validateTaskId()){
             throw new BussinessException(BizExceptionEnum.PARAM_NULL);
         }

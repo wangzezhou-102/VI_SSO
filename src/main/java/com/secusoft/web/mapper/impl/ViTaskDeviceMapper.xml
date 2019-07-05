@@ -81,7 +81,7 @@
   </delete>
     <delete id="deleteViTaskDeviceByTaskId" parameterType="java.lang.String">
     delete from vi_task_device
-    where task_id = #{taskId,jdbcType=String}
+    where task_id = #{taskId}
   </delete>
     <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO vi_task_device (task_id,device_id) values
