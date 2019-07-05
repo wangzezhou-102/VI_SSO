@@ -31,7 +31,7 @@ public class ViPsurveyAlarmDetailBean {
 
     private String picid;
 
-    private Date time;
+    private String time;
 
     private String status;
 
@@ -143,11 +143,11 @@ public class ViPsurveyAlarmDetailBean {
         this.picid = picid == null ? null : picid.trim();
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 

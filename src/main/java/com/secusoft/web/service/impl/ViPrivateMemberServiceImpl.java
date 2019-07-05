@@ -3,12 +3,14 @@ package com.secusoft.web.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
+import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViPrivateMemberService;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
 import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
@@ -48,7 +50,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
     @Transactional
     @Override
     public ResultVo insertViPrivateMember(ViPrivateMemberBean viPrivateMemberBean, HttpServletRequest request) {
-
+        log.info("开始创建自定义布控库布控目标");
         if (!StringUtils.hasLength(viPrivateMemberBean.getIdentityId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getCode(),
                     BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getMessage());
@@ -86,13 +88,16 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
         System.out.println(requestStr);
-        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+//        BaseResponse baseResponse = new BaseResponse();
+//        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         String code = baseResponse.getCode();
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
+            log.info("创建自定义布控库布控目标失败");
             throw new RuntimeException("布控目标创建失败");
         }
+
+        log.info("结束创建自定义布控库布控目标");
         return ResultVo.success();
     }
 
@@ -161,8 +166,8 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
                 bkMemberAddRequest.setContent(viPrivateMemberBean.getImageUrl());
                 bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
-                //baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
-                baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+                baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+                //baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
                 code = baseResponse.getCode();
                 if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
                     throw new RuntimeException("新布控目标创建失败");

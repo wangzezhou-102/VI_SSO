@@ -32,6 +32,11 @@ public class ViPsurveyAlarmController {
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
+    /**
+     * 历史告警
+     * @param viPsurveyAlarmDetailRequest
+     * @return
+     */
     @RequestMapping("/gethistortyalarmdetail")
     public ResponseEntity<ResultVo> getHistortyAlarmDetail(@RequestBody ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest){
         ResultVo resultVo = viPsurveyAlarmService.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);

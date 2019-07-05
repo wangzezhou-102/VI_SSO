@@ -10,6 +10,7 @@ import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.mapper.ViPsurveyAlarmDetailMapper;
 import com.secusoft.web.mapper.ViPsurveyAlarmMapper;
+import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.websocket.WebSock;
@@ -25,10 +26,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 布控告警同步
@@ -54,11 +54,15 @@ public class ViPsurveyAlarmTask {
     @Resource
     ViBasicMemberMapper viBasicMemberMapper;
 
+    @Resource
+    DeviceMapper deviceMapper;
+
     @Autowired
     WebSock webSock;
 
     //@Scheduled(cron = "0 0 */1 * * ?")
-    @Scheduled(cron = "30 16 10 * * ?")
+    //0 0/1 * * * ? 每分钟执行一次
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
@@ -79,6 +83,7 @@ public class ViPsurveyAlarmTask {
                     //复制对象
                     BeanCopier beanCopier = BeanCopier.create(ViPsurveyAlarmBean.class, ViPsurveyAlarmBean.class, false);
                     beanCopier.copy(alaramVo.getSrc(), viPsurveyAlarmBean, null);
+                    //base64转存本地图片
                     viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getCropImage(), "Alarm"));
                     viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getOrigImage(), "Alarm"));
                     viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getPersonImage(), "Alarm"));
@@ -86,8 +91,20 @@ public class ViPsurveyAlarmTask {
                 } else {
                     viPsurveyAlarmBean = bean;
                 }
+                //查找设备信息
+                DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(alaramVo.getSrc().getCameraId());
                 //人员报警布控图比对
                 for (ViPsurveyAlarmDetailBean beans : alaramVo.getSimilar()) {
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = null;
+                    try {
+                        date = simpleDateFormat.parse(beans.getTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    beans.setTime(sdf.format(date));
                     beans.setAlarmId(viPsurveyAlarmBean.getId());
                     beans.setTaskId(alaramVo.getTaskId());
                     beans.setAlarmType("312312");
@@ -109,9 +126,9 @@ public class ViPsurveyAlarmTask {
                         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
                         viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
                         ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
-                        if(null!=basicMemberBean) {
+                        if (null != basicMemberBean) {
                             viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
-                        }else{
+                        } else {
                             viPsurveyAlarmDetailResponse.setBkname("测试人员库");
                         }
                     } else {
@@ -120,17 +137,25 @@ public class ViPsurveyAlarmTask {
                     viPsurveyAlarmDetailMapper.insertViPsurveyAlarmDetail(beans);
                     viPsurveyAlarmDetailResponse.setAlarmDetailId(beans.getId());
                     viPsurveyAlarmDetailResponse.setAlarmStatus(beans.getAlarmStatus());
+                    SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
+                    viPsurveyAlarmDetailResponse.setTime(sdfs.format(date));
+                    if(null!=deviceBean){
+                        viPsurveyAlarmDetailResponse.setDeviceRoadName(deviceBean.getDeviceName());
+                    }
                     detailResponses.add(viPsurveyAlarmDetailResponse);
                 }
             }
             Map<String, Object> map = new HashMap<>();
             map.put("psurveAlarmBk", detailResponses);
 
+
             WebSocketMessageVO webSocketMessageVO = new WebSocketMessageVO();
             webSocketMessageVO.setData(map);
             webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
 
-            log.info("结束获取实时告警数据");
         }
+        //webSock.sendMessage("{\"data\":{\"psurveAlarmBk\":[{\"alarmDetailId\":53,\"bkname\":\"测试人员库\",\"cropImage\":\"/static/Alarm/201907/Alarm_bNw5xWZIhse9WUIlWEwxCf.jpg\",\"name\":\"\",\"origImage\":\"/static/Alarm/201907/Alarm_eiB1agFe0jKeJPvzuGO1Pg.jpg\",\"ossUrl\":\"/static/Alarm/201907/Alarm_gpA9EkXH4uD6AFEffrsyin.jpg\",\"personImage\":\"/static/Alarm/201907/Alarm_d0Ha3XMWsoTehekOYB7hT6.jpg\",\"similarity\":\"77%\"},{\"alarmDetailId\":54,\"bkname\":\"测试人员库\",\"cropImage\":\"/static/Alarm/201907/Alarm_bfv7vM98yiL5NnalgpIMLW.jpg\",\"name\":\"\",\"origImage\":\"/static/Alarm/201907/Alarm_cf6nLl39LLhaVxxiKDuldP.jpg\",\"ossUrl\":\"/static/Alarm/201907/Alarm_fFx4GM94NPIkubRJcShweZ.jpg\",\"personImage\":\"/static/Alarm/201907/Alarm_ggGK307oJtp66tPAiEPpGN.jpg\",\"similarity\":\"77%\"},{\"alarmDetailId\":55,\"bkname\":\"测试人员库\",\"cropImage\":\"/static/Alarm/201907/Alarm_dSDksMZKD3g35Xwg7Lturd.jpg\",\"name\":\"\",\"origImage\":\"/static/Alarm/201907/Alarm_fDG3hG7KxvCjVyRpUejZDB.jpg\",\"ossUrl\":\"/static/Alarm/201907/Alarm_dVix8zj066KfzytmrRnUzL.jpg\",\"personImage\":\"/static/Alarm/201907/Alarm_eom0krKELs8lkiqcVgh3Ky.jpg\",\"similarity\":\"77%\"},{\"alarmDetailId\":56,\"bkname\":\"测试人员库\",\"cropImage\":\"/static/Alarm/201907/Alarm_cvyYPHhUeHG53wab6DiuQZ.jpg\",\"name\":\"\",\"origImage\":\"/static/Alarm/201907/Alarm_fQvyxlXWhR8k5kLwQh1pB2.jpg\",\"ossUrl\":\"/static/Alarm/201907/Alarm_d4cgjFoyYbjj34aNO6ax4q.jpg\",\"personImage\":\"/static/Alarm/201907/Alarm_cVpilcER6hU29J0y9itJ6g.jpg\",\"similarity\":\"77%\"},{\"alarmDetailId\":57,\"bkname\":\"测试人员库\",\"cropImage\":\"/static/Alarm/201907/Alarm_dT00YW5L84b1XZ5ZuGiWDv.jpg\",\"name\":\"\",\"origImage\":\"/static/Alarm/201907/Alarm_cxApYuoRIsAjw3QPNlglNF.jpg\",\"ossUrl\":\"/static/Alarm/201907/Alarm_dSqkJHky13SbJ4dMtfZ5RK.jpg\",\"personImage\":\"/static/Alarm/201907/Alarm_cw6sTbMt9iiguzGf9YTlok.jpg\",\"similarity\":\"77%\"}]},\"type\":0}");
+
+        log.info("结束获取实时告警数据");
     }
 }

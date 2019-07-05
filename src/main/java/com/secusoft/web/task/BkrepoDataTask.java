@@ -3,12 +3,15 @@ package com.secusoft.web.task;
 import com.alibaba.fastjson.JSON;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
+import com.secusoft.web.config.ServiceApiConfig;
+import com.secusoft.web.core.util.UploadUtil;
 import com.secusoft.web.mapper.SyncZdryLogMapper;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
 import com.secusoft.web.mapper.ZdryMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ZdryService;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKMemberAddRequest;
 import com.secusoft.web.tusouapi.model.BKMemberDeleteRequest;
@@ -30,12 +33,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -79,7 +80,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "30 33 17 * * ?")//0 0 */1 * * ?
+    @Scheduled(cron = "0 22 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -104,14 +105,23 @@ public class BkrepoDataTask {
                 SyncZdryLogBean syncBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
                 ZdryVo zdryVo = new ZdryVo();
                 zdryVo.setTableName(str);
-                zdryVo.setUpdateTime(new Date());
+                Calendar calendar=Calendar.getInstance();
+                calendar.set(Calendar.YEAR,2019);
+                calendar.set(Calendar.DAY_OF_MONTH,2);
+                calendar.set(Calendar.HOUR_OF_DAY,19);
+                calendar.set(Calendar.MINUTE,07);
+                calendar.set(Calendar.SECOND,0);
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                log.info(formatter.format(calendar.getTime()));
+                zdryVo.setUpdateTime(calendar.getTime());
                 zdryVo.setIsFirst(null == syncBean ? 1 : 0);
                 //判断是否是首次同步 1首次，0非首次
                 log.info("是否是首次同步：" + (null == syncBean));
                 if ("view_qgzt".equals(str)) {
-                    //asycBkrepo("全国在逃人员布控库", zdryVo, syncBean, syncZdryLogBean);
+                    asycBkrepo("全国在逃人员布控库", zdryVo, syncBean, syncZdryLogBean);
                 } else if ("view_sgy".equals(str)) {
-                    //asycBkrepo("省高院布控库", zdryVo, syncBean, syncZdryLogBean);
+                    asycBkrepo("省高院布控库", zdryVo, syncBean, syncZdryLogBean);
 
                 } else if ("view_sdts".equals(str)) {
                     asycBkrepo("涉毒脱失人员布控库", zdryVo, syncBean, syncZdryLogBean);
@@ -187,6 +197,11 @@ public class BkrepoDataTask {
         viBasicMemberBean.setIdentityId(bean.getPicId());
         viBasicMemberBean.setIdentityName(bean.getHumanName());
         viBasicMemberBean.setContent(ImageUtils.encode(bean.getPic()));
+        try {
+            viBasicMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viBasicMemberBean.getContent(), "Bkmember"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         viBasicMemberBean.setRepoId(viRepoBean.getId());
         viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
         memberSendToTQAdd(viBasicMemberBean);
@@ -210,8 +225,8 @@ public class BkrepoDataTask {
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
         log.info(requestStr);
-        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
-        BaseResponse baseResponse = new BaseResponse();
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
+        //BaseResponse baseResponse = new BaseResponse();
 
         return baseResponse;
     }
@@ -232,8 +247,8 @@ public class BkrepoDataTask {
 
         String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
         log.info(requestStr);
-        //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
-        BaseResponse baseResponse = new BaseResponse();
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
+        //BaseResponse baseResponse = new BaseResponse();
 
         return baseResponse;
     }
@@ -390,7 +405,7 @@ public class BkrepoDataTask {
 //        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(zdryVo.getIsFirst() == 1 ? zdryVo.getUpdateTime() : syncZdryLogBean.getLastSyncTime());
-        String sql = "select * from (select ROWNUM AS num,HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from  " + zdryVo.getTableName() + "  where rownum <= " + (zdryVo.getSyncNum() * 40) + " and UPDATE_TIME>=to_date('" + dateString + "','yyyy-MM-dd HH24:mi:ss')  order by UPDATE_TIME) a where a.num>=" + ((zdryVo.getSyncNum() - 1) * 40 + 1);
+        String sql = "select * from (select ROWNUM AS num,HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from  (select * from " + zdryVo.getTableName() + " order by update_time) a   where rownum <= " + (zdryVo.getSyncNum() * 40) + " and UPDATE_TIME>=to_date('" + dateString + "','yyyy-MM-dd HH24:mi:ss')) a where a.num>=" + ((zdryVo.getSyncNum() - 1) * 40 + 1);
         log.info(sql);
         RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
         List<ZdryBean> zdryList = jdbcTemplate.query(sql, rowMapper);
