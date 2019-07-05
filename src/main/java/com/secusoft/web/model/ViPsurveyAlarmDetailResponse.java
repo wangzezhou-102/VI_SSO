@@ -51,7 +51,7 @@ public class ViPsurveyAlarmDetailResponse {
     /**
      * 入库时间
      */
-    private Date time;
+    private String time;
 
     /**
      * 对象id
@@ -61,12 +61,22 @@ public class ViPsurveyAlarmDetailResponse {
     /**
      * 处理状态 0-忽略 1-关注 2-无操作
      */
-    private Integer alarmStatus=2;
+    private Integer alarmStatus = 2;
 
     /**
      * 所在库名称
      */
     private String bkname;
+
+    /**
+     * 设备所在道路名称
+     */
+    private String deviceRoadName;
+
+    /**
+     * AI处理状态 0-未处理 1-已处理 2-无意义
+     */
+    private Integer aiStatus;
 
     public Integer getAlarmDetailId() {
         return alarmDetailId;
@@ -132,11 +142,11 @@ public class ViPsurveyAlarmDetailResponse {
         this.picid = picid;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -162,5 +172,21 @@ public class ViPsurveyAlarmDetailResponse {
 
     public void setBkname(String bkname) {
         this.bkname = bkname;
+    }
+
+    public String getDeviceRoadName() {
+        return deviceRoadName;
+    }
+
+    public void setDeviceRoadName(String deviceRoadName) {
+        this.deviceRoadName = deviceRoadName;
+    }
+
+    public Integer getAiStatus() {
+        return aiStatus;
+    }
+
+    public void setAiStatus(Integer aiStatus) {
+        this.aiStatus = aiStatus;
     }
 }

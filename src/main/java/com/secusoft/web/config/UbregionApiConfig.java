@@ -19,8 +19,15 @@ public class UbregionApiConfig {
     private String clusterList;
     // 批量获取设备详情
     private String deviceDetail;
-    
-    public String getAccessDeviceList() {
+    // 修改和删除信息
+    private String update;
+    public String getUpdate() {
+		return update;
+	}
+	public void setUpdate(String update) {
+		this.update = update;
+	}
+	public String getAccessDeviceList() {
         return accessDeviceList;
     }
     public void setAccessDeviceList(String accessDeviceList) {

@@ -6,7 +6,6 @@ import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.RoundBean;
 import com.secusoft.web.service.BoxSelectService;
 import com.secusoft.web.model.PointBean;
-import com.secusoft.web.shipinapi.service.CameraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +22,6 @@ import java.util.ArrayList;
 public class BoxSelectController {
     @Autowired
     private  BoxSelectService boxSelectService;
-    @Autowired
-    private  CameraService CameraServiceImpl;
-
 
     /**
      * 多边形框选返回设备id

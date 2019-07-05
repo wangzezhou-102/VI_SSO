@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -144,4 +146,47 @@ public class DeviceServiceImpl implements DeviceService {
         });
         return resultList;
     }
+
+    /**
+     * 从城市大脑获取信息 更新设备流状态信息
+     * @return
+     */
+	@Override
+	public ResultVo syncStreamState() {
+		Map<String,Object> paramMap = new HashMap<String,Object>();
+        String resultStr = ShiPinClient.getClientConnectionPool()
+                .fetchByPostMethod(ubregionApiConfig.getUpdate(), paramMap);
+        BaseResponse deviceRes = JSON.parseObject(resultStr, BaseResponse.class);
+        if(deviceRes != null && Constants.SUCCESS.equals(deviceRes.getErrorCode())) {
+            Map<String, Object> dataMap = (Map<String, Object>) deviceRes.getData();
+            if(MapUtils.isNotEmpty(dataMap)) {
+            	List<String> validList = new ArrayList<String>();
+            	List<String> notValidList = new ArrayList<String>();
+            	List<Map<String,Object>> listUpdate = (List<Map<String, Object>>) dataMap.get("listUpdate");
+            	if(CollectionUtils.isNotEmpty(listUpdate)) {
+            		listUpdate.forEach(obj -> {
+            			String deviceId = (String) obj.get("deviceId");
+            			if((int)obj.get("streamState") == Constants.STREAM_STATE_VALID) {
+            				validList.add(deviceId);
+            			} else {
+            				notValidList.add(deviceId);
+            			}
+            		});
+            	}
+            	List<Map<String,Object>> listDelete = (List<Map<String, Object>>) dataMap.get("listDelete");
+            	if(CollectionUtils.isNotEmpty(listDelete)) {
+            		listDelete.forEach(obj -> {
+            			String deviceId = (String) obj.get("deviceId");
+            			notValidList.add(deviceId);
+            		});
+            	}
+            	if(CollectionUtils.isNotEmpty(validList)) deviceMapper.updateStreamState(Constants.STREAM_STATE_VALID, validList);
+            	if(CollectionUtils.isNotEmpty(notValidList)) deviceMapper.updateStreamState(Constants.STREAM_STATE_NOT_VALID, notValidList);
+            }
+            
+        }
+        return ResultVo.success();
+	}
+	
+	
 }

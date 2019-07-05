@@ -1,6 +1,7 @@
 package com.secusoft.web.task;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
@@ -32,9 +33,7 @@ public class BkrepoTask implements ApplicationRunner {
         BKRepoDataBkIdRequest bkRepoDataBkIdRequest = new BKRepoDataBkIdRequest();
         bkRepoDataBkIdRequest.setBkid(bkrepoConfig.getBkid());
         baseRequest.setData(bkRepoDataBkIdRequest);
-//        BaseResponse baseResponse =
-//                ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(),
-//                        baseRequest);
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), baseRequest);
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -49,21 +48,21 @@ public class BkrepoTask implements ApplicationRunner {
 //                "\t\t}\n" +
 //                "\t}]\n" +
 //                "}" ;
-        BaseResponse baseResponse=new BaseResponse();
-        baseResponse.setCode("SUCCESS");
-        baseResponse.setMessage("");
+//        BaseResponse baseResponse=new BaseResponse();
+//        baseResponse.setCode("SUCCESS");
+//        baseResponse.setMessage("");
         String code = baseResponse.getCode();
         JSONArray data = (JSONArray) baseResponse.getData();
         String message = baseResponse.getMessage();
 
         boolean bkCreateResult = false;
-//        for (int i = 0; i < data.size(); i++) {
-//            JSONObject object = data.getJSONObject(i);
-//            String bkId = object.getString("bkid");
-//            if (bkrepoConfig.getBkid().equals(bkId)) {
-//                bkCreateResult = false;
-//            }
-//        }
+        for (int i = 0; i < data.size(); i++) {
+            JSONObject object = data.getJSONObject(i);
+            String bkId = object.getString("bkid");
+            if (bkrepoConfig.getBkid().equals(bkId)) {
+                bkCreateResult = false;
+            }
+        }
         if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && bkCreateResult) {
             //头部参数
             BaseRequest<BKRepoCreateRequest> bkRepoCreateRequestBaseRequest = new BaseRequest<>();
