@@ -1,6 +1,7 @@
 package com.secusoft.web.mapper;
 
 import com.secusoft.web.model.ViPsurveyAlarmDetailBean;
+import com.secusoft.web.model.ViPsurveyAlarmDetailResponse;
 
 import java.util.List;
 
@@ -40,4 +41,12 @@ public interface ViPsurveyAlarmDetailMapper {
      * @param viPsurveyAlarmDetailBean
      */
     void insertViPsurveyAlarmDetail(ViPsurveyAlarmDetailBean viPsurveyAlarmDetailBean);
+
+
+
+    /**
+     * 获取历史告警信息
+     * @param
+     */
+    List<ViPsurveyAlarmDetailResponse> getHistortyAlarmDetail();
 }
