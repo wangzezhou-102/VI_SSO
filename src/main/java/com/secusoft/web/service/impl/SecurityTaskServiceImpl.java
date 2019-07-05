@@ -4,12 +4,10 @@ import com.secusoft.web.core.emuns.ViRepoBkTypeEnum;
 import com.secusoft.web.mapper.SecurityPlaceMapper;
 import com.secusoft.web.mapper.SecurityTaskTypeMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
-import com.secusoft.web.model.ResultVo;
-import com.secusoft.web.model.SecurityPlaceBean;
-import com.secusoft.web.model.SecurityTaskTypeBean;
-import com.secusoft.web.model.ViRepoBean;
+import com.secusoft.web.model.*;
 import com.secusoft.web.service.SecurityTaskService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -39,9 +37,13 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
         securityTaskTypeA.addAll(securityTaskTypeB);
 
         List<SecurityPlaceBean> securityPlaceBeans = securityPlaceMapper.selectSecirityTaskPlace();
+
+        List<SecurityTaskTypeBean> securityTaskTypeBeans = securityTaskTypeMapper.selectsecurityFKType();
+
         ArrayList<List> result = new ArrayList<>();
         result.add(securityTaskTypeA);
         result.add(securityPlaceBeans);
+        result.add(securityTaskTypeBeans);
         return ResultVo.success(result);
     }
 
@@ -54,6 +56,9 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
     @Override
     public ResultVo getAllViRepo() {
         ViRepoBean viRepoBean = new ViRepoBean();
+        viRepoBean.setTableName(null);
+        viRepoBean.setBktype(null);
+        viRepoBean.setType(null);
         List<ViRepoBean> viRepoBeanList = viRepoMapper.getAllViRepo(viRepoBean);
         HashMap<String, Object> map1 = new HashMap<>();
         HashMap<String, Object> map2 = new HashMap<>();
@@ -77,5 +82,20 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
         list.add(map1);
         list.add(map2);
         return ResultVo.success(list);
+    }
+
+    @Override
+    public ResultVo getSecurityTaskTypeRepo() {
+        return ResultVo.success(securityTaskTypeMapper.selectsecurityTaskTypeRepo());
+    }
+
+    @Override
+    @Transactional
+    public ResultVo setSecurityTaskTypeRepo(List<SecurityTaskTypeRepoBean> securityTaskTypeRepoBeans) {
+        for (SecurityTaskTypeRepoBean securityTaskTypeRepoBean:securityTaskTypeRepoBeans){
+            securityTaskTypeMapper.deletesecurityTaskTypeRepoById(securityTaskTypeRepoBean.getId());
+            securityTaskTypeMapper.insertsecurityTaskTypeRepo(securityTaskTypeRepoBean.getRepoIds(),securityTaskTypeRepoBean.getId());
+        }
+        return ResultVo.success(securityTaskTypeMapper.selectsecurityTaskTypeRepo());
     }
 }

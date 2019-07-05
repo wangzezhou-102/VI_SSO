@@ -12,7 +12,7 @@ public interface FolderService {
     ResultVo setFolderStatus(FolderBean folderBean);
     ResultVo setFolderName(FolderBean folderBean);
     ResultVo getFolderByStatus(FolderBean folderBean);
-    ResultVo getFolderByName(@Param("name") String name,@Param("status")Integer status);
+    ResultVo getFolderByName(FolderBean folderBean);
     ResultVo getAllFolder();
     ResultVo getFolder(String fid);
     Map<String, Object> getPicById(String id);

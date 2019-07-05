@@ -76,9 +76,9 @@
 
 
     <!-- 将Picture插入到对应数据库的表中,包括属性值为null的数据-->
-    <insert id="insertPicture" parameterType="com.secusoft.web.model.PictureBean">
-        insert into vi_picture(id,picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score,local_ori_image_url,local_crop_image_url)
-        values(#{id},#{pictureId},#{origImageUrl},#{cropImageUrl},#{oriImageSignedUrl},#{cropImageSignedUrl},#{pictureTime},#{deviceId},#{folderId},#{picType},#{score},#{localOriImageUrl},#{localCropImageUrl})
+    <insert id="insertPicture" useGeneratedKeys="true" keyProperty="id" parameterType="com.secusoft.web.model.PictureBean">
+        insert into vi_picture(picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score,local_ori_image_url,local_crop_image_url)
+        values(#{pictureId},#{origImageUrl},#{cropImageUrl},#{oriImageSignedUrl},#{cropImageSignedUrl},#{pictureTime},#{deviceId},#{folderId},#{picType},#{score},#{localOriImageUrl},#{localCropImageUrl})
     </insert>
 
     <insert id="insertMorePicture" useGeneratedKeys="true" keyProperty="id"
@@ -86,7 +86,7 @@
         insert into vi_picture(picture_id,orig_image_url,crop_image_url,ori_image_signed_url,crop_image_signed_url,picture_time,device_id,folder_id,pic_type,score,local_ori_image_url,local_crop_image_url)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.pictureId},#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score},#{localOriImageUrl},#{localCropImageUrl})
+            (#{item.pictureId},#{item.origImageUrl},#{item.cropImageUrl},#{item.oriImageSignedUrl},#{item.cropImageSignedUrl},#{item.pictureTime},#{item.deviceId},#{item.folderId},#{item.picType},#{item.score},#{item.localOriImageUrl},#{item.localCropImageUrl})
         </foreach>
     </insert>
 

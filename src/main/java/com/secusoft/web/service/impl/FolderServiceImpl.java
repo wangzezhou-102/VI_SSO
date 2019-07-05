@@ -40,10 +40,11 @@ public class FolderServiceImpl implements FolderService {
         if(folderMapper.selectCountFolderByObj(folderBean)==0){
             folderBean.setStatus(0);
             folderMapper.insertFolder(folderBean);
+
         }else {
             return ResultVo.failure(BizExceptionEnum.REPEAT.getCode(),BizExceptionEnum.REPEAT.getMessage());
         }
-        return ResultVo.success();
+        return ResultVo.success(folderMapper.selectAllFolder());
     }
 
     @Override
@@ -93,8 +94,8 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public ResultVo getFolderByName(String name,Integer status) {
-        List<FolderBean> folderBeans = folderMapper.selectFolderByName(name,status);
+    public ResultVo getFolderByName(FolderBean folderBean) {
+        List<FolderBean> folderBeans = folderMapper.selectFolderByName(folderBean);
         return ResultVo.success(folderBeans);
     }
 
@@ -108,6 +109,7 @@ public class FolderServiceImpl implements FolderService {
     public ResultVo getFolder(String fid) {
         FolderBean folderBean = folderMapper.selectOneFolder(fid);
         List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(fid);
+
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
         if (!pictureBeans.isEmpty()){

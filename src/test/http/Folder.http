@@ -9,7 +9,7 @@ POST http://localhost:8006/addFolder
 Content-Type: application/json
 
 {
-  "folderName":"630案情"
+  "folderName":"631案情"
 }
 
 ###删除文件夹
@@ -67,8 +67,8 @@ POST http://localhost:8006/getFolderByName
 Content-Type: application/json
 
 {
-  "name": "案",
-  "status": 0
+  "folderName": "案"
+
 }
 
 ###总和信息接口

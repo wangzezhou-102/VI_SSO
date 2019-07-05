@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TrackService {
     ResultVo addTrack(TrackBean trackBean, List<PictureBean> pictureBeans);
+    ResultVo coveraddTrack(TrackBean trackBean, List<PictureBean> pictureBeans);
     ResultVo removeTrack(TrackBean trackBean);
     ResultVo updateTrackName(TrackBean trackBean);
     ResultVo updateTrack(TrackBean trackBean, List<PictureBean> pictureBeans);

@@ -1,5 +1,10 @@
 package com.secusoft.web.model;
 
+import com.secusoft.web.core.util.StringUtils;
+import com.secusoft.web.tusouapi.model.SearchResponse;
+import com.secusoft.web.tusouapi.model.SearchResponseData;
+import jdk.internal.dynalink.beans.StaticClass;
+
 import java.io.Serializable;
 
 
@@ -168,6 +173,7 @@ public class PictureBean implements Serializable {
     public String toString() {
         return "PictureBean{" +
                 "id='" + id + '\'' +
+                ", pictureId='" + pictureId + '\'' +
                 ", origImageUrl='" + origImageUrl + '\'' +
                 ", cropImageUrl='" + cropImageUrl + '\'' +
                 ", oriImageSignedUrl='" + oriImageSignedUrl + '\'' +
@@ -177,7 +183,53 @@ public class PictureBean implements Serializable {
                 ", folderId='" + folderId + '\'' +
                 ", picType=" + picType +
                 ", score='" + score + '\'' +
+                ", localOriImageUrl='" + localOriImageUrl + '\'' +
+                ", localCropImageUrl='" + localCropImageUrl + '\'' +
                 ", deviceBean=" + deviceBean +
                 '}';
+    }
+    public static SearchResponseData toSearchResponseDate(PictureBean pictureBean){
+        SearchResponseData searchResponseData = new SearchResponseData();
+        if (pictureBean.getPictureId()!=null){
+            searchResponseData.setId(pictureBean.getPictureId());
+        }else if(pictureBean.getScore()!=null){
+            searchResponseData.setScore(Double.parseDouble(pictureBean.getScore()));
+        }else if(pictureBean.getOrigImageUrl()!=null){
+            searchResponseData.getSource().setOrigImage(pictureBean.getOrigImageUrl());
+        }else if(pictureBean.getCropImageUrl()!=null){
+            //TODO
+        }
+        return searchResponseData;
+    }
+
+    //将阿里格式转换成普通格式
+    public static PictureBean toPictureBean(SearchResponseData searchResponseData){
+        PictureBean pictureBean = new PictureBean();
+        if(searchResponseData!=null){
+            if (StringUtils.isNotEmpty(searchResponseData.getId())){
+                pictureBean.setPictureId(searchResponseData.getId());
+            }
+            if (searchResponseData.getScore()!=null){
+                pictureBean.setScore(searchResponseData.getScore().toString());
+            }
+            if(StringUtils.isNotEmpty(searchResponseData.getSource().getCameraId())){
+                pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
+            }
+            if(StringUtils.isNotEmpty(searchResponseData.getSource().getOriImageSigned())){
+                pictureBean.setOriImageSignedUrl(searchResponseData.getSource().getOriImageSigned());
+            }
+            if(StringUtils.isNotEmpty(searchResponseData.getSource().getCropImageSigned())){
+                pictureBean.setCropImageSignedUrl(searchResponseData.getSource().getCropImageSigned());
+            }
+            if (searchResponseData.getSource().getDeviceBean()!=null){
+                pictureBean.setDeviceBean(searchResponseData.getSource().getDeviceBean());
+            }
+            if(searchResponseData.getSource().getTimestamp()!=null){
+                pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
+            }//TODO
+            return  pictureBean;
+        }else {
+            return pictureBean;
+        }
     }
 }

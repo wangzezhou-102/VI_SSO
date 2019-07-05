@@ -247,7 +247,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "      \"_type\": \"default\",\n" +
                 "      \"_source\": {\n" +
                 "        \"origImage\": \"https://k.zol-img.com.cn/sjbbs/7692/a7691486_s.jpg\",\n" +
-                "        \"oriImageSigned\": \"../img/img/b4.jpghttps://k.zol-img.com.cn/sjbbs/7692/a7691486_s.jpg\",\n" +
+                "        \"oriImageSigned\": \"https://k.zol-img.com.cn/sjbbs/7692/a7691486_s.jpg\",\n" +
                 "        \"hairScore\": 0.82993346,\n" +
                 "        \"cropImage\": \"https://k.zol-img.com.cn/sjbbs/7692/a7691486_s.jpg\",\n" +
                 "        \"sexScore\": 0.8038736,\n" +

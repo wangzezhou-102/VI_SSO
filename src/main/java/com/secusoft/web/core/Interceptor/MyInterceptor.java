@@ -98,7 +98,7 @@ public class MyInterceptor implements HandlerInterceptor {
             //结果跟当前操作人员 后续添加
             sysOperationLog.setResult("");
             sysOperationLog.setUserId("1");
-            sysOperationLog.setOrgId("10");
+            sysOperationLog.setOrgCode("10");
             sysOperationLog.setTimeout(endtime-starttime);
             sysOperationLogMapper.insert(sysOperationLog);
         }

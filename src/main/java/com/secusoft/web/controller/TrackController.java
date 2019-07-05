@@ -3,10 +3,12 @@ package com.secusoft.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.TrackBean;
 import com.secusoft.web.service.TrackService;
+import com.secusoft.web.tusouapi.model.SearchResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class TrackController {
     private TrackService trackService;
 
     /**
-     * 添加轨迹
+     * 添加轨迹 不覆盖
      * @param jsonObject Track对象 以及 Picture数组
      * @return
      */
@@ -36,10 +38,59 @@ public class TrackController {
     public ResponseEntity<ResultVo> addTrack(@RequestBody JSONObject jsonObject){
         TrackBean trackBean = JSON.parseObject(jsonObject.get("track").toString(), new TypeReference<TrackBean>() {
         });
-        ArrayList<PictureBean> pictureBeanList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<PictureBean>>() {
+        ArrayList<SearchResponseData> searchResponseDataList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<SearchResponseData>>() {
         });
+        ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
+        PictureBean pictureBean = new PictureBean();
+        for (SearchResponseData searchResponseData:searchResponseDataList) {
+            pictureBean.setScore(searchResponseData.getScore().toString());
+            pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
+            pictureBean.setPictureId(searchResponseData.getId());
+            pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
+            pictureBean.setOriImageSignedUrl(searchResponseData.getSource().getOriImageSigned());
+            pictureBean.setOrigImageUrl(searchResponseData.getSource().getOrigImage());
+            pictureBean.setCropImageSignedUrl(searchResponseData.getSource().getCropImageSigned());
+            pictureBean.setCropImageUrl(searchResponseData.getSource().getCropImage());
+            pictureBeanList.add(pictureBean);
+        }
+
         ResultVo resultVo = trackService.addTrack(trackBean, pictureBeanList);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
+
+    /**
+     *覆盖原来重名的轨迹
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping("coveraddtrack")
+    public ResponseEntity<ResultVo> coveraddTrack(@RequestBody JSONObject jsonObject){
+        TrackBean trackBean = JSON.parseObject(jsonObject.get("track").toString(), new TypeReference<TrackBean>() {
+        });
+        ArrayList<SearchResponseData> searchResponseDataList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<SearchResponseData>>() {
+        });
+        ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
+        PictureBean pictureBean = new PictureBean();
+        for (SearchResponseData searchResponseData:searchResponseDataList) {
+            pictureBean.setScore(searchResponseData.getScore().toString());
+            pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
+            pictureBean.setPictureId(searchResponseData.getId());
+            pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
+            pictureBean.setOriImageSignedUrl(searchResponseData.getSource().getOriImageSigned());
+            pictureBean.setOrigImageUrl(searchResponseData.getSource().getOrigImage());
+            pictureBean.setCropImageSignedUrl(searchResponseData.getSource().getCropImageSigned());
+            pictureBean.setCropImageUrl(searchResponseData.getSource().getCropImage());
+            pictureBeanList.add(pictureBean);
+        }
+        ResultVo resultVo = null;
+        try {
+            resultVo = trackService.coveraddTrack(trackBean, pictureBeanList);
+
+        } catch (Exception ex) {
+            resultVo = ResultVo.failure(BizExceptionEnum.COLLECTION_COVERTRACK.getCode(),BizExceptionEnum.COLLECTION_COVERTRACK.getMessage());
+        }
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+
     }
 
     /**

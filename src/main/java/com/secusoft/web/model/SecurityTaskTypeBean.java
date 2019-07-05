@@ -3,6 +3,7 @@ package com.secusoft.web.model;
 import java.util.List;
 
 /**
+ * 安保任务类型实体 包含类型下的具体地点
  * @author huanghao
  * @date 2019-07-02
  */

@@ -45,16 +45,19 @@
 
     <select id="selectAllFolder" resultType="com.secusoft.web.model.FolderBean">
         select id,folder_name ,status from vi_folder
-        ORDER BY gmt_create
+        ORDER BY gmt_create desc
     </select>
     <select id="selectOneFolder" resultType="com.secusoft.web.model.FolderBean">
         select id,folder_name ,status from vi_folder
         where id=#{fid}
     </select>
-    <select id="selectFolderByName"  resultType="com.secusoft.web.model.FolderBean">
+    <select id="selectFolderByName" parameterType="com.secusoft.web.model.FolderBean" resultType="com.secusoft.web.model.FolderBean">
         SELECT id,folder_name ,status
          FROM `vi_folder`
-         where instr(folder_name,#{name})>0 and status =#{status}
+         where instr(folder_name,#{folderName})>0
+        <if test="status != null">
+            and status=#{status}
+        </if>
     </select>
 
     <!-- 通过Folder的id获得对应数据库中表的数据对象-->

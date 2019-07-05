@@ -19,12 +19,12 @@ public class SysOperationLog {
     private String userId;//用户账号ID
     private java.util.Date operateDate;//记录时间
     private Long timeout;//毫秒级响应时间
-    private String orgId;//用户组织ID
+    private String orgCode;//用户组织ID
 
     public SysOperationLog() {
     }
 
-    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, String userId, Date operateDate, Long timeout, String orgId) {
+    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, String userId, Date operateDate, Long timeout, String orgCode) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -37,7 +37,7 @@ public class SysOperationLog {
         this.userId = userId;
         this.operateDate = operateDate;
         this.timeout = timeout;
-        this.orgId = orgId;
+        this.orgCode = orgCode;
     }
 
     public Integer getId() {
@@ -120,12 +120,12 @@ public class SysOperationLog {
         this.userId = userId;
     }
 
-    public String getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode;
     }
 
     public Date getOperateDate() {
@@ -156,9 +156,10 @@ public class SysOperationLog {
                 ", param='" + param + '\'' +
                 ", result='" + result + '\'' +
                 ", exception='" + exception + '\'' +
-                ", userId=" + userId +
+                ", userId='" + userId + '\'' +
                 ", operateDate=" + operateDate +
                 ", timeout=" + timeout +
+                ", orgCode='" + orgCode + '\'' +
                 '}';
     }
 }

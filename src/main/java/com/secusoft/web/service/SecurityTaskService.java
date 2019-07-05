@@ -1,6 +1,10 @@
 package com.secusoft.web.service;
 
+import com.secusoft.web.mapper.SecurityTaskTypeMapper;
 import com.secusoft.web.model.ResultVo;
+import com.secusoft.web.model.SecurityTaskTypeRepoBean;
+
+import java.util.List;
 
 /**
  * @author huanghao
@@ -19,4 +23,7 @@ public interface SecurityTaskService {
      */
     ResultVo getSecurityTaskType();
     ResultVo getAllViRepo();
+
+    ResultVo getSecurityTaskTypeRepo();
+    ResultVo setSecurityTaskTypeRepo(List<SecurityTaskTypeRepoBean> securityTaskTypeRepoBeans);
 }

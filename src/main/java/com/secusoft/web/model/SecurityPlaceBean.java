@@ -3,6 +3,7 @@ package com.secusoft.web.model;
 import java.util.List;
 
 /**
+ * 地点VO
  * @author huanghao
  * @date 2019-07-02
  */

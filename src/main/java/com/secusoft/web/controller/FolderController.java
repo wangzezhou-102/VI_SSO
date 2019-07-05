@@ -26,7 +26,7 @@ public class FolderController {
     FolderService folderService;
 
     /**
-     * 增加文件夹
+     * 增加文件夹 后返回最新的 时间排序文件夹列表
      * @param folderBean folderName
      * @return
      */
@@ -117,7 +117,7 @@ public class FolderController {
 
     /**
      * 根据文件夹名称模糊查询
-     * @param jsonObject folderName
+     * @param folderBean
      * @return
      */
     @PostMapping("getFolderByName")
@@ -128,10 +128,8 @@ public class FolderController {
             @ApiImplicitParam(name = "status" ,value = "状态 0未结案  1结案", required = true, dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "name" ,value = "模糊输入的文件名", required = true, dataType = "String",paramType = "query")
     })
-    public ResponseEntity<ResultVo> getFolderByName(@RequestBody JSONObject jsonObject){
-        String name = String.valueOf(jsonObject.get("name").toString());
-        Integer status = Integer.valueOf(jsonObject.get("status").toString());
-        ResultVo resultVo = folderService.getFolderByName(name,status);
+    public ResponseEntity<ResultVo> getFolderByName(@RequestBody FolderBean folderBean){
+        ResultVo resultVo = folderService.getFolderByName(folderBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

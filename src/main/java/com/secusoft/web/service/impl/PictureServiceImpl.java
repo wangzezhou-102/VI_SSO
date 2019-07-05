@@ -36,7 +36,7 @@ public class PictureServiceImpl implements PictureService {
         }
         //图片收藏需要下载到本地
         String basePath = System.getProperty("user.dir");
-        String folderName = basePath+"pic"+UploadUtil.getFolder();
+        String folderName = basePath+"/"+"pic"+UploadUtil.getFolder();
         //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
         String oriFileName = UUIDUtil.getUid("org_") +".jpg";
         String cropFileName = UUIDUtil.getUid("crop_") +".jpg";
@@ -61,8 +61,8 @@ public class PictureServiceImpl implements PictureService {
         //存储文件夹+文件名 /2019621/1.jpg
         pictureBean.setLocalCropImageUrl(UploadUtil.getFolder()+cropFileName);
         pictureBean.setLocalOriImageUrl(UploadUtil.getFolder()+oriFileName);
-        //图片收藏type为0 轨迹内的图type为1
-        pictureBean.setPicType(0);
+        //图片收藏type为1 轨迹内的图type为2
+        pictureBean.setPicType(1);
         pictureMapper.insertPicture(pictureBean);
         return ResultVo.success();
     }

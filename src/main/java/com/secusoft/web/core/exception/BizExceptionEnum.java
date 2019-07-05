@@ -89,8 +89,12 @@ public enum BizExceptionEnum {
 	BKMEMBER_ADD_FAIL(1002,"布控目标添加失败"),
 	BKMEMBER_ID_NULL(1003,"id/objectId 为空"),
 	BKMEMBER_UPDATE_FAIL(1004,"布控目标更新失败"),
-	BKMEMBER_EXISTED(1005,"布控目标不存在"),;
+	BKMEMBER_EXISTED(1005,"布控目标不存在"),
 
+	/**
+	 *收藏相关
+	 */
+	COLLECTION_COVERTRACK(1010,"轨迹覆盖失败");
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;
 		this.friendlyMsg = message;
