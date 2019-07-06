@@ -133,7 +133,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "布控任务添加失败！");
         }
 
-        TQTimeTask(viSurveyTaskBean);
+        //TQTimeTask(viSurveyTaskBean);
 
         log.info("结束新增布控任务");
         return ResultVo.success();
@@ -439,7 +439,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      *
      * @param oldList
      * @param newList
-     * @param type    true-返回原布控库差集合 false-返回布控库列表中不存在的集合
+     * @param type     true-返回原布控库差集合 false-返回布控库列表中不存在的集合
      * @return
      */
     private List<ViTaskRepoBean> removeToRepo(List<ViTaskRepoBean> oldList, List<ViTaskRepoBean> newList, boolean type) {

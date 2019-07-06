@@ -6,11 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
-import com.secusoft.web.mapper.ViBasicMemberMapper;
-import com.secusoft.web.mapper.ViPrivateMemberMapper;
-import com.secusoft.web.mapper.ViPsurveyAlarmDetailMapper;
-import com.secusoft.web.mapper.ViPsurveyAlarmMapper;
-import com.secusoft.web.mapper.DeviceMapper;
+import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.websocket.WebSock;
@@ -21,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -62,7 +57,7 @@ public class ViPsurveyAlarmTask {
 
     //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");

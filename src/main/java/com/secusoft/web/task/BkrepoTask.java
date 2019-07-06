@@ -1,13 +1,6 @@
 package com.secusoft.web.task;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.BkrepoConfig;
-import com.secusoft.web.config.ServiceApiConfig;
-import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.serviceapi.ServiceApiClient;
-import com.secusoft.web.serviceapi.model.BaseResponse;
-import com.secusoft.web.tusouapi.model.*;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -28,12 +21,12 @@ public class BkrepoTask implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments applicationArguments) throws Exception {
-        BaseRequest baseRequest = new BaseRequest();
+       /* BaseRequest baseRequest = new BaseRequest();
         baseRequest.setRequestId(bkrepoConfig.getRequestId());
         BKRepoDataBkIdRequest bkRepoDataBkIdRequest = new BKRepoDataBkIdRequest();
         bkRepoDataBkIdRequest.setBkid(bkrepoConfig.getBkid());
         baseRequest.setData(bkRepoDataBkIdRequest);
-        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), baseRequest);
+         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoMeta(), baseRequest);
 
 //        String responseStr="\n" +
 //                "\t\"errorCode\": \"SUCCESS\",\n" +
@@ -87,7 +80,7 @@ public class BkrepoTask implements ApplicationRunner {
             bkRepoCreateRequest.setMeta(bkRepoMeta);
             bkRepoCreateRequestBaseRequest.setData(bkRepoCreateRequest);
 
-            baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), bkRepoCreateRequestBaseRequest);
+           // baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkrepoCreate(), bkRepoCreateRequestBaseRequest);
 
             //解析json
             code = baseResponse.getCode();
@@ -96,6 +89,6 @@ public class BkrepoTask implements ApplicationRunner {
             }
         } else {
             System.out.println("布控库已创建");
-        }
+        }*/
     }
 }

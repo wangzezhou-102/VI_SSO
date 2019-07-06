@@ -131,6 +131,22 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
             viTaskRepoBean.setRepoId(viRepoBean.getId());
             viTaskRepoMapper.insertViTaskRepo(viTaskRepoBean);
         }
+       /* //下发布控任务创建
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), BktaskSubmit(viSurveyTaskBean));
+
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+        Object dataJson = baseResponse.getData();
+        String errorCode = baseResponse.getCode();
+        String errorMsg = baseResponse.getMessage();
+        //判断布控任务添加是否成功
+        if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
+            throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "布控任务添加失败！");
+        }
+
+        TQTimeTask(viSurveyTaskBean);*/
+
+
         return ResultVo.success();
     }
     //巡逻任务编辑
