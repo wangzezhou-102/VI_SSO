@@ -21,7 +21,7 @@ import java.util.Date;
 public class UploadUtil {
 
     private static Logger log = LoggerFactory.getLogger(UploadUtil.class);
-    private static String basePath = System.getProperty("user.dir") + "/src/main/resources";
+    private static String basePath = System.getProperty("user.dir") + "/resources";
 
     /**
      * 获得文件名
@@ -117,7 +117,7 @@ public class UploadUtil {
     public static String downLoadFromBase64(String getData, String type) throws IOException {
 
         //图片收藏需要下载到本地
-        String folderName = "/static/" + type + getFolder();
+        String folderName = "/" + type + getFolder();
         String fullName = basePath + folderName;
         //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
         String ImgName = UUIDUtil.getUid(type + "_") + ".jpg";
