@@ -154,8 +154,7 @@ public class DeviceServiceImpl implements DeviceService {
 	@Override
 	public ResultVo syncStreamState() {
 		Map<String,Object> paramMap = new HashMap<String,Object>();
-        String resultStr = ShiPinClient.getClientConnectionPool()
-                .fetchByPostMethod(ubregionApiConfig.getUpdate(), paramMap);
+        String resultStr = ShiPinClient.getClientConnectionPool().fetchByPostMethod(ubregionApiConfig.getUpdate(), paramMap);
         BaseResponse deviceRes = JSON.parseObject(resultStr, BaseResponse.class);
         if(deviceRes != null && Constants.SUCCESS.equals(deviceRes.getErrorCode())) {
             Map<String, Object> dataMap = (Map<String, Object>) deviceRes.getData();
