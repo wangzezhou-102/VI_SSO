@@ -91,13 +91,9 @@
             #{time}, #{status})
     </insert>
 
-    <update id="updateFocusAlaramDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean">
+    <update id="updateFocusAlarmDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean">
         update vi_psurvey_alarm_detail
-        <set>
-            <if test="alarmStatus">
-                alarm_status=#{alarmStatus}
-            </if>
-        </set>
+        set alarm_status=#{alarmStatus}
         where id=#{id}
     </update>
 
@@ -117,12 +113,26 @@
         where vpad.id=#{id}
     </select>
 
-    <select id="getHistortyAlarmDetail" resultType="com.secusoft.web.model.ViPsurveyAlarmDetailResponse">
+    <select id="getHistortyAlarmDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailRequest" resultType="com.secusoft.web.model.ViPsurveyAlarmDetailResponse">
                 select vpad.id as alarmDetailId,vpad.oss_url, vpa.orig_image,vpa.crop_image,vpa.person_image,vpad.similarity,vpad.`name`,
                 vpad.picid,vpad.time,vpad.object_id,vpad.alarm_status,vpa.camera_id as deviceRoadName,vpad.ai_status
             from vi_psurvey_alarm_detail vpad
-            left join vi_psurvey_alarm vpa on vpad.id=vpad.alarm_id
+            left join vi_psurvey_alarm vpa on vpa.id=vpad.alarm_id
             left join vi_survey_task vst on vst.task_id=vpad.task_id
+            <where>
+                <if test="surveyName!=null">
+                    and survey_name like CONCAT(CONCAT('%', #{surveyName}), '%')
+                </if>
+                <if test="beginTime!=null">
+                    and vst.begin_time &gt;= #{beginTime}
+                </if>
+                <if test="endTime!=null">
+                    and vst.end_time &lt;= #{endTime}
+                </if>
+                <if test="name">
+                    and vpad.name like CONCAT(CONCAT('%', #{name}), '%')
+                </if>
+            </where>
             order by vpad.gmt_create desc,vpad.gmt_modified desc
     </select>
 </mapper>

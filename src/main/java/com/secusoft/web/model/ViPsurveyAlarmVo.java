@@ -6,7 +6,7 @@ import java.util.List;
  * @author chjiang
  * @since 2019/7/1 16:44
  */
-public class ViPsurveyAlaramVo {
+public class ViPsurveyAlarmVo {
 
     private String taskId;
     private ViPsurveyAlarmBean src;

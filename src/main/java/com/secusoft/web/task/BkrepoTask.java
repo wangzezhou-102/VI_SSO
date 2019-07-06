@@ -44,6 +44,9 @@ public class BkrepoTask implements ApplicationRunner {
 //        BaseResponse baseResponse=new BaseResponse();
 //        baseResponse.setCode("SUCCESS");
 //        baseResponse.setMessage("");
+        if (baseResponse.getData() == null || baseResponse.getData().equals("")) {
+            return;
+        }
         String code = baseResponse.getCode();
         JSONArray data = (JSONArray) baseResponse.getData();
         String message = baseResponse.getMessage();

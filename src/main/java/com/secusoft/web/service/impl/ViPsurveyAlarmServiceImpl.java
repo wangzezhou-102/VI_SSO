@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -62,9 +64,16 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
         PageHelper.startPage(viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
-        List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail();
+        List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
         for(ViPsurveyAlarmDetailResponse bean:histortyAlarmDetail){
-            DecimalFormat df = new DecimalFormat("0.00%");
+            SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                bean.setTime(sdfs.format(sdf.parse(bean.getTime())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            DecimalFormat df = new DecimalFormat("0%");
             bean.setSimilarity(df.format(Double.valueOf(bean.getSimilarity())));
             ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
             viPrivateMemberBean.setObjectId(bean.getObjectId());
@@ -84,7 +93,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
             //查找设备信息
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getDeviceRoadName());
             if(null!=deviceBean){
-                bean.setDeviceRoadName(bean.getDeviceRoadName());
+                bean.setDeviceRoadName(deviceBean.getDeviceName());
             }
         }
 

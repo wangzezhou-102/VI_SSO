@@ -118,7 +118,7 @@ public class TestController<psvm> extends BaseController {
 
     @RequestMapping("/testalaram")
     public Object testAlaram() {
-        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
+        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
 
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
         String code = jsonObject.getString("code");

@@ -37,7 +37,7 @@ public class ViPsurveyAlarmDetailBean {
 
     private String surveyStatus;
 
-    private Integer alarmStatus=2;
+    private Integer alarmStatus;
 
     private Integer aiStatus;
 
