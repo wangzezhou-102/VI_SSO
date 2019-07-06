@@ -91,13 +91,9 @@
             #{time}, #{status})
     </insert>
 
-    <update id="updateFocusAlaramDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean">
+    <update id="updateFocusAlarmDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailBean">
         update vi_psurvey_alarm_detail
-        <set>
-            <if test="alarmStatus">
-                alarm_status=#{alarmStatus}
-            </if>
-        </set>
+        set alarm_status=#{alarmStatus}
         where id=#{id}
     </update>
 
