@@ -62,7 +62,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
         PageHelper.startPage(viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
-        List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail();
+        List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
         for(ViPsurveyAlarmDetailResponse bean:histortyAlarmDetail){
             DecimalFormat df = new DecimalFormat("0.00%");
             bean.setSimilarity(df.format(Double.valueOf(bean.getSimilarity())));
