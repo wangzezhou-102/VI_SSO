@@ -65,15 +65,15 @@ public class ViPsurveyAlarmTask {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
-        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
+        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
 
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
         String code = jsonObject.getString("code");
         String data = jsonObject.getString("data");
         List<ViPsurveyAlarmDetailResponse> detailResponses = new ArrayList<>();
         if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && (!data.isEmpty() || !"null".equals(data))) {
-            List<ViPsurveyAlaramVo> viPsurveyAlaramVoLists = JSONArray.parseArray(data, ViPsurveyAlaramVo.class);
-            for (ViPsurveyAlaramVo alaramVo : viPsurveyAlaramVoLists) {
+            List<ViPsurveyAlarmVo> viPsurveyAlarmVoLists = JSONArray.parseArray(data, ViPsurveyAlarmVo.class);
+            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVoLists) {
 
                 ViPsurveyAlarmBean viPsurveyAlarmBean = new ViPsurveyAlarmBean();
                 viPsurveyAlarmBean.setTaskId(alaramVo.getTaskId());

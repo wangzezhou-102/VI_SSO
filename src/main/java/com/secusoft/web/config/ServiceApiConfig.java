@@ -64,7 +64,7 @@ public class ServiceApiConfig {
     /**
      * 获取缓存里的布控告警数据
      */
-    public static String getViPsurveyAlaram;
+    public static String getViPsurveyAlarm;
 
     /**
      * 重点人员库
@@ -151,12 +151,12 @@ public class ServiceApiConfig {
         ServiceApiConfig.streamStop = streamStop;
     }
 
-    public static String getGetViPsurveyAlaram() {
-        return getViPsurveyAlaram;
+    public static String getGetViPsurveyAlarm() {
+        return getViPsurveyAlarm;
     }
 
-    public static void setGetViPsurveyAlaram(String getViPsurveyAlaram) {
-        ServiceApiConfig.getViPsurveyAlaram = getViPsurveyAlaram;
+    public static void setGetViPsurveyAlarm(String getViPsurveyAlarm) {
+        ServiceApiConfig.getViPsurveyAlarm = getViPsurveyAlarm;
     }
 
     public static String getViewZdryList() {
