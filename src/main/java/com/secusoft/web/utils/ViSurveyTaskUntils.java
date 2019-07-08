@@ -20,7 +20,7 @@ public class ViSurveyTaskUntils {
             return true;
         }
         ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-        long diff = new Date().getTime() - viSurveyTaskBean.getBeginTime().getTime();
+        long diff = new Date().getTime() - viSurveyTask.getBeginTime().getTime();
         long sec = diff % nd % nh % nm / ns;// 计算差多少秒
         //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
         //若和当前时间相差时间大于0秒，则不执行
@@ -33,7 +33,7 @@ public class ViSurveyTaskUntils {
 
     public static boolean validTaskEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
         ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-        long diff = new Date().getTime() - viSurveyTaskBean.getEndTime().getTime();
+        long diff = new Date().getTime() - viSurveyTask.getEndTime().getTime();
         long sec = diff % nd % nh % nm / ns;// 计算差多少秒
         //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
         //若和当前时间相差时间大于0秒，则不执行
@@ -47,15 +47,15 @@ public class ViSurveyTaskUntils {
         if (1 == viSurveyTaskBean.getEnable()) {
             return true;
         }
+        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        calendar.setTime(viSurveyTask.getBeginTime());
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
         long diff = new Date().getTime() - calendar.getTime().getTime();
         long sec = diff % nd % nh % nm / ns;// 计算差多少秒
         //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
-        //若和当前时间相差时间大于0秒，则不执行
+        //若和当前时间相差时间大于3秒，则不执行
         if (sec != 0) {
             return false;
         }
@@ -64,12 +64,12 @@ public class ViSurveyTaskUntils {
 
 
     public static boolean validTaskStreamEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
+        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        calendar.setTime(viSurveyTask.getEndTime());
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
-        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-        long diff = new Date().getTime() - viSurveyTaskBean.getEndTime().getTime();
+        long diff = new Date().getTime() - calendar.getTime().getTime();
         long sec = diff % nd % nh % nm / ns;// 计算差多少秒
         //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
         //若和当前时间相差时间大于0秒，则不执行

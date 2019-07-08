@@ -45,7 +45,7 @@ public class VideoStreamStopTask extends TimerTask {
     @Override
     public void run() {
 
-        log.info("开始启流，布控任务编号：" + viSurveyTaskBean.getTaskId());
+        log.info("开始停流，布控任务编号：" + viSurveyTaskBean.getTaskId());
         if (viSurveyTaskBean != null && viSurveyTaskBean.getId() != null) {
             if (1 != viSurveyTaskBean.getEnable()) {
                 log.info("无需立即执行，开始判断是否到执行时间");
@@ -55,42 +55,45 @@ public class VideoStreamStopTask extends TimerTask {
                 }
             }
             Date now = new Date();
-            for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTaskBean.getViTaskDeviceList()) {
-                List<ViTaskDeviceBean> allViTaskDevice = viTaskDeviceMapper.getAllViTaskDevice(viTaskDeviceBean);
-                if (allViTaskDevice.size() == 0) {
-                    return;
-                }
-                viTaskDeviceBean = allViTaskDevice.get(0);
-
-                ViTaskDeviceBean bean = new ViTaskDeviceBean();
-                bean.setDeviceId(viTaskDeviceBean.getDeviceId());
-                bean.setAction(0);
-                bean.setStatus(1);
-                List<ViTaskDeviceBean> viTaskDeviceList = viTaskDeviceMapper.getViTaskDeviceByObject(bean);
-                //筛选还在使用的设备信息
-                List<ViTaskDeviceBean> list = viTaskDeviceList.stream().
-                        filter((ViTaskDeviceBean vtdb) -> vtdb.getViSurveyTask().getEndTime().compareTo(now) > 0).collect(Collectors.toList());
-                //判断设备是否已启用1和状态是否为成功1
-                if (viTaskDeviceBean.getAction() == 1 && viTaskDeviceBean.getStatus() == 1) {
-                    StreamRequest streamRequest = new StreamRequest();
-                    streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
-
-                    String requestStr = JSON.toJSONString(streamRequest);
-                    String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
-
-                    JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
-                    String code = jsonObject.getString("code");
-                    String message = jsonObject.getString("message");
-                    if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
-                        log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流成功，布控任务编号：" + viSurveyTaskBean.getTaskId());
-                        viTaskDeviceBean.setStatus(1);
-                    } else {
-                        log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流失败，原因：" + message);
-                        viTaskDeviceBean.setStatus(0);
+            ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
+            if(viSurveyTask!=null) {
+                for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTask.getViTaskDeviceList()) {
+                    List<ViTaskDeviceBean> allViTaskDevice = viTaskDeviceMapper.getAllViTaskDevice(viTaskDeviceBean);
+                    if (allViTaskDevice.size() == 0) {
+                        return;
                     }
+                    viTaskDeviceBean = allViTaskDevice.get(0);
 
-                    viTaskDeviceBean.setAction(0);
-                    viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
+                    ViTaskDeviceBean bean = new ViTaskDeviceBean();
+                    bean.setDeviceId(viTaskDeviceBean.getDeviceId());
+                    bean.setAction(0);
+                    bean.setStatus(1);
+                    List<ViTaskDeviceBean> viTaskDeviceList = viTaskDeviceMapper.getViTaskDeviceByObject(bean);
+                    //筛选还在使用的设备信息
+                    List<ViTaskDeviceBean> list = viTaskDeviceList.stream().
+                            filter((ViTaskDeviceBean vtdb) -> vtdb.getViSurveyTask().getEndTime().compareTo(now) > 0).collect(Collectors.toList());
+                    //判断设备是否已启用1和状态是否为成功1
+                    if (viTaskDeviceBean.getAction() == 1 && viTaskDeviceBean.getStatus() == 1) {
+                        StreamRequest streamRequest = new StreamRequest();
+                        streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
+
+                        String requestStr = JSON.toJSONString(streamRequest);
+                        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
+
+                        JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
+                        String code = jsonObject.getString("code");
+                        String message = jsonObject.getString("message");
+                        if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
+                            log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流成功，布控任务编号：" + viSurveyTaskBean.getTaskId());
+                            viTaskDeviceBean.setStatus(1);
+                        } else {
+                            log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，停流失败，原因：" + message);
+                            viTaskDeviceBean.setStatus(0);
+                        }
+
+                        viTaskDeviceBean.setAction(0);
+                        viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
+                    }
                 }
             }
         }

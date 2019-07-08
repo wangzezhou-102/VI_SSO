@@ -54,27 +54,30 @@ public class VideoStreamStartTask extends TimerTask {
                 }
             }
 
-            for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTaskBean.getViTaskDeviceList()) {
-                //判断设备是否已启用或者状态是否为1
-                if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
-                    StreamRequest streamRequest = new StreamRequest();
-                    streamRequest.setAppId(NormalConfig.getSzBkAppId());
-                    streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
+            ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
+            if(viSurveyTask!=null) {
+                for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTask.getViTaskDeviceList()) {
+                    //判断设备是否已启用或者状态是否为1
+                    if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
+                        StreamRequest streamRequest = new StreamRequest();
+                        streamRequest.setAppId(NormalConfig.getSzBkAppId());
+                        streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
-                    String requestStr = JSON.toJSONString(streamRequest);
-                    String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
-                    JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
-                    String code = jsonObject.getString("code");
-                    String message = jsonObject.getString("message");
-                    if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
-                        log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流成功，布控任务编号：" + viSurveyTaskBean.getTaskId());
-                        viTaskDeviceBean.setStatus(1);
-                    } else {
-                        log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败，原因：" + message);
-                        viTaskDeviceBean.setStatus(0);
+                        String requestStr = JSON.toJSONString(streamRequest);
+                        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getStreamStart(), requestStr);
+                        JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
+                        String code = jsonObject.getString("code");
+                        String message = jsonObject.getString("message");
+                        if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
+                            log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流成功，布控任务编号：" + viSurveyTaskBean.getTaskId());
+                            viTaskDeviceBean.setStatus(1);
+                        } else {
+                            log.info("设备号：" + viTaskDeviceBean.getDeviceId() + "，启流失败，原因：" + message);
+                            viTaskDeviceBean.setStatus(0);
+                        }
+                        viTaskDeviceBean.setAction(1);
+                        viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
                     }
-                    viTaskDeviceBean.setAction(1);
-                    viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
                 }
             }
         }

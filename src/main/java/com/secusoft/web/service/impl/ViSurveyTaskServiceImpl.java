@@ -531,7 +531,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void surveyStartTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
+        //布控任务准时开启
         calendar.setTime(viSurveyTaskBean.getBeginTime());
         timer.schedule(new SurveyStartTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
     }
@@ -545,8 +545,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void surveyStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        //布控任务准时停止
+        calendar.setTime(viSurveyTaskBean.getEndTime());
         timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
     }
 
@@ -558,9 +558,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void videoStreamStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        calendar.setTime(viSurveyTaskBean.getEndTime());
         //设备提前5分钟启动码流计划任务
-        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
+        calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
         timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
     }
 
