@@ -11,7 +11,7 @@ public class SecurityTaskTypeBean {
     private Integer id;
     private String typeName;
     private List<SecurityTaskTypeBean> subsetType;
-    private List<SecurityTaskPlaceBean> securityTaskPlaces;
+    private List<SecurityPlaceBean> securityTaskPlaces;
 
     public SecurityTaskTypeBean() {
     }
@@ -46,11 +46,11 @@ public class SecurityTaskTypeBean {
         this.subsetType = subsetType;
     }
 
-    public List<SecurityTaskPlaceBean> getSecurityTaskPlaces() {
+    public List<SecurityPlaceBean> getSecurityTaskPlaces() {
         return securityTaskPlaces;
     }
 
-    public void setSecurityTaskPlaces(List<SecurityTaskPlaceBean> securityTaskPlaces) {
+    public void setSecurityTaskPlaces(List<SecurityPlaceBean> securityTaskPlaces) {
         this.securityTaskPlaces = securityTaskPlaces;
     }
 }

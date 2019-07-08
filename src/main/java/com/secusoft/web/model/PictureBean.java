@@ -218,6 +218,12 @@ public class PictureBean implements Serializable {
             if(StringUtils.isNotEmpty(searchResponseData.getSource().getOriImageSigned())){
                 pictureBean.setOriImageSignedUrl(searchResponseData.getSource().getOriImageSigned());
             }
+            if(StringUtils.isNotEmpty(searchResponseData.getSource().getCropImage())){
+                pictureBean.setCropImageUrl(searchResponseData.getSource().getCropImage());
+            }
+            if(StringUtils.isNotEmpty(searchResponseData.getSource().getOrigImage())){
+                pictureBean.setOrigImageUrl(searchResponseData.getSource().getOrigImage());
+            }
             if(StringUtils.isNotEmpty(searchResponseData.getSource().getCropImageSigned())){
                 pictureBean.setCropImageSignedUrl(searchResponseData.getSource().getCropImageSigned());
             }
@@ -226,7 +232,7 @@ public class PictureBean implements Serializable {
             }
             if(searchResponseData.getSource().getTimestamp()!=null){
                 pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
-            }//TODO
+            }
             return  pictureBean;
         }else {
             return pictureBean;

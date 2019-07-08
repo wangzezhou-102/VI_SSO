@@ -33,8 +33,9 @@ public class TrackServcieImpl implements TrackService {
     public ResultVo addTrack(TrackBean trackBean, List<PictureBean> pictureBeans) {
         if(trackMapper.selectCountTrackByName(trackBean)==0){
             trackMapper.insertTrack(trackBean);
-            int i=0;
-            for (PictureBean pictureBean : pictureBeans) {
+            ArrayList<String> picIds = new ArrayList<>();
+            System.out.println(pictureBeans.size());
+            for (PictureBean pictureBean:pictureBeans) {
                 //收藏图片类型是1  轨迹是2
                 pictureBean.setPicType(2);
                 //图片收藏需要下载到本地
@@ -47,11 +48,8 @@ public class TrackServcieImpl implements TrackService {
                 try {
                     //创建并下载到相应的文件夹
                     Files.createDirectories(Paths.get(folderName));
-                    System.out.println(pictureBean.getCropImageSignedUrl());
                     UploadUtil.downLoadFromUrl(pictureBean.getCropImageSignedUrl(),cropFileName,folderName);
                     UploadUtil.downLoadFromUrl(pictureBean.getOriImageSignedUrl(),oriFileName,folderName);
-                    System.out.println("第"+i+"张图片下载完毕");
-                    i++;
                 } catch (Exception e) {
                     e.printStackTrace();
                     Path path1 = Paths.get(folderName,oriFileName);
@@ -67,11 +65,9 @@ public class TrackServcieImpl implements TrackService {
                 //存储文件夹+文件名 /2019621/1.jpg
                 pictureBean.setLocalCropImageUrl(UploadUtil.getFolder()+cropFileName);
                 pictureBean.setLocalOriImageUrl(UploadUtil.getFolder()+oriFileName);
-            }
-            ArrayList<String> picIds = new ArrayList<>();
-            for (PictureBean pictureBean : pictureBeans) {
                 pictureMapper.insertPicture(pictureBean);
                 picIds.add(pictureBean.getId());
+
             }
             trackMapper.insertTrackPicture(picIds, trackBean.getId());
             return ResultVo.success();

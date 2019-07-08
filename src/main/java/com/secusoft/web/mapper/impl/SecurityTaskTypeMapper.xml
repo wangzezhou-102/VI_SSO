@@ -24,12 +24,12 @@
         <collection property="subsetType" ofType="securityTaskTypeBean">
             <id column="chirldren_id" property="id"/>
             <result column="children_type" property="typeName"/>
-            <collection column="chirldren_id" property="securityTaskPlaces" ofType="securityTaskPlaceBean"
+            <collection column="chirldren_id" property="securityTaskPlaces" ofType="securityPlaceVo"
                         select="com.secusoft.web.mapper.SecurityPlaceMapper.selectSecirityTaskPlaceByTypeId">
             </collection>
         </collection>
 
-        <collection column="id" property="securityTaskPlaces" ofType="securityTaskPlaceBean"
+        <collection column="id" property="securityTaskPlaces" ofType="securityPlaceVo"
                     select="com.secusoft.web.mapper.SecurityPlaceMapper.selectSecirityTaskPlaceByTypeId">
         </collection>
 

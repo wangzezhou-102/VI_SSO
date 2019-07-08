@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.SecurityTaskPlaceMapper">
+
+
+    <resultMap id="security_task_place_Map" type="com.secusoft.web.model.CodeplacesBean">
+        <id column="type_code" property="typeCode" />
+        <collection property="place" ofType="java.lang.Integer">
+            <result column="place_id"  />
+        </collection>
+    </resultMap>
+
+
+    <!--关联查询-->
+    <select id="selectPlaceByTaskId" parameterType="java.lang.String" resultMap="security_task_place_Map">
+        select task_id , place_id,type_code
+        from vi_security_task_place
+        where task_id = #{taskId}
+    </select>
+</mapper>

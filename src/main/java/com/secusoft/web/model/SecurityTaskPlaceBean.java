@@ -1,86 +1,58 @@
 package com.secusoft.web.model;
 
+import com.baomidou.mybatisplus.annotations.TableName;
+
 /**
+ * 安保任务地点中间表
  * @author huanghao
- * @date 2019-07-02
+ * @date 2019-07-08
  */
+@TableName("vi_security_task_place")
 public class SecurityTaskPlaceBean {
-    private Integer id;
-    private Integer typeId;
-    private String placeName;
-    private String longitude;
-    private String latitude;
-    private String radius;
-
+    private Integer id;//主键ID
+    private String taskId;//任务ID,UUID
+    private Integer placeId;//地点ID
+    private Integer typeCode;//区分具体135范围类型，1表示一分钟圈，3表示3分钟圈，6表示大型活动
     public SecurityTaskPlaceBean() {
+        super();
     }
-
-    public SecurityTaskPlaceBean(Integer id, Integer typeId, String placeName, String longitude, String latitude, String radius) {
+    public SecurityTaskPlaceBean(Integer id,String taskId,Integer placeId,Integer typeCode) {
+        super();
         this.id = id;
-        this.typeId = typeId;
-        this.placeName = placeName;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.radius = radius;
+        this.taskId = taskId;
+        this.placeId = placeId;
+        this.typeCode = typeCode;
     }
-
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getPlaceName() {
-        return placeName;
+    public String getTaskId() {
+        return this.taskId;
     }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public Integer getPlaceId() {
+        return this.placeId;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setPlaceId(Integer placeId) {
+        this.placeId = placeId;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public Integer getTypeCode() {
+        return this.typeCode;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setTypeCode(Integer typeCode) {
+        this.typeCode = typeCode;
     }
 
-    public String getRadius() {
-        return radius;
-    }
-
-    public void setRadius(String radius) {
-        this.radius = radius;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
-
-    @Override
-    public String toString() {
-        return "SecurityTaskPlaceBean{" +
-                "id=" + id +
-                ", typeId=" + typeId +
-                ", placeName='" + placeName + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", radius='" + radius + '\'' +
-                '}';
-    }
 }

@@ -36,4 +36,11 @@ Content-Type: application/json
 {
 }
 
+###安保类型 预设地点查询
+POST http://localhost:8006/securitytypeplace
+Content-Type: application/json
+
+{
+}
+
 ###
