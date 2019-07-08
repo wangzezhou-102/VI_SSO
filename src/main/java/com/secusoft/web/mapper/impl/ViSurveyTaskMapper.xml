@@ -49,6 +49,7 @@
             <result column="task_id" property="taskId"/>
             <result column="device_id" property="deviceId"/>
             <result column="status" property="status"/>
+            <result column="action" property="action"/>
         </collection>
     </resultMap>
 
@@ -169,7 +170,7 @@
     </select>
 
     <select id="selectBeanByIdOrObjectId" parameterType="com.secusoft.web.model.ViSurveyTaskRequest" resultMap="viSurveyTaskResultMap">
-        select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id
+        select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id,vtd.action
         from vi_survey_task vst
         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
@@ -203,5 +204,13 @@
             </if>
         </where>
         order by vst.create_time desc,vst.modify_time desc
+    </select>
+
+    <select id="getViSurveyTaskById" parameterType="com.secusoft.web.model.ViSurveyTaskBean" resultMap="viSurveyTaskResultMap">
+         select vst.*,vtr.id as vi_task_repo_id,vtr.repo_id,vtd.`status`,vtd.id as vi_task_device_id,vtd.device_id,vtd.action
+        from vi_survey_task vst
+        LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
+        LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
+        where vst.id =#{id}
     </select>
 </mapper>

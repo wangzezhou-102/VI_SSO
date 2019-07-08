@@ -6,11 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
-import com.secusoft.web.mapper.ViBasicMemberMapper;
-import com.secusoft.web.mapper.ViPrivateMemberMapper;
-import com.secusoft.web.mapper.ViPsurveyAlarmDetailMapper;
-import com.secusoft.web.mapper.ViPsurveyAlarmMapper;
-import com.secusoft.web.mapper.DeviceMapper;
+import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.websocket.WebSock;
@@ -21,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -62,18 +57,23 @@ public class ViPsurveyAlarmTask {
 
     //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0 0/1 * * * ?")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
-        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlaram(), "");
+        String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
+
+        if(responseStr==null){
+            log.info("实时告警数据接口请求失败");
+            return;
+        }
 
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
         String code = jsonObject.getString("code");
         String data = jsonObject.getString("data");
         List<ViPsurveyAlarmDetailResponse> detailResponses = new ArrayList<>();
         if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && (!data.isEmpty() || !"null".equals(data))) {
-            List<ViPsurveyAlaramVo> viPsurveyAlaramVoLists = JSONArray.parseArray(data, ViPsurveyAlaramVo.class);
-            for (ViPsurveyAlaramVo alaramVo : viPsurveyAlaramVoLists) {
+            List<ViPsurveyAlarmVo> viPsurveyAlarmVoLists = JSONArray.parseArray(data, ViPsurveyAlarmVo.class);
+            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVoLists) {
 
                 ViPsurveyAlarmBean viPsurveyAlarmBean = new ViPsurveyAlarmBean();
                 viPsurveyAlarmBean.setTaskId(alaramVo.getTaskId());

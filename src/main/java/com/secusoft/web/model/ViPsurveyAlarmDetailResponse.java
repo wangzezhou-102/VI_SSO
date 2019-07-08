@@ -36,7 +36,7 @@ public class ViPsurveyAlarmDetailResponse {
     /**
      * 相似度
      */
-    private Double similarity;
+    private String similarity;
 
     /**
      * 对象名称
@@ -118,11 +118,11 @@ public class ViPsurveyAlarmDetailResponse {
         this.personImage = personImage;
     }
 
-    public Double getSimilarity() {
+    public String getSimilarity() {
         return similarity;
     }
 
-    public void setSimilarity(Double similarity) {
+    public void setSimilarity(String similarity) {
         this.similarity = similarity;
     }
 

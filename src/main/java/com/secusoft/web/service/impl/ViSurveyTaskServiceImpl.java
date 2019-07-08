@@ -133,7 +133,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "布控任务添加失败！");
         }
 
-        TQTimeTask(viSurveyTaskBean);
+        //TQTimeTask(viSurveyTaskBean);
 
         log.info("结束新增布控任务");
         return ResultVo.success();
@@ -142,8 +142,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
     @Transactional
     @Override
     public ResultVo updateViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
-        String requestStr = JSON.toJSONString(viSurveyTaskRequest);
 
+        log.info("开始执行更新布控任务");
+        String requestStr = JSON.toJSONString(viSurveyTaskRequest);
         log.info(requestStr);
         if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
@@ -152,7 +153,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
         ViSurveyTaskBean bean = viSurveyTaskMapper.selectBeanByIdOrObjectId(viSurveyTaskRequest);
-
+        ViSurveyTaskBean baseBean = bean;
         if (!StringUtils.hasLength(viSurveyTaskRequest.getSurveyName())) {
             return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
         }
@@ -163,18 +164,23 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         }
         //判断布控任务是否一致
         if (!viSurveyTaskRequest.getSurveyName().equals(bean.getSurveyName())) {
+            log.info("开始执行更新布控任务，布控名称不一致，原名称：" + baseBean.getSurveyName());
             bean.setSurveyName(viSurveyTaskRequest.getSurveyName());
         }
         //判断开始时间是否一致
         if (viSurveyTaskRequest.getBeginTime() != null && viSurveyTaskRequest.getBeginTime().compareTo(bean.getBeginTime()) != 0) {
+            log.info("开始执行更新布控任务，布控开始时间不一致，原开始时间：" + baseBean.getBeginTime());
             bean.setBeginTime(viSurveyTaskRequest.getBeginTime());
         }
         //判断结束时间是否一致
         if (viSurveyTaskRequest.getEndTime() != null && viSurveyTaskRequest.getEndTime().compareTo(bean.getEndTime()) != 0) {
+            log.info("开始执行更新布控任务，布控结束时间不一致，原结束时间：" + baseBean.getEndTime());
             bean.setEndTime(viSurveyTaskRequest.getEndTime());
         }
-        //取新增设备列表
+        //取需去除设备列表
         List<ViTaskDeviceBean> cutDeviceList = null;
+        //取新增设备列表
+        List<ViTaskDeviceBean> diffrientDevice = null;
         if (viSurveyTaskRequest.getSurveyDevice().length > 0) {
             List<String> listDevice = Arrays.asList(viSurveyTaskRequest.getSurveyDevice());
             List<ViTaskDeviceBean> newDevice = new ArrayList<>();
@@ -187,7 +193,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             //拟去除设备列表
             cutDeviceList = removeToDevice(bean.getViTaskDeviceList(), newDevice, true);
             //拟新增设备列表
-            List<ViTaskDeviceBean> diffrientDevice = removeToDevice(bean.getViTaskDeviceList(), newDevice, false);
+            diffrientDevice = removeToDevice(bean.getViTaskDeviceList(), newDevice, false);
 
             //判断算力
             if (!validUpdateCalute(viSurveyTaskRequest, cutDeviceList, diffrientDevice)) {
@@ -198,16 +204,17 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 //            List<ViTaskDeviceBean> removeDevice =
 //                    bean.getViTaskDeviceList().stream().filter((ViTaskDeviceBean beans) -> !listDevice.contains(beans.getDeviceId())).collect(Collectors.toList());
             //判断需要移除的设备或者新老设备是否一致
-            if (cutDeviceList.size() != 0 && bean.getSurveyStatus() == 1 && bean.getEnable() == 1) {
-                log.info("暂停任务");
-//                SurveyStopTask surveyStopTask = new SurveyStopTask(bean);
-//                surveyStopTask.run();
-//
+            if ((cutDeviceList.size() >= 0 || diffrientDevice.size() > 0) && bean.getSurveyStatus() == 1 && bean.getEnable() == 1) {
+                log.info("暂停布控任务");
+                SurveyStopTask surveyStopTask = new SurveyStopTask(bean);
+                surveyStopTask.run();
+
                 log.info("暂停相关设备");
 //                ViSurveyTaskBean taskBean = bean;
 //                taskBean.setViTaskDeviceList(cutDeviceList);
-//                VideoStreamStopTask videoStreamStopTask = new VideoStreamStopTask(taskBean);
-//                videoStreamStopTask.run();
+
+                VideoStreamStopTask videoStreamStopTask = new VideoStreamStopTask(baseBean);
+                videoStreamStopTask.run();
             }
             log.info("ViTaskDeviceList size：" + bean.getViTaskDeviceList().size());
             if (diffrientDevice.size() > 0) {
@@ -240,29 +247,39 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             List<ViTaskRepoBean> cutRepoList = removeToRepo(bean.getViTaskRepoList(), newRepo, true);
             List<ViTaskRepoBean> diffrientRepo = removeToRepo(bean.getViTaskRepoList(), newRepo, false);
 
-            if(diffrientRepo.size()>0) {
+            if (diffrientRepo.size() > 0) {
                 viTaskRepoMapper.insertBatch(diffrientRepo);
                 bean.getViTaskRepoList().addAll(diffrientRepo);
                 log.info("ViTaskRepoList addAll：" + bean.getViTaskRepoList().size());
             }
             log.info("ViTaskRepoList size：" + bean.getViTaskRepoList().size());
-            if(cutRepoList.size()>0) {
+            if (cutRepoList.size() > 0) {
                 viTaskRepoMapper.delBatchViTaskRepo(cutRepoList);
                 bean.getViTaskRepoList().removeAll(cutRepoList);
                 log.info("ViTaskRepoList removeAll：" + bean.getViTaskRepoList().size());
             }
         }
+        bean.setSurveyStatus(2);
+        bean.setEnable(2);
         viSurveyTaskMapper.updateViSurveyTask(bean);
-        if (cutDeviceList != null && cutDeviceList.size() > 0) {
-            //判断开始时间是否一致
-            if (viSurveyTaskRequest.getBeginTime().compareTo(bean.getBeginTime()) != 0) {
-                SurveyStartTask surveyStartTask = new SurveyStartTask(bean);
-                surveyStartTask.run();
-            }
-            //判断结束时间是否一致
-            if (viSurveyTaskRequest.getEndTime().compareTo(bean.getEndTime()) != 0) {
-                SurveyStopTask surveyStopTask = new SurveyStopTask(bean);
-                surveyStopTask.run();
+        bean.setEnable(viSurveyTaskRequest.getEnable());
+        if (diffrientDevice.size() > 0 || cutDeviceList.size() > 0) {
+            log.info("有变更的设备，需重新下发任务，需剔除设备：" + cutDeviceList.size() + "，需增加的设备：" + diffrientDevice.size());
+            Timer time = new Timer();
+            //判断开始时间与结束时间是否一致，若不一致则重新下发任务
+            if (viSurveyTaskRequest.getBeginTime().compareTo(baseBean.getBeginTime()) != 0 && viSurveyTaskRequest.getEndTime().compareTo(baseBean.getEndTime()) != 0) {
+                TQTimeTask(bean);
+            } else {
+                //判断开始时间是否一致，若不一致则重新下发任务
+                if (viSurveyTaskRequest.getBeginTime().compareTo(baseBean.getBeginTime()) != 0) {
+                    videoStreamStartTask(time, bean);
+                    surveyStartTask(time, bean);
+                }
+                //判断结束时间是否一致，若不一致则重新下发任务
+                if (viSurveyTaskRequest.getEndTime().compareTo(baseBean.getEndTime()) != 0) {
+                    videoStreamStopTask(time, bean);
+                    surveyStopTask(time, bean);
+                }
             }
         }
         return ResultVo.success();
@@ -284,9 +301,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         bkTaskDeleteRequestBaseRequest.setData(bkTaskDeleteRequest);
         bkTaskDeleteRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
 
-        //BaseResponse baseResponse = TQClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskDeleteRequestBaseRequest);
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskDeleteRequestBaseRequest);
+//        BaseResponse baseResponse = new BaseResponse();
+//        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         Object dataJson = baseResponse.getData();
         String errorCode = baseResponse.getCode();
         String errorMsg = baseResponse.getMessage();
@@ -439,7 +456,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      *
      * @param oldList
      * @param newList
-     * @param type    true-返回原布控库差集合 false-返回布控库列表中不存在的集合
+     * @param type     true-返回原布控库差集合 false-返回布控库列表中不存在的集合
      * @return
      */
     private List<ViTaskRepoBean> removeToRepo(List<ViTaskRepoBean> oldList, List<ViTaskRepoBean> newList, boolean type) {
@@ -478,6 +495,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 //        ViSurveyTaskBean viSurveyTaskBean = lists.get(0);
 
         Timer timer = new Timer();
+
         //设备提前5分钟启动码流计划任务
         videoStreamStartTask(timer, viSurveyTaskBean);
 
@@ -513,11 +531,10 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void surveyStartTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
+        //布控任务准时开启
         calendar.setTime(viSurveyTaskBean.getBeginTime());
         timer.schedule(new SurveyStartTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
     }
-
 
     /**
      * 结束布控任务
@@ -527,8 +544,8 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void surveyStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        //布控任务准时停止
+        calendar.setTime(viSurveyTaskBean.getEndTime());
         timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
     }
 
@@ -540,9 +557,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     private void videoStreamStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+        calendar.setTime(viSurveyTaskBean.getEndTime());
         //设备提前5分钟启动码流计划任务
-        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
+        calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
         timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
     }
 
