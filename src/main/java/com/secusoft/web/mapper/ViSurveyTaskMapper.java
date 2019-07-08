@@ -72,4 +72,11 @@ public interface ViSurveyTaskMapper extends BaseMapper<ViSurveyTaskBean> {
      * @return
      */
     List<ViSurveyTaskBean> getAllViSurveyTaskByPage(ViSurveyTaskRequest viSurveyTaskRequest);
+
+    /**
+     * 通过beanId获取对象
+     * @param viSurveyTaskBean
+     * @return
+     */
+    ViSurveyTaskBean getViSurveyTaskById(ViSurveyTaskBean viSurveyTaskBean);
 }

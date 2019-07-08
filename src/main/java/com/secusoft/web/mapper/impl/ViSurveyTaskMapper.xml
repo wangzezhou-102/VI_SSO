@@ -204,4 +204,9 @@
         </where>
         order by vst.create_time desc,vst.modify_time desc
     </select>
+
+    <select id="getViSurveyTaskById" parameterType="com.secusoft.web.model.ViSurveyTaskBean" resultType="com.secusoft.web.model.ViSurveyTaskBean">
+        select * from vi_survey_task
+        where id =#{id}
+    </select>
 </mapper>
