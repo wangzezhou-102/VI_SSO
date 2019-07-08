@@ -117,7 +117,7 @@ public class UploadUtil {
     public static String downLoadFromBase64(String getData, String type) throws IOException {
 
         //图片收藏需要下载到本地
-        String folderName = "/" + type + getFolder();
+        String folderName = "/static/" + type + getFolder();
         String fullName = basePath + folderName;
         //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
         String ImgName = UUIDUtil.getUid(type + "_") + ".jpg";
