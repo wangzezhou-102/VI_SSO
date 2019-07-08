@@ -518,7 +518,6 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         timer.schedule(new SurveyStartTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
     }
 
-
     /**
      * 结束布控任务
      *

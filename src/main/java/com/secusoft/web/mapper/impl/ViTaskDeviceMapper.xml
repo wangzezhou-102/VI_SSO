@@ -119,16 +119,16 @@
         left join vi_survey_task vst
         on vtd.task_id=vst.task_id
         <where>
-            <if test="deviceId !=null">
+            <if test="deviceId != null">
                 AND device_id=#{deviceId}
             </if>
-            <if test="taskId !=null">
+            <if test="taskId != null">
                 AND vtd.task_id=#{taskId}
             </if>
-            <if test="status !=null">
+            <if test="status != null">
                 AND vtd.status=#{status}
             </if>
-            <if test="action !=null">
+            <if test="action != null">
                 AND vtd.action=#{action}
             </if>
         </where>

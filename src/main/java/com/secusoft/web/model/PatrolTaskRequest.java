@@ -21,13 +21,13 @@ public class PatrolTaskRequest {
     //时间模板ID
     private String timeTemplateId;
     //时间段
-    private List<PatrolTimeSegmentBean> patrolTimeSegmentBeans;
+    private List<PatrolTimeSegmentBean> patrolTimeSegments;
     //预置路线
-    private List<PatrolRouteBean> patrolRouteBeans;
+    private List<PatrolRouteBean> patrolRoutes;
     //设备列表
-    private List<DeviceBean> deviceBeans;
+    private List<DeviceBean> devices;
     //目标库
-    private List<ViRepoBean> viRepoBeans;
+    private List<ViRepoBean> repoes;
 
     public String getTimeTemplateId() { return timeTemplateId; }
 
@@ -61,26 +61,27 @@ public class PatrolTaskRequest {
 
     public void setCycle(Integer cycle) { this.cycle = cycle; }
 
-    public List<PatrolTimeSegmentBean> getPatrolTimeSegmentBeans() { return patrolTimeSegmentBeans; }
+    public List<PatrolTimeSegmentBean> getPatrolTimeSegments() { return patrolTimeSegments; }
 
-    public void setPatrolTimeSegmentBeans(List<PatrolTimeSegmentBean> patrolTimeSegmentBeans) { this.patrolTimeSegmentBeans = patrolTimeSegmentBeans; }
+    public void setPatrolTimeSegments(List<PatrolTimeSegmentBean> patrolTimeSegments) { this.patrolTimeSegments = patrolTimeSegments; }
 
-    public List<PatrolRouteBean> getPatrolRouteBeans() { return patrolRouteBeans; }
+    public List<PatrolRouteBean> getPatrolRoutes() { return patrolRoutes; }
 
-    public void setPatrolRouteBeans(List<PatrolRouteBean> patrolRouteBeans) { this.patrolRouteBeans = patrolRouteBeans; }
+    public void setPatrolRoutes(List<PatrolRouteBean> patrolRoutes) { this.patrolRoutes = patrolRoutes; }
 
-    public List<DeviceBean> getDeviceBeans() { return deviceBeans; }
+    public List<DeviceBean> getDevices() { return devices; }
 
-    public void setDeviceBeans(List<DeviceBean> deviceBeans) { this.deviceBeans = deviceBeans; }
+    public void setDevices(List<DeviceBean> devices) { this.devices = devices; }
 
-    public List<ViRepoBean> getViRepoBeans() { return viRepoBeans; }
+    public List<ViRepoBean> getRepoes() { return repoes; }
 
-    public void setViRepoBeans(List<ViRepoBean> viRepoBeans) { this.viRepoBeans = viRepoBeans; }
+    public void setRepoes(List<ViRepoBean> repoes) { this.repoes = repoes; }
+
     /**
     * 数据校验
     * */
     public boolean validateTaskAll(){
-        if(patrolName == null || updateId == null || cycle == null || patrolTimeSegmentBeans == null || patrolRouteBeans == null|| deviceBeans == null || viRepoBeans == null){
+        if(patrolName == null || updateId == null || cycle == null || patrolTimeSegments == null || patrolRoutes == null|| devices == null || repoes == null){
             return false;
         }
         return true;

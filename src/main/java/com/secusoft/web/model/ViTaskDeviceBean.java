@@ -63,4 +63,6 @@ public class ViTaskDeviceBean {
     public void setAction(Integer action) {
         this.action = action;
     }
+
+
 }
