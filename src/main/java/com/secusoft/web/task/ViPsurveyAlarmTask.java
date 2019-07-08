@@ -62,6 +62,11 @@ public class ViPsurveyAlarmTask {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
 
+        if(responseStr==null){
+            log.info("实时告警数据接口请求失败");
+            return;
+        }
+
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);
         String code = jsonObject.getString("code");
         String data = jsonObject.getString("data");

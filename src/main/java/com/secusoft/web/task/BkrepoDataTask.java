@@ -80,7 +80,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "0 22 0/1 * * ?")//每小时的固定分开始同步
+    @Scheduled(cron = "10 12 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -105,12 +105,12 @@ public class BkrepoDataTask {
                 SyncZdryLogBean syncBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
                 ZdryVo zdryVo = new ZdryVo();
                 zdryVo.setTableName(str);
-                Calendar calendar=Calendar.getInstance();
-                calendar.set(Calendar.YEAR,2019);
-                calendar.set(Calendar.DAY_OF_MONTH,2);
-                calendar.set(Calendar.HOUR_OF_DAY,19);
-                calendar.set(Calendar.MINUTE,07);
-                calendar.set(Calendar.SECOND,0);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, 2019);
+                calendar.set(Calendar.DAY_OF_MONTH, 2);
+                calendar.set(Calendar.HOUR_OF_DAY, 19);
+                calendar.set(Calendar.MINUTE, 07);
+                calendar.set(Calendar.SECOND, 0);
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 log.info(formatter.format(calendar.getTime()));
@@ -189,6 +189,33 @@ public class BkrepoDataTask {
      * @return
      */
     private ViBasicMemberBean addViBasicMember(ViRepoBean viRepoBean, ZdryBean bean) {
+        ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
+        viBasicMemberBean.setObjectId(viRepoBean.getTableName() + "_" + bean.getPicId());
+        viBasicMemberBean.setRepoId(viRepoBean.getId());
+        viBasicMemberBean.setRealObjectId(bean.getPicId());
+        viBasicMemberBean.setRealTableName(viRepoBean.getTableName());
+        viBasicMemberBean.setIdentityId(bean.getPicId());
+        viBasicMemberBean.setIdentityName(bean.getHumanName());
+        viBasicMemberBean.setContent(ImageUtils.encode(bean.getPic()));
+        try {
+            viBasicMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viBasicMemberBean.getContent(), "Bkmember"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        viBasicMemberBean.setRepoId(viRepoBean.getId());
+        viBasicMemberMapper.insertViBasicMember(viBasicMemberBean);
+        memberSendToTQAdd(viBasicMemberBean);
+        return viBasicMemberBean;
+    }
+
+    /**
+     * 添加基础布控库
+     *
+     * @param viRepoBean
+     * @param bean
+     * @return
+     */
+    private ViBasicMemberBean updateViBasicMember(ViRepoBean viRepoBean, ZdryBean bean) {
         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
         viBasicMemberBean.setObjectId(viRepoBean.getTableName() + "_" + bean.getPicId());
         viBasicMemberBean.setRepoId(viRepoBean.getId());
@@ -292,21 +319,26 @@ public class BkrepoDataTask {
             for (ZdryBean bean : zdryList) {
                 ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
                 if (tableName.equals("view_qgzt")) {
-                    viBasicMemberBean.setObjectId("view_qgzt_" + bean.getPicId());
+                    viBasicMemberBean.setObjectId("vi_view_qgzt_" + bean.getPicId());
                     zdryMapper.insertQgzt(bean);
                 } else if (tableName.equals("view_sgy")) {
-                    viBasicMemberBean.setObjectId("view_sgy_" + bean.getPicId());
+                    viBasicMemberBean.setObjectId("vi_view_sgy_" + bean.getPicId());
                     zdryMapper.insertSgy(bean);
                 } else if (tableName.equals("view_sdts")) {
-                    viBasicMemberBean.setObjectId("view_sdts_" + bean.getPicId());
+                    viBasicMemberBean.setObjectId("vi_view_sdts_" + bean.getPicId());
                     zdryMapper.insertSdts(bean);
                 }
                 ViBasicMemberBean viBasicMemberByObjectId = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+
                 if (bean.getStatus().equals("1")) {
-                    memberSendToTQDelete(viBasicMemberByObjectId);
-                    viBasicMemberMapper.delViBasicMember(viBasicMemberByObjectId.getId());
+                    if (viBasicMemberByObjectId != null) {
+                        memberSendToTQDelete(viBasicMemberByObjectId);
+                        viBasicMemberMapper.delViBasicMember(viBasicMemberByObjectId.getId());
+                    }
                 } else {
-                    addViBasicMember(viRepoBean,bean);
+                    if (viBasicMemberByObjectId == null) {
+                        addViBasicMember(viRepoBean, bean);
+                    }
                 }
             }
             if (zdryList.size() > 0) {
@@ -392,6 +424,7 @@ public class BkrepoDataTask {
 
     /**
      * 获取基础库数据信息
+     *
      * @param zdryVo
      * @param syncZdryLogBean
      * @return
