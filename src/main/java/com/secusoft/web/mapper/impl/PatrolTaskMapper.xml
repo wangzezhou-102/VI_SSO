@@ -14,24 +14,28 @@
         <result column="update_id" property="updateId"/>
         <result column="update_time" property="updateTime"/>
         <result column="org_code" property="orgCode"/>
+        <result column="topic" property="topic"/>
+        <result column="valid_state" property="validState"/>
+        <result column="end_state" property="endState"/>
         <association column="time_template_id" property="patrolTimeTemplateBean" select="com.secusoft.web.mapper.PatrolTimeTemplateMapper.selectPatroltTimeTemplate"/>
+        <collection column="task_id" property="viTaskDevices" select="com.com.secusoft.web.mapper.ViTaskDeviceMapper.getViTaskDeviceByObject" ofType="com.secusoft.web.model.ViTaskDeviceBean"></collection>
     </resultMap>
     <!-- 根据主键(task_id)查询 -->
     <select id="selectPatrolTaskByPrimaryKey" parameterType="com.secusoft.web.model.PatrolTaskBean" resultMap="PatrolTaskResultMap">
-        select task_id,patrol_name,time_template_id,status,enable from vi_patrol_task
+        select task_id,patrol_name,time_template_id,status,enable,topic,valid_state,end_state from vi_patrol_task
         where task_id=#{taskId}
     </select>
     <!-- 根据状态查询不相关所有任务 -->
     <select id="selectPatrolTaskAll" parameterType="com.secusoft.web.model.PatrolTaskBean"
             resultMap="PatrolTaskResultMap">
-        select task_id,patrol_name,status,enable,time_template_id from vi_patrol_task
-        where status!=#{status}
+        select task_id,patrol_name,status,enable,time_template_id,topic,valid_state,end_state from vi_patrol_task
+        where valid_state!=#{validState}
     </select>
     <!-- 根据任务名称查询任务id -->
     <select id="selectPatrolTaskByPatrolName" parameterType="com.secusoft.web.model.PatrolTaskBean"
             resultMap="PatrolTaskResultMap">
-        select task_id,status from vi_patrol_task
-        where patrol_name=#{patrolName} and status!=#{status}
+        select task_id,status,valid_state,end_state from vi_patrol_task
+        where patrol_name=#{patrolName} and valid_state!=#{validState}
     </select>
     <insert id="insertPatrolTask" parameterType="com.secusoft.web.model.PatrolTaskBean">
         insert into vi_patrol_task
@@ -47,7 +51,10 @@
             <if test="updateTime != null">update_time,</if>
             <if test="createId != null">create_id,</if>
             <if test="updateId != null">update_id,</if>
-            <if test="orgCode != null">org_code</if>
+            <if test="orgCode != null">org_code,</if>
+            <if test="topic != null">topic,</if>
+            <if test="validState != null">valid_state,</if>
+            <if test="endState != null">endState</if>
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             <if test="taskId != null">#{taskId},</if>
@@ -61,7 +68,10 @@
             <if test="updateTime != null">#{updateTime},</if>
             <if test="createId != null">#{createId},</if>
             <if test="updateId != null">#{updateId},</if>
-            <if test="orgCode != null">#{orgCode}</if>
+            <if test="orgCode != null">#{orgCode},</if>
+            <if test="topic != null">#{topic},</if>
+            <if test="validState != null">#{validState},</if>
+            <if test="endState != null">#{endState}</if>
         </trim>
     </insert>
     <!-- 删除任务信息 -->
@@ -87,10 +97,19 @@
                 status=#{status},
             </if>
             <if test="updateTime != null">
-                update_time=#{updateTime}
+                update_time=#{updateTime},
             </if>
             <if test="updateId != null">
-                update_id=#{updateId}
+                update_id=#{updateId},
+            </if>
+            <if test="topic != null">
+                topic=#{topic},
+            </if>
+            <if test="validState != null">
+                valid_state=#{validState},
+            </if>
+            <if test="endState != null">
+                end_state=#{endState}
             </if>
         </set>
         <where>

@@ -3,6 +3,7 @@ package com.secusoft.web.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 巡逻任务
@@ -40,6 +41,30 @@ public class PatrolTaskBean {
    private Date updateTime;
    //组织code
    private String orgCode;
+   //任务设备列表
+   private List<ViTaskDeviceBean> viTaskDevices;
+   //主题信息 topic
+   private String topic;
+   //有效状态
+   private Integer validState;
+   //终止状态
+   private Integer endState;
+
+   public String getTopic() { return topic; }
+
+   public void setTopic(String topic) { this.topic = topic; }
+
+   public Integer getValidState() { return validState; }
+
+   public void setValidState(Integer validState) { this.validState = validState; }
+
+   public Integer getEndState() { return endState; }
+
+   public void setEndState(Integer endState) { this.endState = endState; }
+
+   public List<ViTaskDeviceBean> getViTaskDevices() { return viTaskDevices; }
+
+   public void setViTaskDevices(List<ViTaskDeviceBean> viTaskDevices) { this.viTaskDevices = viTaskDevices; }
 
    public PatrolTimeTemplateBean getPatrolTimeTemplateBean() { return patrolTimeTemplateBean; }
 

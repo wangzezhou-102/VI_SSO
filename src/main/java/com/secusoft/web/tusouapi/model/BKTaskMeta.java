@@ -7,8 +7,6 @@ import java.util.ArrayList;
  * 布控任务相关信息
  */
 public class BKTaskMeta {
-
-
     /**
      * [必须] 布控任务描述信息
      */

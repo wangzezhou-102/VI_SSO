@@ -2,13 +2,11 @@ package com.secusoft.web.service.impl;
 
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
-import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.emuns.ViRepoBkTypeEnum;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.SecurityTaskService;
-import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.task.SurveyStartTask;
 import com.secusoft.web.task.SurveyStopTask;

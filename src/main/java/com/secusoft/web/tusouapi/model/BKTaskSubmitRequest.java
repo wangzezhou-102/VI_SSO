@@ -13,9 +13,6 @@ public class BKTaskSubmitRequest{
      * 布控任务相关信息,
      */
     private BKTaskMeta meta;
-
-
-    
     /**
      * @return the taskId
      */
