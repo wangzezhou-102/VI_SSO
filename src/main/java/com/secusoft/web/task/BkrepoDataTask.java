@@ -83,7 +83,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "10 12 0/1 * * ?")//每小时的固定分开始同步
+    @Scheduled(cron = "0 30 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -254,7 +254,7 @@ public class BkrepoDataTask {
         bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
-        log.info(requestStr);
+        //log.info(requestStr);
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
         //BaseResponse baseResponse = new BaseResponse();
 
@@ -276,7 +276,7 @@ public class BkrepoDataTask {
         bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
 
         String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
-        log.info(requestStr);
+        //log.info(requestStr);
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
         //BaseResponse baseResponse = new BaseResponse();
 

@@ -287,6 +287,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
     @Override
     public ResultVo delViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
+
+        String requestStr = JSON.toJSONString(viSurveyTaskRequest);
+        log.info(requestStr);
         if (viSurveyTaskRequest == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
@@ -301,7 +304,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         bkTaskDeleteRequestBaseRequest.setData(bkTaskDeleteRequest);
         bkTaskDeleteRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
 
-        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskDeleteRequestBaseRequest);
+        BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskDelete(), bkTaskDeleteRequestBaseRequest);
 //        BaseResponse baseResponse = new BaseResponse();
 //        baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
         Object dataJson = baseResponse.getData();
