@@ -124,10 +124,10 @@
                     and survey_name like CONCAT(CONCAT('%', #{surveyName}), '%')
                 </if>
                 <if test="beginTime!=null">
-                    and vst.begin_time &gt;= #{beginTime}
+                    or vst.begin_time &gt;= #{beginTime}
                 </if>
                 <if test="endTime!=null">
-                    and vst.end_time &lt;= #{endTime}
+                    or vst.end_time &lt;= #{endTime}
                 </if>
                 <if test="name">
                     and vpad.name like CONCAT(CONCAT('%', #{name}), '%')
