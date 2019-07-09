@@ -387,14 +387,22 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        List<ViSurveyTaskBean> allViSurveyTask = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+        ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+        viSurveyTaskBean.setTaskId(viSurveyTaskRequest.getTaskId());
+        viSurveyTaskBean.setId(viSurveyTaskRequest.getId());
+        viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
 
-        if (allViSurveyTask.size() == 0) {
+        if (viSurveyTaskBean == null) {
             return ResultVo.failure(BizExceptionEnum.NOT_FOUND.getCode(), BizExceptionEnum.NOT_FOUND.getMessage());
         }
+        if (viSurveyTaskBean.getEnable() == 1 && viSurveyTaskBean.getSurveyStatus() == 1) {
+            return ResultVo.failure(BizExceptionEnum.TASK_STARTED.getCode(), BizExceptionEnum.TASK_STARTED.getMessage());
+        }
         try {
-            SurveyStartTask surveyStartTask = new SurveyStartTask(allViSurveyTask.get(0));
-            surveyStartTask.run();
+            viSurveyTaskBean.setEnable(1);
+            Timer timer=new Timer();
+            videoStreamStartTask(timer,viSurveyTaskBean);
+            surveyStartTask(timer,viSurveyTaskBean);
         } catch (Exception ex) {
             return ResultVo.failure(BizExceptionEnum.TASK_START_FAIL.getCode(), BizExceptionEnum.TASK_START_FAIL.getMessage());
         }
@@ -409,22 +417,29 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      */
     @Override
     public ResultVo stopViSurveyTask(ViSurveyTaskRequest viSurveyTaskRequest) {
-
         if (null == viSurveyTaskRequest) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        List<ViSurveyTaskBean> allViSurveyTask = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+        ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+        viSurveyTaskBean.setTaskId(viSurveyTaskRequest.getTaskId());
+        viSurveyTaskBean.setId(viSurveyTaskRequest.getId());
+        viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
 
-        if (allViSurveyTask.size() == 0) {
+        if (viSurveyTaskBean == null) {
             return ResultVo.failure(BizExceptionEnum.NOT_FOUND.getCode(), BizExceptionEnum.NOT_FOUND.getMessage());
         }
 
+        if (viSurveyTaskBean.getEnable() == 1 && viSurveyTaskBean.getSurveyStatus() == 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_CLOSED.getCode(), BizExceptionEnum.TASK_CLOSED.getMessage());
+        }
         try {
-            SurveyStopTask surveyStopTask = new SurveyStopTask(allViSurveyTask.get(0));
-            surveyStopTask.run();
+            viSurveyTaskBean.setEnable(1);
+            Timer timer=new Timer();
+            surveyStopTask(timer,viSurveyTaskBean);
+            videoStreamStopTask(timer,viSurveyTaskBean);
         } catch (Exception ex) {
             return ResultVo.failure(BizExceptionEnum.TASK_STOP_FAIL.getCode(), BizExceptionEnum.TASK_STOP_FAIL.getMessage());
         }

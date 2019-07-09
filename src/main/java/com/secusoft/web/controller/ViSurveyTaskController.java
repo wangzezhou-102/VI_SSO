@@ -55,19 +55,11 @@ public class ViSurveyTaskController {
     }
 
     @PostMapping("/startvisurveytask")
-    @ApiOperation("开始布控任务")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "布控编号", required = true , dataType="int", paramType="query"),
-    })
     public ResponseEntity<ResultVo> startViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest) {
         return new ResponseEntity<ResultVo>(viSurveyTaskService.startViSurveyTask(viSurveyTaskRequest), HttpStatus.OK);
     }
 
     @PostMapping("/stopvisurveytask")
-    @ApiOperation("停止布控任务")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "布控编号", required = true , dataType="int", paramType="query"),
-    })
     public ResponseEntity<ResultVo> stopViSurveyTask(@RequestBody ViSurveyTaskRequest viSurveyTaskRequest) {
         return new ResponseEntity<ResultVo>(viSurveyTaskService.stopViSurveyTask(viSurveyTaskRequest), HttpStatus.OK);
     }

@@ -66,6 +66,8 @@ public enum BizExceptionEnum {
 	TASK_CALUATE_FAIL(709,"算力不足，新增布控任务失败"),
 	TASK_CALUATE_UPDATE_FAIL(710,"算力不足，修改布控任务失败"),
 	TASK_DELETED_FAIL(711,"布控任务正在运行中，删除失败"),
+	TASK_STARTED(712,"布控任务正在运行中，启动任务失败"),
+	TASK_CLOSED(713,"布控任务已停止，停止任务失败"),
 
 	/**
 	 * 布控库相关

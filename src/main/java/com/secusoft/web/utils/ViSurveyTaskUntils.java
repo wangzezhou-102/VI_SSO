@@ -32,6 +32,9 @@ public class ViSurveyTaskUntils {
 
 
     public static boolean validTaskEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
+        if (1 == viSurveyTaskBean.getEnable()) {
+            return true;
+        }
         ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
         long diff = new Date().getTime() - viSurveyTask.getEndTime().getTime();
         long sec = diff % nd % nh % nm / ns;// 计算差多少秒
@@ -64,6 +67,9 @@ public class ViSurveyTaskUntils {
 
 
     public static boolean validTaskStreamEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
+        if (1 == viSurveyTaskBean.getEnable()) {
+            return true;
+        }
         ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(viSurveyTask.getEndTime());
