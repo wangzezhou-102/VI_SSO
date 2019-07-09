@@ -34,6 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -80,7 +83,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "10 12 0/1 * * ?")//每小时的固定分开始同步
+    @Scheduled(cron = "0 21 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -107,9 +110,9 @@ public class BkrepoDataTask {
                 zdryVo.setTableName(str);
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.YEAR, 2019);
-                calendar.set(Calendar.DAY_OF_MONTH, 2);
-                calendar.set(Calendar.HOUR_OF_DAY, 19);
-                calendar.set(Calendar.MINUTE, 07);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
 
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -136,18 +139,18 @@ public class BkrepoDataTask {
      */
     private void asycBkrepo(String bkname, ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean) {
 
-        ViRepoBean viRepoBean = null;
-        if (null == syncBean) {
-            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+        ViRepoBean viRepoBean = new ViRepoBean();
+        viRepoBean.setTableName("vi_" + zdryVo.getTableName());
+        ViRepoBean bean = viRepoMapper.selectViRepoByTableName(viRepoBean);
+//        if (null == syncBean) {
+//            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+//        } else {
+        if (bean != null) {
+            viRepoBean = bean;
         } else {
-            List<ViRepoBean> list = viRepoMapper.getAllViRepo(null).stream().filter((ViRepoBean viRepo) -> viRepo.getTableName().equals(
-                    "vi_" + zdryVo.getTableName())).collect(Collectors.toList());
-            if (list.size() > 0) {
-                viRepoBean = list.get(0);
-            } else {
-                viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
-            }
+            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
         }
+//        }
         boolean result = true;
         Integer syncNum = 1;
         while (result) {
@@ -251,7 +254,7 @@ public class BkrepoDataTask {
         bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
         String requestStr = JSON.toJSONString(bkMemberAddRequestBaseRequest);
-        log.info(requestStr);
+        //log.info(requestStr);
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
         //BaseResponse baseResponse = new BaseResponse();
 
@@ -273,7 +276,7 @@ public class BkrepoDataTask {
         bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
 
         String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
-        log.info(requestStr);
+        //log.info(requestStr);
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
         //BaseResponse baseResponse = new BaseResponse();
 
@@ -334,6 +337,12 @@ public class BkrepoDataTask {
                     if (viBasicMemberByObjectId != null) {
                         memberSendToTQDelete(viBasicMemberByObjectId);
                         viBasicMemberMapper.delViBasicMember(viBasicMemberByObjectId.getId());
+                        Path path1 = Paths.get(UploadUtil.basePath, viBasicMemberByObjectId.getImageUrl());
+                        try {
+                            Files.deleteIfExists(path1);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 } else {
                     if (viBasicMemberByObjectId == null) {

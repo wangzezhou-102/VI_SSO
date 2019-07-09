@@ -21,8 +21,8 @@ import java.util.Date;
 public class UploadUtil {
 
     private static Logger log = LoggerFactory.getLogger(UploadUtil.class);
-    private static String basePath = System.getProperty("user.dir") + "/resources";
-    //private static String basePath = System.getProperty("user.dir") + "/src/main/resources";
+    public static String basePath = System.getProperty("user.dir") + "/resources";
+    //public static String basePath = System.getProperty("user.dir") + "/src/main/resources";
 
 
     /**

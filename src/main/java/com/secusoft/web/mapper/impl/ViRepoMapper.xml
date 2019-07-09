@@ -80,4 +80,24 @@
         </where>
         order by gmt_create desc,gmt_modified desc
     </select>
+
+    <select id="selectViRepoByTableName" parameterType="com.secusoft.web.model.ViRepoBean" resultType="com.secusoft.web.model.ViRepoBean">
+        select * from
+        <include refid="table"/>
+        <where>
+            <if test="tableName!=null">
+                table_name=#{tableName}
+            </if>
+        </where>
+        order by gmt_create desc,gmt_modified desc
+    </select>
+
+    <select id="getAllViRepoByViTaskRepoList" resultType="com.secusoft.web.model.ViRepoBean">
+        select * from
+        <include refid="table"/>
+        where id in
+        <foreach collection="list" item="param" index="index" open="(" close=")" separator=",">
+            #{param.repoId}
+        </foreach>
+    </select>
 </mapper>

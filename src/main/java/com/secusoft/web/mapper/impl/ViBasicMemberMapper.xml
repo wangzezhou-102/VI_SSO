@@ -86,7 +86,11 @@
                 and vbm.repo_id =#{repoId}
             </if>
             <if test="identityName!=null">
-                and vbm.identity_name like CONCAT(CONCAT('%', #{identityName}), '%')
+                or vbm.identity_name like CONCAT(CONCAT('%', #{identityName}), '%')
+            </if>
+
+            <if test="identityId!=null">
+                or vbm.identity_id like CONCAT(CONCAT('%', #{identityId}), '%')
             </if>
         </where>
     </select>

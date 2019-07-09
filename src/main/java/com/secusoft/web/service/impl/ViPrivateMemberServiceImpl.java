@@ -27,6 +27,9 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -69,7 +72,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         }
         String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();//访问路径
         String base64=viPrivateMemberBean.getImageUrl();
-        viPrivateMemberBean.setObjectId("vi_private_" + viPrivateMemberBean.getIdentityId());
+        viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
         try {
             viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl().split(",")[1], "Bkmember"));
         } catch (IOException e) {
@@ -151,10 +154,9 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             bkMemberDeleteRequest.setObjectIds(viPrivateMemberBean.getObjectId());
             bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
             bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
-            //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(),
-            // bkMemberDeleteRequestBaseRequest);
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+            BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(),bkMemberDeleteRequestBaseRequest);
+//            BaseResponse baseResponse = new BaseResponse();
+//            baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
             String code = baseResponse.getCode();
             if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
                 //添加布控目标
@@ -210,16 +212,21 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
             String requestStr = JSON.toJSONString(bkMemberDeleteRequestBaseRequest);
             System.out.println("bkMemberDeleteRequestBaseRequest：" + requestStr);
-            //BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete() ,
-            // bkMemberDeleteRequestBaseRequest);
-            BaseResponse baseResponse = new BaseResponse();
-            baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
+            BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete() , bkMemberDeleteRequestBaseRequest);
+//            BaseResponse baseResponse = new BaseResponse();
+//            baseResponse.setCode(String.valueOf(BizExceptionEnum.OK.getCode()));
             Object dataJson = baseResponse.getData();
             String errorCode = baseResponse.getCode();
             String errorMsg = baseResponse.getMessage();
             if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
                 log.info("布控目标删除成功");
                 viPrivateMemberMapper.delViPrivateMember(viPrivateMemberBean.getId());
+                Path path1 = Paths.get(UploadUtil.basePath, viPrivateMemberBean.getImageUrl());
+                try {
+                    Files.deleteIfExists(path1);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             } else {
                 log.info("布控目标删除失败");
                 return ResultVo.failure(BizExceptionEnum.BKMEMBER_DELETE_FAIL.getCode(), BizExceptionEnum.BKMEMBER_DELETE_FAIL.getMessage());
@@ -239,6 +246,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
             viBasicMemberBean.setRepoId(viPrivateMemberVo.getRepoId());
             viBasicMemberBean.setIdentityName(viPrivateMemberVo.getSearchValue());
+            viBasicMemberBean.setIdentityId(viPrivateMemberVo.getSearchValue());
             list = viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean);
         }
         return ResultVo.success(PageReturnUtils.getPageMap(list, viPrivateMemberVo.getCurrent(), viPrivateMemberVo.getSize()));

@@ -91,7 +91,8 @@
                 and repo_id=#{repoId}
             </if>
             <if test="searchValue!=null">
-                and identity_name like CONCAT(CONCAT('%', #{searchValue}), '%')
+                or identity_name like CONCAT(CONCAT('%', #{searchValue}), '%')
+                or identity_id like CONCAT(CONCAT('%', #{searchValue}), '%')
             </if>
         </where>
     </select>
