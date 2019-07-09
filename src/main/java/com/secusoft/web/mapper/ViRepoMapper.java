@@ -2,6 +2,7 @@ package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViRepoBean;
+import com.secusoft.web.model.ViTaskRepoBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -39,4 +40,12 @@ public interface ViRepoMapper extends BaseMapper<ViRepoBean> {
      * @return
      */
     ViRepoBean selectViRepoById(ViRepoBean viRepoBean);
+
+    /**
+     * 根据表名称获取布控库
+     * @return
+     */
+    ViRepoBean selectViRepoByTableName(ViRepoBean viRepoBean);
+
+    List<ViRepoBean> getAllViRepoByViTaskRepoList(List<ViTaskRepoBean> list);
 }

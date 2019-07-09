@@ -121,4 +121,12 @@
    			</foreach>
    		</if>
    	</update>
+
+    <select id="getDeviceListByViTaskDeviceList" resultType="com.secusoft.web.model.DeviceBean">
+        select * from vi_device
+        where device_id in
+        <foreach collection="list" item="param" index="index" open="(" close=")" separator=",">
+            #{param.deviceId}
+        </foreach>
+    </select>
 </mapper>

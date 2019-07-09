@@ -139,14 +139,14 @@ public class BkrepoDataTask {
      */
     private void asycBkrepo(String bkname, ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean) {
 
-        ViRepoBean viRepoBean = null;
+        ViRepoBean viRepoBean = new ViRepoBean();
         if (null == syncBean) {
             viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
         } else {
-            List<ViRepoBean> list = viRepoMapper.getAllViRepo(null).stream().filter((ViRepoBean viRepo) -> viRepo.getTableName().equals(
-                    "vi_" + zdryVo.getTableName())).collect(Collectors.toList());
-            if (list.size() > 0) {
-                viRepoBean = list.get(0);
+            viRepoBean.setTableName("vi_" + zdryVo.getTableName());
+            ViRepoBean bean = viRepoMapper.selectViRepoByTableName(viRepoBean);
+            if (bean != null) {
+                viRepoBean = bean;
             } else {
                 viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
             }

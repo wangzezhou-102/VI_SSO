@@ -1,15 +1,13 @@
 package com.secusoft.web.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.mapper.SysOrgRoadMapper;
-import com.secusoft.web.mapper.ViSurveyTaskMapper;
-import com.secusoft.web.mapper.ViTaskDeviceMapper;
-import com.secusoft.web.mapper.ViTaskRepoMapper;
+import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
 import com.secusoft.web.serviceapi.*;
@@ -45,6 +43,12 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
     @Resource
     SysOrgRoadMapper sysOrgRoadMapper;
+
+    @Resource
+    ViRepoMapper viRepoMapper;
+
+    @Resource
+    DeviceMapper deviceMapper;
 
     @Resource
     BkrepoConfig bkrepoConfig;
@@ -296,6 +300,14 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         if (viSurveyTaskRequest.getId() == null && !StringUtils.hasLength(viSurveyTaskRequest.getTaskId())) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
+        ViSurveyTaskBean bean = new ViSurveyTaskBean();
+        bean.setTaskId(viSurveyTaskRequest.getTaskId());
+        bean.setId(viSurveyTaskRequest.getId());
+        ViSurveyTaskBean viSurveyTaskById = viSurveyTaskMapper.getViSurveyTaskById(bean);
+        if (viSurveyTaskById.getEnable() == 1 && viSurveyTaskById.getSurveyStatus() == 1) {
+            log.info("布控任务正在运行中，删除失败");
+            return ResultVo.failure(BizExceptionEnum.TASK_DELETED_FAIL.getCode(), BizExceptionEnum.TASK_DELETED_FAIL.getMessage());
+        }
         log.info("开始删除布控任务");
         //组装数据下发天擎
         BaseRequest<BKTaskDeleteRequest> bkTaskDeleteRequestBaseRequest = new BaseRequest<>();
@@ -326,9 +338,39 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 
         ViSurveyTaskRequest viSurveyTaskRequest = new ViSurveyTaskRequest();
         viSurveyTaskRequest.setSurveyType(viSurveyTaskVo.getSurveyType());
-        List<ViSurveyTaskBean> list = viSurveyTaskMapper.getAllViSurveyTaskByPage(viSurveyTaskRequest);
+        List<ViSurveyTaskResponse> list = viSurveyTaskMapper.getAllViSurveyTaskByPage(viSurveyTaskRequest);
+        Map<String, Object> pageMap = PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize());
+        List<ViSurveyTaskResponse> viPsurveyAlarmVoLists =(ArrayList<ViSurveyTaskResponse>) pageMap.get("records");
+        for (ViSurveyTaskResponse bean:viPsurveyAlarmVoLists){
+            //获取布控库相关信息
+            List<ViTaskRepoBean> viTaskRepoBeans = viTaskRepoMapper.selectViTaskRepo(bean.getTaskId());
+            List<ViRepoBean> allViRepoByViTaskRepoList = viRepoMapper.getAllViRepoByViTaskRepoList(viTaskRepoBeans);
 
-        return ResultVo.success(PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize()));
+            List<ViRepoVo> viRepoVos=new ArrayList<>();
+            for (ViRepoBean viRepoBean:allViRepoByViTaskRepoList) {
+                ViRepoVo viRepoVo=new ViRepoVo();
+                //复制对象
+                BeanCopier beanCopier = BeanCopier.create(ViRepoBean.class, ViRepoVo.class, false);
+                beanCopier.copy(viRepoBean, viRepoVo, null);
+                viRepoVos.add(viRepoVo);
+            }
+            bean.setViRepoVos(viRepoVos);
+            //获取设备相关信息
+            ViTaskDeviceBean viTaskDeviceBean=new ViTaskDeviceBean();
+            viTaskDeviceBean.setTaskId(bean.getTaskId());
+            List<ViTaskDeviceBean> viTaskDeviceByObject = viTaskDeviceMapper.getViTaskDeviceByObject(viTaskDeviceBean);
+            List<DeviceBean> deviceListByViTaskDeviceList = deviceMapper.getDeviceListByViTaskDeviceList(viTaskDeviceByObject);
+            List<DeviceVo> deviceVos=new ArrayList<>();
+            for (DeviceBean deviceBean:deviceListByViTaskDeviceList) {
+                DeviceVo deviceVo=new DeviceVo();
+                deviceVo.setDeviceId(deviceBean.getDeviceId());
+                deviceVo.setDeviceName(deviceBean.getDeviceName());
+                deviceVos.add(deviceVo);
+            }
+            bean.setDeviceVos(deviceVos);
+        }
+        pageMap.put("records",viPsurveyAlarmVoLists);
+        return ResultVo.success(pageMap);
     }
 
     /**
@@ -459,7 +501,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
      *
      * @param oldList
      * @param newList
-     * @param type     true-返回原布控库差集合 false-返回布控库列表中不存在的集合
+     * @param type    true-返回原布控库差集合 false-返回布控库列表中不存在的集合
      * @return
      */
     private List<ViTaskRepoBean> removeToRepo(List<ViTaskRepoBean> oldList, List<ViTaskRepoBean> newList, boolean type) {
