@@ -70,6 +70,10 @@ public class ViRepoServiceImpl implements ViRepoService {
         if (!StringUtils.hasLength(viRepoBean.getBkname())) {
             return ResultVo.failure(BizExceptionEnum.REPO_NAME_NULL.getCode(), BizExceptionEnum.REPO_NAME_NULL.getMessage());
         }
+        List<ViRepoBean> list = viRepoMapper.getAllViRepo(viRepoBean);
+        if (list.size() > 0) {
+            return ResultVo.failure(BizExceptionEnum.RRPO_NAME_REPEATED.getCode(), BizExceptionEnum.RRPO_NAME_REPEATED.getMessage());
+        }
         ViRepoBean bean = viRepoMapper.selectViRepoById(viRepoBean);
         if (bean == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());

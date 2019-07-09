@@ -72,7 +72,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         }
         String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();//访问路径
         String base64=viPrivateMemberBean.getImageUrl();
-        viPrivateMemberBean.setObjectId("vi_private_" + viPrivateMemberBean.getIdentityId());
+        viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
         try {
             viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl().split(",")[1], "Bkmember"));
         } catch (IOException e) {
@@ -246,6 +246,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
             viBasicMemberBean.setRepoId(viPrivateMemberVo.getRepoId());
             viBasicMemberBean.setIdentityName(viPrivateMemberVo.getSearchValue());
+            viBasicMemberBean.setIdentityId(viPrivateMemberVo.getSearchValue());
             list = viBasicMemberMapper.getAllViBasicMember(viBasicMemberBean);
         }
         return ResultVo.success(PageReturnUtils.getPageMap(list, viPrivateMemberVo.getCurrent(), viPrivateMemberVo.getSize()));

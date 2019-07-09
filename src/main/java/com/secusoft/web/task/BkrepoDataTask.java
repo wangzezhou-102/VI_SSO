@@ -83,7 +83,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "0 30 0/1 * * ?")//每小时的固定分开始同步
+    @Scheduled(cron = "0 21 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -140,17 +140,17 @@ public class BkrepoDataTask {
     private void asycBkrepo(String bkname, ZdryVo zdryVo, SyncZdryLogBean syncBean, SyncZdryLogBean syncZdryLogBean) {
 
         ViRepoBean viRepoBean = new ViRepoBean();
-        if (null == syncBean) {
-            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+        viRepoBean.setTableName("vi_" + zdryVo.getTableName());
+        ViRepoBean bean = viRepoMapper.selectViRepoByTableName(viRepoBean);
+//        if (null == syncBean) {
+//            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
+//        } else {
+        if (bean != null) {
+            viRepoBean = bean;
         } else {
-            viRepoBean.setTableName("vi_" + zdryVo.getTableName());
-            ViRepoBean bean = viRepoMapper.selectViRepoByTableName(viRepoBean);
-            if (bean != null) {
-                viRepoBean = bean;
-            } else {
-                viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
-            }
+            viRepoBean = addViRepo(bkname, bkname, "vi_" + zdryVo.getTableName());
         }
+//        }
         boolean result = true;
         Integer syncNum = 1;
         while (result) {

@@ -211,6 +211,13 @@
         from vi_survey_task vst
         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
-        where vst.id =#{id}
+        <where>
+            <if test="id!=null">
+                and vst.id =#{id}
+            </if>
+            <if test="taskId!=null">
+                and vst.task_id =#{taskId}
+            </if>
+        </where>
     </select>
 </mapper>
