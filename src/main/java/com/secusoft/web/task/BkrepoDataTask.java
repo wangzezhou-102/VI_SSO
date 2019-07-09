@@ -34,6 +34,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -334,6 +337,12 @@ public class BkrepoDataTask {
                     if (viBasicMemberByObjectId != null) {
                         memberSendToTQDelete(viBasicMemberByObjectId);
                         viBasicMemberMapper.delViBasicMember(viBasicMemberByObjectId.getId());
+                        Path path1 = Paths.get(UploadUtil.basePath, viBasicMemberByObjectId.getImageUrl());
+                        try {
+                            Files.deleteIfExists(path1);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 } else {
                     if (viBasicMemberByObjectId == null) {
