@@ -31,13 +31,8 @@ public class PatrolVideoStreamStartTask extends TimerTask {
 
     private PatrolTaskBean patrolTaskBean;
 
-    private PatrolTaskUtil patrolTaskUtil;
-
     public PatrolVideoStreamStartTask(PatrolTaskBean patrolTaskBean){ this.patrolTaskBean = patrolTaskBean;}
-    public PatrolVideoStreamStartTask(PatrolTaskBean patrolTaskBean,PatrolTaskUtil patrolTaskUtil) {
-        this.patrolTaskBean = patrolTaskBean;
-        this.patrolTaskUtil = patrolTaskUtil;
-    }
+
     private static ViTaskDeviceMapper viTaskDeviceMapper = SpringContextHolder.getBean(ViTaskDeviceMapper.class);
 
     private static PatrolTaskMapper patrolTaskMapper = SpringContextHolder.getBean(PatrolTaskMapper.class);
@@ -48,6 +43,7 @@ public class PatrolVideoStreamStartTask extends TimerTask {
         if (patrolTaskBean != null) {
             if (1 != patrolTaskBean.getEnable()) {
                 log.info("无需立即执行，开始判断是否到执行时间");
+                PatrolTaskUtil patrolTaskUtil = new PatrolTaskUtil();
                 if (!patrolTaskUtil.validTaskStreamBeginTime(patrolTaskMapper, patrolTaskBean)) {
                     log.info("时间不一致，无法启流，布控任务编号：" + patrolTaskBean.getTaskId());
                     return;

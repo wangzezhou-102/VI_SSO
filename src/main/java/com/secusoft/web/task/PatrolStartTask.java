@@ -9,6 +9,7 @@ import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKTaskDataTaskIdRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.utils.PatrolTaskUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,13 +36,14 @@ public class PatrolStartTask extends TimerTask {
     public void run() {
         log.info("开启巡逻任务，任务编号：" + patrolTaskBean.getTaskId());
         if (patrolTaskBean != null ) {
-            /*if (1 != patrolTaskBean.getEnable()) {
+            if (1 != patrolTaskBean.getEnable()) {
                 log.info("无需立即执行，开始判断是否到执行时间");
-                if (!validTaskBeginTime(patrolTaskMapper, patrolTaskBean)) {
+                PatrolTaskUtil patrolTaskUtil = new PatrolTaskUtil();
+                if (!patrolTaskUtil.validTaskBeginTime(patrolTaskMapper, patrolTaskBean)) {
                     log.info("时间不一致，无法启动任务，布控任务编号：" + patrolTaskBean.getTaskId());
                     return;
                 }
-            }*/
+            }
 
             PatrolTaskBean patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(this.patrolTaskBean);
             if (patrolTaskBean != null && 2 == patrolTaskBean.getEnable()) {
