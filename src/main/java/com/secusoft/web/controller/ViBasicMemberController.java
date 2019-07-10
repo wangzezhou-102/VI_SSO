@@ -34,7 +34,7 @@ public class ViBasicMemberController {
     }
 
     @RequestMapping("/listvibasicmember")
-    public ResponseEntity<ResultVo> listViBasicMember(ViBasicMemberVo viBasicMemberVo) {
+    public ResponseEntity<ResultVo> listViBasicMember(@RequestBody ViBasicMemberVo viBasicMemberVo) {
         return new ResponseEntity<ResultVo>(viBasicMemberService.getPagedViBasicMember(viBasicMemberVo), HttpStatus.OK);
     }
 }

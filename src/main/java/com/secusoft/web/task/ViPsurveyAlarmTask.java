@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -57,12 +58,12 @@ public class ViPsurveyAlarmTask {
 
     //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
-    //@Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
 
-        if(responseStr==null){
+        if (responseStr == null) {
             log.info("实时告警数据接口请求失败");
             return;
         }
@@ -119,13 +120,14 @@ public class ViPsurveyAlarmTask {
                     viPsurveyAlarmDetailResponse.setPersonImage(viPsurveyAlarmBean.getPersonImage());
 
                     ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
+                    ViBasicMemberBean basicMemberBean = null;
                     viPrivateMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
                     //判断在哪个库
                     ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
                     if (null == viPrivateMemberByBean) {
                         ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
                         viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
-                        ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+                        basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
                         if (null != basicMemberBean) {
                             viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
                         } else {
@@ -139,8 +141,11 @@ public class ViPsurveyAlarmTask {
                     viPsurveyAlarmDetailResponse.setAlarmStatus(beans.getAlarmStatus());
                     SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
                     viPsurveyAlarmDetailResponse.setTime(sdfs.format(date));
-                    if(null!=deviceBean){
+                    if (null != deviceBean) {
                         viPsurveyAlarmDetailResponse.setDeviceRoadName(deviceBean.getDeviceName());
+                    }
+                    if (basicMemberBean != null && basicMemberBean.getStatus() == 0) {
+                        continue;
                     }
                     detailResponses.add(viPsurveyAlarmDetailResponse);
                 }

@@ -100,4 +100,10 @@
             #{param.repoId}
         </foreach>
     </select>
+
+    <select id="getViRepoById" parameterType="com.secusoft.web.model.ViRepoBean" resultType="com.secusoft.web.model.ViRepoBean">
+        select * from
+        <include refid="table"/>
+        where id =#{id}
+    </select>
 </mapper>

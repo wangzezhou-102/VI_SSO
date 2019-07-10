@@ -113,4 +113,17 @@
             </if>
         </where>
     </select>
+
+    <select id="getAllViBasicMemberByPaged" parameterType="com.secusoft.web.model.ViBasicMemberVo" resultType="com.secusoft.web.model.ViMemberVo">
+        select * from vi_basic_member
+        <where>
+            <if test="repoId!=null">
+                and repo_id=#{repoId}
+            </if>
+            <if test="searchValue!=null">
+                and (identity_name like CONCAT(CONCAT('%', #{searchValue}), '%')
+                or identity_id like CONCAT(CONCAT('%', #{searchValue}), '%'))
+            </if>
+        </where>
+    </select>
 </mapper>
