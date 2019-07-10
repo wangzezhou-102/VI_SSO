@@ -43,7 +43,7 @@ public class TrackController {
         ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
         PictureBean pictureBean = new PictureBean();
         for (SearchResponseData searchResponseData:searchResponseDataList) {
-            pictureBean.setScore(searchResponseData.getScore().toString());
+            pictureBean.setScore(searchResponseData.getScore()==null?null:searchResponseData.getScore().toString());
             pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
             pictureBean.setPictureId(searchResponseData.getId());
             pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
