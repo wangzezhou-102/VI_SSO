@@ -1,5 +1,7 @@
 package com.secusoft.web.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.DeviceMapper;
@@ -15,8 +17,10 @@ import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chjiang
@@ -39,6 +43,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
     /**
      * 更新告警详情关注与否
+     *
      * @param viPsurveyAlarmDetailBean
      * @return
      */
@@ -65,7 +70,12 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
         PageHelper.startPage(viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
         List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
-        for(ViPsurveyAlarmDetailResponse bean:histortyAlarmDetail){
+        Map<String, Object> pageMap = PageReturnUtils.getPageMap(histortyAlarmDetail, viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
+
+
+        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(pageMap.get("records").toString(), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
+
+        for (ViPsurveyAlarmDetailResponse bean : viPsurveyAlarmVos) {
             SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -92,11 +102,11 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
 
             //查找设备信息
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getDeviceRoadName());
-            if(null!=deviceBean){
+            if (null != deviceBean) {
                 bean.setDeviceRoadName(deviceBean.getDeviceName());
             }
         }
 
-        return ResultVo.success(PageReturnUtils.getPageMap(histortyAlarmDetail, viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize()));
+        return ResultVo.success();
     }
 }

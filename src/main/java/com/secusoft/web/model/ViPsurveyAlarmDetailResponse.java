@@ -78,6 +78,8 @@ public class ViPsurveyAlarmDetailResponse {
      */
     private Integer aiStatus;
 
+    private ViPsurveyAlarmBean viPsurveyAlarmBean;
+
     public Integer getAlarmDetailId() {
         return alarmDetailId;
     }
@@ -188,5 +190,13 @@ public class ViPsurveyAlarmDetailResponse {
 
     public void setAiStatus(Integer aiStatus) {
         this.aiStatus = aiStatus;
+    }
+
+    public ViPsurveyAlarmBean getViPsurveyAlarmBean() {
+        return viPsurveyAlarmBean;
+    }
+
+    public void setViPsurveyAlarmBean(ViPsurveyAlarmBean viPsurveyAlarmBean) {
+        this.viPsurveyAlarmBean = viPsurveyAlarmBean;
     }
 }
