@@ -1,9 +1,9 @@
 package com.secusoft.web.model;
 
 import com.secusoft.web.core.util.StringUtils;
-import com.secusoft.web.tusouapi.model.SearchResponse;
 import com.secusoft.web.tusouapi.model.SearchResponseData;
-import jdk.internal.dynalink.beans.StaticClass;
+import com.secusoft.web.tusouapi.model.SearchSource;
+
 
 import java.io.Serializable;
 
@@ -190,14 +190,34 @@ public class PictureBean implements Serializable {
     }
     public static SearchResponseData toSearchResponseDate(PictureBean pictureBean){
         SearchResponseData searchResponseData = new SearchResponseData();
+        SearchSource searchSource = new SearchSource();
+        searchResponseData.setSource(searchSource);
         if (pictureBean.getPictureId()!=null){
             searchResponseData.setId(pictureBean.getPictureId());
-        }else if(pictureBean.getScore()!=null){
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getId())){
+            searchResponseData.setSzId(pictureBean.getId());
+        }
+        if(pictureBean.getScore()!=null){
             searchResponseData.setScore(Double.parseDouble(pictureBean.getScore()));
-        }else if(pictureBean.getOrigImageUrl()!=null){
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getOrigImageUrl())){
             searchResponseData.getSource().setOrigImage(pictureBean.getOrigImageUrl());
-        }else if(pictureBean.getCropImageUrl()!=null){
-            //TODO
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getCropImageUrl())){
+            searchResponseData.getSource().setCropImage(pictureBean.getCropImageUrl());
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getLocalOriImageUrl())){
+            searchResponseData.getSource().setOriImageSigned(pictureBean.getLocalOriImageUrl());
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getLocalCropImageUrl())){
+            searchResponseData.getSource().setCropImageSigned(pictureBean.getLocalCropImageUrl());
+        }
+        if(StringUtils.isNotEmpty(pictureBean.getDeviceId())){
+            searchResponseData.getSource().setCameraId(pictureBean.getDeviceId());
+        }
+        if(pictureBean.getPictureTime()!=null){
+            searchResponseData.getSource().setTimestamp(pictureBean.getPictureTime());
         }
         return searchResponseData;
     }

@@ -82,11 +82,11 @@ public class SecurityTaskController {
     @PostMapping("insertsecuritytask")
     public ResponseEntity<ResultVo> insertSecurityTask(@RequestBody SecurityTaskRequest securityTaskRequest) {
         ResultVo resultVo = null;
-        //try {
+        try {
             resultVo = securityTaskService.insertSecurityTask(securityTaskRequest);
-//        } catch (Exception ex) {
-//            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(), BizExceptionEnum.TASK_ADD_FAIL.getMessage());
-//        }
+        } catch (Exception ex) {
+            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(), BizExceptionEnum.TASK_ADD_FAIL.getMessage());
+        }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

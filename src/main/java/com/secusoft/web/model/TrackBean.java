@@ -1,5 +1,7 @@
 package com.secusoft.web.model;
 
+import com.secusoft.web.tusouapi.model.SearchResponseData;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,15 +10,17 @@ public class TrackBean implements Serializable {
     private String trackName;
     private String folderId;
     private List<PictureBean> pictureBeans;
+    private List<SearchResponseData> pictureList;
 
     public TrackBean() {
     }
 
-    public TrackBean(String id, String trackName, String folderId, List<PictureBean> pictureBeans) {
+    public TrackBean(String id, String trackName, String folderId, List<PictureBean> pictureBeans, List<SearchResponseData> pictureList) {
         this.id = id;
         this.trackName = trackName;
         this.folderId = folderId;
         this.pictureBeans = pictureBeans;
+        this.pictureList = pictureList;
     }
 
     public String getId() {
@@ -49,5 +53,13 @@ public class TrackBean implements Serializable {
 
     public void setPictureBeans(List<PictureBean> pictureBeans) {
         this.pictureBeans = pictureBeans;
+    }
+
+    public List<SearchResponseData> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<SearchResponseData> pictureList) {
+        this.pictureList = pictureList;
     }
 }

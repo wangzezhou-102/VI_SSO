@@ -6,12 +6,11 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.secusoft.web.core.exception.BizExceptionEnum;
-import com.secusoft.web.mapper.AreaMapper;
-import com.secusoft.web.mapper.PictureMapper;
-import com.secusoft.web.mapper.TrackMapper;
+import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.FolderService;
-import com.secusoft.web.mapper.FolderMapper;
+import com.secusoft.web.tusouapi.model.SearchResponse;
+import com.secusoft.web.tusouapi.model.SearchResponseData;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +29,8 @@ public class FolderServiceImpl implements FolderService {
     TrackMapper trackMapper;
     @Resource
     PictureMapper pictureMapper;
+    @Resource
+    DeviceMapper deviceMapper;
 
     @Override
     public ResultVo addFolder(FolderBean folderBean) {
@@ -113,12 +114,54 @@ public class FolderServiceImpl implements FolderService {
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
         if (!pictureBeans.isEmpty()){
-            folderBean.setImageSearchList(pictureBeans);
+            ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
+            for (PictureBean pictureBean:pictureBeans) {
+                SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
+                searchResponseDatas.add(searchResponseData);
+            }
+            DeviceBean device = new DeviceBean();
+            List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
+            searchResponseDatas.forEach(searchResponseData -> {
+                deviceBeans.forEach(deviceBean ->{
+                    if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+                        searchResponseData.getSource().setDeviceBean(deviceBean);
+                    }
+                });
+                if(searchResponseData.getSource().getDeviceBean()==null){
+                    DeviceBean deviceBean = new DeviceBean();
+                    deviceBean.setDeviceName("未命名");
+                    searchResponseData.getSource().setDeviceBean(deviceBean);
+                }
+            });
+            folderBean.setImageSearchList(searchResponseDatas);
         }
         if (!areaBeans.isEmpty()){
             folderBean.setDeviceArea(areaBeans);
         }
        if (!trackBeans.isEmpty()){
+           for (TrackBean trackBean:trackBeans) {
+               ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
+               List<PictureBean> pictureBeans1 = trackBean.getPictureBeans();
+               for (PictureBean pictureBean:pictureBeans1) {
+                   SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
+                   searchResponseDatas.add(searchResponseData);
+               }
+               DeviceBean device = new DeviceBean();
+               List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
+               searchResponseDatas.forEach(searchResponseData -> {
+                   deviceBeans.forEach(deviceBean ->{
+                       if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+                           searchResponseData.getSource().setDeviceBean(deviceBean);
+                       }
+                   });
+                   if(searchResponseData.getSource().getDeviceBean()==null){
+                       DeviceBean deviceBean = new DeviceBean();
+                       deviceBean.setDeviceName("未命名");
+                       searchResponseData.getSource().setDeviceBean(deviceBean);
+                   }
+               });
+               trackBean.setPictureList(searchResponseDatas);
+           }
            folderBean.setTrackList(trackBeans);
        }
         String responStr = JSON.toJSONString(ResultVo.success(folderBean), SerializerFeature.DisableCircularReferenceDetect);

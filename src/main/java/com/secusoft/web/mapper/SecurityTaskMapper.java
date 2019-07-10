@@ -29,7 +29,12 @@ public interface SecurityTaskMapper {
     /**
      * 获取所有布控任务
      */
-    List<SecurityTaskRequest> selectAllSecurityTask();
+    List<SecurityTaskBean> selectAllSecurityTask();
+
+    /**
+     * 获取一条布控任务详情
+     */
+    SecurityTaskBean selectSecurityTaskByTaskId(SecurityTaskRequest securityTaskRequest);
 
     /**
      * 获取条件查询并未删除的任务

@@ -249,14 +249,14 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
 
     @Override
     public ResultVo getSecurityTask(SecurityTaskRequest securityTaskRequest) {
-
-        return null;
+        SecurityTaskBean securityTaskBean = securityTaskMapper.selectSecurityTaskByTaskId(securityTaskRequest);
+        return ResultVo.success(securityTaskBean);
     }
 
     @Override
     public ResultVo getSecurityTaskList(SecurityTaskRequest securityTaskRequest) {
 
-        List<SecurityTaskRequest> securityTaskRequests = securityTaskMapper.selectAllSecurityTask();
+        List<SecurityTaskBean> securityTaskRequests = securityTaskMapper.selectAllSecurityTask();
 
         return ResultVo.success(securityTaskRequests);
     }

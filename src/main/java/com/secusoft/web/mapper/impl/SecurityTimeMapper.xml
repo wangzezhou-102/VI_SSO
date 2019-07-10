@@ -15,8 +15,9 @@
 
     </resultMap>
 
-    <select id="selectTimeByTaskId" resultType="securityTimeBean">
+    <select id="selectTimeByTaskId" resultType="com.secusoft.web.model.SecurityTimeBean">
         SELECT id,task_id,begin_time,end_time,time_status
          FROM `vi`.`vi_security_time`
+         where task_id = #{taskId}
     </select>
 </mapper>
