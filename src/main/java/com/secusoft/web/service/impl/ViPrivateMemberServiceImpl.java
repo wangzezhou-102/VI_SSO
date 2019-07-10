@@ -61,13 +61,17 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         if (!StringUtils.hasLength(viPrivateMemberBean.getIdentityName())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getMessage());
         }
-        if (!StringUtils.hasLength(viPrivateMemberBean.getImageUrl())) {
+        if (!StringUtils.hasLength(viPrivateMemberBean.getImageUrl())||viPrivateMemberBean.getImageUrl()==null) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getMessage());
         }
         if (!StringUtils.hasLength(viPrivateMemberBean.getRepoId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_REPOID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_REPOID_NULL.getMessage());
         }
-        String returnUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();//访问路径
+
+        ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+        if (viPrivateMemberByBean != null) {
+            return ResultVo.failure(BizExceptionEnum.BKREPO_NAME_REPEATED.getCode(), BizExceptionEnum.BKREPO_NAME_REPEATED.getMessage());
+        }
         String base64 = viPrivateMemberBean.getImageUrl();
         viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
         try {
@@ -126,8 +130,15 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         if (null == viPrivateMemberBean.getId() && null == viPrivateMemberBean.getObjectId() || viPrivateMemberBean.getId() == 0) {
             return ResultVo.failure(BizExceptionEnum.BKMEMBER_ID_NULL.getCode(), BizExceptionEnum.BKMEMBER_ID_NULL.getMessage());
         }
-        ViPrivateMemberBean bean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+        ViPrivateMemberBean viPrivateMemberBean1 = new ViPrivateMemberBean();
+        viPrivateMemberBean1.setIdentityName(viPrivateMemberBean.getIdentityName());
 
+        ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
+        if (bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityName().equals(viPrivateMemberBean.getIdentityName())) {
+            return ResultVo.failure(BizExceptionEnum.BKREPO_NAME_REPEATED.getCode(), BizExceptionEnum.BKREPO_NAME_REPEATED.getMessage());
+        }
+
+        ViPrivateMemberBean bean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
         if (null == bean) {
             return ResultVo.failure(BizExceptionEnum.BKMEMBER_EXISTED.getCode(), BizExceptionEnum.BKMEMBER_EXISTED.getMessage());
         }
@@ -140,7 +151,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         if (!oldBase64.equals(viPrivateMemberBean.getImageUrl().split(",")[1])) {
 
             try {
-                viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl(), "Bkmember"));
+                bean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl(), "Bkmember"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -148,7 +159,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             BaseRequest<BKMemberDeleteRequest> bkMemberDeleteRequestBaseRequest = new BaseRequest<>();
             bkMemberDeleteRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
             BKMemberDeleteRequest bkMemberDeleteRequest = new BKMemberDeleteRequest();
-            bkMemberDeleteRequest.setObjectIds(viPrivateMemberBean.getObjectId());
+            bkMemberDeleteRequest.setObjectIds(bean.getObjectId());
             bkMemberDeleteRequest.setBkid(bkrepoConfig.getBkid());
             bkMemberDeleteRequestBaseRequest.setData(bkMemberDeleteRequest);
             BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberDelete(), bkMemberDeleteRequestBaseRequest);
@@ -162,7 +173,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
                 BKMemberAddRequest bkMemberAddRequest = new BKMemberAddRequest();
                 bkMemberAddRequest.setObjectId(bean.getObjectId());
                 bkMemberAddRequest.setBkid(bkrepoConfig.getBkid());
-                bkMemberAddRequest.setContent(viPrivateMemberBean.getImageUrl());
+                bkMemberAddRequest.setContent(bean.getImageUrl());
                 bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
                 baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBkmemberAdd(), bkMemberAddRequestBaseRequest);
@@ -174,15 +185,10 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             } else {
                 throw new RuntimeException("删除布控目标失败");
             }
-        } else {
-            viPrivateMemberBean.setImageUrl(bean.getImageUrl());
         }
-        viPrivateMemberBean.setObjectId(bean.getObjectId());
-        viPrivateMemberBean.setId(bean.getId());
-        viPrivateMemberBean.setModifyTime(new Date());
-        viPrivateMemberBean.setCreateTime(bean.getCreateTime());
-        viPrivateMemberBean.setRepoId(bean.getRepoId());
-        viPrivateMemberMapper.updateViPrivateMember(viPrivateMemberBean);
+        bean.setModifyTime(new Date());
+        bean.setCreateTime(bean.getCreateTime());
+        viPrivateMemberMapper.updateViPrivateMember(bean);
         log.info("结束布控目标更新");
         return ResultVo.success();
     }

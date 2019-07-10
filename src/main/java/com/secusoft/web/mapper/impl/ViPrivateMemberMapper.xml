@@ -102,11 +102,18 @@
         from vi_private_member vpm
         left join vi_repo vr on vpm.repo_id=vr.id
         <where>
+            valid_state=1
+            <if test="repoId!=null">
+                and repo_id=#{repoId}
+            </if>
             <if test="objectId!=null">
                and object_id=#{objectId}
             </if>
             <if test="id!=null">
                 and vpm.id=#{id}
+            </if>
+            <if test="identityName!=null">
+                and vpm.identity_name=#{identityName}
             </if>
         </where>
     </select>

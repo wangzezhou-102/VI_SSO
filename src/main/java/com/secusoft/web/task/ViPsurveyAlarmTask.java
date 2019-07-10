@@ -3,12 +3,14 @@ package com.secusoft.web.task;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
+import com.secusoft.web.utils.ImageUtils;
 import com.secusoft.web.websocket.WebSock;
 import com.secusoft.web.websocket.WebSocketMessageVO;
 import org.slf4j.Logger;
@@ -73,8 +75,9 @@ public class ViPsurveyAlarmTask {
         String data = jsonObject.getString("data");
         List<ViPsurveyAlarmDetailResponse> detailResponses = new ArrayList<>();
         if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && (!data.isEmpty() || !"null".equals(data))) {
-            List<ViPsurveyAlarmVo> viPsurveyAlarmVoLists = JSONArray.parseArray(data, ViPsurveyAlarmVo.class);
-            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVoLists) {
+            System.out.println(data);
+            List<ViPsurveyAlarmVo> viPsurveyAlarmVos = JSON.parseObject(data, new TypeReference<ArrayList<ViPsurveyAlarmVo>>(){});
+            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVos) {
 
                 ViPsurveyAlarmBean viPsurveyAlarmBean = new ViPsurveyAlarmBean();
                 viPsurveyAlarmBean.setTaskId(alaramVo.getTaskId());
@@ -85,9 +88,9 @@ public class ViPsurveyAlarmTask {
                     BeanCopier beanCopier = BeanCopier.create(ViPsurveyAlarmBean.class, ViPsurveyAlarmBean.class, false);
                     beanCopier.copy(alaramVo.getSrc(), viPsurveyAlarmBean, null);
                     //base64转存本地图片
-                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getCropImage(), "Alarm"));
-                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getOrigImage(), "Alarm"));
-                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getPersonImage(), "Alarm"));
+                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getCropImage().getBytes()), "Alarm"));
+                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getOrigImage().getBytes()), "Alarm"));
+                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getPersonImage().getBytes()), "Alarm"));
                     viPsurveyAlarmMapper.insertViPsurveyAlarm(viPsurveyAlarmBean);
                 } else {
                     viPsurveyAlarmBean = bean;
@@ -110,7 +113,7 @@ public class ViPsurveyAlarmTask {
                     beans.setTaskId(alaramVo.getTaskId());
                     beans.setAlarmType("312312");
                     beans.setViPsurveyAlarmBean(viPsurveyAlarmBean);
-                    beans.setOssUrl(UploadUtil.downLoadFromBase64(beans.getOssUrl(), "Alarm"));
+                    beans.setOssUrl(UploadUtil.downLoadFromBase64(ImageUtils.encode(beans.getOssUrl().getBytes()), "Alarm"));
 
                     ViPsurveyAlarmDetailResponse viPsurveyAlarmDetailResponse = new ViPsurveyAlarmDetailResponse();
                     viPsurveyAlarmDetailResponse.setName(beans.getName());

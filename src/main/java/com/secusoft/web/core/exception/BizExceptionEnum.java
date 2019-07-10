@@ -87,6 +87,7 @@ public enum BizExceptionEnum {
 	PRIVATEREPO_REPOID_NULL(904,"关联的布控库不能为空"),
 	PRIVATEREPO_DELETED_FAILED(905,"布控库还存在布控目标，删除失败"),
 	BKREPO_ID_NULL(906,"布控库 id 为空"),
+	BKREPO_NAME_REPEATED(907,"不能输入重复的布控目标名称"),
 
 	/**
 	 * 布控目标相关

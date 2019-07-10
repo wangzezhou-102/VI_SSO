@@ -45,8 +45,6 @@ public class ViPsurveyAlarmBean {
 
     private Date gmtModified;
 
-    private List<ViPsurveyAlarmBean> viPsurveyAlarmBeans;
-
     public Integer getId() {
         return id;
     }
@@ -197,13 +195,5 @@ public class ViPsurveyAlarmBean {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
-    }
-
-    public List<ViPsurveyAlarmBean> getViPsurveyAlarmBeans() {
-        return viPsurveyAlarmBeans;
-    }
-
-    public void setViPsurveyAlarmBeans(List<ViPsurveyAlarmBean> viPsurveyAlarmBeans) {
-        this.viPsurveyAlarmBeans = viPsurveyAlarmBeans;
     }
 }
