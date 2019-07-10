@@ -189,14 +189,6 @@ public class SecurityTaskBean implements Serializable {
         this.isfinish = isfinish;
     }
 
-    public List<ViTaskRepoBean> getViTaskRepoList() {
-        return repoids;
-    }
-
-    public void setViTaskRepoList(List<ViTaskRepoBean> viTaskRepoList) {
-        this.repoids = viTaskRepoList;
-    }
-
     public Integer getValidState() {
         return validState;
     }

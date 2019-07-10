@@ -26,16 +26,21 @@ public class SearchResponseData {
     @JSONField(name="_ext")
     private String ext;
 
+    /**
+     * 保证返回阿里格式的同时拥有自己的id
+     */
+    private String szId;
     public SearchResponseData() {
     }
 
-    public SearchResponseData(String index, String type, SearchSource source, String id, Double score, String ext) {
+    public SearchResponseData(String index, String type, SearchSource source, String id, Double score, String ext, String szId) {
         this.index = index;
         this.type = type;
         this.source = source;
         this.id = id;
         this.score = score;
         this.ext = ext;
+        this.szId = szId;
     }
 
     public String getIndex() {
@@ -86,6 +91,14 @@ public class SearchResponseData {
         this.ext = ext;
     }
 
+    public String getSzId() {
+        return szId;
+    }
+
+    public void setSzId(String szId) {
+        this.szId = szId;
+    }
+
     @Override
     public String toString() {
         return "SearchResponseData{" +
@@ -95,6 +108,7 @@ public class SearchResponseData {
                 ", id='" + id + '\'' +
                 ", score=" + score +
                 ", ext='" + ext + '\'' +
+                ", szId='" + szId + '\'' +
                 '}';
     }
 }

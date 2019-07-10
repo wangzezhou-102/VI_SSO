@@ -52,9 +52,9 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     @Transactional
     public ResultVo insertPatrolTak(PatrolTaskRequest patrolTaskRequest) {
         //判断算力
-        if (!validUpdateCalute(patrolTaskRequest)) {
+       /* if (!validUpdateCalute(patrolTaskRequest)) {
             return ResultVo.failure(BizExceptionEnum.TASK_CALUATE_FAIL.getCode(), BizExceptionEnum.TASK_CALUATE_FAIL.getMessage());
-        }
+        }*/
         PatrolTaskBean patrolTaskBean = new PatrolTaskBean();
         patrolTaskBean.setValidState(0);
         //任务名称重复异常
@@ -141,14 +141,14 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
             viTaskRepoBean.setRepoId(viRepoBean.getId());
             viTaskRepoMapper.insertViTaskRepo(viTaskRepoBean);
         }
-        //下发布控任务创建
+       /* //下发布控任务创建
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), BktaskSubmit(patrolTaskBean));
         String errorCode = baseResponse.getCode();
         String errorMsg = baseResponse.getMessage();
         //判断布控任务添加是否成功
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
             throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "巡逻任务添加失败！");
-        }
+        }*/
         //定时任务开启
         TQTimeTask(patrolTaskBean);
 

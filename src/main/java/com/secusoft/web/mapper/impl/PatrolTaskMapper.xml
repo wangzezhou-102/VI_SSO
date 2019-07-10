@@ -54,7 +54,7 @@
             <if test="orgCode != null">org_code,</if>
             <if test="topic != null">topic,</if>
             <if test="validState != null">valid_state,</if>
-            <if test="endState != null">endState</if>
+            <if test="endState != null">end_state</if>
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
             <if test="taskId != null">#{taskId},</if>

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -97,6 +98,7 @@ public class ExcelUtil {
                         Date date = (Date) value;
                         SimpleDateFormat sdf = new SimpleDateFormat(
                                 "yyyy-MM-dd HH:mm:ss");
+                        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
                         textValue = sdf.format(date);
                     } else if (value instanceof byte[]) {
                         // 有图片时，设置行高为60px;
