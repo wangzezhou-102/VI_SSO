@@ -120,13 +120,13 @@
             left join vi_psurvey_alarm vpa on vpa.id=vpad.alarm_id
             left join vi_survey_task vst on vst.task_id=vpad.task_id
             <where>
-                <if test="surveyName!=null">
+                <if test="surveyName!=''">
                     and survey_name like CONCAT(CONCAT('%', #{surveyName}), '%')
                 </if>
                 <if test="beginTime!=null and endTime!=null">
-                    or (vst.begin_time &gt;= #{beginTime} and  vst.end_time &lt;= #{endTime})
+                    or (vpad.time between  #{beginTime} and  #{endTime})
                 </if>
-                <if test="name">
+                <if test="name!=''">
                     and vpad.name like CONCAT(CONCAT('%', #{name}), '%')
                 </if>
             </where>

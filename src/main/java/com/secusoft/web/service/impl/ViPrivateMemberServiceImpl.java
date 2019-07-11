@@ -71,7 +71,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         ViPrivateMemberBean viPrivateMemberBean1 = new ViPrivateMemberBean();
         viPrivateMemberBean1.setIdentityId(viPrivateMemberBean.getIdentityId());
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
-        if (bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+        if (bean1!=null&&bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
@@ -119,16 +119,13 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         if (!StringUtils.hasLength(viPrivateMemberBean.getIdentityName())) {
-            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getCode(),
-                    BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getMessage());
         }
         if (!StringUtils.hasLength(viPrivateMemberBean.getIdentityId())) {
-            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getCode(),
-                    BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IDENTITYID_NULL.getMessage());
         }
         if (!StringUtils.hasLength(viPrivateMemberBean.getImageUrl())) {
-            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getCode(),
-                    BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getMessage());
         }
 //        if (!StringUtils.hasLength(viPrivateMemberBean.getRepoId())) {
 //            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_REPOID_NULL.getCode(),
@@ -141,11 +138,11 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         viPrivateMemberBean1.setIdentityId(viPrivateMemberBean.getIdentityId());
 
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
-        if (bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+        if (bean1!=null&&bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
-        ViPrivateMemberBean bean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+        ViPrivateMemberBean bean = viPrivateMemberMapper.getViPrivateMemberById(viPrivateMemberBean);
         if (null == bean) {
             return ResultVo.failure(BizExceptionEnum.BKMEMBER_EXISTED.getCode(), BizExceptionEnum.BKMEMBER_EXISTED.getMessage());
         }
@@ -193,6 +190,15 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
                 throw new RuntimeException("删除布控目标失败");
             }
         }
+
+        if(!bean.getIdentityId().equals(viPrivateMemberBean.getIdentityId())){
+            bean.setIdentityId(viPrivateMemberBean.getIdentityId());
+        }
+
+        if(!bean.getIdentityName().equals(viPrivateMemberBean.getIdentityName())){
+            bean.setIdentityName(viPrivateMemberBean.getIdentityName());
+        }
+
         bean.setModifyTime(new Date());
         bean.setCreateTime(bean.getCreateTime());
         viPrivateMemberMapper.updateViPrivateMember(bean);

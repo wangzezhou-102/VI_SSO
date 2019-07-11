@@ -134,4 +134,11 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="getViPrivateMemberById" parameterType="com.secusoft.web.model.ViPrivateMemberBean" resultMap="ViPrivateMemberResultMap">
+        select vpm.*,vr.id as viRepo_id,vr.bkdesc,vr.bktype,vr.bkname,vr.police_station_id,vr.table_name,vr.type,vr.gmt_create,vr.gmt_modified,vr.valid_state as viRepo_valid_state
+        from vi_private_member vpm
+        left join vi_repo vr on vpm.repo_id=vr.id
+        where vpm.id=#{id}
+    </select>
 </mapper>

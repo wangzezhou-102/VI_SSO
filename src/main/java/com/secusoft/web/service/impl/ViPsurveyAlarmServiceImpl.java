@@ -75,10 +75,8 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
         List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
         Map<String, Object> pageMap = PageReturnUtils.getPageMap(histortyAlarmDetail, viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
-        log.info(String.valueOf(pageMap.get("records")));
-        Object records = pageMap.get("records");
-        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(String.valueOf(records), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
-
+        //List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(String.valueOf(records), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
+        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos =(ArrayList<ViPsurveyAlarmDetailResponse>)pageMap.get("records");
         for (ViPsurveyAlarmDetailResponse bean : viPsurveyAlarmVos) {
             SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -110,7 +108,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
                 bean.setDeviceRoadName(deviceBean.getDeviceName());
             }
         }
-
-        return ResultVo.success();
+        pageMap.put("records",viPsurveyAlarmVos);
+        return ResultVo.success(pageMap);
     }
 }

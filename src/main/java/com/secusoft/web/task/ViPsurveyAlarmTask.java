@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -116,6 +117,9 @@ public class ViPsurveyAlarmTask {
                     beans.setOssUrl(UploadUtil.downLoadFromBase64(ImageUtils.encode(beans.getOssUrl().getBytes()), "Alarm"));
 
                     ViPsurveyAlarmDetailResponse viPsurveyAlarmDetailResponse = new ViPsurveyAlarmDetailResponse();
+
+                    DecimalFormat df = new DecimalFormat("0%");
+                    viPsurveyAlarmDetailResponse.setSimilarity(df.format(Double.valueOf(beans.getSimilarity())));
                     viPsurveyAlarmDetailResponse.setName(beans.getName());
                     viPsurveyAlarmDetailResponse.setOssUrl(beans.getOssUrl());
                     viPsurveyAlarmDetailResponse.setCropImage(viPsurveyAlarmBean.getCropImage());
