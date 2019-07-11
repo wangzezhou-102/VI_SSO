@@ -113,9 +113,9 @@ public class FolderServiceImpl implements FolderService {
 
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
-        folderBean.setImageSearchList(new ArrayList<>());
-        folderBean.setTrackList(new ArrayList<>());
-        folderBean.setDeviceArea(new ArrayList<>());
+//        folderBean.setImageSearchList(new ArrayList<>());
+//        folderBean.setTrackList(new ArrayList<>());
+//        folderBean.setDeviceArea(new ArrayList<>());
         if (!pictureBeans.isEmpty()){
             ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
             for (PictureBean pictureBean:pictureBeans) {
@@ -141,33 +141,34 @@ public class FolderServiceImpl implements FolderService {
         if (!areaBeans.isEmpty()){
             folderBean.setDeviceArea(areaBeans);
         }
-       if (!trackBeans.isEmpty()){
-           for (TrackBean trackBean:trackBeans) {
-               ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
-               List<PictureBean> pictureBeans1 = trackBean.getPictureBeans();
-               for (PictureBean pictureBean:pictureBeans1) {
-                   SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
-                   searchResponseDatas.add(searchResponseData);
-               }
-               DeviceBean device = new DeviceBean();
-               List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
-               searchResponseDatas.forEach(searchResponseData -> {
-                   deviceBeans.forEach(deviceBean ->{
-                       if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
-                           searchResponseData.getSource().setDeviceBean(deviceBean);
-                       }
-                   });
-                   if(searchResponseData.getSource().getDeviceBean()==null){
-                       DeviceBean deviceBean = new DeviceBean();
-                       deviceBean.setDeviceName("未命名");
-                       searchResponseData.getSource().setDeviceBean(deviceBean);
-                   }
-               });
-               trackBean.setPictureList(searchResponseDatas);
-           }
-           folderBean.setTrackList(trackBeans);
-       }
-        String responStr = JSON.toJSONString(ResultVo.success(folderBean), SerializerFeature.DisableCircularReferenceDetect);
+	    if (!trackBeans.isEmpty()){
+	        for (TrackBean trackBean:trackBeans) {
+	            ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
+	            List<PictureBean> pictureBeans1 = trackBean.getPictureBeans();
+	            for (PictureBean pictureBean:pictureBeans1) {
+	                SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
+	                searchResponseDatas.add(searchResponseData);
+	            }
+	            DeviceBean device = new DeviceBean();
+	            List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
+	            searchResponseDatas.forEach(searchResponseData -> {
+	                deviceBeans.forEach(deviceBean ->{
+	                    if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+	                        searchResponseData.getSource().setDeviceBean(deviceBean);
+	                    }
+	                });
+	                if(searchResponseData.getSource().getDeviceBean()==null){
+	                    DeviceBean deviceBean = new DeviceBean();
+	                    deviceBean.setDeviceName("未命名");
+	                    searchResponseData.getSource().setDeviceBean(deviceBean);
+	                }
+	            });
+	            trackBean.setPictureList(searchResponseDatas);
+	        }
+	       folderBean.setTrackList(trackBeans);
+	    }
+        String responStr = JSON.toJSONString(ResultVo.success(folderBean), new SerializerFeature[] {SerializerFeature.DisableCircularReferenceDetect,
+        					SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty});
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });
         return resultVo;
