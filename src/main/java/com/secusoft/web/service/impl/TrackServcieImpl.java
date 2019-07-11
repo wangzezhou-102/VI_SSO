@@ -192,6 +192,9 @@ public class TrackServcieImpl implements TrackService {
 
     @Override
     public ResultVo updateTrackName(TrackBean trackBean) {
+    	if(StringUtils.isEmpty(trackBean.getId())||StringUtils.isEmpty(trackBean.getTrackName())) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+    	}
         trackMapper.updateTrackNameById(trackBean);
         return ResultVo.success();
     }
