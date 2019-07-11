@@ -7,11 +7,11 @@ import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.mapper.FolderMapper;
 import com.secusoft.web.mapper.PictureMapper;
 import com.secusoft.web.model.DeviceBean;
-import com.secusoft.web.model.FolderBean;
 import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PictureService;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class PictureServiceImpl implements PictureService {
@@ -126,5 +127,24 @@ public class PictureServiceImpl implements PictureService {
 		paramBean.setPicType(1);
 		pictureMapper.deletePicByBean(paramBean);
 		return ResultVo.success();
+	}
+	
+	/**
+	 * 目标搜图取消收藏图片
+	 */
+	public ResultVo cancelPicture(PictureBean pictureBean) {
+		if(StringUtils.isEmpty(pictureBean.getPictureId())) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+		}
+		ResultVo resultVo = new ResultVo();
+		PictureBean queryBean = new PictureBean();
+		queryBean.setPictureId(pictureBean.getPictureId());
+		queryBean.setPicType(1);
+		List<PictureBean> list = pictureMapper.selectPictureByObj(queryBean);
+		if(CollectionUtils.isNotEmpty(list)) {
+			PictureBean bean = list.get(0);
+			resultVo = removePicture(bean.getId());
+		}
+		return resultVo;
 	}
 }

@@ -19,4 +19,6 @@ public interface PictureMapper {
     void deletePicByBean(PictureBean paramBean);
     
     void deleteTrackPicByFolderId(@Param("folderId")Integer folderId);
+    
+    List<PictureBean> selectPictureByObj(PictureBean bean);
 }

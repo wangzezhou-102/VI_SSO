@@ -11,4 +11,6 @@ public interface PictureService {
     ResultVo getPictureById(String id);
     
     ResultVo removePictureByFolderId(String folderId);
+    
+    ResultVo cancelPicture(PictureBean pictureBean);
 }

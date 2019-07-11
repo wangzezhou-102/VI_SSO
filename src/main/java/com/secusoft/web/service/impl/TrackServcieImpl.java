@@ -1,6 +1,7 @@
 package com.secusoft.web.service.impl;
 
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.FileUtil;
 import com.secusoft.web.core.util.StringUtils;
 import com.secusoft.web.core.util.UUIDUtil;
 import com.secusoft.web.core.util.UploadUtil;
@@ -162,8 +163,8 @@ public class TrackServcieImpl implements TrackService {
         String relativePath = "/store/" + track.getFolderId() + "/track/" + track.getId() ;
         Path path = Paths.get(basePath, relativePath);
         try {
-        	Files.deleteIfExists(path);
-        } catch (IOException e1) {
+        	FileUtil.deleteDir(path.toFile());
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
 //        for (String id:pids) {

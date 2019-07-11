@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,9 +64,19 @@ public class PictureController {
      * @return
      */
     @RequestMapping("/getPictureById")
-     public ResponseEntity<ResultVo> getFolder(@RequestBody PictureBean pictureBean){
+    public ResponseEntity<ResultVo> getFolder(@RequestBody PictureBean pictureBean){
         ResultVo resultVo = pictureService.getPictureById(pictureBean.getId());
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
-   }
+    }
 
+    /**
+     * 取消收藏，限于目标搜图
+     * @param pictureBean
+     * @return
+     */
+    @PostMapping("/cancelpicture")
+    public ResponseEntity<ResultVo> cancelPicture(@RequestBody PictureBean pictureBean){
+        ResultVo resultVo = pictureService.cancelPicture(pictureBean);
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
 }
