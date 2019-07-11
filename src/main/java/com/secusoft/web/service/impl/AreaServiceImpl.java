@@ -1,5 +1,7 @@
 package com.secusoft.web.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
+import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.AreaMapper;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.model.AreaBean;
@@ -51,5 +53,16 @@ public class AreaServiceImpl implements AreaService {
     public ResultVo readArea(AreaBean areaBean) {
         List<DeviceBean> deviceBeans = deviceMapper.selectDeviceByAreaId(areaBean.getId());
         return ResultVo.success(deviceBeans);
+    }
+    
+    public ResultVo removeAreaByFolderId(Integer folderId) {
+    	if(folderId==null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+    	}
+    	areaMapper.deleteAreaDeviceByFolderId(folderId);
+    	AreaBean bean = new AreaBean();
+    	bean.setFolderId(folderId);
+    	areaMapper.deleteAreaByBean(bean);
+    	return ResultVo.success();
     }
 }

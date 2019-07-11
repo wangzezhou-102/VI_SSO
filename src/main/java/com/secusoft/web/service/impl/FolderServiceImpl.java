@@ -8,19 +8,31 @@ import com.github.pagehelper.PageInfo;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
+import com.secusoft.web.service.AreaService;
 import com.secusoft.web.service.FolderService;
-import com.secusoft.web.tusouapi.model.SearchResponse;
+import com.secusoft.web.service.PictureService;
+import com.secusoft.web.service.TrackService;
 import com.secusoft.web.tusouapi.model.SearchResponseData;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class FolderServiceImpl implements FolderService {
+	
+    private static final String basePath = System.getProperty("user.dir") + "/resources";
+
     @Resource
     FolderMapper folderMapper;
     @Resource
@@ -32,6 +44,12 @@ public class FolderServiceImpl implements FolderService {
     @Resource
     DeviceMapper deviceMapper;
 
+    @Autowired
+    PictureService pictureService;
+    @Autowired
+    TrackService trackService;
+    @Autowired
+    AreaService areaService;
     @Override
     public ResultVo addFolder(FolderBean folderBean) {
 
@@ -54,6 +72,17 @@ public class FolderServiceImpl implements FolderService {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         folderMapper.deleteFolderById(id);
+        pictureService.removePictureByFolderId(id);
+        areaService.removeAreaByFolderId(Integer.valueOf(id));
+        trackService.removeTrackByFolderId(Integer.valueOf(id));
+        String relativePath = "/store/" + id;
+        Path folderPath = Paths.get(basePath, relativePath);
+        try {
+            Files.deleteIfExists(folderPath);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        
         return ResultVo.success();
     }
 
@@ -69,7 +98,8 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public ResultVo setFolderName(FolderBean folderBean) {
-        if(folderBean == null || StringUtils.isEmpty(folderBean.getFolderName())){
+        if(folderBean == null || StringUtils.isEmpty(folderBean.getFolderName()) 
+        		|| StringUtils.isEmpty(folderBean.getId())){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         if(folderMapper.selectCountFolderByObj(folderBean)==0){

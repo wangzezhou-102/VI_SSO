@@ -26,6 +26,8 @@ public class SearchResponseData {
     @JSONField(name="_ext")
     private String ext;
 
+    // 是否已收藏
+    private int status;
     /**
      * 保证返回阿里格式的同时拥有自己的id
      */
@@ -99,16 +101,17 @@ public class SearchResponseData {
         this.szId = szId;
     }
 
-    @Override
-    public String toString() {
-        return "SearchResponseData{" +
-                "index='" + index + '\'' +
-                ", type='" + type + '\'' +
-                ", source=" + source +
-                ", id='" + id + '\'' +
-                ", score=" + score +
-                ", ext='" + ext + '\'' +
-                ", szId='" + szId + '\'' +
-                '}';
-    }
+    public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "SearchResponseData [index=" + index + ", type=" + type + ", source=" + source + ", id=" + id
+				+ ", score=" + score + ", ext=" + ext + ", status=" + status + ", szId=" + szId + "]";
+	}
 }

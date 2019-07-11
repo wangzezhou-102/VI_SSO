@@ -18,7 +18,7 @@ public interface TrackMapper {
     /**
      *根据trackId删除轨迹图片中间表
      */
-    int deletcTrackPictureById(String id);
+    int deleteTrackPictureById(String id);
     int updateTrackNameById(TrackBean trackBean);
     int selectCountTrackByName(TrackBean trackBean);
     /**
@@ -28,4 +28,9 @@ public interface TrackMapper {
     List<String> selectTrackPictureByTid(String tid);
     List<TrackBean> selectTrackByFid(String fid);
     TrackBean selectTrackById(Object id);
+    
+    void deleteTrackPicByPicId(@Param("picId") String picId);
+    
+    void deleteTrackPicByFolderId(@Param("folderId") Integer folderId);
+    void deleteTrackByBean(TrackBean trackBean);
 }
