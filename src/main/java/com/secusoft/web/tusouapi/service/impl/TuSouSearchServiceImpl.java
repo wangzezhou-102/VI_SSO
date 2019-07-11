@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.secusoft.web.core.common.Constants;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.DeviceMapper;
+import com.secusoft.web.mapper.PictureMapper;
 import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.DeviceBean;
 import com.secusoft.web.model.ResultVo;
@@ -16,6 +18,8 @@ import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.model.*;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
 import com.secusoft.web.utils.SearchSortUtils;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +37,9 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     @Autowired
     TuSouSearchService tuSouSearchService;
 
+    @Autowired
+    PictureMapper pictureMapper;
+    
     @Override
     public BaseResponse<JSONArray> search(BaseRequest<SearchRequestData> request) {
         return TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH,request);
@@ -57,14 +64,26 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         //真实给阿里返回的接口
 
         //如果返回的状态码为failed，就返回阿里的Msg
-        if(searchResponse == null || searchResponse.getErrorCode().equals("FAILED")){
+        if(searchResponse == null || Constants.FAILED.equals(searchResponse.getErrorCode())){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
         }
         //如果查询结果为空并且请求成功
-        if(searchResponse.getData()==null&&searchResponse.getErrorCode().equals("SUCCESS")){
+        if(searchResponse.getData()==null&&Constants.SUCCESS.equals(searchResponse.getErrorCode())){
             return  ResultVo.success();
         }
         List<SearchResponseData> olddata = searchResponse.getData();
+        // 注入状态
+        List<String> pictureIds = pictureMapper.readPictureIds();
+        olddata.forEach(obj -> {
+        	if(CollectionUtils.isNotEmpty(pictureIds)) {
+        		for(String picId:pictureIds) {
+        			if(picId.equals(obj.getId())) {
+        				obj.setStatus(1);
+        				break;
+        			}
+        		}
+        	}
+        });
         //获取全部的设备列表 与data里进行映射
         //如果设备列表为空
         DeviceBean device = new DeviceBean();
@@ -108,6 +127,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             resultList.add(v);
         });
         HashMap<String, Object> stringSearchDataHashMap = new HashMap<>();
+        
         stringSearchDataHashMap.put("score",scoreData);
         stringSearchDataHashMap.put("timestamp",timeStampData);
         stringSearchDataHashMap.put("device",resultList);

@@ -87,7 +87,7 @@
     </delete>
     
     <!-- 批量插入数据 -->
-    <insert id="insetBatchDevice" parameterType="list">
+    <insert id="insertBatchDevice" parameterType="list">
         insert into vi_device (device_id,parent_id,device_name,type,status,longitude,
         latitude,civil_code,tq_api,stream_state,play_url) values
         <foreach collection="list" item="obj" index="index" separator=",">

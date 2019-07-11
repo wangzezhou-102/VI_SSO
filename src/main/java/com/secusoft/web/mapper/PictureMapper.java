@@ -13,4 +13,10 @@ public interface PictureMapper {
     List<PictureBean>  selectPictureByTid(String tid);
     List<PictureBean>  selectPictureByFid(String fid);
     int insertMorePicture(List<PictureBean> pictureBeans);
+    List<String> readPictureIds();
+    void deletePictureByTrackId(@Param("trackId") String trackId);
+    
+    void deletePicByBean(PictureBean paramBean);
+    
+    void deleteTrackPicByFolderId(@Param("folderId")Integer folderId);
 }

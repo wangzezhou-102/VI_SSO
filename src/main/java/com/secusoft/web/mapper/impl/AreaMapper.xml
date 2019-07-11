@@ -65,6 +65,22 @@
         where area_id =#{id}
     </delete>
 
+	<delete id="deleteAreaDeviceByFolderId" parameterType="Integer">
+		delete from vi_area_device where area_id in
+		(select id from vi_area where folder_id=#{folderId})
+	</delete>
+	
+	<delete id="deleteAreaByBean" parameterType="areaBean">
+		delete from vi_area
+		<where>
+			<if test="id != null and id != ''">
+				and id=#{id}
+			</if>
+			<if test="folderId!=null and folderId!=''">
+				and folder_id=#{folderId}			
+			</if>
+		</where>	
+	</delete>
     <!-- 获得类名为:Area对应数据库中表的数据集合 -->
     <select id="selectArea" resultMap="result_Area_Map">
         select 

@@ -7,6 +7,9 @@ import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PictureService;
 import com.secusoft.web.tusouapi.model.SearchResponseData;
+
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +33,10 @@ public class PictureController {
      * 收藏图片
      * @param jsonObject 图片对象
      * @return
+     * @throws UnsupportedEncodingException 
      */
     @RequestMapping("/addPicture")
-    public ResponseEntity<ResultVo> addPicture(@RequestBody JSONObject jsonObject){
+    public ResponseEntity<ResultVo> addPicture(@RequestBody JSONObject jsonObject) throws UnsupportedEncodingException{
         String folderId = jsonObject.get("folderId").toString();
         SearchResponseData searchResponseData = JSON.parseObject(jsonObject.get("picture").toString(), new TypeReference<SearchResponseData>() {
         });

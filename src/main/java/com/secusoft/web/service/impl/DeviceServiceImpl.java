@@ -96,7 +96,7 @@ public class DeviceServiceImpl implements DeviceService {
                 deviceMapper.deleteDeviceTable();
                 deleted = true;
             }
-            deviceMapper.insetBatchDevice(devices);
+            deviceMapper.insertBatchDevice(devices);
         }
         deviceMapper.deleteOrgDevice();
         return ResultVo.success();

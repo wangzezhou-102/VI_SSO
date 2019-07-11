@@ -13,5 +13,6 @@ public interface AreaMapper {
     int deleteAreaById(String id);
     int deleteAreaDeviceById(String id);
     List<AreaBean> selectAreaByFid(String fid);
-
+    void deleteAreaDeviceByFolderId(@Param("folderId") Integer folderId);
+    void deleteAreaByBean(AreaBean bean);
 }
