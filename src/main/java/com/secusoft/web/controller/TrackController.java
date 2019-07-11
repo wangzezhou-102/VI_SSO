@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.ResponseUtil;
 import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.TrackBean;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,9 +43,9 @@ public class TrackController {
         ArrayList<SearchResponseData> searchResponseDataList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<SearchResponseData>>() {
         });
         ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
-        PictureBean pictureBean = new PictureBean();
         for (SearchResponseData searchResponseData:searchResponseDataList) {
-            pictureBean.setScore(searchResponseData.getScore().toString());
+        	PictureBean pictureBean = new PictureBean();
+            pictureBean.setScore(searchResponseData.getScore()==null?null:searchResponseData.getScore().toString());
             pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
             pictureBean.setPictureId(searchResponseData.getId());
             pictureBean.setPictureTime(searchResponseData.getSource().getTimestamp());
@@ -105,6 +107,7 @@ public class TrackController {
     }
 
     /**
+     * 暂无用，启用需修改
      * 修改该轨迹下的图片
      * @param jsonObject
      * @return
@@ -140,5 +143,16 @@ public class TrackController {
         ResultVo resultVo = trackService.readTrack(trackBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
 
+    }
+    
+    /**
+     * 删除轨迹下图片
+     * @param pictureBean
+     * @return
+     */
+    @PostMapping("removetrackpic")
+    public ResponseEntity<ResultVo> removeTrackPic(@RequestBody PictureBean pictureBean){
+    	ResultVo resultVo = trackService.removeTrackPic(pictureBean);
+    	return ResponseUtil.handle(HttpStatus.OK, resultVo);
     }
 }

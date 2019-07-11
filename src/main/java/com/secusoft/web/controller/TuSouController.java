@@ -69,4 +69,8 @@ public class TuSouController {
     }
 
 
+    @RequestMapping("/bkontinuetracking")
+    public ResponseEntity<ResultVo> bkContinueTracking(){
+        return new ResponseEntity<>(ResultVo.success(), HttpStatus.OK);
+    }
 }

@@ -48,4 +48,11 @@ public interface ViRepoMapper extends BaseMapper<ViRepoBean> {
     ViRepoBean selectViRepoByTableName(ViRepoBean viRepoBean);
 
     List<ViRepoBean> getAllViRepoByViTaskRepoList(List<ViTaskRepoBean> list);
+
+    /**
+     * 根据id获取对象值
+     * @param viRepoBean
+     * @return
+     */
+    ViRepoBean getViRepoById(ViRepoBean viRepoBean);
 }

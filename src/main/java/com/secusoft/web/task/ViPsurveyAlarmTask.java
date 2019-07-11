@@ -3,12 +3,14 @@ package com.secusoft.web.task;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.serviceapi.ServiceApiClient;
+import com.secusoft.web.utils.ImageUtils;
 import com.secusoft.web.websocket.WebSock;
 import com.secusoft.web.websocket.WebSocketMessageVO;
 import org.slf4j.Logger;
@@ -17,10 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -44,10 +48,7 @@ public class ViPsurveyAlarmTask {
     ViPsurveyAlarmDetailMapper viPsurveyAlarmDetailMapper;
 
     @Resource
-    ViPrivateMemberMapper viPrivateMemberMapper;
-
-    @Resource
-    ViBasicMemberMapper viBasicMemberMapper;
+    ViSurveyTaskMapper viSurveyTaskMapper;
 
     @Resource
     DeviceMapper deviceMapper;
@@ -57,12 +58,12 @@ public class ViPsurveyAlarmTask {
 
     //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
-    //@Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
 
-        if(responseStr==null){
+        if (responseStr == null) {
             log.info("实时告警数据接口请求失败");
             return;
         }
@@ -72,8 +73,9 @@ public class ViPsurveyAlarmTask {
         String data = jsonObject.getString("data");
         List<ViPsurveyAlarmDetailResponse> detailResponses = new ArrayList<>();
         if (String.valueOf(BizExceptionEnum.OK.getCode()).equals(code) && (!data.isEmpty() || !"null".equals(data))) {
-            List<ViPsurveyAlarmVo> viPsurveyAlarmVoLists = JSONArray.parseArray(data, ViPsurveyAlarmVo.class);
-            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVoLists) {
+            System.out.println(data);
+            List<ViPsurveyAlarmVo> viPsurveyAlarmVos = JSON.parseObject(data, new TypeReference<ArrayList<ViPsurveyAlarmVo>>(){});
+            for (ViPsurveyAlarmVo alaramVo : viPsurveyAlarmVos) {
 
                 ViPsurveyAlarmBean viPsurveyAlarmBean = new ViPsurveyAlarmBean();
                 viPsurveyAlarmBean.setTaskId(alaramVo.getTaskId());
@@ -84,9 +86,9 @@ public class ViPsurveyAlarmTask {
                     BeanCopier beanCopier = BeanCopier.create(ViPsurveyAlarmBean.class, ViPsurveyAlarmBean.class, false);
                     beanCopier.copy(alaramVo.getSrc(), viPsurveyAlarmBean, null);
                     //base64转存本地图片
-                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getCropImage(), "Alarm"));
-                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getOrigImage(), "Alarm"));
-                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getPersonImage(), "Alarm"));
+                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getCropImage().getBytes()), "Alarm"));
+                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getOrigImage().getBytes()), "Alarm"));
+                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getPersonImage().getBytes()), "Alarm"));
                     viPsurveyAlarmMapper.insertViPsurveyAlarm(viPsurveyAlarmBean);
                 } else {
                     viPsurveyAlarmBean = bean;
@@ -109,9 +111,12 @@ public class ViPsurveyAlarmTask {
                     beans.setTaskId(alaramVo.getTaskId());
                     beans.setAlarmType("312312");
                     beans.setViPsurveyAlarmBean(viPsurveyAlarmBean);
-                    beans.setOssUrl(UploadUtil.downLoadFromBase64(beans.getOssUrl(), "Alarm"));
+                    beans.setOssUrl(UploadUtil.downLoadFromBase64(ImageUtils.encode(beans.getOssUrl().getBytes()), "Alarm"));
 
                     ViPsurveyAlarmDetailResponse viPsurveyAlarmDetailResponse = new ViPsurveyAlarmDetailResponse();
+
+                    DecimalFormat df = new DecimalFormat("0%");
+                    viPsurveyAlarmDetailResponse.setSimilarity(df.format(Double.valueOf(beans.getSimilarity())));
                     viPsurveyAlarmDetailResponse.setName(beans.getName());
                     viPsurveyAlarmDetailResponse.setOssUrl(beans.getOssUrl());
                     viPsurveyAlarmDetailResponse.setCropImage(viPsurveyAlarmBean.getCropImage());
@@ -119,28 +124,38 @@ public class ViPsurveyAlarmTask {
                     viPsurveyAlarmDetailResponse.setPersonImage(viPsurveyAlarmBean.getPersonImage());
 
                     ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
+                    ViBasicMemberBean basicMemberBean = null;
                     viPrivateMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
-                    //判断在哪个库
-                    ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
-                    if (null == viPrivateMemberByBean) {
-                        ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
-                        viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
-                        ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
-                        if (null != basicMemberBean) {
-                            viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
-                        } else {
-                            viPsurveyAlarmDetailResponse.setBkname("测试人员库");
-                        }
-                    } else {
-                        viPsurveyAlarmDetailResponse.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
+//                    //判断在哪个库
+//                    ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+//                    if (null == viPrivateMemberByBean) {
+//                        ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
+//                        viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
+//                        basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+//                        if (null != basicMemberBean) {
+//                            viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
+//                        } else {
+//                            viPsurveyAlarmDetailResponse.setBkname("测试人员库");
+//                        }
+//                    } else {
+//                        viPsurveyAlarmDetailResponse.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
+//                    }
+                    ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+                    viSurveyTaskBean.setTaskId(alaramVo.getTaskId());
+                    viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
+                    if(null!=viSurveyTaskBean){
+                        viPsurveyAlarmDetailResponse.setBkname(viSurveyTaskBean.getSurveyName());
                     }
                     viPsurveyAlarmDetailMapper.insertViPsurveyAlarmDetail(beans);
                     viPsurveyAlarmDetailResponse.setAlarmDetailId(beans.getId());
                     viPsurveyAlarmDetailResponse.setAlarmStatus(beans.getAlarmStatus());
                     SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
                     viPsurveyAlarmDetailResponse.setTime(sdfs.format(date));
-                    if(null!=deviceBean){
+                    if (null != deviceBean) {
                         viPsurveyAlarmDetailResponse.setDeviceRoadName(deviceBean.getDeviceName());
+                    }
+                    if (basicMemberBean != null && basicMemberBean.getStatus() == 0) {
+                        continue;
                     }
                     detailResponses.add(viPsurveyAlarmDetailResponse);
                 }

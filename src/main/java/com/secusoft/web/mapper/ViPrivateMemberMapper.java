@@ -50,4 +50,11 @@ public interface ViPrivateMemberMapper extends BaseMapper<ViPrivateMemberBean> {
      * @return
      */
     List<ViMemberVo> getInfoSearchMember(ViPrivateMemberVo viPrivateMemberVo);
+
+    /**
+     * 根据id获取ViPrivateMemberBean
+     * @param viPrivateMemberBean
+     * @return
+     */
+    ViPrivateMemberBean getViPrivateMemberById(ViPrivateMemberBean viPrivateMemberBean);
 }

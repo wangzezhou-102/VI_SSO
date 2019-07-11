@@ -74,6 +74,15 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         } else {
             return ResultVo.failure(BizExceptionEnum.TASK_DATE_NULL.getCode(), BizExceptionEnum.TASK_DATE_NULL.getMessage());
         }
+
+        if (viSurveyTaskRequest.getSurveyDevice().length <= 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_DEVICE_NULL.getCode(), BizExceptionEnum.TASK_DEVICE_NULL.getMessage());
+        }
+
+        if (viSurveyTaskRequest.getSurveyRepo().length <= 0) {
+            return ResultVo.failure(BizExceptionEnum.TASK_REPO_NULL.getCode(), BizExceptionEnum.TASK_REPO_NULL.getMessage());
+        }
+
         //判断算力
         if (!validUpdateCalute(viSurveyTaskRequest, null, null)) {
             return ResultVo.failure(BizExceptionEnum.TASK_CALUATE_FAIL.getCode(), BizExceptionEnum.TASK_CALUATE_FAIL.getMessage());
@@ -160,6 +169,11 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         ViSurveyTaskBean baseBean = bean;
         if (!StringUtils.hasLength(viSurveyTaskRequest.getSurveyName())) {
             return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
+        }else{
+            List<ViSurveyTaskBean> surveyTaskList = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
+            if (surveyTaskList.size() > 0) {
+                return ResultVo.failure(BizExceptionEnum.TASK_NANE_REPEATED.getCode(), BizExceptionEnum.TASK_NANE_REPEATED.getMessage());
+            }
         }
         if (viSurveyTaskRequest.getBeginTime() != null && viSurveyTaskRequest.getEndTime() != null) {
             if (viSurveyTaskRequest.getBeginTime().compareTo(viSurveyTaskRequest.getEndTime()) > 0) {
@@ -263,6 +277,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                 log.info("ViTaskRepoList removeAll：" + bean.getViTaskRepoList().size());
             }
         }
+        bean.setSurveyType(viSurveyTaskRequest.getSurveyType());
         bean.setSurveyStatus(2);
         bean.setEnable(2);
         viSurveyTaskMapper.updateViSurveyTask(bean);
@@ -340,15 +355,15 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         viSurveyTaskRequest.setSurveyType(viSurveyTaskVo.getSurveyType());
         List<ViSurveyTaskResponse> list = viSurveyTaskMapper.getAllViSurveyTaskByPage(viSurveyTaskRequest);
         Map<String, Object> pageMap = PageReturnUtils.getPageMap(list, viSurveyTaskVo.getCurrent(), viSurveyTaskVo.getSize());
-        List<ViSurveyTaskResponse> viPsurveyAlarmVoLists =(ArrayList<ViSurveyTaskResponse>) pageMap.get("records");
-        for (ViSurveyTaskResponse bean:viPsurveyAlarmVoLists){
+        List<ViSurveyTaskResponse> viPsurveyAlarmVoLists = (ArrayList<ViSurveyTaskResponse>) pageMap.get("records");
+        for (ViSurveyTaskResponse bean : viPsurveyAlarmVoLists) {
             //获取布控库相关信息
             List<ViTaskRepoBean> viTaskRepoBeans = viTaskRepoMapper.selectViTaskRepo(bean.getTaskId());
             List<ViRepoBean> allViRepoByViTaskRepoList = viRepoMapper.getAllViRepoByViTaskRepoList(viTaskRepoBeans);
 
-            List<ViRepoVo> viRepoVos=new ArrayList<>();
-            for (ViRepoBean viRepoBean:allViRepoByViTaskRepoList) {
-                ViRepoVo viRepoVo=new ViRepoVo();
+            List<ViRepoVo> viRepoVos = new ArrayList<>();
+            for (ViRepoBean viRepoBean : allViRepoByViTaskRepoList) {
+                ViRepoVo viRepoVo = new ViRepoVo();
                 //复制对象
                 BeanCopier beanCopier = BeanCopier.create(ViRepoBean.class, ViRepoVo.class, false);
                 beanCopier.copy(viRepoBean, viRepoVo, null);
@@ -356,20 +371,20 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             }
             bean.setViRepoVos(viRepoVos);
             //获取设备相关信息
-            ViTaskDeviceBean viTaskDeviceBean=new ViTaskDeviceBean();
+            ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
             viTaskDeviceBean.setTaskId(bean.getTaskId());
             List<ViTaskDeviceBean> viTaskDeviceByObject = viTaskDeviceMapper.getViTaskDeviceByObject(viTaskDeviceBean);
             List<DeviceBean> deviceListByViTaskDeviceList = deviceMapper.getDeviceListByViTaskDeviceList(viTaskDeviceByObject);
-            List<DeviceVo> deviceVos=new ArrayList<>();
-            for (DeviceBean deviceBean:deviceListByViTaskDeviceList) {
-                DeviceVo deviceVo=new DeviceVo();
+            List<DeviceVo> deviceVos = new ArrayList<>();
+            for (DeviceBean deviceBean : deviceListByViTaskDeviceList) {
+                DeviceVo deviceVo = new DeviceVo();
                 deviceVo.setDeviceId(deviceBean.getDeviceId());
                 deviceVo.setDeviceName(deviceBean.getDeviceName());
                 deviceVos.add(deviceVo);
             }
             bean.setDeviceVos(deviceVos);
         }
-        pageMap.put("records",viPsurveyAlarmVoLists);
+        pageMap.put("records", viPsurveyAlarmVoLists);
         return ResultVo.success(pageMap);
     }
 
@@ -387,7 +402,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+        ViSurveyTaskBean viSurveyTaskBean = new ViSurveyTaskBean();
         viSurveyTaskBean.setTaskId(viSurveyTaskRequest.getTaskId());
         viSurveyTaskBean.setId(viSurveyTaskRequest.getId());
         viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
@@ -400,9 +415,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         }
         try {
             viSurveyTaskBean.setEnable(1);
-            Timer timer=new Timer();
-            videoStreamStartTask(timer,viSurveyTaskBean);
-            surveyStartTask(timer,viSurveyTaskBean);
+            Timer timer = new Timer();
+            videoStreamStartTask(timer, viSurveyTaskBean);
+            surveyStartTask(timer, viSurveyTaskBean);
         } catch (Exception ex) {
             return ResultVo.failure(BizExceptionEnum.TASK_START_FAIL.getCode(), BizExceptionEnum.TASK_START_FAIL.getMessage());
         }
@@ -423,7 +438,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         if (viSurveyTaskRequest.getId() == null || viSurveyTaskRequest.getId() == 0) {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
-        ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+        ViSurveyTaskBean viSurveyTaskBean = new ViSurveyTaskBean();
         viSurveyTaskBean.setTaskId(viSurveyTaskRequest.getTaskId());
         viSurveyTaskBean.setId(viSurveyTaskRequest.getId());
         viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
@@ -437,9 +452,9 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         }
         try {
             viSurveyTaskBean.setEnable(1);
-            Timer timer=new Timer();
-            surveyStopTask(timer,viSurveyTaskBean);
-            videoStreamStopTask(timer,viSurveyTaskBean);
+            Timer timer = new Timer();
+            surveyStopTask(timer, viSurveyTaskBean);
+            videoStreamStopTask(timer, viSurveyTaskBean);
         } catch (Exception ex) {
             return ResultVo.failure(BizExceptionEnum.TASK_STOP_FAIL.getCode(), BizExceptionEnum.TASK_STOP_FAIL.getMessage());
         }

@@ -83,7 +83,7 @@ public class BkrepoDataTask {
     //0 0/1 * * * ? 每分钟执行一次
     //0 15 10 ? * * 每天10点15分触发
     @Async
-    @Scheduled(cron = "0 21 0/1 * * ?")//每小时的固定分开始同步
+    @Scheduled(cron = "00 10 0/1 * * ?")//每小时的固定分开始同步
     public void BkrepoData() throws ParseException, InterruptedException {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
@@ -447,7 +447,7 @@ public class BkrepoDataTask {
 //        ZdryResponse zdryResponse = JSON.parseObject(dataJson, ZdryResponse.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(zdryVo.getIsFirst() == 1 ? zdryVo.getUpdateTime() : syncZdryLogBean.getLastSyncTime());
-        String sql = "select * from (select ROWNUM AS num,HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from  (select * from " + zdryVo.getTableName() + " order by update_time) a   where rownum <= " + (zdryVo.getSyncNum() * 40) + " and UPDATE_TIME>=to_date('" + dateString + "','yyyy-MM-dd HH24:mi:ss')) a where a.num>=" + ((zdryVo.getSyncNum() - 1) * 40 + 1);
+        String sql = "select * from (select ROWNUM AS num,HUMAN_NAME,PIC_ID,STATUS,UPDATE_TIME,PIC from  (select * from " + zdryVo.getTableName() + " order by update_time) a   where rownum <= " + (zdryVo.getSyncNum() * 40) + " and UPDATE_TIME>to_date('" + dateString + "','yyyy-MM-dd HH24:mi:ss')) a where a.num>=" + ((zdryVo.getSyncNum() - 1) * 40 + 1);
         log.info(sql);
         RowMapper<ZdryBean> rowMapper = new BeanPropertyRowMapper<ZdryBean>(ZdryBean.class);
         List<ZdryBean> zdryList = jdbcTemplate.query(sql, rowMapper);

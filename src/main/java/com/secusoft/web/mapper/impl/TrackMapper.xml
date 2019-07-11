@@ -47,11 +47,29 @@
         where id = #{id}
     </delete>
     
-    <delete id="deletcTrackPictureById" parameterType="java.lang.String">
+    <delete id="deleteTrackPictureById" parameterType="java.lang.String">
         delete from vi_track_picture
         where track_id=#{id}
     </delete>
-
+	
+	<delete id="deleteTrackPicByPicId" parameterType="java.lang.String">
+		delete from vi_track_picture
+		where picture_id=#{picId}
+	</delete>
+	
+	<delete id="deleteTrackPicByFolderId" parameterType="Integer">
+		delete from vi_track_picture
+		where track_id in (select id from vi_track t where t.folder_id=#{folderId})
+	</delete>
+	
+	<delete id="deleteTrackByBean" parameterType="trackBean">
+		delete from vi_track 
+		<where>
+			<if test="folderId!=null">
+				folder_id=#{folderId}
+			</if>
+		</where>
+	</delete>
     <!-- 通过Track的id将Track中属性值不为null的数据更新到数据库对应的表中-->
     <update id="updateTrackNameById" parameterType="com.secusoft.web.model.TrackBean">
         update vi_track

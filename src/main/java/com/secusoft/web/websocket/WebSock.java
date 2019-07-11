@@ -1,104 +1,203 @@
-/**
- * Company
- * Copyright (C) 2004-2019 All Rights Reserved.
- */
 package com.secusoft.web.websocket;
 
-/**
- * @author Administrator
- * @version $Id WebSock.java, v 0.1 2019-05-26 19:13 Administrator Exp $$
- */
-
+import com.secusoft.web.websocket.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
-/**
- * @ServerEndPoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端，
- * 注解的值将被用于监听用户连接的终端访问URL地址，客户端可以通过这个URL连接到websocket服务器端
- */
-@ServerEndpoint("/socketServer")
+@ServerEndpoint(value = "/socketServer/{userName}")
 @Component
 public class WebSock {
 
-    private static Logger log = LoggerFactory.getLogger(WebSock.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSock.class);
 
-    private static int onlineCount=0;
-    private static CopyOnWriteArrayList<WebSock> webSocketSet=new CopyOnWriteArrayList<WebSock>();
-    private static Session session;
+    /**
+     *
+     * 用线程安全的CopyOnWriteArraySet来存放客户端连接的信息
+     */
+    private static CopyOnWriteArraySet<Client> socketServers = new CopyOnWriteArraySet<>();
 
+    /**
+     *
+     * websocket封装的session,信息推送，就是通过它来信息推送
+     */
+    private Session session;
+
+    /**
+     *
+     * 服务端的userName,因为用的是set，每个客户端的username必须不一样，否则会被覆盖。
+     * 要想完成ui界面聊天的功能，服务端也需要作为客户端来接收后台推送用户发送的信息
+     */
+    private final static String SYS_USERNAME = "niezhiliang9595";
+
+
+    /**
+     *
+     * 用户连接时触发，我们将其添加到
+     * 保存客户端连接信息的socketServers中
+     *
+     * @param session
+     * @param userName
+     */
     @OnOpen
-    public void onOpen(Session session) throws IOException {
-        this.session=session;
-        webSocketSet.add(this);//加入set中
-        addOnlineCount();
-        log.info("有新连接加入！当前在线人数为"+getOnlineCount());
+    public void open(Session session, @PathParam(value="userName")String userName){
+        System.out.println(session.getId());
+
+        this.session = session;
+        socketServers.add(new Client(userName,session));
+        System.out.println(socketServers.toArray());
+
+        logger.info("客户端:【{}】连接成功",userName);
+
     }
 
+    /**
+     *
+     * 收到客户端发送信息时触发
+     * 我们将其推送给客户端(niezhiliang9595)
+     * 其实也就是服务端本身，为了达到前端聊天效果才这么做的
+     *
+     * @param message
+     */
+    @OnMessage
+    public void onMessage(String message){
+
+        Client client = socketServers.stream().filter( cli -> cli.getSession() == session)
+                .collect(Collectors.toList()).get(0);
+        sendMessage(client.getUserName()+"<--"+message,SYS_USERNAME);
+
+        logger.info("客户端:【{}】发送信息:{}",client.getUserName(),message);
+    }
+
+    /**
+     *
+     * 连接关闭触发，通过sessionId来移除
+     * socketServers中客户端连接信息
+     */
     @OnClose
     public void onClose(){
-        webSocketSet.remove(this);
-        subOnlineCount();
-        log.info("有一连接关闭！当前在线人数为" + getOnlineCount());
-    }
+        socketServers.forEach(client ->{
+            if (client.getSession().getId().equals(session.getId())) {
 
-    public  void main(String[] args) {
-        onMessage("xxxxxxxxxx",session);
-    }
+                logger.info("客户端:【{}】断开连接",client.getUserName());
+                socketServers.remove(client);
 
-    @OnMessage
-    public void onMessage(String message,Session session){
-        log.info("来自客户端的消息："+message);
-//        群发消息
-        for (WebSock item:webSocketSet){
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-                continue;
             }
-        }
+        });
     }
 
+    /**
+     *
+     * 发生错误时触发
+     * @param error
+     */
     @OnError
-    public  void onError(Session session,Throwable throwable){
-        log.info("发生错误！");
-        throwable.printStackTrace();
+    public void onError(Throwable error) {
+        socketServers.forEach(client ->{
+            if (client.getSession().getId().equals(session.getId())) {
+                socketServers.remove(client);
+                logger.error("客户端:【{}】发生异常",client.getUserName());
+                error.printStackTrace();
+            }
+        });
     }
-    //   下面是自定义的一些方法
-    public  void sendMessage(String message) throws IOException {
-      //  this.session.getBasicRemote().sendText(message);
-        try {
-            if (webSocketSet.size() != 0) {
-                for (WebSock s : webSocketSet) {
-                    if (s != null) {
-                        // 判断是否为终端信息。如果是终端信息则查询数据库获取detail
-                        log.info("webSocket发送消息开始：");
-                        s.session.getBasicRemote().sendText(message);
-                    }
+
+    /**
+     *
+     * 信息发送的方法，通过客户端的userName
+     * 拿到其对应的session，调用信息推送的方法
+     * @param message
+     * @param userName
+     */
+    public synchronized static void sendMessage(String message,String userName) {
+
+        socketServers.forEach(client ->{
+            if (userName.equals(client.getUserName())) {
+                try {
+                    client.getSession().getBasicRemote().sendText(message);
+
+                    logger.info("服务端推送给客户端 :【{}】",client.getUserName(),message);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        });
+    }
+
+    /**
+     *
+     * 获取服务端当前客户端的连接数量，
+     * 因为服务端本身也作为客户端接受信息，
+     * 所以连接总数还要减去服务端
+     * 本身的一个连接数
+     *
+     * 这里运用三元运算符是因为客户端第一次在加载的时候
+     * 客户端本身也没有进行连接，-1 就会出现总数为-1的情况，
+     * 这里主要就是为了避免出现连接数为-1的情况
+     *
+     * @return
+     */
+    public synchronized static int getOnlineNum(){
+        return socketServers.stream().filter(client -> !client.getUserName().equals(SYS_USERNAME))
+                .collect(Collectors.toList()).size();
+    }
+
+    /**
+     *
+     * 获取在线用户名，前端界面需要用到
+     * @return
+     */
+    public synchronized static List<String> getOnlineUsers(){
+
+        List<String> onlineUsers = socketServers.stream()
+                .filter(client -> !client.getUserName().equals(SYS_USERNAME))
+                .map(client -> client.getUserName())
+                .collect(Collectors.toList());
+
+        return onlineUsers;
+    }
+
+    /**
+     *
+     * 信息群发，我们要排除服务端自己不接收到推送信息
+     * 所以我们在发送的时候将服务端排除掉
+     * @param message
+     */
+    public synchronized static void sendMessage(String message)  {
+
+        //群发，不能发送给服务端自己
+        socketServers.stream().filter(cli -> cli.getUserName() != SYS_USERNAME)
+                .forEach(client -> {
+
+                    try {
+                        client.getSession().getBasicRemote().sendText(message);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+
+        logger.info("服务端推送给所有客户端 :【{}】",message);
+    }
+
+    /**
+     *
+     * 多个人发送给指定的几个用户
+     * @param message
+     * @param persons
+     */
+    public synchronized static void SendMany(String message,String [] persons) {
+        for (String userName : persons) {
+            sendMessage(message,userName);
         }
     }
-
-    public static synchronized int getOnlineCount(){
-        return onlineCount;
-    }
-
-    public static synchronized void addOnlineCount(){
-        WebSock.onlineCount++;
-    }
-
-    public static synchronized void subOnlineCount(){
-        WebSock.onlineCount--;
-    }
-
 }

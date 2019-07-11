@@ -23,7 +23,7 @@ public class ViPsurveyAlarmDetailBean {
 
     private String ossUrl;
 
-    private BigDecimal similarity;
+    private double similarity;
 
     private String objectId;
 
@@ -68,7 +68,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setTaskId(String taskId) {
-        this.taskId = taskId == null ? null : taskId.trim();
+        this.taskId = taskId;
     }
 
     public String getBkid() {
@@ -76,7 +76,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setBkid(String bkid) {
-        this.bkid = bkid == null ? null : bkid.trim();
+        this.bkid = bkid;
     }
 
     public String getAlarmType() {
@@ -84,7 +84,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setAlarmType(String alarmType) {
-        this.alarmType = alarmType == null ? null : alarmType.trim();
+        this.alarmType = alarmType;
     }
 
     public String getAlarmTypeName() {
@@ -92,7 +92,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setAlarmTypeName(String alarmTypeName) {
-        this.alarmTypeName = alarmTypeName == null ? null : alarmTypeName.trim();
+        this.alarmTypeName = alarmTypeName;
     }
 
     public String getFeature() {
@@ -100,7 +100,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setFeature(String feature) {
-        this.feature = feature == null ? null : feature.trim();
+        this.feature = feature;
     }
 
     public String getOssUrl() {
@@ -108,14 +108,14 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setOssUrl(String ossUrl) {
-        this.ossUrl = ossUrl == null ? null : ossUrl.trim();
+        this.ossUrl = ossUrl;
     }
 
-    public BigDecimal getSimilarity() {
+    public double getSimilarity() {
         return similarity;
     }
 
-    public void setSimilarity(BigDecimal similarity) {
+    public void setSimilarity(double similarity) {
         this.similarity = similarity;
     }
 
@@ -124,7 +124,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setObjectId(String objectId) {
-        this.objectId = objectId == null ? null : objectId.trim();
+        this.objectId = objectId;
     }
 
     public String getName() {
@@ -132,7 +132,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getPicid() {
@@ -140,7 +140,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setPicid(String picid) {
-        this.picid = picid == null ? null : picid.trim();
+        this.picid = picid;
     }
 
     public String getTime() {
@@ -156,7 +156,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
     public String getSurveyStatus() {
@@ -164,7 +164,7 @@ public class ViPsurveyAlarmDetailBean {
     }
 
     public void setSurveyStatus(String surveyStatus) {
-        this.surveyStatus = surveyStatus == null ? null : surveyStatus.trim();
+        this.surveyStatus = surveyStatus;
     }
 
     public Integer getAlarmStatus() {

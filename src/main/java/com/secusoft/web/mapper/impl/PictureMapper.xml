@@ -104,8 +104,31 @@
         delete from vi_picture
         where id = #{id}
     </delete>
-
-
+	
+	<delete id="deletePictureByTrackId" parameterType="java.lang.String">
+		delete from vi_picture where id in (select picture_id from vi_track_picture where track_id=#{trackId})
+	</delete>
+	
+	<delete id="deleteTrackPicByFolderId" parameterType="Integer">
+		delete from vi_picture where id in
+		(select picture_id from vi_track_picture where track_id in
+			(select id from vi_track t where t.folder_id=#{folderId})
+		)
+	</delete>
+	<delete id="deletePicByBean" parameterType="pictureBean">
+		delete from vi_picture
+		<where>
+			<if test="id!=null and id !=''">
+				and id=#{id}
+			</if>
+			<if test="folderId!=null and folderId!=''">
+				and folder_id=#{folderId}
+			</if>
+			<if test="picType!=null">
+				and pic_type=#{picType}
+			</if>
+		</where>
+	</delete>
     <!-- 通过Picture的id获得对应数据库中表的数据对象-->
     <select id="selectPictureById" parameterType="java.lang.String" resultMap="result_Picture_Map">
         SELECT p.id,p.picture_id,p.orig_image_url,p.crop_image_url,p.ori_image_signed_url,p.crop_image_signed_url,p.picture_time,folder_id,p.pic_type,score,d.id as did,d.device_id,d.parent_id,device_name,type,ip,`port`,longitude,latitude,local_ori_image_url,local_crop_image_url
@@ -119,7 +142,7 @@
         select
         <include refid="vi_picture_Column" />
         from vi_picture
-        where folder_id =#{fid} and pic_type = 0
+        where folder_id =#{fid} and pic_type = 1
     </select>
 
 
@@ -130,5 +153,9 @@
       where track_id=#{trackid}
     </select>
 
+	<!-- 查询所有收藏图片 -->
+	<select id="readPictureIds" resultType="string">
+		select picture_id from vi_picture where pic_type=1
+	</select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.ViBasicMemberBean;
+import com.secusoft.web.model.ViBasicMemberVo;
 import com.secusoft.web.model.ViMemberVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -49,4 +50,10 @@ public interface ViBasicMemberMapper extends BaseMapper<ViBasicMemberBean> {
      * @return
      */
     ViBasicMemberBean getViBasicMemberByObjectId(ViBasicMemberBean viBasicMemberBean);
+
+    /**
+     * 获取所有自定义库信息
+     * @return
+     */
+    List<ViMemberVo> getAllViBasicMemberByPaged(ViBasicMemberVo viBasicMemberVo);
 }

@@ -11,4 +11,5 @@ public interface AreaService {
     ResultVo updateAreaName(AreaBean areaBean);
     ResultVo updateArea(AreaBean areaBean, List deviceIds);
     ResultVo readArea(AreaBean areaBean);
+    ResultVo removeAreaByFolderId(Integer folderId);
 }

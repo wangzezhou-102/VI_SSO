@@ -70,6 +70,43 @@ public class TestController<psvm> extends BaseController {
     @Qualifier("threedaryJdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
+    @Resource
+    TuSouSearchService tuSouSearch;
+    @RequestMapping("jx")
+    public Object jx(){
+
+        BaseRequest<SearchRequestData> baseRequest = new BaseRequest<>();
+        //这个随机生成也可以
+        baseRequest.setRequestId("szsk");
+        //from 是跳过多少个结果    size是本次展示多少个结果
+        baseRequest.setFrom("0");
+        baseRequest.setSize("100");
+
+        SearchRequestData searchRequestData = new SearchRequestData();
+        //以下三个固定
+        searchRequestData.setUid("hangzhou");
+        searchRequestData.setTaskId("512041492240442db7462770e968e785");
+        searchRequestData.setType("person");
+
+        //要搜索的时间 采用时间戳
+        searchRequestData.setStartTime(Long.valueOf("1562776991000"));
+        searchRequestData.setEndTime(Long.valueOf("1562809391000"));
+
+        //图片的base64  不带前面的base64标记
+        searchRequestData.setContents("sdadhwudhashdj");
+
+        //要搜索的设备ID      用，隔开
+        searchRequestData.setCameraId("1,2,3");
+        baseRequest.setData(searchRequestData);
+        //这里可以直接将search返回给前端  默认已相似度排序
+        BaseResponse<JSONArray> search = tuSouSearch.search(baseRequest);
+        JSONArray data = search.getData();
+        ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(JSON.toJSONString(data), new TypeReference<ArrayList<SearchResponseData>>() {
+        });
+
+        return search;
+    }
+
 
     @RequestMapping("/testguolv")
     public Object testguolv() {
@@ -94,11 +131,7 @@ public class TestController<psvm> extends BaseController {
         map.put("Bktask", new Object());
         WebSocketMessageVO webSocketMessageVO = new WebSocketMessageVO();
         webSocketMessageVO.setData(map);
-        try {
-            webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        webSock.sendMessage(JSON.toJSONString(webSocketMessageVO));
 
         return true;
     }
