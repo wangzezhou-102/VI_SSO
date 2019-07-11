@@ -48,10 +48,7 @@ public class ViPsurveyAlarmTask {
     ViPsurveyAlarmDetailMapper viPsurveyAlarmDetailMapper;
 
     @Resource
-    ViPrivateMemberMapper viPrivateMemberMapper;
-
-    @Resource
-    ViBasicMemberMapper viBasicMemberMapper;
+    ViSurveyTaskMapper viSurveyTaskMapper;
 
     @Resource
     DeviceMapper deviceMapper;
@@ -129,19 +126,25 @@ public class ViPsurveyAlarmTask {
                     ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
                     ViBasicMemberBean basicMemberBean = null;
                     viPrivateMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
-                    //判断在哪个库
-                    ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
-                    if (null == viPrivateMemberByBean) {
-                        ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
-                        viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
-                        basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
-                        if (null != basicMemberBean) {
-                            viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
-                        } else {
-                            viPsurveyAlarmDetailResponse.setBkname("测试人员库");
-                        }
-                    } else {
-                        viPsurveyAlarmDetailResponse.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
+//                    //判断在哪个库
+//                    ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+//                    if (null == viPrivateMemberByBean) {
+//                        ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
+//                        viBasicMemberBean.setObjectId(viPsurveyAlarmBean.getObjId());
+//                        basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+//                        if (null != basicMemberBean) {
+//                            viPsurveyAlarmDetailResponse.setBkname(basicMemberBean.getViRepoBean().getBkname());
+//                        } else {
+//                            viPsurveyAlarmDetailResponse.setBkname("测试人员库");
+//                        }
+//                    } else {
+//                        viPsurveyAlarmDetailResponse.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
+//                    }
+                    ViSurveyTaskBean viSurveyTaskBean=new ViSurveyTaskBean();
+                    viSurveyTaskBean.setTaskId(alaramVo.getTaskId());
+                    viSurveyTaskBean = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
+                    if(null!=viSurveyTaskBean){
+                        viPsurveyAlarmDetailResponse.setBkname(viSurveyTaskBean.getSurveyName());
                     }
                     viPsurveyAlarmDetailMapper.insertViPsurveyAlarmDetail(beans);
                     viPsurveyAlarmDetailResponse.setAlarmDetailId(beans.getId());

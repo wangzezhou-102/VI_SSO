@@ -115,7 +115,7 @@
 
     <select id="getHistortyAlarmDetail" parameterType="com.secusoft.web.model.ViPsurveyAlarmDetailRequest" resultType="com.secusoft.web.model.ViPsurveyAlarmDetailResponse">
                 select vpad.id as alarmDetailId,vpad.oss_url, vpa.orig_image,vpa.crop_image,vpa.person_image,vpad.similarity,vpad.`name`,
-                vpad.picid,vpad.time,vpad.object_id,vpad.alarm_status,vpa.camera_id as deviceRoadName,vpad.ai_status
+                vpad.picid,vpad.time,vpad.object_id,vpad.alarm_status,vpa.camera_id as deviceRoadName,vpad.ai_status,vst.survey_name as bkname
             from vi_psurvey_alarm_detail vpad
             left join vi_psurvey_alarm vpa on vpa.id=vpad.alarm_id
             left join vi_survey_task vst on vst.task_id=vpad.task_id

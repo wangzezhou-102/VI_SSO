@@ -61,7 +61,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         if (!StringUtils.hasLength(viPrivateMemberBean.getIdentityName())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IDENTITYNAME_NULL.getMessage());
         }
-        if (!StringUtils.hasLength(viPrivateMemberBean.getImageUrl())||viPrivateMemberBean.getImageUrl()==null) {
+        if (!StringUtils.hasLength(viPrivateMemberBean.getImageUrl()) || viPrivateMemberBean.getImageUrl() == null) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_IMAGEURL_NULL.getMessage());
         }
         if (!StringUtils.hasLength(viPrivateMemberBean.getRepoId())) {
@@ -70,8 +70,9 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
         ViPrivateMemberBean viPrivateMemberBean1 = new ViPrivateMemberBean();
         viPrivateMemberBean1.setIdentityId(viPrivateMemberBean.getIdentityId());
+        viPrivateMemberBean1.setRepoId(viPrivateMemberBean.getRepoId());
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
-        if (bean1!=null&&bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+        if (bean1 != null && bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
@@ -136,9 +137,10 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         }
         ViPrivateMemberBean viPrivateMemberBean1 = new ViPrivateMemberBean();
         viPrivateMemberBean1.setIdentityId(viPrivateMemberBean.getIdentityId());
-
+        viPrivateMemberBean1.setRepoId(viPrivateMemberBean.getRepoId());
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
-        if (bean1!=null&&bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+        //判断要修改的库是否有重复的身份证号码
+        if (bean1 != null && bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
@@ -149,7 +151,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
 
         String oldBase64 = ImageUtils.image2Base64(UploadUtil.basePath + bean.getImageUrl());
-        String newBase64=viPrivateMemberBean.getImageUrl().split(",")[1];
+        String newBase64 = viPrivateMemberBean.getImageUrl().split(",")[1];
         log.info("oldBase64：" + oldBase64);
         log.info("NewBase64：" + newBase64);
         if (!oldBase64.equals(newBase64)) {
@@ -191,11 +193,11 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             }
         }
 
-        if(!bean.getIdentityId().equals(viPrivateMemberBean.getIdentityId())){
+        if (!bean.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
             bean.setIdentityId(viPrivateMemberBean.getIdentityId());
         }
 
-        if(!bean.getIdentityName().equals(viPrivateMemberBean.getIdentityName())){
+        if (!bean.getIdentityName().equals(viPrivateMemberBean.getIdentityName())) {
             bean.setIdentityName(viPrivateMemberBean.getIdentityName());
         }
 

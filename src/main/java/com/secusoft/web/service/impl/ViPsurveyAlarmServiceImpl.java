@@ -89,18 +89,18 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
             bean.setSimilarity(df.format(Double.valueOf(bean.getSimilarity())));
             ViPrivateMemberBean viPrivateMemberBean = new ViPrivateMemberBean();
             viPrivateMemberBean.setObjectId(bean.getObjectId());
-            //判断在哪个库
-            ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
-            if (null == viPrivateMemberByBean) {
-                ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
-                viBasicMemberBean.setObjectId(bean.getObjectId());
-                ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
-                if (null != basicMemberBean) {
-                    bean.setBkname(basicMemberBean.getViRepoBean().getBkname());
-                }
-            } else {
-                bean.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
-            }
+//            //判断在哪个库
+//            ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
+//            if (null == viPrivateMemberByBean) {
+//                ViBasicMemberBean viBasicMemberBean = new ViBasicMemberBean();
+//                viBasicMemberBean.setObjectId(bean.getObjectId());
+//                ViBasicMemberBean basicMemberBean = viBasicMemberMapper.getViBasicMemberByObjectId(viBasicMemberBean);
+//                if (null != basicMemberBean) {
+//                    bean.setBkname(basicMemberBean.getViRepoBean().getBkname());
+//                }
+//            } else {
+//                bean.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
+//            }
 
             //查找设备信息
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getDeviceRoadName());
