@@ -17,7 +17,6 @@ public interface ViPsurveyAlarmMapper {
      */
     void insertViPsurveyAlarm(ViPsurveyAlarmBean viPsurveyAlarmBean);
 
-
     /**
      * 根据布控任务id获得布控报警数量
      */

@@ -5,15 +5,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class ViPsurveyAlarmDetailRequest extends PageReqAbstractModel {
+public class PatrolAlarmDetailRequest extends PageReqAbstractModel {
 
     /**
-     * 布控任务
+     * 巡逻任务名称
      */
-    private String surveyName;
+    private String patrolName;
 
     /**
-     * 布控目标名称
+     * 布控目标名称(姓名，身份信息)
      */
     private String name;
 
@@ -22,24 +22,20 @@ public class ViPsurveyAlarmDetailRequest extends PageReqAbstractModel {
      */
     private String[] deviceId;
     /**
-     * 布控任务开始时间
+     * 巡逻任务开始时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date beginTime;
 
     /**
-     * 布控任务结束时间
+     * 巡逻任务结束时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
-    public String getSurveyName() {
-        return surveyName;
-    }
+    public String getPatrolName() { return patrolName; }
 
-    public void setSurveyName(String surveyName) {
-        this.surveyName = surveyName;
-    }
+    public void setPatrolName(String patrolName) { this.patrolName = patrolName; }
 
     public String getName() {
         return name;

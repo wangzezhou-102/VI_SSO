@@ -17,9 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class PictureServiceImpl implements PictureService {
@@ -31,7 +28,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public ResultVo addPicture(PictureBean pictureBean) {
-        if (pictureBean ==null){
+        if (pictureBean == null){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
         //图片收藏需要下载到本地

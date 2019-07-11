@@ -47,7 +47,7 @@ public class WebSock {
         log.info("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
 
-    public   void main(String[] args) {
+    public  void main(String[] args) {
         onMessage("xxxxxxxxxx",session);
     }
 
@@ -92,12 +92,13 @@ public class WebSock {
     public static synchronized int getOnlineCount(){
         return onlineCount;
     }
+
     public static synchronized void addOnlineCount(){
         WebSock.onlineCount++;
     }
+
     public static synchronized void subOnlineCount(){
         WebSock.onlineCount--;
     }
-
 
 }
