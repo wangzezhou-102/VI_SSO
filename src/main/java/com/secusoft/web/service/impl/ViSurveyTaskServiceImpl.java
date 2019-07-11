@@ -277,6 +277,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
                 log.info("ViTaskRepoList removeAll：" + bean.getViTaskRepoList().size());
             }
         }
+        bean.setSurveyType(viSurveyTaskRequest.getSurveyType());
         bean.setSurveyStatus(2);
         bean.setEnable(2);
         viSurveyTaskMapper.updateViSurveyTask(bean);

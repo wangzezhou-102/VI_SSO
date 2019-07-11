@@ -95,6 +95,9 @@
             <if test="validState != null">
                 valid_state=#{validState},
             </if>
+            <if test="surveyType != null">
+                survey_type=#{surveyType},
+            </if>
         </set>
         where id=#{id}
     </update>

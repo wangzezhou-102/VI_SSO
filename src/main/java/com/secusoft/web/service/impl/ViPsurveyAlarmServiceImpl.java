@@ -11,6 +11,8 @@ import com.secusoft.web.mapper.ViPsurveyAlarmDetailMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViPsurveyAlarmService;
 import com.secusoft.web.utils.PageReturnUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +30,7 @@ import java.util.Map;
  */
 @Service
 public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
+    private static Logger log = LoggerFactory.getLogger(ViPsurveyAlarmServiceImpl.class);
 
     @Resource
     ViPsurveyAlarmDetailMapper viPsurveyAlarmDetailMapper;
@@ -72,8 +75,9 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
         List<ViPsurveyAlarmDetailResponse> histortyAlarmDetail = viPsurveyAlarmDetailMapper.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
         Map<String, Object> pageMap = PageReturnUtils.getPageMap(histortyAlarmDetail, viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
-
-        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(pageMap.get("records").toString(), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
+        log.info(String.valueOf(pageMap.get("records")));
+        Object records = pageMap.get("records");
+        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(String.valueOf(records), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
 
         for (ViPsurveyAlarmDetailResponse bean : viPsurveyAlarmVos) {
             SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");

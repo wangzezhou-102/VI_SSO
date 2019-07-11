@@ -53,7 +53,7 @@ public class ViBasicMemberServiceImpl implements ViBasicMemberService {
     public ResultVo getPagedViBasicMember(ViBasicMemberVo viBasicMemberVo) {
 
         if (null == viBasicMemberVo.getRepoId() || viBasicMemberVo.getRepoId() <= 0) {
-            return ResultVo.failure(BizExceptionEnum.BKREPO_ID_NULL.getCode(), BizExceptionEnum.BKREPO_ID_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getMessage());
         }
         ViRepoBean viRepoBean = new ViRepoBean();
         viRepoBean.setId(viBasicMemberVo.getRepoId());

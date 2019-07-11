@@ -68,9 +68,16 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_REPOID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_REPOID_NULL.getMessage());
         }
 
+        ViPrivateMemberBean viPrivateMemberBean1 = new ViPrivateMemberBean();
+        viPrivateMemberBean1.setIdentityId(viPrivateMemberBean.getIdentityId());
+        ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
+        if (bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
+        }
+
         ViPrivateMemberBean viPrivateMemberByBean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
         if (viPrivateMemberByBean != null) {
-            return ResultVo.failure(BizExceptionEnum.BKREPO_ID_REPEATED.getCode(), BizExceptionEnum.BKREPO_ID_REPEATED.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
         String base64 = viPrivateMemberBean.getImageUrl();
         viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
@@ -135,7 +142,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
 
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
         if (bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
-            return ResultVo.failure(BizExceptionEnum.BKREPO_ID_REPEATED.getCode(), BizExceptionEnum.BKREPO_ID_REPEATED.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
         ViPrivateMemberBean bean = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean);
@@ -243,7 +250,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
     public ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo) {
 
         if (null == viPrivateMemberVo.getRepoId() || viPrivateMemberVo.getRepoId() <= 0) {
-            return ResultVo.failure(BizExceptionEnum.BKREPO_ID_NULL.getCode(), BizExceptionEnum.BKREPO_ID_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getMessage());
         }
         ViRepoBean viRepoBean = new ViRepoBean();
         viRepoBean.setId(viPrivateMemberVo.getRepoId());
