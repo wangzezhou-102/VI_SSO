@@ -113,6 +113,9 @@ public class FolderServiceImpl implements FolderService {
 
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
+        folderBean.setImageSearchList(new ArrayList<>());
+        folderBean.setTrackList(new ArrayList<>());
+        folderBean.setDeviceArea(new ArrayList<>());
         if (!pictureBeans.isEmpty()){
             ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
             for (PictureBean pictureBean:pictureBeans) {
