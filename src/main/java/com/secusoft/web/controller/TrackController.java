@@ -43,8 +43,8 @@ public class TrackController {
         ArrayList<SearchResponseData> searchResponseDataList = JSON.parseObject(jsonObject.get("pictureList").toString(), new TypeReference<ArrayList<SearchResponseData>>() {
         });
         ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
-        PictureBean pictureBean = new PictureBean();
         for (SearchResponseData searchResponseData:searchResponseDataList) {
+        	PictureBean pictureBean = new PictureBean();
             pictureBean.setScore(searchResponseData.getScore()==null?null:searchResponseData.getScore().toString());
             pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
             pictureBean.setPictureId(searchResponseData.getId());
