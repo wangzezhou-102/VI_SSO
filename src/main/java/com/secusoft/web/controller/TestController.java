@@ -101,8 +101,7 @@ public class TestController<psvm> extends BaseController {
         //这里可以直接将search返回给前端  默认已相似度排序
         BaseResponse<JSONArray> search = tuSouSearch.search(baseRequest);
         JSONArray data = search.getData();
-        ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(JSON.toJSONString(data), new TypeReference<ArrayList<SearchResponseData>>() {
-        });
+        ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(JSON.toJSONString(data), new TypeReference<ArrayList<SearchResponseData>>() { });
 
         return search;
     }

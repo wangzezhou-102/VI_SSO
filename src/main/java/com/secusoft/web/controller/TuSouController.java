@@ -67,10 +67,4 @@ public class TuSouController {
         ResultVo resultVo = tuSouSearchService.cacheSearch();
         return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
-
-
-    @RequestMapping("/bkontinuetracking")
-    public ResponseEntity<ResultVo> bkContinueTracking(){
-        return new ResponseEntity<>(ResultVo.success(), HttpStatus.OK);
-    }
 }
