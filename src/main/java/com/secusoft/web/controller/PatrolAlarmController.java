@@ -23,7 +23,7 @@ public class PatrolAlarmController {
      * @param patrolAlarmDetailBean
      * @return
      */
-    @RequestMapping("/focusalarmdetail")
+    @RequestMapping("/focuspatrolalarmdetail")
     public ResponseEntity<ResultVo> updateFocusAlarmDetail(@RequestBody PatrolAlarmDetailBean patrolAlarmDetailBean){
         ResultVo resultVo = patrolAlarmService.updateFocusAlarmDetail(patrolAlarmDetailBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
@@ -34,7 +34,7 @@ public class PatrolAlarmController {
      * @param patrolAlarmDetailRequest
      * @return
      */
-    @RequestMapping("/gethistoryalarmdetail")
+    @RequestMapping("/gethistorypatrolalarmdetail")
     public ResponseEntity<ResultVo> getHistoryAlarmDetail(@RequestBody PatrolAlarmDetailRequest patrolAlarmDetailRequest){
         ResultVo resultVo = patrolAlarmService.getHistortyAlarmDetail(patrolAlarmDetailRequest);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
