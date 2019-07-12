@@ -22,6 +22,7 @@ public class NormalConfig {
     public static String bkrepoDataTaskTime;
 
     public static String streamMinute;
+
     /**
      * 基础库数据源  1-烽火 2-视频专网orcal
      */
@@ -46,6 +47,12 @@ public class NormalConfig {
      * 布控任务启停流AppId
      */
     public static String szBkAppId;
+
+    public static String szPatrolAppId;
+
+    public static String getSzPatrolAppId() { return szPatrolAppId; }
+
+    public static void setSzPatrolAppId(String szPatrolAppId) { NormalConfig.szPatrolAppId = szPatrolAppId; }
 
     public static String getAddrApiService() {
         return addrApiService;

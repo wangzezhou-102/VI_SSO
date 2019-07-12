@@ -56,7 +56,7 @@ public class PatrolVideoStreamStartTask extends TimerTask {
                     //判断设备是否已启用或者状态是否为2
                     if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
                         StreamRequest streamRequest = new StreamRequest();
-                        streamRequest.setAppId(NormalConfig.getSzBkAppId());
+                        streamRequest.setAppId(NormalConfig.getSzPatrolAppId());
                         streamRequest.setDeviceId(viTaskDeviceBean.getDeviceId());
 
                         String requestStr = JSON.toJSONString(streamRequest);

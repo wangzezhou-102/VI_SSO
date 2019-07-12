@@ -86,7 +86,6 @@ public class PatrolAlarmServiceImpl implements PatrolAlarmService {
             } else {
                 bean.setBkname(viPrivateMemberByBean.getViRepoBean().getBkname());
             }
-
             //查找设备信息
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getDeviceRoadName());
             if(null!=deviceBean){
