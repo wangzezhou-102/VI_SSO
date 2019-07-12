@@ -1,5 +1,7 @@
 package com.secusoft.web.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -54,6 +56,11 @@ public class ViPsurveyAlarmDetailResponse {
     private String time;
 
     /**
+     * 入库时间
+     */
+    private String realTime;
+
+    /**
      * 对象id
      */
     private String objectId;
@@ -79,6 +86,12 @@ public class ViPsurveyAlarmDetailResponse {
     private Integer aiStatus;
 
     private ViPsurveyAlarmBean viPsurveyAlarmBean;
+    /**
+     * 经纬度
+     */
+    private PointBean pointBean;
+
+    private String ossUrlBase64;
 
     public Integer getAlarmDetailId() {
         return alarmDetailId;
@@ -198,5 +211,29 @@ public class ViPsurveyAlarmDetailResponse {
 
     public void setViPsurveyAlarmBean(ViPsurveyAlarmBean viPsurveyAlarmBean) {
         this.viPsurveyAlarmBean = viPsurveyAlarmBean;
+    }
+
+    public String getRealTime() {
+        return realTime;
+    }
+
+    public void setRealTime(String realTime) {
+        this.realTime = realTime;
+    }
+
+    public PointBean getPointBean() {
+        return pointBean;
+    }
+
+    public void setPointBean(PointBean pointBean) {
+        this.pointBean = pointBean;
+    }
+
+    public String getOssUrlBase64() {
+        return ossUrlBase64;
+    }
+
+    public void setOssUrlBase64(String ossUrlBase64) {
+        this.ossUrlBase64 = ossUrlBase64;
     }
 }

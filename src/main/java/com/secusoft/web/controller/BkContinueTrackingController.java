@@ -23,7 +23,7 @@ public class BkContinueTrackingController {
     @Autowired
     BkContinueTrackingService bkContinueTrackingService;
 
-    @RequestMapping("/bkontinuetracking")
+    @RequestMapping("/bkcontinuetracking")
     public ResponseEntity<ResultVo> bkContinueTracking(@RequestBody BkContinueTrackingRequest bkContinueTrackingRequest){
         return new ResponseEntity<>(bkContinueTrackingService.getBkContinueTracking(bkContinueTrackingRequest), HttpStatus.OK);
     }

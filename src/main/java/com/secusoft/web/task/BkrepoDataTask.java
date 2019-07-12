@@ -130,8 +130,8 @@ public class BkrepoDataTask {
                     asycBkrepo("涉毒脱失人员布控库", zdryVo, syncBean, syncZdryLogBean);
                 }
             }
-            log.info("结束同步基础库数据");
         }
+        log.info("结束同步基础库数据");
     }
 
     /**

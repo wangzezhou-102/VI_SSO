@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.UploadUtil;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.mapper.ViPsurveyAlarmDetailMapper;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViPsurveyAlarmService;
+import com.secusoft.web.utils.ImageUtils;
 import com.secusoft.web.utils.PageReturnUtils;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -68,7 +71,7 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
     }
 
     @Override
-    public ResultVo getHistortyAlarmDetail(ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest) {
+    public ResultVo getHistortyAlarmDetail(ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest, HttpServletRequest request) {
 
         PageHelper.startPage(viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
@@ -76,10 +79,12 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
         Map<String, Object> pageMap = PageReturnUtils.getPageMap(histortyAlarmDetail, viPsurveyAlarmDetailRequest.getCurrent(), viPsurveyAlarmDetailRequest.getSize());
 
         //List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = JSON.parseObject(String.valueOf(records), new TypeReference<ArrayList<ViPsurveyAlarmDetailResponse>>(){});
-        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos =(ArrayList<ViPsurveyAlarmDetailResponse>)pageMap.get("records");
+        List<ViPsurveyAlarmDetailResponse> viPsurveyAlarmVos = (ArrayList<ViPsurveyAlarmDetailResponse>) pageMap.get("records");
         for (ViPsurveyAlarmDetailResponse bean : viPsurveyAlarmVos) {
+            bean.setOssUrlBase64(ImageUtils.image2Base64(getRequestPrefix(request) + bean.getPersonImage()));
             SimpleDateFormat sdfs = new SimpleDateFormat("MM/dd HH:mm:ss");
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            bean.setRealTime(bean.getTime());
             try {
                 bean.setTime(sdfs.format(sdf.parse(bean.getTime())));
             } catch (ParseException e) {
@@ -105,10 +110,30 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
             //查找设备信息
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getDeviceRoadName());
             if (null != deviceBean) {
+                PointBean pointBean=new PointBean(Double.valueOf(deviceBean.getLongitude()),Double.valueOf(deviceBean.getLatitude()));
+                bean.setPointBean(pointBean);
                 bean.setDeviceRoadName(deviceBean.getDeviceName());
             }
         }
-        pageMap.put("records",viPsurveyAlarmVos);
+        pageMap.put("records", viPsurveyAlarmVos);
         return ResultVo.success(pageMap);
+    }
+
+    /**
+     * 获取url请求前缀
+     *
+     * @param request request对象
+     * @return
+     * @explain http://localhost:8080/test
+     */
+    public static String getRequestPrefix(HttpServletRequest request) {
+        // 网络协议
+        String networkProtocol = request.getScheme();
+        // 网络ip
+        String ip = request.getServerName();
+        // 端口号
+        int port = request.getServerPort();
+        String urlPrefix = networkProtocol + "://" + ip + ":" + port;
+        return urlPrefix;
     }
 }

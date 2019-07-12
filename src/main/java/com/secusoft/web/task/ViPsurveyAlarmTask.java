@@ -86,9 +86,9 @@ public class ViPsurveyAlarmTask {
                     BeanCopier beanCopier = BeanCopier.create(ViPsurveyAlarmBean.class, ViPsurveyAlarmBean.class, false);
                     beanCopier.copy(alaramVo.getSrc(), viPsurveyAlarmBean, null);
                     //base64转存本地图片
-                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getCropImage().getBytes()), "Alarm"));
-                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getOrigImage().getBytes()), "Alarm"));
-                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(ImageUtils.encode(viPsurveyAlarmBean.getPersonImage().getBytes()), "Alarm"));
+                    viPsurveyAlarmBean.setCropImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getCropImage(), "Alarm"));
+                    viPsurveyAlarmBean.setOrigImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getOrigImage(), "Alarm"));
+                    viPsurveyAlarmBean.setPersonImage(UploadUtil.downLoadFromBase64(viPsurveyAlarmBean.getPersonImage(), "Alarm"));
                     viPsurveyAlarmMapper.insertViPsurveyAlarm(viPsurveyAlarmBean);
                 } else {
                     viPsurveyAlarmBean = bean;
@@ -98,7 +98,9 @@ public class ViPsurveyAlarmTask {
                 //人员报警布控图比对
                 for (ViPsurveyAlarmDetailBean beans : alaramVo.getSimilar()) {
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    ViPsurveyAlarmDetailResponse viPsurveyAlarmDetailResponse = new ViPsurveyAlarmDetailResponse();
+                    viPsurveyAlarmDetailResponse.setOssUrlBase64(viPsurveyAlarmBean.getPersonImage());
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = null;
                     try {
@@ -111,12 +113,11 @@ public class ViPsurveyAlarmTask {
                     beans.setTaskId(alaramVo.getTaskId());
                     beans.setAlarmType("312312");
                     beans.setViPsurveyAlarmBean(viPsurveyAlarmBean);
-                    beans.setOssUrl(UploadUtil.downLoadFromBase64(ImageUtils.encode(beans.getOssUrl().getBytes()), "Alarm"));
-
-                    ViPsurveyAlarmDetailResponse viPsurveyAlarmDetailResponse = new ViPsurveyAlarmDetailResponse();
+                    beans.setOssUrl(UploadUtil.downLoadFromBase64(beans.getOssUrl(), "Alarm"));
 
                     DecimalFormat df = new DecimalFormat("0%");
                     viPsurveyAlarmDetailResponse.setSimilarity(df.format(Double.valueOf(beans.getSimilarity())));
+                    viPsurveyAlarmDetailResponse.setRealTime(beans.getTime());
                     viPsurveyAlarmDetailResponse.setName(beans.getName());
                     viPsurveyAlarmDetailResponse.setOssUrl(beans.getOssUrl());
                     viPsurveyAlarmDetailResponse.setCropImage(viPsurveyAlarmBean.getCropImage());
@@ -153,6 +154,8 @@ public class ViPsurveyAlarmTask {
                     viPsurveyAlarmDetailResponse.setTime(sdfs.format(date));
                     if (null != deviceBean) {
                         viPsurveyAlarmDetailResponse.setDeviceRoadName(deviceBean.getDeviceName());
+                        PointBean pointBean=new PointBean(Double.valueOf(deviceBean.getLongitude()),Double.valueOf(deviceBean.getLatitude()));
+                        viPsurveyAlarmDetailResponse.setPointBean(pointBean);
                     }
                     if (basicMemberBean != null && basicMemberBean.getStatus() == 0) {
                         continue;

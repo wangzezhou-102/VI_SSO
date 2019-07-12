@@ -45,10 +45,10 @@ public class BkContinueTrackingServiceImpl implements BkContinueTrackingService 
         searchRequestData.setEndTime(bkContinueTrackingRequest.getEndTime().getTime());
 
         //图片的base64  不带前面的base64标记
-        searchRequestData.setContents(bkContinueTrackingRequest.getContent().split(",")[1]);
+        searchRequestData.setContents(bkContinueTrackingRequest.getContent());
 
         //要搜索的设备ID      用，隔开
-        searchRequestData.setCameraId(StringUtils.arrayToDelimitedString(bkContinueTrackingRequest.getDeviceId(), ","));
+        //searchRequestData.setCameraId(StringUtils.arrayToDelimitedString(bkContinueTrackingRequest.getDeviceId(), ","));
         baseRequest.setData(searchRequestData);
         //这里可以直接将search返回给前端  默认已相似度排序
         BaseResponse<JSONArray> search = tuSouSearch.search(baseRequest);

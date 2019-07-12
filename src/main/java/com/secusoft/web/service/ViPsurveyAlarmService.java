@@ -3,6 +3,7 @@ package com.secusoft.web.service;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPsurveyAlarmDetailBean;
 import com.secusoft.web.model.ViPsurveyAlarmDetailRequest;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 /**
  * @author chjiang
@@ -17,5 +18,5 @@ public interface ViPsurveyAlarmService {
      */
     ResultVo updateFocusAlarmDetail(ViPsurveyAlarmDetailBean viPsurveyAlarmDetailBean);
 
-    ResultVo getHistortyAlarmDetail(ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest);
+    ResultVo getHistortyAlarmDetail(ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest, HttpServletRequest httpServletRequest);
 }

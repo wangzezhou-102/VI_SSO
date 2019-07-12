@@ -143,7 +143,7 @@
     <select id="getEnabledViSurveyTaskCount" resultType="java.lang.Integer">
         SELECT count(*)
         FROM vi_survey_task vst
-        where vst.`enable`=1
+        where vst.`enable`=1 and vst.survey_status=1
     </select>
 
     <select id="selectExecutingSurveyTaskNumber" resultType="java.lang.Integer">

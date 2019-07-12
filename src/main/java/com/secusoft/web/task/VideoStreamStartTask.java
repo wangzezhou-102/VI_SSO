@@ -52,7 +52,7 @@ public class VideoStreamStartTask extends TimerTask {
             }
 
             ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-            if(viSurveyTask!=null) {
+            if (viSurveyTask != null) {
                 for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTask.getViTaskDeviceList()) {
                     //判断设备是否已启用或者状态是否为1
                     if (viTaskDeviceBean.getAction() == 2 && viTaskDeviceBean.getStatus() == 2) {
@@ -74,6 +74,10 @@ public class VideoStreamStartTask extends TimerTask {
                         }
                         viTaskDeviceBean.setAction(1);
                         viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
+
+                        if (viTaskDeviceBean.getAction() == 1 && viTaskDeviceBean.getStatus() == 1) {
+
+                        }
                     }
                 }
             }
