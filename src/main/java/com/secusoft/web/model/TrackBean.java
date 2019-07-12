@@ -11,6 +11,7 @@ public class TrackBean implements Serializable {
     private String folderId;
     private List<PictureBean> pictureBeans;
     private List<SearchResponseData> pictureList;
+    private Integer idn;
 
     public TrackBean() {
     }
@@ -62,4 +63,13 @@ public class TrackBean implements Serializable {
     public void setPictureList(List<SearchResponseData> pictureList) {
         this.pictureList = pictureList;
     }
+
+	public Integer getIdn() {
+		return idn;
+	}
+
+	public void setIdn(Integer idn) {
+		this.idn = idn;
+	}
+    
 }

@@ -109,10 +109,13 @@ public class FolderServiceImpl implements FolderService {
         		|| StringUtils.isEmpty(folderBean.getId())){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
         }
-        if(folderMapper.selectCountFolderByObj(folderBean)==0){
+        FolderBean queryBean = new FolderBean();
+        queryBean.setFolderName(folderBean.getFolderName());
+        queryBean.setIdn(Integer.valueOf(folderBean.getId()));
+        if(folderMapper.selectCountFolderByObj(queryBean)==0){
             folderMapper.updateNonEmptyFolderById(folderBean);
         }else{
-            return ResultVo.failure(BizExceptionEnum.REPEAT.getCode(),BizExceptionEnum.REPEAT.getMessage());
+            return ResultVo.failure(BizExceptionEnum.FOLDER_REPEAT.getCode(),BizExceptionEnum.FOLDER_REPEAT.getMessage());
         }
         return ResultVo.success();
     }

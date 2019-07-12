@@ -15,6 +15,12 @@ public enum BizExceptionEnum {
     REQUEST_NULL(400, "请求有错误"),
     NO_PERMITION(403, "权限不足"),
     SERVER_ERROR(500, "服务器异常"),
+    
+    /**
+     * 业务相关
+     */
+    FOLDER_REPEAT(1001021,"文件夹名重复"),
+    TRACK_REPEAT(1001022,"轨迹名重复"),
 	/**
 	 * 登录问题
 	 */

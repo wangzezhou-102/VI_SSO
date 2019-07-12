@@ -18,7 +18,8 @@
         count(*)
         from vi_folder
         <where>
-            <if test="folderName != null "> and folder_name = #{folderName}</if>
+            <if test="folderName != null and folderName != ''"> and folder_name = #{folderName}</if>
+            <if test="idn != null "> and id != #{idn}</if>
         </where>
     </select>
 

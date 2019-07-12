@@ -106,6 +106,15 @@
         </where>
     </select>
 
+	<select id="selectTrackCountByBean" parameterType="trackBean" resultType="Integer">
+		select count(1) from vi_track
+		<where>
+			<if test="folderId != null "> and vi_track.folder_id = #{folderId}</if>
+            <if test="trackName != null "> and vi_track.track_name = #{trackName}</if>
+            <if test="id != null "> and vi_track.id = #{id}</if>
+            <if test="idn != null"> and id != #{idn}</if>
+		</where>
+	</select>
     <!-- 获得条件相同的文件夹总数,以参数Folder对象中不为空的属性作为条件进行查询-->
     <select id="selectCountTrackByName" parameterType="com.secusoft.web.model.TrackBean" resultType="java.lang.Integer">
         select

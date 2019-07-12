@@ -26,8 +26,16 @@ public class FolderBean extends Page  {
     //收藏区域集合
     private List deviceArea;
 
+    private Integer idn;
+    public Integer getIdn() {
+		return idn;
+	}
 
-    public FolderBean() {
+	public void setIdn(Integer idn) {
+		this.idn = idn;
+	}
+
+	public FolderBean() {
     }
 
     public FolderBean(String id, String folderName, Integer status, List imageSearchList, List trackList, List deviceArea) {
