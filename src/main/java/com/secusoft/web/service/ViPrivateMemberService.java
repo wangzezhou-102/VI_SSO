@@ -3,8 +3,7 @@ package com.secusoft.web.service;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPrivateMemberBean;
 import com.secusoft.web.model.ViPrivateMemberVo;
-
-import javax.servlet.http.HttpServletRequest;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 /**
  * @author chjiang

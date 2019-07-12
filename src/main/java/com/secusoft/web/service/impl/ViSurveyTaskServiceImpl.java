@@ -171,7 +171,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
         } else {
             List<ViSurveyTaskBean> surveyTaskList = viSurveyTaskMapper.getAllViSurveyTask(viSurveyTaskRequest);
-            if (surveyTaskList.size() > 0 && viSurveyTaskRequest.getId() != surveyTaskList.get(0).getId()) {
+            if (surveyTaskList.size() > 0 && !viSurveyTaskRequest.getId().equals(surveyTaskList.get(0).getId())) {
                 return ResultVo.failure(BizExceptionEnum.TASK_NANE_REPEATED.getCode(), BizExceptionEnum.TASK_NANE_REPEATED.getMessage());
             }
         }

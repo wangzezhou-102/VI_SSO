@@ -178,6 +178,7 @@
         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
         <where>
+            valid_state=1
             <if test="id!=null">
                 AND vst.id=#{id}
             </if>
