@@ -184,6 +184,9 @@
             <if test="taskId!=null">
                 AND vst.task_id=#{taskId}
             </if>
+            <if test="surveyType!=null">
+                AND vst.survey_type=#{surveyType}
+            </if>
         </where>
         order by vst.create_time desc,vst.modify_time desc
     </select>
