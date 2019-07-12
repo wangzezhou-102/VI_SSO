@@ -67,7 +67,9 @@ public class PatrolTaskUtil {
         //TODO
         PatrolTaskBean patrolTaskBean1 = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(patrolTaskBean1.getEndTime());
+        calendar.setTime(patrolTaskBean1.
+
+                getEndTime());
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
         long diff = new Date().getTime() - calendar.getTime().getTime();

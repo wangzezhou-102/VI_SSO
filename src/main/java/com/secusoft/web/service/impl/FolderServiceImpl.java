@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.FileUtil;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.AreaService;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -78,8 +80,8 @@ public class FolderServiceImpl implements FolderService {
         String relativePath = "/store/" + id;
         Path folderPath = Paths.get(basePath, relativePath);
         try {
-            Files.deleteIfExists(folderPath);
-        } catch (IOException e1) {
+        	FileUtil.deleteDir(folderPath.toFile());
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
         
@@ -95,6 +97,11 @@ public class FolderServiceImpl implements FolderService {
         folderMapper.updateNonEmptyFolderById(folderBean);
         return ResultVo.success();
     }
+
+    public static void main(String[] args) {
+		File folder = new File("D:/个人/项目/VI_WEB/resources/store/24");
+		FileUtil.deleteDir(folder);
+	}
 
     @Override
     public ResultVo setFolderName(FolderBean folderBean) {

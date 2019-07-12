@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.secusoft.web.mapper.ViPsurveyAlarmMapper">
+<mapper namespace="com.secusoft.web.mapper.PatrolAlarmMapper">
 
-    <insert id="insertViPsurveyAlarm" parameterType="com.secusoft.web.model.ViPsurveyAlarmBean" keyProperty="id" useGeneratedKeys="true">
-        insert into vi_psurvey_alarm (orig_image, crop_image,
+    <insert id="insertPatrolAlarm" parameterType="com.secusoft.web.model.PatrolAlarmBean" keyProperty="id" useGeneratedKeys="true">
+        insert into vi_patrol_alarm (orig_image, crop_image,
           person_image, entry_time, leave_time,
           feature, camera_id, obj_top,
           obj_bottom, obj_left, obj_right,
@@ -17,8 +17,8 @@
           #{taskId,jdbcType=VARCHAR})
     </insert>
 
-    <select id="getViPsurveyAlarmByBean" parameterType="com.secusoft.web.model.ViPsurveyAlarmBean" resultType="com.secusoft.web.model.ViPsurveyAlarmBean">
-        select * from vi_psurvey_alarm
+    <select id="getPatrolAlarmByBean" parameterType="com.secusoft.web.model.PatrolAlarmBean" resultType="com.secusoft.web.model.PatrolAlarmBean">
+        select * from vi_patrol_alarm
         where task_id=#{taskId}
     </select>
 </mapper>

@@ -65,11 +65,19 @@ public class ServiceApiConfig {
      * 获取缓存里的布控告警数据
      */
     public static String getViPsurveyAlarm;
+    /**
+     * 获取缓存里的巡逻告警数据
+     */
+    public static String getPatrolAlarm;
 
     /**
      * 重点人员库
      */
     public static String viewZdryList;
+
+    public static String getGetPatrolAlarm() { return getPatrolAlarm; }
+
+    public static void setGetPatrolAlarm(String getPatrolAlarm) { ServiceApiConfig.getPatrolAlarm = getPatrolAlarm; }
 
     public static String getPathBkrepoMeta() {
         return pathBkrepoMeta;

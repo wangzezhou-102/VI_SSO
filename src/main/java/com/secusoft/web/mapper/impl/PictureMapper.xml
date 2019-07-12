@@ -61,6 +61,7 @@
         from vi_picture
         <where>
             <if test="score != null "> and vi_picture.score = #{score}</if>
+            <if test="pictureId != null and pictureId != ''">and vi_picture.picture_id=#{pictureId}</if>
             <if test="picType != null "> and vi_picture.pic_type = #{picType}</if>
             <if test="folderId != null "> and vi_picture.folder_id = #{folderId}</if>
             <if test="deviceId != null "> and vi_picture.device_id = #{deviceId}</if>
@@ -126,6 +127,9 @@
 			</if>
 			<if test="picType!=null">
 				and pic_type=#{picType}
+			</if>
+			<if test="pictureId != null and pictureId != ''">
+				and picture_id=#{pictureId}
 			</if>
 		</where>
 	</delete>
