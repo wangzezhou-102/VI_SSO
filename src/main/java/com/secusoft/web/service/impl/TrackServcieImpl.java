@@ -198,7 +198,7 @@ public class TrackServcieImpl implements TrackService {
     	}
     	TrackBean queryBean = new TrackBean();
     	queryBean.setIdn(Integer.valueOf(trackBean.getId()));
-    	queryBean.setTrackName(queryBean.getTrackName());
+    	queryBean.setTrackName(trackBean.getTrackName());
     	Integer count = trackMapper.selectTrackCountByBean(queryBean);
     	if(count > 0) {
             return ResultVo.failure(BizExceptionEnum.TRACK_REPEAT.getCode(),BizExceptionEnum.TRACK_REPEAT.getMessage());
