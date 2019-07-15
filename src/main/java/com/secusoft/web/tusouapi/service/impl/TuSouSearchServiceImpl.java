@@ -114,10 +114,12 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             return resultVo;
         }
         //相似度排序
-        List<SearchResponseData> scoreData = SearchSortUtils.scoreSort(olddata);
+        List<SearchResponseData> scoreData = new ArrayList<SearchResponseData>();
+        scoreData.addAll(SearchSortUtils.scoreSort(olddata));
 
         // 时间戳排序
-        List<SearchResponseData> timeStampData = SearchSortUtils.timeStampSort(olddata);
+        List<SearchResponseData> timeStampData = new ArrayList<SearchResponseData>();
+        timeStampData.addAll(SearchSortUtils.timeStampSort(olddata));
 
         //设备分组排序
         Map<String, List> resultMap = SearchSortUtils.deviceSort(olddata);
