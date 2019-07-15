@@ -13,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 /**
  * 自定义布控库
@@ -48,7 +47,7 @@ public class ViPrivateMemberController {
             resultVo = viPrivateMemberService.updateViPrivateMember(viPrivateMemberBean, request);
         } catch (Exception ex) {
             log.info(ex.getMessage());
-            ResultVo.failure(BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getCode(), BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getMessage());
+            resultVo=ResultVo.failure(BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getCode(), BizExceptionEnum.BKMEMBER_UPDATE_FAIL.getMessage());
         }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }

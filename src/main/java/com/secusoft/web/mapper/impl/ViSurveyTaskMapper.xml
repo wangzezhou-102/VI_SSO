@@ -143,7 +143,7 @@
     <select id="getEnabledViSurveyTaskCount" resultType="java.lang.Integer">
         SELECT count(*)
         FROM vi_survey_task vst
-        where vst.`enable`=1
+        where vst.`enable`=1 and vst.survey_status=1
     </select>
 
     <select id="selectExecutingSurveyTaskNumber" resultType="java.lang.Integer">
@@ -178,11 +178,15 @@
         LEFT JOIN vi_task_repo vtr on vst.task_id=vtr.task_id
         LEFT JOIN vi_task_device vtd on vst.task_id=vtd.task_id
         <where>
+            valid_state=1
             <if test="id!=null">
                 AND vst.id=#{id}
             </if>
             <if test="taskId!=null">
                 AND vst.task_id=#{taskId}
+            </if>
+            <if test="surveyType!=null">
+                AND vst.survey_type=#{surveyType}
             </if>
         </where>
         order by vst.create_time desc,vst.modify_time desc

@@ -4,6 +4,7 @@ import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.ViPsurveyAlarmDetailBean;
 import com.secusoft.web.model.ViPsurveyAlarmDetailRequest;
 import com.secusoft.web.service.ViPsurveyAlarmService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,8 @@ public class ViPsurveyAlarmController {
      * @return
      */
     @RequestMapping("/gethistoryalarmdetail")
-    public ResponseEntity<ResultVo> getHistoryAlarmDetail(@RequestBody ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest){
-        ResultVo resultVo = viPsurveyAlarmService.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest);
+    public ResponseEntity<ResultVo> getHistoryAlarmDetail(@RequestBody ViPsurveyAlarmDetailRequest viPsurveyAlarmDetailRequest, HttpServletRequest httpServletRequest){
+        ResultVo resultVo = viPsurveyAlarmService.getHistortyAlarmDetail(viPsurveyAlarmDetailRequest, httpServletRequest);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 }

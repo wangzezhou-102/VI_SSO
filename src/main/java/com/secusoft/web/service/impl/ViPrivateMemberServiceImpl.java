@@ -6,7 +6,6 @@ import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UploadUtil;
-import com.secusoft.web.mapper.ViBasicMemberMapper;
 import com.secusoft.web.mapper.ViPrivateMemberMapper;
 import com.secusoft.web.mapper.ViRepoMapper;
 import com.secusoft.web.model.*;
@@ -24,9 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -140,7 +139,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         viPrivateMemberBean1.setRepoId(viPrivateMemberBean.getRepoId());
         ViPrivateMemberBean bean1 = viPrivateMemberMapper.getViPrivateMemberByBean(viPrivateMemberBean1);
         //判断要修改的库是否有重复的身份证号码
-        if (bean1 != null && bean1.getId() != viPrivateMemberBean.getId() && bean1.getIdentityId().equals(viPrivateMemberBean.getIdentityId())) {
+        if (bean1 != null && !bean1.getId().equals(viPrivateMemberBean.getId())) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
 
@@ -150,7 +149,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         }
 
 
-        String oldBase64 = ImageUtils.image2Base64(UploadUtil.basePath + bean.getImageUrl());
+        String oldBase64 = ImageUtils.image2Base64(getRequestPrefix(request)+ bean.getImageUrl());
         String newBase64 = viPrivateMemberBean.getImageUrl().split(",")[1];
         log.info("oldBase64：" + oldBase64);
         log.info("NewBase64：" + newBase64);
@@ -313,4 +312,22 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
     }
 
 
+
+    /**
+     * 获取url请求前缀
+     *
+     * @param request request对象
+     * @return
+     * @explain http://localhost:8080/test
+     */
+    public static String getRequestPrefix(HttpServletRequest request) {
+        // 网络协议
+        String networkProtocol = request.getScheme();
+        // 网络ip
+        String ip = request.getServerName();
+        // 端口号
+        int port = request.getServerPort();
+        String urlPrefix = networkProtocol + "://" + ip + ":" + port;
+        return urlPrefix;
+    }
 }

@@ -196,6 +196,13 @@ public class TrackServcieImpl implements TrackService {
     	if(StringUtils.isEmpty(trackBean.getId())||StringUtils.isEmpty(trackBean.getTrackName())) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
     	}
+    	TrackBean queryBean = new TrackBean();
+    	queryBean.setIdn(Integer.valueOf(trackBean.getId()));
+    	queryBean.setTrackName(trackBean.getTrackName());
+    	Integer count = trackMapper.selectTrackCountByBean(queryBean);
+    	if(count > 0) {
+            return ResultVo.failure(BizExceptionEnum.TRACK_REPEAT.getCode(),BizExceptionEnum.TRACK_REPEAT.getMessage());
+    	}
         trackMapper.updateTrackNameById(trackBean);
         return ResultVo.success();
     }

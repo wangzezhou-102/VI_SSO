@@ -88,12 +88,36 @@ public class BkrepoDataTask {
         log.info("开始同步基础库数据");
         String[] bkrepoTable = null;
         log.info(NormalConfig.getBkrepoType() == 1 ? "从烽火取数据" : "从视频专网取数据");
+
         if (NormalConfig.getBkrepoType() == 1) {
             bkrepoTable = NormalConfig.getBkrepoTable1().split(",");
             ViRepoBean viRepoBean = null;
             for (String str : bkrepoTable) {
+
+                log.info("开始同步基础库数据：" + str);
+                SyncZdryLogBean syncZdryLogBean = new SyncZdryLogBean();
+                syncZdryLogBean.setTableName(str);
+                SyncZdryLogBean syncBean = syncZdryLogMapper.selectByBean(syncZdryLogBean);
+                ZdryVo zdryVo = new ZdryVo();
+                zdryVo.setTableName(str);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, 2019);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                log.info(formatter.format(calendar.getTime()));
+                zdryVo.setUpdateTime(calendar.getTime());
+                zdryVo.setIsFirst(null == syncBean ? 1 : 0);
+                //判断是否是首次同步 1首次，0非首次
+                log.info("是否是首次同步：" + (null == syncBean));
+
+
+
                 OdpsUtils.table = "vi_" + str + "_linshi";
-                OdpsUtils.sql = "select * from vi_" + str + ";";
+                OdpsUtils.sql = "select * from" + str + ";";
                 OdpsUtils.runSql();
                 OdpsUtils.tunnel();
                 return;
@@ -130,10 +154,13 @@ public class BkrepoDataTask {
                     asycBkrepo("涉毒脱失人员布控库", zdryVo, syncBean, syncZdryLogBean);
                 }
             }
-            log.info("结束同步基础库数据");
         }
+        log.info("结束同步基础库数据");
     }
+    //==================================================同步情报部门odps==================================================
 
+
+    //======================================================同步oracle====================================================
     /**
      * 同步数据总方法
      */

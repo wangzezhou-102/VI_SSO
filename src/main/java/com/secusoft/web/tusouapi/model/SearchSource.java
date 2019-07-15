@@ -41,11 +41,12 @@ public class SearchSource {
     private String bag_color;
 
     private DeviceBean deviceBean;
+    private String cropImageSignedBase64;
 
     public SearchSource() {
     }
 
-    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, String year, String hat_type, String hat_color, String bag_type, String bag_color, DeviceBean deviceBean) {
+    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, String year, String hat_type, String hat_color, String bag_type, String bag_color, DeviceBean deviceBean,String cropImageSignedBase64) {
         this.origImage = origImage;
         this.oriImageSigned = oriImageSigned;
         this.hairScore = hairScore;
@@ -79,6 +80,7 @@ public class SearchSource {
         this.bag_type = bag_type;
         this.bag_color = bag_color;
         this.deviceBean = deviceBean;
+        this.cropImageSignedBase64=cropImageSignedBase64;
     }
 
     public String getOrigImage() {
@@ -343,6 +345,14 @@ public class SearchSource {
 
     public void setBag_color(String bag_color) {
         this.bag_color = bag_color;
+    }
+
+    public String getCropImageSignedBase64() {
+        return cropImageSignedBase64;
+    }
+
+    public void setCropImageSignedBase64(String cropImageSignedBase64) {
+        this.cropImageSignedBase64 = cropImageSignedBase64;
     }
 
     @Override

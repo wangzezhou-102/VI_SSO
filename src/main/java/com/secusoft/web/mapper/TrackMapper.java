@@ -33,4 +33,6 @@ public interface TrackMapper {
     
     void deleteTrackPicByFolderId(@Param("folderId") Integer folderId);
     void deleteTrackByBean(TrackBean trackBean);
+    
+    Integer selectTrackCountByBean(TrackBean queryBean);
 }

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.secusoft.web.core.common.Constants;
 import com.secusoft.web.core.exception.BizExceptionEnum;
+import com.secusoft.web.core.util.StringUtils;
 import com.secusoft.web.mapper.DeviceMapper;
 import com.secusoft.web.mapper.PictureMapper;
 import com.secusoft.web.mapper.SysOperationLogMapper;
@@ -48,7 +49,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     @Override
     public ResultVo sortsearch(JSONObject request) {
         String requestStr = JSON.toJSONString(request);
-        System.out.println("前台发送的数据"+requestStr);
+//        System.out.println("前台发送的数据"+requestStr);
 
         //判断是否是语义搜索
         BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(request.toJSONString(), new TypeReference<BaseRequest<SearchRequestData>>() {
@@ -67,9 +68,12 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         if(searchResponse == null || Constants.FAILED.equals(searchResponse.getErrorCode())){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
         }
+        if(StringUtils.isEmpty(searchResponse.getErrorCode())) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),BizExceptionEnum.PARAM_ERROR.getMessage());
+        }
         //如果查询结果为空并且请求成功
-        if(searchResponse.getData()==null&&Constants.SUCCESS.equals(searchResponse.getErrorCode())){
-            return  ResultVo.success();
+        if(CollectionUtils.isEmpty(searchResponse.getData())&&Constants.SUCCESS.equals(searchResponse.getErrorCode())){
+            return ResultVo.success();
         }
         List<SearchResponseData> olddata = searchResponse.getData();
         // 注入状态
@@ -114,10 +118,12 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             return resultVo;
         }
         //相似度排序
-        List<SearchResponseData> scoreData = SearchSortUtils.scoreSort(olddata);
+        List<SearchResponseData> scoreData = new ArrayList<SearchResponseData>();
+        scoreData.addAll(SearchSortUtils.scoreSort(olddata));
 
         // 时间戳排序
-        List<SearchResponseData> timeStampData = SearchSortUtils.timeStampSort(olddata);
+        List<SearchResponseData> timeStampData = new ArrayList<SearchResponseData>();
+        timeStampData.addAll(SearchSortUtils.timeStampSort(olddata));
 
         //设备分组排序
         Map<String, List> resultMap = SearchSortUtils.deviceSort(olddata);

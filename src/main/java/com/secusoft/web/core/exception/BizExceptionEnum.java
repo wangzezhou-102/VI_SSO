@@ -15,6 +15,12 @@ public enum BizExceptionEnum {
     REQUEST_NULL(400, "请求有错误"),
     NO_PERMITION(403, "权限不足"),
     SERVER_ERROR(500, "服务器异常"),
+    
+    /**
+     * 业务相关
+     */
+    FOLDER_REPEAT(1001021,"文件夹名重复"),
+    TRACK_REPEAT(1001022,"轨迹名重复"),
 	/**
 	 * 登录问题
 	 */
@@ -57,19 +63,19 @@ public enum BizExceptionEnum {
 	TASK_DATE_WRONG(701,"开始时间不能大于结束时间"),
 	TASK_DATE_NULL(702,"开始时间或结束时间不能为空"),
 	TASK_NANE_NULL(703,"布控任务名称不能为空"),
-	TASK_NANE_REPEATED(703,"该名称已存在，请输入不存在的名称"),
-	TASK_ADD_FAIL(704,"添加布控任务失败"),
-	TASK_ID_NULL(705,"布控任务id为null或0"),
-	TASK_START_FAIL(706,"开始布控任务失败"),
-	TASK_STOP_FAIL(707,"停止布控任务失败"),
-	TASK_DELETE_FAIL(708,"删除布控任务失败"),
-	TASK_CALUATE_FAIL(709,"算力不足，新增布控任务失败"),
-	TASK_CALUATE_UPDATE_FAIL(710,"算力不足，修改布控任务失败"),
-	TASK_DELETED_FAIL(711,"布控任务正在运行中，删除失败"),
-	TASK_STARTED(712,"布控任务正在运行中，启动任务失败"),
-	TASK_CLOSED(713,"布控任务已停止，停止任务失败"),
-	TASK_DEVICE_NULL(714,"设备号为空，新增布控任务失败"),
-	TASK_REPO_NULL(714,"关联布控库为空，新增布控任务失败"),
+	TASK_NANE_REPEATED(704,"该名称已存在，请输入不存在的名称"),
+	TASK_ADD_FAIL(705,"添加布控任务失败"),
+	TASK_ID_NULL(706,"布控任务id为null或0"),
+	TASK_START_FAIL(707,"开始布控任务失败"),
+	TASK_STOP_FAIL(708,"停止布控任务失败"),
+	TASK_DELETE_FAIL(709,"删除布控任务失败"),
+	TASK_CALUATE_FAIL(710,"算力不足，新增布控任务失败"),
+	TASK_CALUATE_UPDATE_FAIL(711,"算力不足，修改布控任务失败"),
+	TASK_DELETED_FAIL(712,"布控任务正在运行中，删除失败"),
+	TASK_STARTED(713,"布控任务正在运行中，启动任务失败"),
+	TASK_CLOSED(714,"布控任务已停止，停止任务失败"),
+	TASK_DEVICE_NULL(715,"设备号为空，新增布控任务失败"),
+	TASK_REPO_NULL(716,"关联布控库为空，新增布控任务失败"),
 
 	/**
 	 * 布控库相关
