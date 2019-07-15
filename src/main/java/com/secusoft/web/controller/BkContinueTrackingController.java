@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class BkContinueTrackingController {
-
-
     @Autowired
     BkContinueTrackingService bkContinueTrackingService;
 

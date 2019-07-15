@@ -43,9 +43,6 @@ public class MybatisPlusConfig {
     @Autowired
     DruidProperties druidProperties;
 
-
-
-
     /**
      * 数据源
      */

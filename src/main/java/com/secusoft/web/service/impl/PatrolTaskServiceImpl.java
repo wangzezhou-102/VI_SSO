@@ -431,7 +431,6 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         beanSet.removeAll(beanSameSet);
         return type ? new ArrayList<>(beanSet) : returnNewList;
     }
-
     /**
      * 新老布控库列表对比
      *
@@ -489,7 +488,9 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         calendar.setTime(patrolTaskBean.getBeginTime());
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        timer.schedule(new PatrolVideoStreamStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
+        //
+        timer.schedule(new PatrolVideoStreamStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 2 ? new Date() : calendar.getTime());
+
     }
 
     /**
@@ -502,7 +503,7 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         Calendar calendar = Calendar.getInstance();
         //设备提前5分钟启动码流计划任务
         calendar.setTime(patrolTaskBean.getBeginTime());
-        timer.schedule(new PatrolStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
+        timer.schedule(new PatrolStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 2 ? new Date() : calendar.getTime());
     }
 
     /**
@@ -527,7 +528,7 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     private void videoStreamStopTask(Timer timer, PatrolTaskBean patrolTaskBean) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(patrolTaskBean.getBeginTime());
-        //设备提前5分钟启动码流计划任务
+        //设备5分钟后停止码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
         timer.schedule(new PatrolVideoStreamStopTask(patrolTaskBean), calendar.getTime());
     }

@@ -5,72 +5,58 @@ package com.secusoft.web.model;
  * @since 2019/7/11 15:45
  */
 public class PatrolAlarmDetailResponse {
-
     /**
      * 告警详情编号
      */
     private Integer alarmDetailId;
-
     /**
      * 图片地址
      */
     private String ossUrl;
-
     /**
      * 原图oss地址
      */
     private String origImage;
-
     /**
      * 抠图oss地址，这里是人脸抠图
      */
     private String cropImage;
-
     /**
      * 人体抠图oss地址
      */
     private String personImage;
-
     /**
      * 相似度
      */
     private String similarity;
-
     /**
      * 对象名称
      */
     private String name;
-
     /**
      * 对象身份证
      */
     private String picid;
-
     /**
      * 入库时间
      */
     private String time;
-
     /**
      * 对象id
      */
     private String objectId;
-
     /**
      * 处理状态 0-忽略 1-关注 2-无操作
      */
     private Integer alarmStatus = 2;
-
     /**
      * 所在库名称
      */
     private String bkname;
-
     /**
      * 设备所在道路名称
      */
     private String deviceRoadName;
-
     /**
      * AI处理状态 0-未处理 1-已处理 2-无意义
      */

@@ -77,18 +77,15 @@ public class UUIDUtil {
         return sBuffer.toString().substring(0,length);
     }
 
-
     private static BigInteger unsigned2BigInt(long value) {
         if (value >= 0)
             return BigInteger.valueOf(value);
-
         // 将value 转 无符号数
         long lowValue = value & 0x7fffffffffffffffL;
         return BigInteger.valueOf(lowValue).
                 add(BigInteger.valueOf(Long.MAX_VALUE)).
                 add(BigInteger.valueOf(1));
     }
-
     /**
      * 获取UUID字符串
      * @return

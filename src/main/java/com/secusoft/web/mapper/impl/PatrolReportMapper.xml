@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.secusoft.web.mapper.PatrolTaskReportMapper">
-    <resultMap id="PatrolTaskReportResultMap" type="com.secusoft.web.model.PatrolTaskReportBean">
+<mapper namespace="com.secusoft.web.mapper.PatrolReportMapper">
+    <resultMap id="PatrolReportResultMap" type="com.secusoft.web.model.PatrolReportBean">
         <id column="report_id" property="reportId"/>
         <result column="task_id" property="taskId"/>
         <result column="report_date" property="reportDate"/>
@@ -10,15 +10,11 @@
         <association column="task_id" property="patrolTaskBean" select="com.secusoft.web.mapper.PatrolTaskMapper.selectPatrolTaskByPrimaryKey" />
     </resultMap>
     <!-- 根据(task_id)查询报告 -->
-    <select id="selectPatrolTaskReport" parameterType="java.lang.Integer" resultMap="PatrolTaskReportResultMap">
+    <select id="selectPatrolReport" parameterType="java.lang.String" resultMap="PatrolReportResultMap">
         select task_id,report_date,report_name,report_content from vi_patrol_report
         where task_id=#{taskId}
     </select>
-    <!-- 根据查询所有报告 -->
-    <select id="selectPatrolTaskReportAll" parameterType="com.secusoft.web.model.PatrolTaskReportBean" resultMap="PatrolTaskReportResultMap">
-        select task_id,patrol_name,status,enable from vi_patrol_report
-    </select>
-    <insert id="insertPatrolTaskReport" parameterType="com.secusoft.web.model.PatrolTaskReportBean">
+    <insert id="insertPatrolTaskReport" parameterType="com.secusoft.web.model.PatrolReportBean">
         insert into vi_patrol_report
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="reportId != null">report_id,</if>
@@ -36,7 +32,7 @@
         </trim>
     </insert>
     <!-- 删除任务信息 -->
-    <delete id="deletePatrolTaskReport" parameterType="java.lang.Integer">
+    <delete id="deletePatrolReport" parameterType="java.lang.String">
         delete from vi_patrol_report
         <where>
             <if test="taskId != null">
@@ -45,13 +41,13 @@
         </where>
     </delete>
     <!-- 修改路线信息 -->
-    <update id="updatePatrolTaskReport" parameterType="com.secusoft.web.model.PatrolTaskReportBean">
-        update vi_patrol_report set
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+    <update id="updatePatrolReport" parameterType="com.secusoft.web.model.PatrolReportBean">
+        update vi_patrol_report
+        <set>
             <if test="reportName != null">report_name=#{reportName},</if>
             <if test="reportDate != null">report_date=#{reportDate},</if>
             <if test="reportContent != null">report_content=#{reportContent}</if>
-        </trim>
+        </set>
         <where>
             <if test="taskId != null">
                 task_id=#{taskId}

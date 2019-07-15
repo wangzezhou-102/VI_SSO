@@ -55,14 +55,12 @@ public class PatrolAlarmTask {
     @Autowired
     WebSock webSock;
 
-    //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
     //@Scheduled(cron = "0 0/1 * * * ?")
     public void patrolAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetPatrolAlarm(), "");
-
-        if(responseStr==null){
+        if(responseStr == null){
             log.info("实时告警数据接口请求失败");
             return;
         }
@@ -93,7 +91,6 @@ public class PatrolAlarmTask {
                 DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(alaramVo.getSrc().getCameraId());
                 //人员报警布控图比对
                 for (PatrolAlarmDetailBean beans : alaramVo.getSimilar()) {
-
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = null;

@@ -3,7 +3,7 @@ package com.secusoft.web.model;
 import java.util.List;
 
 /**
- * @author wangzezhou
+ * @author Wangzezhou
  * @since 2019/7/11 16:44
  */
 public class PatrolAlarmVo {
@@ -12,9 +12,7 @@ public class PatrolAlarmVo {
     private PatrolAlarmBean src;
     private List<PatrolAlarmDetailBean> similar;
 
-    public String getTaskId() {
-        return taskId;
-    }
+    public String getTaskId() { return taskId; }
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
