@@ -88,10 +88,10 @@
     
     <!-- 批量插入数据 -->
     <insert id="insertBatchDevice" parameterType="list">
-        insert into vi_device (device_id,parent_id,device_name,type,status,longitude,
+        insert into vi_device (device_id,real_device_id,parent_id,device_name,type,status,longitude,
         latitude,civil_code,tq_api,stream_state,play_url) values
         <foreach collection="list" item="obj" index="index" separator=",">
-            (#{obj.deviceId},#{obj.parentId},#{obj.deviceName},#{obj.type},#{obj.status},
+            (#{obj.deviceId},#{obj.realDeviceId},#{obj.parentId},#{obj.deviceName},#{obj.type},#{obj.status},
             #{obj.longitude},#{obj.latitude},#{obj.civilCode},#{obj.tqApi},#{obj.streamState},#{obj.playUrl})
         </foreach>
     </insert>

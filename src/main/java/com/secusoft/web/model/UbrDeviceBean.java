@@ -12,6 +12,8 @@ public class UbrDeviceBean {
 
     // 设备ID
     private String deviceId;
+    // 实际设备ID
+    private String realDeviceId;
     // 设备名
     private String name;
     // 集群编号
@@ -149,7 +151,14 @@ public class UbrDeviceBean {
     public void setPlayUrl(String playUrl) {
         this.playUrl = playUrl;
     }
-
+    
+    public String getRealDeviceId() {
+        return realDeviceId;
+    }
+    
+    public void setRealDeviceId(String realDeviceId) {
+        this.realDeviceId = realDeviceId;
+    }
     @Override
     public String toString() {
         return "UbrDeviceBean [deviceId=" + deviceId + ", name=" + name + ", clusterSn=" + clusterSn + ", tqApi="
