@@ -61,6 +61,8 @@ public class BkContinueTrackingServiceImpl implements BkContinueTrackingService 
         //要搜索的设备ID      用，隔开
         //searchRequestData.setCameraId(StringUtils.arrayToDelimitedString(bkContinueTrackingRequest.getDeviceId(), ","));
         baseRequest.setData(searchRequestData);
+
+        System.out.println(JSON.toJSONString(baseRequest));
         //这里可以直接将search返回给前端  默认已相似度排序
         com.secusoft.web.serviceapi.model.BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getTusouSearch(), baseRequest);
 

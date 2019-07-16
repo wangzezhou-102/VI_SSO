@@ -17,7 +17,7 @@ public interface ViPrivateMemberService {
 
     ResultVo delViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
 
-    ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo);
+    ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo, HttpServletRequest request);
 
     /**
      * 上传图片

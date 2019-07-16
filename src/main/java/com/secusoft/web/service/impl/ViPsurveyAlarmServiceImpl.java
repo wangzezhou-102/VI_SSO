@@ -109,8 +109,8 @@ public class ViPsurveyAlarmServiceImpl implements ViPsurveyAlarmService {
             if (null != deviceBean) {
                 PointBean pointBean=new PointBean(Double.valueOf(deviceBean.getLongitude()),Double.valueOf(deviceBean.getLatitude()));
                 bean.setPointBean(pointBean);
-                bean.setDeviceRoadName(deviceBean.getDeviceName());
                 bean.setDeviceId(bean.getDeviceRoadName());
+                bean.setDeviceRoadName(deviceBean.getDeviceName());
             }
         }
         pageMap.put("records", viPsurveyAlarmVos);

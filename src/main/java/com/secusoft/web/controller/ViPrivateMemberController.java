@@ -59,8 +59,8 @@ public class ViPrivateMemberController {
     }
 
     @PostMapping("/listviprivatemember")
-    public ResponseEntity<ResultVo> listViPrivateMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo) {
-        return new ResponseEntity<ResultVo>(viPrivateMemberService.getAllViPrivateMember(viPrivateMemberVo), HttpStatus.OK);
+    public ResponseEntity<ResultVo> listViPrivateMember(@RequestBody ViPrivateMemberVo viPrivateMemberVo, HttpServletRequest request) {
+        return new ResponseEntity<ResultVo>(viPrivateMemberService.getAllViPrivateMember(viPrivateMemberVo,request), HttpStatus.OK);
     }
 
     @PostMapping("/uploadimg")

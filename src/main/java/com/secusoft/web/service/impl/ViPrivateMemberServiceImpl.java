@@ -80,10 +80,10 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         if (viPrivateMemberByBean != null) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getCode(), BizExceptionEnum.PRIVATEREPO_ID_REPEATED.getMessage());
         }
-        String base64 = viPrivateMemberBean.getImageUrl();
+        String base64 = viPrivateMemberBean.getImageUrl().split(",")[1];
         viPrivateMemberBean.setObjectId("vi_private_" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
         try {
-            viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(viPrivateMemberBean.getImageUrl().split(",")[1], "Bkmember"));
+            viPrivateMemberBean.setImageUrl(UploadUtil.downLoadFromBase64(base64, "Bkmember"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         bkMemberAddRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
         BKMemberAddRequest bkMemberAddRequest = new BKMemberAddRequest();
         bkMemberAddRequest.setObjectId(viPrivateMemberBean.getObjectId());
-        bkMemberAddRequest.setContent(base64.split(",")[1]);
+        bkMemberAddRequest.setContent(base64);
         bkMemberAddRequest.setBkid(bkrepoConfig.getBkid());
         bkMemberAddRequestBaseRequest.setData(bkMemberAddRequest);
 
@@ -255,7 +255,7 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
     }
 
     @Override
-    public ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo) {
+    public ResultVo getAllViPrivateMember(ViPrivateMemberVo viPrivateMemberVo, HttpServletRequest request) {
 
         if (null == viPrivateMemberVo.getRepoId() || viPrivateMemberVo.getRepoId() <= 0) {
             return ResultVo.failure(BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getCode(), BizExceptionEnum.PRIVATEREPO_BKREPOID_NULL.getMessage());
@@ -270,7 +270,9 @@ public class ViPrivateMemberServiceImpl implements ViPrivateMemberService {
         PageHelper.startPage(viPrivateMemberVo.getCurrent(), viPrivateMemberVo.getSize());
 
         List<ViMemberVo> list = viPrivateMemberMapper.getAllViPrivateMember(viPrivateMemberVo);
-
+        for(ViMemberVo vo:list){
+            vo.setContent(ImageUtils.image2Base64(getRequestPrefix(request)+ vo.getImageUrl()));
+        }
         return ResultVo.success(PageReturnUtils.getPageMap(list, viPrivateMemberVo.getCurrent(), viPrivateMemberVo.getSize()));
     }
 
