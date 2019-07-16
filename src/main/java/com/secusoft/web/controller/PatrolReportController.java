@@ -5,6 +5,7 @@ import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
 import com.secusoft.web.core.util.PdfUtil;
 import com.secusoft.web.core.util.ResponseUtil;
+import com.secusoft.web.model.PatrolAlarmVo;
 import com.secusoft.web.model.PatrolReportBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PatrolReportService;
@@ -35,10 +36,10 @@ public class PatrolReportController {
     }
     //生成巡逻报告
     @GetMapping("/createpatrolreport")
-    public ResponseEntity createPatrolReport(HttpServletResponse response){
+    public ResponseEntity createPatrolReport(HttpServletResponse response, PatrolAlarmVo patrolAlarmVo){
         PdfUtil pdfUtil = new PdfUtil();
         try{
-            pdfUtil.turnToPdf();
+            pdfUtil.turnToPdf(response, patrolAlarmVo);
             System.out.println("生成巡逻报告");
         }catch(Exception e) {
             throw new BussinessException(BizExceptionEnum.SERVER_ERROR);
