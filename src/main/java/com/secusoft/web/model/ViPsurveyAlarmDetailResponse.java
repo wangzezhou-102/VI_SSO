@@ -93,6 +93,8 @@ public class ViPsurveyAlarmDetailResponse {
 
     private String ossUrlBase64;
 
+    private String deviceId;
+
     public Integer getAlarmDetailId() {
         return alarmDetailId;
     }
@@ -235,5 +237,13 @@ public class ViPsurveyAlarmDetailResponse {
 
     public void setOssUrlBase64(String ossUrlBase64) {
         this.ossUrlBase64 = ossUrlBase64;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }

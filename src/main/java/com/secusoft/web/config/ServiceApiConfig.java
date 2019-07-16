@@ -75,6 +75,8 @@ public class ServiceApiConfig {
      */
     public static String viewZdryList;
 
+    public static String tusouSearch;
+
     public static String getGetPatrolAlarm() { return getPatrolAlarm; }
 
     public static void setGetPatrolAlarm(String getPatrolAlarm) { ServiceApiConfig.getPatrolAlarm = getPatrolAlarm; }
@@ -173,5 +175,13 @@ public class ServiceApiConfig {
 
     public static void setViewZdryList(String viewZdryList) {
         ServiceApiConfig.viewZdryList = viewZdryList;
+    }
+
+    public static String getTusouSearch() {
+        return tusouSearch;
+    }
+
+    public static void setTusouSearch(String tusouSearch) {
+        ServiceApiConfig.tusouSearch = tusouSearch;
     }
 }
