@@ -1,10 +1,7 @@
 package com.secusoft.web.core.util;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-
+import com.itextpdf.text.pdf.*;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -61,9 +58,10 @@ public class PdfUtil {
         //建立书写器,与文档对象关联
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("F://巡逻任务报告.PDF"));
         writer.setViewerPreferences(PdfWriter.PageModeUseThumbs);
+        writer.setStrictImageSequence(true);//图片精确放置
         writer.setEncryption("123".getBytes(),"1234".getBytes(),1,1);
         //设置文档标题
-        document.addTitle("巡逻任务报告");
+        document.addTitle("黄龙体育馆巡逻任务报告");
         //设置文档主题
         document.addSubject("巡逻报告");
         //设置关键字
@@ -76,14 +74,116 @@ public class PdfUtil {
         document.addProducer();
         //设置创建日期
         document.addCreationDate();
+        //add Chinese font
+        BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+        //Font headfont=new Font(bfChinese,10,Font.BOLD);
+        Font boldfont = new Font(bfChinese,14,Font.BOLD);//字体加粗
+        Font noramlfont = new Font(bfChinese,11,Font.NORMAL);//字体正常
         //打开文档
         document.open();
         //向文档中添加内容
-        document.add(new Paragraph("巡逻任务内容"));
+        //document.add(new Paragraph("巡逻任务内容"));(默认不支持中文字体)
+        //设置文本块
+        //Chunk chunk = new Chunk("sakah",FontFactory.getFont(FontFactory.HELVETICA, 12, Font.UNDERLINE));
+        //设置短语
+        /*Phrase phrase = new Phrase();
+        phrase.add(chunk);*/
+
+        //报告标题
+        Paragraph reportTitle = new Paragraph("黄龙体育馆巡逻任务报告", boldfont);
+        //1为居中对齐、2为右对齐、3为左对齐,默认为左对齐
+        reportTitle.setAlignment(1);
+        // 添加表格，2列
+        PdfPTable table = new PdfPTable(2);
+        //// 设置表格宽度比例为%100
+        table.setWidthPercentage(100);
+        // 设置表格的宽度
+        //table.setTotalWidth(500);
+        // 也可以每列分别设置宽度
+        //table.setTotalWidth(new float[] { 160, 70, 130, 100 });
+        // 锁住宽度
+        table.setLockedWidth(true);
+        // 设置表格上面空白宽度
+        table.setSpacingBefore(10f);
+        // 设置表格下面空白宽度
+        table.setSpacingAfter(10f);
+        // 设置表格默认为无边框
+        table.getDefaultCell().setBorder(0);
+        //PdfContentByte cb = writer.getDirectContent();生成条形码图片时使用
+
+        // 构建每个单元格
+        PdfPCell cell1 = new PdfPCell(new Paragraph("Cell 1"));
+        // 边框颜色
+        cell1.setBorderColor(BaseColor.BLUE);
+        // 设置背景颜色
+        cell1.setBackgroundColor(BaseColor.ORANGE);
+        // 设置跨两行
+        cell1.setRowspan(2);
+        // 设置距左边的距离
+        cell1.setPaddingLeft(10);
+        // 设置高度
+        cell1.setFixedHeight(20);
+        // 设置内容水平居中显示
+        cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        // 设置垂直居中
+        cell1.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        table.addCell(cell1);
+
+
+
+
+        //巡逻任务名称
+        Paragraph reportName = new Paragraph("巡逻任务名称        黄龙体育馆巡逻任务", noramlfont);
+        reportName.setPaddingTop(40f);
+        //报告时间范围
+        Paragraph dateRange = new Paragraph("报告时间范围        2019/05/06-2019/06/06", noramlfont);
+        //巡逻循环范围
+        Paragraph cycleRange = new Paragraph("巡逻循环范围        日期 19/06/05  19/06/07  19/06/08  19/06/09  19/06/10  19/06/11  19/07/12  19/06/08  19/06/08  19/06/08  19/06/08  19/06/08  \n" +
+                                                    "                                      时间  00:00-00:30  01:00-02:30", noramlfont);
+        //巡逻目标库
+        Paragraph repo = new Paragraph("巡逻目标库    重点人员库 涉毒人员库 重点物品库 重点事件库", noramlfont);
+        //巡逻任务报警
+        Paragraph alarm = new Paragraph("巡逻任务报警", noramlfont);
+        //添加标题
+        document.add(reportTitle);
+        //添加任务名称
+        document.add(reportName);
+        //添加时间范围
+        document.add(dateRange);
+        //添加循环范围
+        document.add(cycleRange);
+        //添加目标库
+        document.add(repo);
+        //添加任务报警
+        document.add(alarm);
+        //设置图像
+        for(int i=0;i<6;i++){
+            Paragraph alarm1 = new Paragraph();
+            alarm.setFont(noramlfont);
+            Image image = Image.getInstance("F:\\360downloads\\1.jpg");
+            image.setAlignment(Image.ALIGN_LEFT);
+            image.scaleAbsolute(80f,80f);
+            Image image2 = Image.getInstance("F:\\360downloads\\1.jpg");
+            image2.setAlignment(Image.ALIGN_LEFT);
+            image2.scaleAbsolute(80f,80f);
+
+            Paragraph name = new Paragraph("姓名:张无忌"+i, noramlfont);
+            Paragraph datetime = new Paragraph("报警时间:2019/06/25 22:23:46 报警设备:定安路-西湖大道路口", noramlfont);
+            Paragraph address = new Paragraph("报警地点:经度：120.15  纬度：30.28", noramlfont);
+            Paragraph state = new Paragraph("状态:已处理", noramlfont);
+
+            alarm1.add(image);
+            alarm1.add(image2);
+            alarm1.add(name);
+            alarm1.add(datetime);
+            alarm1.add(address);
+            alarm1.add(state);
+
+            document.add(alarm1);
+        }
         //关闭文档
         document.close();
     }
-
 
     public  void printPayment(HttpServletResponse response) throws Exception {
         // 创建文本对象
