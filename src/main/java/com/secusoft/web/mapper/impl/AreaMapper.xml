@@ -50,6 +50,7 @@
         from vi_Area
         <where>
             <if test="areaName != null "> and area_name = #{areaName}</if>
+             <if test="folderId !=null">and folder_id = #{folderId}</if>
         </where>
     </select>
 

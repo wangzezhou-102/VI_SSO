@@ -21,6 +21,8 @@ public enum BizExceptionEnum {
      */
     FOLDER_REPEAT(1001021,"文件夹名重复"),
     TRACK_REPEAT(1001022,"轨迹名重复"),
+	AREA_REPEAT(1001023,"区域名重复"),
+    FOLDER_NAME_NULL(1001024,"文件名不能为空"),
 	/**
 	 * 登录问题
 	 */

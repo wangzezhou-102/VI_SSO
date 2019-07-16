@@ -126,7 +126,8 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         timeStampData.addAll(SearchSortUtils.timeStampSort(olddata));
 
         //设备分组排序
-        Map<String, List> resultMap = SearchSortUtils.deviceSort(olddata);
+        List<SearchResponseData> sortData = SearchSortUtils.scoreSort(olddata);
+        Map<String, List> resultMap = SearchSortUtils.deviceSort(sortData);
         //把Map中的value取出来放入List返回
         ArrayList<List> resultList = new ArrayList<>();
         resultMap.forEach((k,v)->{

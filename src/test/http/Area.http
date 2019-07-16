@@ -13,8 +13,7 @@ Content-Type: application/json
      "areaName": "区域一",
      "folderId": 6
    },
-  "devices": [1,2,3]
-
+  "devices": [330119520001076203,330119520001191003]
 }
 
 ###删除区域
@@ -22,7 +21,7 @@ POST http://localhost:8006/removeArea
 Content-Type: application/json
 
 {
-   "id": "8"
+   "id": "2"
 }
 
 ###修改区域下的设备名称
@@ -30,8 +29,8 @@ POST http://localhost:8006/updateArea
 Content-Type: application/json
 
 {
-  "Area": {
-    "id": 6,
+  "AreaBean": {
+    "id": 2,
     "areaName": "区域一更改后",
     "folderId": 1
   },
@@ -47,7 +46,7 @@ POST http://localhost:8006/readArea
 Content-Type: application/json
 
 {
-    "id": "1"
+    "id": "8"
 }
 
 ###修改区域名称
@@ -55,7 +54,7 @@ POST http://localhost:8006/updateAreaName
 Content-Type: application/json
 
 {
-    "id": "1",
+    "id": "8",
   "areaName": "嫌疑人Akun活动范围"
 }
 

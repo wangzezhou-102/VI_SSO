@@ -50,6 +50,8 @@ public class NormalConfig {
 
     public static String szPatrolAppId;
 
+    public static String szSecurityAppId;
+
     public static String getSzPatrolAppId() { return szPatrolAppId; }
 
     public static void setSzPatrolAppId(String szPatrolAppId) { NormalConfig.szPatrolAppId = szPatrolAppId; }
@@ -140,5 +142,13 @@ public class NormalConfig {
 
     public static void setSzBkAppId(String szBkAppId) {
         NormalConfig.szBkAppId = szBkAppId;
+    }
+
+    public static String getSzSecurityAppId() {
+        return szSecurityAppId;
+    }
+
+    public static void setSzSecurityAppId(String szSecurityAppId) {
+        NormalConfig.szSecurityAppId = szSecurityAppId;
     }
 }

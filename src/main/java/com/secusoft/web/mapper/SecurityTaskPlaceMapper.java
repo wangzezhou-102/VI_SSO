@@ -2,6 +2,7 @@ package com.secusoft.web.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.secusoft.web.model.CodeplacesBean;
+import com.secusoft.web.model.SecurityPlaceBean;
 import com.secusoft.web.model.SecurityTaskPlaceBean;
 
 import java.util.List;
@@ -12,4 +13,5 @@ import java.util.List;
  */
 public interface SecurityTaskPlaceMapper extends BaseMapper<SecurityTaskPlaceBean> {
     List<CodeplacesBean> selectPlaceByTaskId(String taskId);
+    List<SecurityPlaceBean> selectTaskPlaceByTaskId(String taskId);
 }

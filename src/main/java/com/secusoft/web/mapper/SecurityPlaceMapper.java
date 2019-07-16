@@ -14,4 +14,5 @@ import java.util.List;
 public interface SecurityPlaceMapper {
     List<SecurityPlaceBean> selectSecirityTaskPlaceByTypeId(@Param("id") Integer id);
     List<SecurityPlaceVo> selectSecirityTaskPlace();
+    List<SecurityPlaceBean> selectSecirityTaskPlaceByPlaceId(@Param("id") Integer id);
 }

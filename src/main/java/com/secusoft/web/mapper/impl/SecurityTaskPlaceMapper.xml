@@ -10,6 +10,15 @@
         </collection>
     </resultMap>
 
+    <resultMap id="security_task_place_MapA" type="com.secusoft.web.model.SecurityPlaceBean">
+        <id column="id" property="id" />
+        <result column="type_code" property="typeId" />
+        <result column="place_name" property="placeName" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="radius" property="radius" />
+    </resultMap>
+
 
     <!--关联查询-->
     <select id="selectPlaceByTaskId" parameterType="java.lang.String" resultMap="security_task_place_Map">
@@ -17,4 +26,12 @@
         from vi_security_task_place
         where task_id = #{taskId}
     </select>
+
+    <select id="selectTaskPlaceByTaskId" parameterType="java.lang.String"  resultMap="security_task_place_Map">
+      SELECT tp.id ,task_id,place_id,type_code,place_name,longitude,latitude,radius
+      FROM `vi_security_task_place` tp left join vi_security_place sp on tp.place_id = sp.id
+      where task_id = #{taskId}
+    </select>
+
+
 </mapper>

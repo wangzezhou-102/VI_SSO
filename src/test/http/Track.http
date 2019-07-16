@@ -224,3 +224,12 @@ Content-Type: application/json
 }
 
 ###
+###查看轨迹
+POST http://localhost:8006/readTrack
+Content-Type: application/json
+
+{
+  "id": "6"
+}
+
+###

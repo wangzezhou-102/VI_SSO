@@ -57,7 +57,7 @@ POST http://localhost:8006/readFolder
 Content-Type: application/json
 
 {
-"id": 6
+"id": 8
 }
 
 ###

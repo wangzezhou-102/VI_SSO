@@ -35,6 +35,6 @@ public interface SecurityTaskService {
     ResultVo getSecurityTask(SecurityTaskRequest securityTaskRequest);
     ResultVo getSecurityTaskList(SecurityTaskRequest securityTaskRequest);
 
-    ResultVo startSecurityTask(SecurityTaskRequest securityTaskRequest);
-    ResultVo stopSecurityTask(SecurityTaskRequest securityTaskRequest);
+    ResultVo startSecurityTask(SecurityTaskBean securityTaskBean);
+    ResultVo stopSecurityTask(SecurityTaskBean securityTaskBean);
 }

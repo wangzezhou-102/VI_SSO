@@ -246,6 +246,7 @@ public class TrackServcieImpl implements TrackService {
     /**
      * 根据文件夹删除轨迹信息，仅数据库
      */
+    @Override
     public ResultVo removeTrackByFolderId(Integer folderId) {
     	if(folderId == null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(), BizExceptionEnum.PARAM_ERROR.getMessage());

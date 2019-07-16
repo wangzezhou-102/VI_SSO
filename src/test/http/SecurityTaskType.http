@@ -43,4 +43,10 @@ Content-Type: application/json
 {
 }
 
+###预设布控库下拉
+POST http://localhost:8006/listrepo
+Content-Type: application/json
+
+{}
+
 ###

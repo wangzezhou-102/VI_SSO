@@ -92,6 +92,35 @@
         </where>
     </update>
 
+    <update id="updateSecurityTask" parameterType="securityTaskBean">
+      update vi_security_task
+        <set>
+            <if test="securityName != null">
+                security_name=#{securityName},
+            </if>
+            <if test="enable != null">
+                enable=#{enable}
+            </if>
+            <if test="securityType != null">
+                security_type=#{securityType},
+            </if>
+            <if test="securityStatus != null">
+                security_status=#{securityStatus},
+            </if>
+            <if test="isfinish != null">
+                isfinish=#{isfinish},
+            </if>
+            <if test="exposition != null">
+                exposition=#{exposition},
+            </if>
+        </set>
+        <where>
+            <if test="taskId != null">
+                task_id=#{taskId}
+            </if>
+        </where>
+    </update>
+
     <select id="selectAllSecurityTask" resultMap="result_SecurityTaskBean_MapA">
        select id,task_id,security_name,security_type,enable,isfinish,exposition
         from vi_security_task
@@ -102,5 +131,11 @@
        select id,task_id,security_name,security_type,enable,isfinish,exposition
         from vi_security_task
         where valid_state = 1 AND task_id =#{taskId}
+    </select>
+
+    <select id="selectAllSecurityTaskByIsFinish" resultMap="result_SecurityTaskBean_MapA">
+        select id,task_id,security_name,security_type,enable,isfinish,exposition
+        from vi_security_task
+        where valid_state = 1 AND isfinish = #{isFinish}
     </select>
 </mapper>

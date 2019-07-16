@@ -81,12 +81,13 @@ public class SecurityTaskController {
 
     @PostMapping("insertsecuritytask")
     public ResponseEntity<ResultVo> insertSecurityTask(@RequestBody SecurityTaskRequest securityTaskRequest) {
+        System.out.println("前台参数"+securityTaskRequest);
         ResultVo resultVo = null;
-        try {
+//        try {
             resultVo = securityTaskService.insertSecurityTask(securityTaskRequest);
-        } catch (Exception ex) {
-            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(), BizExceptionEnum.TASK_ADD_FAIL.getMessage());
-        }
+//        } catch (Exception ex) {
+//            resultVo = ResultVo.failure(BizExceptionEnum.TASK_ADD_FAIL.getCode(), BizExceptionEnum.TASK_ADD_FAIL.getMessage());
+//        }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
@@ -115,14 +116,14 @@ public class SecurityTaskController {
     }
 
     @PostMapping("startsecuritytask")
-    public ResponseEntity<ResultVo> startSecurityTask(@RequestBody SecurityTaskRequest securityTaskRequest) {
-        ResultVo resultVo = securityTaskService.startSecurityTask(securityTaskRequest);
+    public ResponseEntity<ResultVo> startSecurityTask(@RequestBody SecurityTaskBean securityTaskBean) {
+        ResultVo resultVo = securityTaskService.startSecurityTask(securityTaskBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
     @PostMapping("stopsecuritytask")
-    public ResponseEntity<ResultVo> stopSecurityTask(@RequestBody SecurityTaskRequest securityTaskRequest) {
-        ResultVo resultVo = securityTaskService.stopSecurityTask(securityTaskRequest);
+    public ResponseEntity<ResultVo> stopSecurityTask(@RequestBody SecurityTaskBean securityTaskBean) {
+        ResultVo resultVo = securityTaskService.stopSecurityTask(securityTaskBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 

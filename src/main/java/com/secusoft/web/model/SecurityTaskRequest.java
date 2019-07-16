@@ -46,10 +46,16 @@ public class SecurityTaskRequest {
      * 任务状态
      */
     private Integer isfinish;
+    private List<String> cameraId;
+    /**
+     * 开始时间结束时间
+     */
+    private Long beginTime;
+    private Long endTime;
     public SecurityTaskRequest() {
     }
 
-    public SecurityTaskRequest(Integer id, String taskId, String securityName, Integer securityType, List<CodeplacesBean> codeplacesBeans, List<SecurityTimeBean> timeStamps, String exposition, Integer enable, String userId, String orgCode, List<Integer> repoids, Integer isfinish) {
+    public SecurityTaskRequest(Integer id, String taskId, String securityName, Integer securityType, List<CodeplacesBean> codeplacesBeans, List<SecurityTimeBean> timeStamps, String exposition, Integer enable, String userId, String orgCode, List<Integer> repoids, Integer isfinish, List<String> cameraId, Long beginTime, Long endTime) {
         this.id = id;
         this.taskId = taskId;
         this.securityName = securityName;
@@ -62,6 +68,9 @@ public class SecurityTaskRequest {
         this.orgCode = orgCode;
         this.repoids = repoids;
         this.isfinish = isfinish;
+        this.cameraId = cameraId;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
     }
 
     public Integer getId() {
@@ -160,6 +169,30 @@ public class SecurityTaskRequest {
         this.isfinish = isfinish;
     }
 
+    public List<String> getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(List<String> cameraId) {
+        this.cameraId = cameraId;
+    }
+
+    public Long getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(Long beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "SecurityTaskRequest{" +
@@ -175,6 +208,9 @@ public class SecurityTaskRequest {
                 ", orgCode='" + orgCode + '\'' +
                 ", repoids=" + repoids +
                 ", isfinish=" + isfinish +
+                ", cameraId=" + cameraId +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
                 '}';
     }
 }

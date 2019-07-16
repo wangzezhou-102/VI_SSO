@@ -107,7 +107,7 @@ public class FolderServiceImpl implements FolderService {
     public ResultVo setFolderName(FolderBean folderBean) {
         if(folderBean == null || StringUtils.isEmpty(folderBean.getFolderName()) 
         		|| StringUtils.isEmpty(folderBean.getId())){
-            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.FOLDER_NAME_NULL.getCode(), BizExceptionEnum.FOLDER_NAME_NULL.getMessage());
         }
         FolderBean queryBean = new FolderBean();
         queryBean.setFolderName(folderBean.getFolderName());

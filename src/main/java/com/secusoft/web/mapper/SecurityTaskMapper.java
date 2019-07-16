@@ -40,4 +40,9 @@ public interface SecurityTaskMapper {
      * 获取条件查询并未删除的任务
      */
     List<SecurityTaskBean> selectSecurityTaskBeanByObj(SecurityTaskBean securityTaskbean);
+
+    /**
+     * 根据完成未完成状态获取全部布控任务
+     */
+    List<SecurityTaskBean> selectAllSecurityTaskByIsFinish(Integer isFinish);
 }

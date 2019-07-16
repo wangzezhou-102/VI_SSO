@@ -23,6 +23,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public ResultVo addArea(AreaBean areaBean, List deviceIds) {
+        if(areaMapper.selectCountAreaByName(areaBean)!=0){
+            return ResultVo.failure(BizExceptionEnum.AREA_REPEAT.getCode(),BizExceptionEnum.AREA_REPEAT.getMessage());
+        }
         areaMapper.insertArea(areaBean);
         areaMapper.insertAreaDevice(deviceIds, areaBean.getId());
         return ResultVo.success();
@@ -38,6 +41,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public ResultVo updateAreaName(AreaBean areaBean) {
+        if(StringUtils.isEmpty(areaBean.getAreaName())){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+        }
         areaMapper.updateAreaNameById(areaBean);
         return ResultVo.success();
     }
@@ -54,7 +60,8 @@ public class AreaServiceImpl implements AreaService {
         List<DeviceBean> deviceBeans = deviceMapper.selectDeviceByAreaId(areaBean.getId());
         return ResultVo.success(deviceBeans);
     }
-    
+
+    @Override
     public ResultVo removeAreaByFolderId(Integer folderId) {
     	if(folderId==null) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());

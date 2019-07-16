@@ -35,4 +35,10 @@
         from vi_security_place p right join vi_security_task_type_place ttp on p.id = ttp.place_id
     </select>
 
+    <select id="selectSecirityTaskPlaceByPlaceId" parameterType="java.lang.Integer" resultMap="security_place_Map">
+          select id,place_name,longitude,latitude,radius
+          from vi_security_place
+          where id = #{id}
+    </select>
+
 </mapper>
