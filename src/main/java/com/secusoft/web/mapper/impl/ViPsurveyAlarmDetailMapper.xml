@@ -129,6 +129,9 @@
                 <if test="name!=''">
                     and vpad.name like CONCAT(CONCAT('%', #{name}), '%')
                 </if>
+                <if test="alarmStatus!=null">
+                    and vpad.alarm_status=#{alarmStatus}
+                </if>
             </where>
             order by vpad.gmt_create desc,vpad.gmt_modified desc
     </select>

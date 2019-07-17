@@ -55,7 +55,7 @@ public class SurveyStopTask extends TimerTask {
 
             ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
 
-            if (viSurveyTask != null && 1 == viSurveyTask.getEnable()) {
+            if (viSurveyTask != null && ((1 == viSurveyTask.getEnable() && 1 == viSurveyTask.getSurveyStatus()) || (0 == viSurveyTask.getEnable() && 0 == viSurveyTask.getSurveyStatus()))){
                 BaseRequest<BKTaskDataTaskIdRequest> bkTaskDataTaskIdRequestBaseResponse = new BaseRequest<>();
                 BKTaskDataTaskIdRequest bkTaskDataTaskIdRequest = new BKTaskDataTaskIdRequest();
                 bkTaskDataTaskIdRequest.setTaskId(viSurveyTask.getTaskId());
@@ -78,5 +78,6 @@ public class SurveyStopTask extends TimerTask {
                 }
             }
         }
+        log.info("结束停止任务，布控任务编号：" + viSurveyTaskBean.getTaskId());
     }
 }

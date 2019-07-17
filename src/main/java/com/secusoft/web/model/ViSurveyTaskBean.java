@@ -38,7 +38,7 @@ public class ViSurveyTaskBean implements Serializable {
     /**
      * 是否开启 0-关闭 1-已开启 2-已结束
      */
-    private Integer enable;
+    private Integer enable = 0;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date CreateTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
