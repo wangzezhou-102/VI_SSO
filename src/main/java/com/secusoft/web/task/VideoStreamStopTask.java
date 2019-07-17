@@ -60,7 +60,7 @@ public class VideoStreamStopTask extends TimerTask {
                 for (ViTaskDeviceBean viTaskDeviceBean : viSurveyTask.getViTaskDeviceList()) {
                     List<ViTaskDeviceBean> allViTaskDevice = viTaskDeviceMapper.getAllViTaskDevice(viTaskDeviceBean);
                     if (allViTaskDevice.size() == 0) {
-                        return;
+                        continue;
                     }
                     viTaskDeviceBean = allViTaskDevice.get(0);
 
@@ -97,5 +97,6 @@ public class VideoStreamStopTask extends TimerTask {
                 }
             }
         }
+        log.info("结束停流，布控任务编号：" + viSurveyTaskBean.getTaskId());
     }
 }

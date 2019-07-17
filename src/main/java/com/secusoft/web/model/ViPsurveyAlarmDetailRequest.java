@@ -33,6 +33,11 @@ public class ViPsurveyAlarmDetailRequest extends PageReqAbstractModel {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
+    /**
+     * 处理状态 0-忽略 1-关注 2-无意义
+     */
+    private Integer alarmStatus;
+
     public String getSurveyName() {
         return surveyName;
     }
@@ -71,5 +76,13 @@ public class ViPsurveyAlarmDetailRequest extends PageReqAbstractModel {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getAlarmStatus() {
+        return alarmStatus;
+    }
+
+    public void setAlarmStatus(Integer alarmStatus) {
+        this.alarmStatus = alarmStatus;
     }
 }

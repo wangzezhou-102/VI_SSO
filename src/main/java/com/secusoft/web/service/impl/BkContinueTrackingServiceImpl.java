@@ -84,7 +84,7 @@ public class BkContinueTrackingServiceImpl implements BkContinueTrackingService 
         for (SearchResponseData bean : searchResponseData) {
             DeviceBean deviceBean = deviceMapper.selectDeviceByDeviceId(bean.getSource().getCameraId());
 
-            bean.getSource().setCropImageSignedBase64(ImageUtils.image2Base64("http://33.95.245.249:8006/static/Alarm/201907/Alarm-db558b61d56126ef4c38c5a8556d51d81.jpg"));
+            //bean.getSource().setCropImageSignedBase64(ImageUtils.image2Base64("http://33.95.245.249:8006/static/Alarm/201907/Alarm-db558b61d56126ef4c38c5a8556d51d81.jpg"));
             //bean.getSource().setCropImageSignedBase64(ImageUtils.image2Base64(bean.getSource().getCropImageSigned()));
             bean.getSource().setDeviceBean(deviceBean);
         }

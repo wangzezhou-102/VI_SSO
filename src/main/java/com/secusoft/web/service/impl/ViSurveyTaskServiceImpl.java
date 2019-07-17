@@ -146,7 +146,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "布控任务添加失败！");
         }
 
-        //TQTimeTask(viSurveyTaskBean);
+        TQTimeTask(viSurveyTaskBean);
 
         log.info("结束新增布控任务");
         return ResultVo.success();
@@ -166,11 +166,17 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
         ViSurveyTaskBean bean = viSurveyTaskMapper.selectBeanByIdOrObjectId(viSurveyTaskRequest);
+
+        if (null == bean) {
+            ViSurveyTaskRequest request = new ViSurveyTaskRequest();
+            request.setId(viSurveyTaskRequest.getId());
+            bean = viSurveyTaskMapper.selectBeanByIdOrObjectId(request);
+        }
         ViSurveyTaskBean baseBean = bean;
         if (!StringUtils.hasLength(viSurveyTaskRequest.getSurveyName())) {
             return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
         } else {
-            ViSurveyTaskRequest request=new ViSurveyTaskRequest();
+            ViSurveyTaskRequest request = new ViSurveyTaskRequest();
             request.setSurveyType(viSurveyTaskRequest.getSurveyType());
             request.setSurveyName(viSurveyTaskRequest.getSurveyName());
             List<ViSurveyTaskBean> surveyTaskList = viSurveyTaskMapper.getAllViSurveyTask(request);
@@ -624,7 +630,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         Calendar calendar = Calendar.getInstance();
         //布控任务准时停止
         calendar.setTime(viSurveyTaskBean.getEndTime());
-        timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
+        timer.schedule(new SurveyStopTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
     }
 
     /**
@@ -638,7 +644,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         calendar.setTime(viSurveyTaskBean.getEndTime());
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
-        timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
+        timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
     }
 
     /**

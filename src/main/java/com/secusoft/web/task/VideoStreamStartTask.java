@@ -75,14 +75,11 @@ public class VideoStreamStartTask extends TimerTask {
                         viTaskDeviceBean.setAction(1);
                         viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
 
-                        if (viTaskDeviceBean.getAction() == 1 && viTaskDeviceBean.getStatus() == 1) {
-
-                        }
                     }
                 }
             }
         }
 
-        log.info("结束停流，布控任务编号：" + viSurveyTaskBean.getTaskId());
+        log.info("结束启流，布控任务编号：" + viSurveyTaskBean.getTaskId());
     }
 }
