@@ -26,5 +26,7 @@ public interface PatrolTaskService {
     ResultVo startPatrolTask(PatrolTaskBean patrolTaskBean);
     //终止巡逻任务
     ResultVo stopPatrolTask(PatrolTaskBean patrolTaskBean);
+    //立即执行任务
+    ResultVo runningPatrolTask(PatrolTaskBean patrolTaskBean);
 
 }

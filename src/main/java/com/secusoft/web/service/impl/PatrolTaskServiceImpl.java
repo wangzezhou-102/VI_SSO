@@ -5,6 +5,8 @@ import com.secusoft.web.config.NormalConfig;
 import com.secusoft.web.config.ServiceApiConfig;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
+import com.secusoft.web.core.util.QuartzCronDateUtil;
+import com.secusoft.web.core.util.QuartzUtil;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.PatrolTaskService;
@@ -149,8 +151,6 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
             throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "巡逻任务添加失败！");
         }*/
-        //定时任务开启
-        TQTimeTask(patrolTaskBean);
 
         return ResultVo.success();
     }
@@ -256,9 +256,10 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         }
         //判断任务是否开启，并且设备列表和布控库列表是否一致，否则任务重新下发
 
+        //移除原先定时任务，重新添加定时任务
+
         return ResultVo.success();
     }
-
     //巡逻任务查询
     @Override
     @Transactional
@@ -318,7 +319,7 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     //巡逻任务删除
     @Override
     public ResultVo deletePatrolTask(PatrolTaskBean patrolTaskBean){
-        logger.info("开始删除布控任务");
+        logger.info("开始删除巡逻任务");
         //组装数据下发天擎
         BaseRequest<BKTaskDeleteRequest> bkTaskDeleteRequestBaseRequest = new BaseRequest<>();
         BKTaskDeleteRequest bkTaskDeleteRequest = new BKTaskDeleteRequest();
@@ -329,13 +330,14 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getPathBktaskSubmit(), bkTaskDeleteRequestBaseRequest);
         String errorCode = baseResponse.getCode();
         String errorMsg = baseResponse.getMessage();
-        //判断布控任务是否删除成功
+        //判断巡逻任务是否删除成功
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
             return ResultVo.failure(BizExceptionEnum.TASK_DELETE_FAIL.getCode(), StringUtils.hasLength(errorMsg) ? errorMsg : BizExceptionEnum.TASK_DELETE_FAIL.getMessage());
         }
         patrolTaskMapper.updatePatrolTask(patrolTaskBean);
+        //删除巡逻定时任务
 
-        logger.info("结束删除布控任务");
+        logger.info("结束删除巡逻任务");
         return ResultVo.success();
     }
     //开启任务
@@ -343,7 +345,7 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     public ResultVo startPatrolTask(PatrolTaskBean patrolTaskBean) {
         try {
             PatrolStartTask patrolStartTask = new PatrolStartTask(patrolTaskBean);
-            patrolStartTask.run();
+            videoStreamStartTask(patrolTaskBean);
         } catch (Exception e) {
             return ResultVo.failure(BizExceptionEnum.TASK_START_FAIL.getCode(), BizExceptionEnum.TASK_START_FAIL.getMessage());
         }
@@ -355,14 +357,25 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
     public ResultVo stopPatrolTask(PatrolTaskBean patrolTaskBean){
         try {
             PatrolStopTask patrolStopTask = new PatrolStopTask(patrolTaskBean);
-            patrolStopTask.run();
+
         } catch (Exception ex) {
             return ResultVo.failure(BizExceptionEnum.TASK_STOP_FAIL.getCode(), BizExceptionEnum.TASK_STOP_FAIL.getMessage());
         }
         return ResultVo.success();
     }
 
-   /**
+    @Override
+    public ResultVo runningPatrolTask(PatrolTaskBean patrolTaskBean) {
+        if(patrolTaskBean.getTaskId() == null || patrolTaskBean.getEnable() == null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        //任务下发
+        TQTimeTask(patrolTaskBean);
+        //修改开启状态
+        patrolTaskMapper.updatePatrolTask(patrolTaskBean);
+        return ResultVo.success();
+    }
+    /**
      * 新增/更新巡逻任务验证算力是否充足
      *
      */
@@ -394,7 +407,7 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
            return false;
         }
         //判断算力是否充足
-        if(diffrientDevices.size()+deviceIds.size() > sysOrgRoadByOrgCode.getTotalRoads() ){
+        if(diffrientDevices.size() + deviceIds.size() > sysOrgRoadByOrgCode.getTotalRoads() ){
             return false;
         }else{
             return true;
@@ -427,7 +440,6 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
                 returnNewList.add(newBean);
             }
         }
-
         beanSet.removeAll(beanSameSet);
         return type ? new ArrayList<>(beanSet) : returnNewList;
     }
@@ -460,79 +472,124 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         beanSet.removeAll(beanSameSet);
         return type ? new ArrayList<>(beanSet) : returnNewList;
     }
-
     /**
      * 巡逻定时任务
      *
      * @param patrolTaskBean
      */
     private void TQTimeTask(PatrolTaskBean patrolTaskBean) {
-        Timer timer = new Timer();
         //设备提前5分钟启动码流计划任务
-        videoStreamStartTask(timer, patrolTaskBean);
+        videoStreamStartTask(patrolTaskBean);
         //开始布控任务
-        surveyStartTask(timer, patrolTaskBean);
+        surveyStartTask(patrolTaskBean);
         //停止布控任务
-        surveyStopTask(timer, patrolTaskBean);
+        surveyStopTask(patrolTaskBean);
         //设备延后固定时间停止码流计划任务
-        videoStreamStopTask(timer, patrolTaskBean);
+        videoStreamStopTask(patrolTaskBean);
     }
     /**
      * 设备启流
-     *
-     * @param timer
      * @param patrolTaskBean
      */
-    private void videoStreamStartTask(Timer timer, PatrolTaskBean patrolTaskBean) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(patrolTaskBean.getBeginTime());
-        //设备提前5分钟启动码流计划任务
-        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        //
-        timer.schedule(new PatrolVideoStreamStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 2 ? new Date() : calendar.getTime());
-
+    private void videoStreamStartTask(PatrolTaskBean patrolTaskBean) {
+        //获取任务所有信息
+        patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
+        PatrolTimeTemplateBean patrolTimeTemplateBean = patrolTaskBean.getPatrolTimeTemplateBean();
+        List<PatrolTimeSegmentBean> patrolTimeSegmentBeans = patrolTimeTemplateBean.getPatrolTimeSegmentBeans();
+        //时间模板匹配
+        for (int i=0;i<patrolTimeSegmentBeans.size();i++) {
+            String cron = null;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(patrolTimeSegmentBeans.get(i).getBeginTime());
+            //设备提前5分钟启动码流计划任务()
+            calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
+            if(patrolTimeTemplateBean.getCycle() == 0){// 按日 一天时间从 00:00 开始 23:59 结束
+                cron = QuartzCronDateUtil.getDateCron(calendar.getTime());//日期表达式
+            }
+            if(patrolTimeTemplateBean.getCycle() == 1){ // 按周
+                Integer week = patrolTimeSegmentBeans.get(i).getWeek();//0-6 依次从星期天开始
+                String timeCron = QuartzCronDateUtil.getTimeCron(calendar.getTime());
+                cron = timeCron+" * * "+(week+1);//星期表达式
+            }
+            QuartzUtil.addJob("startstream"+patrolTaskBean.getTaskId() + i, PatrolVideoStreamStartTask.class,cron,patrolTaskBean);//添加任务
+        }
     }
-
     /**
      * 开始巡逻任务
      *
-     * @param timer
      * @param patrolTaskBean
      */
-    private void surveyStartTask(Timer timer, PatrolTaskBean patrolTaskBean) {
-        Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(patrolTaskBean.getBeginTime());
-        timer.schedule(new PatrolStartTask(patrolTaskBean), patrolTaskBean.getEnable() == 2 ? new Date() : calendar.getTime());
+    private void surveyStartTask( PatrolTaskBean patrolTaskBean) {
+        //获取任务所有信息
+        patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
+        PatrolTimeTemplateBean patrolTimeTemplateBean = patrolTaskBean.getPatrolTimeTemplateBean();
+        List<PatrolTimeSegmentBean> patrolTimeSegmentBeans = patrolTimeTemplateBean.getPatrolTimeSegmentBeans();
+        //时间模板匹配
+        for (int i=0;i<patrolTimeSegmentBeans.size();i++) {
+            String cron = null;
+            if(patrolTimeTemplateBean.getCycle() == 0){// 按日 一天时间从 00:00 开始 23:59 结束
+                cron = QuartzCronDateUtil.getDateCron(patrolTimeSegmentBeans.get(i).getBeginTime());//日期表达式
+            }
+            if(patrolTimeTemplateBean.getCycle() == 1){ // 按周
+                Integer week = patrolTimeSegmentBeans.get(i).getWeek();//0-6 依次从星期天开始
+                String timeCron = QuartzCronDateUtil.getTimeCron(patrolTimeSegmentBeans.get(i).getBeginTime());
+                cron = timeCron+" * * "+(week+1);//星期表达式
+            }
+            QuartzUtil.addJob("starttask"+patrolTaskBean.getTaskId() + i, PatrolStartTask.class,cron,patrolTaskBean);//添加任务
+        }
     }
-
     /**
      * 结束巡逻任务
      *
-     * @param timer
      * @param patrolTaskBean
      */
-    private void surveyStopTask(Timer timer, PatrolTaskBean patrolTaskBean) {
-        Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(patrolTaskBean.getBeginTime());
-        timer.schedule(new PatrolStopTask(patrolTaskBean), calendar.getTime());
+    private void surveyStopTask( PatrolTaskBean patrolTaskBean) {
+        //获取任务所有信息
+        patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
+        PatrolTimeTemplateBean patrolTimeTemplateBean = patrolTaskBean.getPatrolTimeTemplateBean();
+        List<PatrolTimeSegmentBean> patrolTimeSegmentBeans = patrolTimeTemplateBean.getPatrolTimeSegmentBeans();
+        //时间模板匹配
+        for (int i=0;i<patrolTimeSegmentBeans.size();i++) {
+            String cron = null;
+            if(patrolTimeTemplateBean.getCycle() == 0){// 按日 一天时间从 00:00 开始 23:59 结束
+                cron = QuartzCronDateUtil.getDateCron(patrolTimeSegmentBeans.get(i).getEndTime());//日期表达式
+            }
+            if(patrolTimeTemplateBean.getCycle() == 1){ // 按周
+                Integer week = patrolTimeSegmentBeans.get(i).getWeek();//0-6 依次从星期天开始
+                String timeCron = QuartzCronDateUtil.getTimeCron(patrolTimeSegmentBeans.get(i).getEndTime());
+                cron = timeCron+" * * "+(week+1);//星期表达式
+            }
+            QuartzUtil.addJob("stoptask"+patrolTaskBean.getTaskId() + i, PatrolStopTask.class,cron,patrolTaskBean);//添加任务
+        }
     }
-
     /**
      * 设备停流
      *
-     * @param timer
      * @param patrolTaskBean
      */
-    private void videoStreamStopTask(Timer timer, PatrolTaskBean patrolTaskBean) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(patrolTaskBean.getBeginTime());
-        //设备5分钟后停止码流计划任务
-        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        timer.schedule(new PatrolVideoStreamStopTask(patrolTaskBean), calendar.getTime());
+    private void videoStreamStopTask(PatrolTaskBean patrolTaskBean) {
+        //获取任务所有信息
+        patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(patrolTaskBean);
+        PatrolTimeTemplateBean patrolTimeTemplateBean = patrolTaskBean.getPatrolTimeTemplateBean();
+        List<PatrolTimeSegmentBean> patrolTimeSegmentBeans = patrolTimeTemplateBean.getPatrolTimeSegmentBeans();
+        //时间模板匹配
+        for (int i=0;i<patrolTimeSegmentBeans.size();i++) {
+            String cron = null;
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(patrolTimeSegmentBeans.get(i).getBeginTime());
+            //设备提前5分钟启动码流计划任务()
+            calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
+            if(patrolTimeTemplateBean.getCycle() == 0){// 按日 一天时间从 00:00 开始 23:59 结束
+                cron = QuartzCronDateUtil.getDateCron(calendar.getTime());//日期表达式
+            }
+            if(patrolTimeTemplateBean.getCycle() == 1){ // 按周
+                Integer week = patrolTimeSegmentBeans.get(i).getWeek();//0-6 依次从星期天开始
+                String timeCron = QuartzCronDateUtil.getTimeCron(calendar.getTime());
+                cron = timeCron+" * * "+(week+1);//星期表达式
+            }
+            QuartzUtil.addJob("stopstream"+patrolTaskBean.getTaskId() + i, PatrolVideoStreamStopTask.class,cron,patrolTaskBean);//添加任务
+        }
     }
-
     /**
      * 下发布控任务创建
      *
@@ -561,6 +618,5 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
 
         return bkTaskSubmitRequestBaseRequest;
     }
-
 
 }

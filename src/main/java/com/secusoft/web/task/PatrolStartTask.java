@@ -9,11 +9,12 @@ import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.tusouapi.model.BKTaskDataTaskIdRequest;
 import com.secusoft.web.tusouapi.model.BaseRequest;
-import com.secusoft.web.utils.PatrolTaskUtil;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.TimerTask;
 
 /**
  * 启动巡逻定时任务
@@ -21,30 +22,32 @@ import java.util.TimerTask;
  * @author Wangzezhou
  * @since 2019/07/09 16:30
  */
-public class PatrolStartTask extends TimerTask {
+public class PatrolStartTask implements Job {
     private static Logger log = LoggerFactory.getLogger(SurveyStartTask.class);
 
     private PatrolTaskBean patrolTaskBean;
+
+    public PatrolStartTask(){}
 
     public PatrolStartTask(PatrolTaskBean patrolTaskBean) {
         this.patrolTaskBean = patrolTaskBean;
     }
 
     private static PatrolTaskMapper patrolTaskMapper = SpringContextHolder.getBean(PatrolTaskMapper.class);
-
     @Override
-    public void run() {
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
         log.info("开启巡逻任务，任务编号：" + patrolTaskBean.getTaskId());
+        JobDataMap patrolMap = jec.getJobDetail().getJobDataMap();
+        patrolTaskBean = (PatrolTaskBean) patrolMap.get("paramName");
         if (patrolTaskBean != null ) {
-            if (1 != patrolTaskBean.getEnable()) {
+            /*if (1 != patrolTaskBean.getEnable()) {
                 log.info("无需立即执行，开始判断是否到执行时间");
                 PatrolTaskUtil patrolTaskUtil = new PatrolTaskUtil();
                 if (!patrolTaskUtil.validTaskBeginTime(patrolTaskMapper, patrolTaskBean)) {
                     log.info("时间不一致，无法启动任务，布控任务编号：" + patrolTaskBean.getTaskId());
                     return;
                 }
-            }
-
+            }*/
             PatrolTaskBean patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(this.patrolTaskBean);
             if (patrolTaskBean != null && 2 == patrolTaskBean.getEnable()) {
                 BaseRequest<BKTaskDataTaskIdRequest> bkTaskDataTaskIdRequestBaseResponse = new BaseRequest<>();

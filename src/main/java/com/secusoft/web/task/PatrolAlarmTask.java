@@ -58,10 +58,10 @@ public class PatrolAlarmTask {
     //0 0/1 * * * ? 每分钟执行一次
     //@Scheduled(cron = "0 0/1 * * * ?")
     public void patrolAlaram() throws IOException {
-        log.info("开始获取实时告警数据");
+        log.info("巡逻任务开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetPatrolAlarm(), "");
         if(responseStr == null){
-            log.info("实时告警数据接口请求失败");
+            log.info("巡逻任务实时告警数据接口请求失败");
             return;
         }
         JSONObject jsonObject = (JSONObject) JSONObject.parse(responseStr);

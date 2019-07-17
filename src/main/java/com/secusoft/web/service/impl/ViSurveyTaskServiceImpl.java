@@ -1,7 +1,6 @@
 package com.secusoft.web.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.secusoft.web.config.BkrepoConfig;
 import com.secusoft.web.config.NormalConfig;
@@ -10,7 +9,7 @@ import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.mapper.*;
 import com.secusoft.web.model.*;
 import com.secusoft.web.service.ViSurveyTaskService;
-import com.secusoft.web.serviceapi.*;
+import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.serviceapi.model.BaseResponse;
 import com.secusoft.web.task.SurveyStartTask;
 import com.secusoft.web.task.SurveyStopTask;
@@ -626,7 +625,6 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         calendar.setTime(viSurveyTaskBean.getEndTime());
         timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
     }
-
     /**
      * 设备停流
      *

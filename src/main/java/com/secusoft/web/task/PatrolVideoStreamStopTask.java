@@ -11,13 +11,15 @@ import com.secusoft.web.model.PatrolTaskBean;
 import com.secusoft.web.model.ViTaskDeviceBean;
 import com.secusoft.web.serviceapi.ServiceApiClient;
 import com.secusoft.web.shipinapi.model.StreamRequest;
-import com.secusoft.web.utils.PatrolTaskUtil;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 /**
@@ -26,12 +28,12 @@ import java.util.stream.Collectors;
  * @author Wangzezhou
  * @since 2019/07/09 17:27
  */
-public class PatrolVideoStreamStopTask extends TimerTask {
+public class PatrolVideoStreamStopTask implements Job {
 
     private static Logger log = LoggerFactory.getLogger(PatrolVideoStreamStopTask.class);
 
     private PatrolTaskBean patrolTaskBean;
-
+    public PatrolVideoStreamStopTask(){}
     public PatrolVideoStreamStopTask(PatrolTaskBean patrolTaskBean) {
         this.patrolTaskBean = patrolTaskBean;
     }
@@ -41,17 +43,19 @@ public class PatrolVideoStreamStopTask extends TimerTask {
     private static PatrolTaskMapper patrolTaskMapper = SpringContextHolder.getBean(PatrolTaskMapper.class);
 
     @Override
-    public void run() {
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        JobDataMap patrolMap = jec.getJobDetail().getJobDataMap();
+        patrolTaskBean = (PatrolTaskBean) patrolMap.get("paramName");
         log.info("开始停流，布控任务编号：" + patrolTaskBean.getTaskId());
         if (patrolTaskBean != null) {
-           if (1 != patrolTaskBean.getEnable()) {
+           /* if (1 != patrolTaskBean.getEnable()) {
                 log.info("无需立即执行，开始判断是否到执行时间");
                PatrolTaskUtil patrolTaskUtil = new PatrolTaskUtil();
                if (!patrolTaskUtil.validTaskStreamEndTime(patrolTaskMapper, patrolTaskBean)) {
                     log.info("时间不一致，无法停流，布控任务编号：" + patrolTaskBean.getTaskId());
                     return;
                 }
-            }
+            }*/
             Date now = new Date();
             PatrolTaskBean patrolTaskBean = patrolTaskMapper.selectPatrolTaskByPrimaryKey(this.patrolTaskBean);
             if(patrolTaskBean != null) {

@@ -64,10 +64,10 @@ public class PdfUtil {
         PdfWriter writer = PdfWriter.getInstance(document, ba);
         writer.setViewerPreferences(PdfWriter.PageModeUseThumbs);
         writer.setStrictImageSequence(true);//图片精确放置
-        /*writer.setEncryption("123".getBytes(),"123".getBytes(), PdfWriter.ALLOW_SCREENREADERS,
+        /* writer.setEncryption("123".getBytes(),"123".getBytes(), PdfWriter.ALLOW_SCREENREADERS,
                 PdfWriter.STANDARD_ENCRYPTION_128);*/
         //设置文档标题
-        document.addTitle(patrolReportBean.getReportName()+"报告");
+        document.addTitle(patrolReportBean.getReportName());
         //设置文档主题
         document.addSubject("巡逻报告");
         //设置关键字
@@ -93,7 +93,7 @@ public class PdfUtil {
         /*Phrase phrase = new Phrase();
         phrase.add(chunk);*/
         //报告标题
-        Paragraph reportTitle = new Paragraph(patrolReportBean.getReportName()+"报告", boldfont);
+        Paragraph reportTitle = new Paragraph(patrolReportBean.getReportName(), boldfont);
         //1为居中对齐、2为右对齐、3为左对齐,默认为左对齐
         reportTitle.setAlignment(1);
         //PdfContentByte cb = writer.getDirectContent();生成条形码图片时使用
@@ -113,9 +113,7 @@ public class PdfUtil {
         pdfTable.addCell(createPdfCell("时间  00:00-00:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30"));
         //巡逻目标库
         pdfTable.addCell(createPdfCell("巡逻目标库"));
-
         pdfTable.addCell(createPdfCell("重点人员库 涉毒人员库 重点物品库 重点事件库 重点事件库 重点事件库 重点事件库 重点事件库 重点事件库"));
-
         //巡逻任务报警
         pdfTable.addCell(createPdfCell("巡逻任务报警"));
         pdfTable.addCell(createPdfCell(""));//

@@ -33,14 +33,15 @@ public class PatrolReportController {
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
     //生成巡逻报告
-    @GetMapping("/createpatrolreport")
+    @PostMapping("/createpatrolreport")
     public ResponseEntity createPatrolReport(HttpServletResponse response,PatrolReportBean patrolReportBean){
+        ResultVo resultVo = null;
         try{
-            patrolReportService.insertPatrolReport(response,patrolReportBean);
+            resultVo = patrolReportService.insertPatrolReport(response, patrolReportBean);
         }catch(Exception e) {
             throw new BussinessException(BizExceptionEnum.SERVER_ERROR);
         }
-        return ResponseUtil.handle(Constants.OK, null);
+        return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
     @PostMapping("/updatepatrolreport")
