@@ -16,4 +16,6 @@ public interface PatrolReportMapper {
     PatrolReportBean selectPatrolReport(@Param("taskId") String taskId);
     //修改巡逻任务报告
     int updatePatrolTaskReport(PatrolReportBean patrolReportBean);
+    //添加巡逻任务报告
+    int insertPatrolTaskReport(PatrolReportBean patrolReportBean);
 }

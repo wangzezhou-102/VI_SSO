@@ -3,6 +3,8 @@ package com.secusoft.web.service;
 import com.secusoft.web.model.PatrolReportBean;
 import com.secusoft.web.model.ResultVo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 巡逻路线service
  * @author Wangzezhou
@@ -14,4 +16,6 @@ public interface PatrolReportService {
     ResultVo selectPatrolReport(PatrolReportBean patrolReportBean);
     //修改巡逻任务报告
     ResultVo updatePatrolReport(PatrolReportBean patrolReportBean);
+    //添加报告
+    ResultVo insertPatrolReport(HttpServletResponse response, PatrolReportBean patrolReportBean);
 }

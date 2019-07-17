@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.secusoft.web.model.PatrolAlarmVo;
+import com.secusoft.web.model.PatrolReportBean;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -56,17 +56,18 @@ public class PdfUtil {
             }
         }
     }*/
-    public void turnToPdf(HttpServletResponse response, PatrolAlarmVo patrolAlarmVo) throws Exception{
+    public boolean turnToPdf(HttpServletResponse response, PatrolReportBean patrolReportBean) throws Exception{
         //创建文本对象
-        Document document = new Document();
+        Document document = new Document(PageSize.A4, 40, 40, 60, 60);
         //建立书写器,与文档对象关联
         ByteArrayOutputStream ba = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, ba);
         writer.setViewerPreferences(PdfWriter.PageModeUseThumbs);
-        //writer.setStrictImageSequence(true);//图片精确放置
-        //writer.setEncryption("123".getBytes(),"123".getBytes(),1,1);
+        writer.setStrictImageSequence(true);//图片精确放置
+        /*writer.setEncryption("123".getBytes(),"123".getBytes(), PdfWriter.ALLOW_SCREENREADERS,
+                PdfWriter.STANDARD_ENCRYPTION_128);*/
         //设置文档标题
-        document.addTitle("黄龙体育馆巡逻任务报告");
+        document.addTitle(patrolReportBean.getReportName()+"报告");
         //设置文档主题
         document.addSubject("巡逻报告");
         //设置关键字
@@ -92,17 +93,15 @@ public class PdfUtil {
         /*Phrase phrase = new Phrase();
         phrase.add(chunk);*/
         //报告标题
-        Paragraph reportTitle = new Paragraph("黄龙体育馆巡逻任务报告", boldfont);
+        Paragraph reportTitle = new Paragraph(patrolReportBean.getReportName()+"报告", boldfont);
         //1为居中对齐、2为右对齐、3为左对齐,默认为左对齐
         reportTitle.setAlignment(1);
-        reportTitle.setPaddingTop(10f);
         //PdfContentByte cb = writer.getDirectContent();生成条形码图片时使用
         //创建表格
-        PdfPTable pdfTable = createPdfTable(2,40f);
+        PdfPTable pdfTable = createPdfTable(2,30f);
         //巡逻任务名称
-        PdfPCell pdfCell1 = createPdfCell("巡逻任务名称");
-        pdfTable.addCell(pdfCell1);
-        pdfTable.addCell(createPdfCell("黄龙体育馆巡逻任务"));
+        pdfTable.addCell(createPdfCell("巡逻任务名称"));
+        pdfTable.addCell(createPdfCell(patrolReportBean.getReportName()));
         //报告时间范围
         pdfTable.addCell(createPdfCell("报告时间范围"));
         pdfTable.addCell(createPdfCell("2019/05/06-2019/06/06"));
@@ -111,21 +110,23 @@ public class PdfUtil {
         pCell.setRowspan(2);
         pdfTable.addCell(pCell);
         pdfTable.addCell(createPdfCell("日期 19/06/05  19/06/07  19/06/08  19/06/09  19/06/10  19/06/11  19/07/12  19/06/08  19/06/08  19/06/08  19/06/08  19/06/08 "));
-        pdfTable.addCell(createPdfCell("时间  00:00-00:30  01:00-02:30"));
+        pdfTable.addCell(createPdfCell("时间  00:00-00:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30  01:00-02:30"));
         //巡逻目标库
         pdfTable.addCell(createPdfCell("巡逻目标库"));
-        pdfTable.addCell(createPdfCell("重点人员库 涉毒人员库 重点物品库 重点事件库"));
+
+        pdfTable.addCell(createPdfCell("重点人员库 涉毒人员库 重点物品库 重点事件库 重点事件库 重点事件库 重点事件库 重点事件库 重点事件库"));
+
         //巡逻任务报警
         pdfTable.addCell(createPdfCell("巡逻任务报警"));
-        pdfTable.addCell(createPdfCell(""));
+        pdfTable.addCell(createPdfCell(""));//
         //创建表格
         PdfPTable pdfTable1 = createPdfTable(3, 0);
         //设置图像
-        for(int i=0;i<5;i++){
+        for(int i=0;i<10;i++){
            //创建图像单元格
             PdfPCell pdfImageCell = createPdfImageCell("");
             PdfPCell pdfImageCell2 = createPdfImageCell("");
-            PdfPCell pdfCell = createPdfCell("姓名：张无忌","报警时间：2019/06/25 22:23:46 报警设备：定安路-西湖大道路口","报警地点：经度：120.15  纬度：30.28","状态：已处理");
+            PdfPCell pdfCell = createPdfCell("姓名:  张无忌","报警时间:  2019/06/25  22:23:46     报警设备:  定安路-西湖大道路口","报警地点:  经度:  120.15  纬度:  30.28","状态:  已处理");
             pdfTable1.addCell(pdfImageCell);
             pdfTable1.addCell(pdfImageCell2);
             pdfTable1.addCell(pdfCell);
@@ -139,6 +140,7 @@ public class PdfUtil {
         ServletOutputStream out = response.getOutputStream();
         ba.writeTo(out);//将字节数组输出流中的数据写入指定的OutputStream输出流中.
         out.flush();
+        return true;
     }
     //创建表格
     public PdfPTable createPdfTable(int cols,float spacingBefore) throws  Exception{
@@ -147,7 +149,7 @@ public class PdfUtil {
         // 设置表格宽度比例为%100
         table.setWidthPercentage(100);
         if(cols == 2){
-            float[] wid ={0.15f,0.85f}; //两列宽度的比例
+            float[] wid ={0.16f,0.84f}; //两列宽度的比例
             table.setWidths(wid);
         }
         if(cols == 3){
@@ -177,6 +179,7 @@ public class PdfUtil {
         PdfPCell cell = new PdfPCell();
         for (String content : contents) {
             Paragraph paragraph = new Paragraph(content,noramlfont);
+            paragraph.setPaddingTop(5f);
             cell.addElement(paragraph);
         }
         // 边框颜色
@@ -202,8 +205,8 @@ public class PdfUtil {
     public PdfPCell  createPdfImageCell(String url) throws Exception{
         Image image = Image.getInstance("F:\\360downloads\\test.jpg");
         //image.setAlignment(Image.ALIGN_LEFT);
-        image.scaleAbsolute(65f,65f);
-        PdfPCell pdfPCell = new PdfPCell(image,false);
+        image.scaleAbsolute(70f,70f);
+        PdfPCell pdfPCell = new PdfPCell(image,false);//
         pdfPCell.setBorderWidth(0);
         // 设置距左边的距离
         pdfPCell.setPaddingLeft(10f);
