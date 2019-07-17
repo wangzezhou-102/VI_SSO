@@ -3,9 +3,7 @@ package com.secusoft.web.controller;
 import com.secusoft.web.core.common.Constants;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.exception.BussinessException;
-import com.secusoft.web.core.util.PdfUtil;
 import com.secusoft.web.core.util.ResponseUtil;
-import com.secusoft.web.model.PatrolAlarmVo;
 import com.secusoft.web.model.PatrolReportBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PatrolReportService;
@@ -36,11 +34,9 @@ public class PatrolReportController {
     }
     //生成巡逻报告
     @GetMapping("/createpatrolreport")
-    public ResponseEntity createPatrolReport(HttpServletResponse response, PatrolAlarmVo patrolAlarmVo){
-        PdfUtil pdfUtil = new PdfUtil();
+    public ResponseEntity createPatrolReport(HttpServletResponse response,PatrolReportBean patrolReportBean){
         try{
-            pdfUtil.turnToPdf(response, patrolAlarmVo);
-            System.out.println("生成巡逻报告");
+            patrolReportService.insertPatrolReport(response,patrolReportBean);
         }catch(Exception e) {
             throw new BussinessException(BizExceptionEnum.SERVER_ERROR);
         }
