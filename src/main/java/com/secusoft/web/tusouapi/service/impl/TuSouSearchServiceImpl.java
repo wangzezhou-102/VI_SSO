@@ -38,7 +38,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     @Autowired
     TuSouSearchService tuSouSearchService;
 
-    @Autowired
+    @Resource
     PictureMapper pictureMapper;
     
     @Override
@@ -64,8 +64,11 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
         });
         //真实给阿里返回的接口
 
+        if(searchResponse == null){
+            return ResultVo.failure(BizExceptionEnum.TQ_SERVER_ERROR.getCode(),BizExceptionEnum.TQ_SERVER_ERROR.getMessage());
+        }
         //如果返回的状态码为failed，就返回阿里的Msg
-        if(searchResponse == null || Constants.FAILED.equals(searchResponse.getErrorCode())){
+        if(Constants.FAILED.equals(searchResponse.getErrorCode())){
             return ResultVo.failure(BizExceptionEnum.PARAM_ERROR.getCode(),searchResponse.getErrorMsg());
         }
         if(StringUtils.isEmpty(searchResponse.getErrorCode())) {
@@ -187,7 +190,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.6810614,\n" +
                 "        \"entryTime\": 1559440276664,\n" +
                 "        \"lower_colorScore\": 0.66150177,\n" +
-                "        \"cameraId\": \"1\",\n" +
+                "        \"cameraId\": \"330119520001066103\",\n" +
                 "        \"objId\": \"a37484d85d9e45a781c7325f0f2e580a\",\n" +
                 "        \"objRight\": 271,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -295,7 +298,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.49887255,\n" +
                 "        \"entryTime\": 1559440476767,\n" +
                 "        \"lower_colorScore\": 0.50681835,\n" +
-                "        \"cameraId\": \"330102540001087260\",\n" +
+                "        \"cameraId\": \"330119520001076203\",\n" +
                 "        \"objId\": \"44ac48d8106b4e46b4a3dd000b39465b\",\n" +
                 "        \"objRight\": 457,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -331,7 +334,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.6301192,\n" +
                 "        \"entryTime\": 1559439693710,\n" +
                 "        \"lower_colorScore\": 0.689523,\n" +
-                "        \"cameraId\": \"330102540001238860\",\n" +
+                "        \"cameraId\": \"330119520001197703\",\n" +
                 "        \"objId\": \"bfd2f5b71bf8445baa64d0d4456ce46c\",\n" +
                 "        \"objRight\": 245,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -475,7 +478,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.40595126,\n" +
                 "        \"entryTime\": 1559439181974,\n" +
                 "        \"lower_colorScore\": 0.38861415,\n" +
-                "        \"cameraId\": \"330102540001513170\",\n" +
+                "        \"cameraId\": \"330106530001752060\",\n" +
                 "        \"objId\": \"f68683208466445da6a1db9eaa5697a6\",\n" +
                 "        \"objRight\": 1220,\n" +
                 "        \"upper_color\": 7,\n" +
@@ -763,7 +766,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.3653439,\n" +
                 "        \"entryTime\": 1559439501488,\n" +
                 "        \"lower_colorScore\": 0.33376402,\n" +
-                "        \"cameraId\": \"330102540001714360\",\n" +
+                "        \"cameraId\": \"330106530001830060\",\n" +
                 "        \"objId\": \"6904f1748cc74f238f4da3010f79ea8c\",\n" +
                 "        \"objRight\": 426,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -799,7 +802,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.92632914,\n" +
                 "        \"entryTime\": 1559437805391,\n" +
                 "        \"lower_colorScore\": 0.520542,\n" +
-                "        \"cameraId\": \"330102540003134860\",\n" +
+                "        \"cameraId\": \"330106530001915760\",\n" +
                 "        \"objId\": \"e20aaf6d0b6c46178c273450a18fa71e\",\n" +
                 "        \"objRight\": 696,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -835,7 +838,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.4188326,\n" +
                 "        \"entryTime\": 1559438480095,\n" +
                 "        \"lower_colorScore\": 0.6738354,\n" +
-                "        \"cameraId\": \"330102540003134860\",\n" +
+                "        \"cameraId\": \"330106530045281260\",\n" +
                 "        \"objId\": \"e299112a6978419f928712abb9883904\",\n" +
                 "        \"objRight\": 361,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -871,7 +874,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.323678,\n" +
                 "        \"entryTime\": 1559439099612,\n" +
                 "        \"lower_colorScore\": 0.37475058,\n" +
-                "        \"cameraId\": \"330102540069943460\",\n" +
+                "        \"cameraId\": \"330106530045281260\",\n" +
                 "        \"objId\": \"eb84f76d4a41498aa943790374fd3a75\",\n" +
                 "        \"objRight\": 1568,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -907,7 +910,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.6810614,\n" +
                 "        \"entryTime\": 1559440276664,\n" +
                 "        \"lower_colorScore\": 0.66150177,\n" +
-                "        \"cameraId\": \"330102540069943460\",\n" +
+                "        \"cameraId\": \"330106530211146660\",\n" +
                 "        \"objId\": \"a37484d85d9e45a781c7325f0f2e580a\",\n" +
                 "        \"objRight\": 271,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -943,7 +946,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.57026124,\n" +
                 "        \"entryTime\": 1559439008210,\n" +
                 "        \"lower_colorScore\": 0.41560984,\n" +
-                "        \"cameraId\": \"330102540011000031\",\n" +
+                "        \"cameraId\": \"330106530211146660\",\n" +
                 "        \"objId\": \"56fd6e8d73ad43918c66dc0f345c495d\",\n" +
                 "        \"objRight\": 1592,\n" +
                 "        \"upper_color\": 2,\n" +
@@ -979,7 +982,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.43089944,\n" +
                 "        \"entryTime\": 1559439828042,\n" +
                 "        \"lower_colorScore\": 0.46018422,\n" +
-                "        \"cameraId\": \"330102540011000031\",\n" +
+                "        \"cameraId\": \"330106710011244460\",\n" +
                 "        \"objId\": \"7c355210fee54806ab246aef91ed9dfc\",\n" +
                 "        \"objRight\": 1100,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1087,7 +1090,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.8365562,\n" +
                 "        \"entryTime\": 1559440564520,\n" +
                 "        \"lower_colorScore\": 0.9060415,\n" +
-                "        \"cameraId\": \"330102540001513187\",\n" +
+                "        \"cameraId\": \"330106710011316260\",\n" +
                 "        \"objId\": \"ed048018a6ab47eab06a7f6ba3a4e376\",\n" +
                 "        \"objRight\": 1761,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -1123,7 +1126,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.59525996,\n" +
                 "        \"entryTime\": 1559438479894,\n" +
                 "        \"lower_colorScore\": 0.34516272,\n" +
-                "        \"cameraId\": \"330102540001513187\",\n" +
+                "        \"cameraId\": \"330106710011316260\",\n" +
                 "        \"objId\": \"aa0008e893db4dddbc16dd5871875192\",\n" +
                 "        \"objRight\": 344,\n" +
                 "        \"upper_color\": 2,\n" +
@@ -1159,7 +1162,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.37291217,\n" +
                 "        \"entryTime\": 1559440557522,\n" +
                 "        \"lower_colorScore\": 0.8297801,\n" +
-                "        \"cameraId\": \"330102540001513223\",\n" +
+                "        \"cameraId\": \"330106710011316260\",\n" +
                 "        \"objId\": \"721180650a9b47d0923e09e5fd3aac24\",\n" +
                 "        \"objRight\": 1808,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1195,7 +1198,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.35940742,\n" +
                 "        \"entryTime\": 1559439083438,\n" +
                 "        \"lower_colorScore\": 0.3787323,\n" +
-                "        \"cameraId\": \"330102540001513223\",\n" +
+                "        \"cameraId\": \"330106710018439260\",\n" +
                 "        \"objId\": \"3b594608003e4634807237033b97e103\",\n" +
                 "        \"objRight\": 628,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1267,7 +1270,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.84178066,\n" +
                 "        \"entryTime\": 1559440005485,\n" +
                 "        \"lower_colorScore\": 0.4785236,\n" +
-                "        \"cameraId\": \"330102540001714360\",\n" +
+                "        \"cameraId\": \"330119520001016003\",\n" +
                 "        \"objId\": \"d3f7bbdc031e4437ac1a07c54f94452b\",\n" +
                 "        \"objRight\": 228,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1303,7 +1306,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.3653439,\n" +
                 "        \"entryTime\": 1559439501488,\n" +
                 "        \"lower_colorScore\": 0.33376402,\n" +
-                "        \"cameraId\": \"330102540001714360\",\n" +
+                "        \"cameraId\": \"330119520001016003\",\n" +
                 "        \"objId\": \"6904f1748cc74f238f4da3010f79ea8c\",\n" +
                 "        \"objRight\": 426,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1339,7 +1342,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.92632914,\n" +
                 "        \"entryTime\": 1559437805391,\n" +
                 "        \"lower_colorScore\": 0.520542,\n" +
-                "        \"cameraId\": \"330102540003134860\",\n" +
+                "        \"cameraId\": \"330119520001975903\",\n" +
                 "        \"objId\": \"e20aaf6d0b6c46178c273450a18fa71e\",\n" +
                 "        \"objRight\": 696,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -1411,7 +1414,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.323678,\n" +
                 "        \"entryTime\": 1559439099612,\n" +
                 "        \"lower_colorScore\": 0.37475058,\n" +
-                "        \"cameraId\": \"330102540069943460\",\n" +
+                "        \"cameraId\": \"330119570020050084\",\n" +
                 "        \"objId\": \"eb84f76d4a41498aa943790374fd3a75\",\n" +
                 "        \"objRight\": 1568,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -1447,7 +1450,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.3653439,\n" +
                 "        \"entryTime\": 1559439501488,\n" +
                 "        \"lower_colorScore\": 0.33376402,\n" +
-                "        \"cameraId\": \"330106530001619760\",\n" +
+                "        \"cameraId\": \"330106710011331560\",\n" +
                 "        \"objId\": \"6904f1748cc74f238f4da3010f79ea8c\",\n" +
                 "        \"objRight\": 426,\n" +
                 "        \"upper_color\": 10,\n" +
@@ -1555,7 +1558,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                 "        \"lower_typeScore\": 0.323678,\n" +
                 "        \"entryTime\": 1559439099612,\n" +
                 "        \"lower_colorScore\": 0.37475058,\n" +
-                "        \"cameraId\": \"330106530005843860\",\n" +
+                "        \"cameraId\": \"330106710011300560\",\n" +
                 "        \"objId\": \"eb84f76d4a41498aa943790374fd3a75\",\n" +
                 "        \"objRight\": 1568,\n" +
                 "        \"upper_color\": 9,\n" +
@@ -1674,7 +1677,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
             String param = sysOperationLog.getParam();
             BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
             });
-            if(searchRequestBaseRequest.getData().getIds()!=null){
+            if(searchRequestBaseRequest!=null&&searchRequestBaseRequest.getData()!=null&&StringUtils.isNotEmpty(searchRequestBaseRequest.getData().getIds())){
                 String ids = searchRequestBaseRequest.getData().getIds();
                 String[] split = ids.split(",");
                 //重新查询id对应的 ossurl
@@ -1690,7 +1693,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                     //返回参数取出oss
                     BaseResponse<JSONArray> search = tuSouSearchService.search(searchDataBaseRequest);
                     JSONArray data = search.getData();
-                    ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(data.toString(), new TypeReference<ArrayList<SearchResponseData>>() {
+                    ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(JSON.toJSONString(data), new TypeReference<ArrayList<SearchResponseData>>() {
                     });
                     strings.add(searchResponseData.get(0).getSource().getCropImageSigned());
                 }

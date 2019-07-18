@@ -39,6 +39,10 @@ public class SearchSource {
     private String hat_color;
     private String bag_type;
     private String bag_color;
+    private String canopy;//是否有敞篷
+    private String headwear;//头饰类型
+    private String bicycletype;//非机动车类型
+    private String object;//是否载物
 
     private DeviceBean deviceBean;
     private String cropImageSignedBase64;
@@ -46,7 +50,7 @@ public class SearchSource {
     public SearchSource() {
     }
 
-    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, String year, String hat_type, String hat_color, String bag_type, String bag_color, DeviceBean deviceBean,String cropImageSignedBase64) {
+    public SearchSource(String origImage, String oriImageSigned, Double hairScore, String cropImage, Double sexScore, Double upper_typeScore, String hair, Integer objLeft, String lower_type, String objType, Integer objTop, String objUUId, Long timestamp, Integer leaveTime, String upper_type, Integer objBottom, String lower_color, Double upper_colorScore, String sex, Double lower_typeScore, Long entryTime, Double lower_colorScore, String cameraId, String objId, Integer objRight, String upper_color, String cropImageSigned, String year, String hat_type, String hat_color, String bag_type, String bag_color, String canopy, String headwear, String bicycletype, String object, DeviceBean deviceBean, String cropImageSignedBase64) {
         this.origImage = origImage;
         this.oriImageSigned = oriImageSigned;
         this.hairScore = hairScore;
@@ -79,8 +83,12 @@ public class SearchSource {
         this.hat_color = hat_color;
         this.bag_type = bag_type;
         this.bag_color = bag_color;
+        this.canopy = canopy;
+        this.headwear = headwear;
+        this.bicycletype = bicycletype;
+        this.object = object;
         this.deviceBean = deviceBean;
-        this.cropImageSignedBase64=cropImageSignedBase64;
+        this.cropImageSignedBase64 = cropImageSignedBase64;
     }
 
     public String getOrigImage() {
@@ -355,6 +363,38 @@ public class SearchSource {
         this.cropImageSignedBase64 = cropImageSignedBase64;
     }
 
+    public String getCanopy() {
+        return canopy;
+    }
+
+    public void setCanopy(String canopy) {
+        this.canopy = canopy;
+    }
+
+    public String getHeadwear() {
+        return headwear;
+    }
+
+    public void setHeadwear(String headwear) {
+        this.headwear = headwear;
+    }
+
+    public String getBicycletype() {
+        return bicycletype;
+    }
+
+    public void setBicycletype(String bicycletype) {
+        this.bicycletype = bicycletype;
+    }
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
+    }
+
     @Override
     public String toString() {
         return "SearchSource{" +
@@ -390,7 +430,12 @@ public class SearchSource {
                 ", hat_color='" + hat_color + '\'' +
                 ", bag_type='" + bag_type + '\'' +
                 ", bag_color='" + bag_color + '\'' +
+                ", canopy='" + canopy + '\'' +
+                ", headwear='" + headwear + '\'' +
+                ", bicycletype='" + bicycletype + '\'' +
+                ", object='" + object + '\'' +
                 ", deviceBean=" + deviceBean +
+                ", cropImageSignedBase64='" + cropImageSignedBase64 + '\'' +
                 '}';
     }
 }

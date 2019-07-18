@@ -212,7 +212,8 @@ Content-Type: application/json
 
 {
   "trackName": "Akun轨迹",
-  "id": "2"
+  "id": "28",
+  "folderId": "8"
 }
 
 ###删除轨迹

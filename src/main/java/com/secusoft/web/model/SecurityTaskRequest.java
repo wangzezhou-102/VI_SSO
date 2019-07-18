@@ -52,10 +52,11 @@ public class SecurityTaskRequest {
      */
     private Long beginTime;
     private Long endTime;
+    private Integer securityStatus;
     public SecurityTaskRequest() {
     }
 
-    public SecurityTaskRequest(Integer id, String taskId, String securityName, Integer securityType, List<CodeplacesBean> codeplacesBeans, List<SecurityTimeBean> timeStamps, String exposition, Integer enable, String userId, String orgCode, List<Integer> repoids, Integer isfinish, List<String> cameraId, Long beginTime, Long endTime) {
+    public SecurityTaskRequest(Integer id, String taskId, String securityName, Integer securityType, List<CodeplacesBean> codeplacesBeans, List<SecurityTimeBean> timeStamps, String exposition, Integer enable, String userId, String orgCode, List<Integer> repoids, Integer isfinish, List<String> cameraId, Long beginTime, Long endTime, Integer securityStatus) {
         this.id = id;
         this.taskId = taskId;
         this.securityName = securityName;
@@ -71,6 +72,7 @@ public class SecurityTaskRequest {
         this.cameraId = cameraId;
         this.beginTime = beginTime;
         this.endTime = endTime;
+        this.securityStatus = securityStatus;
     }
 
     public Integer getId() {
@@ -193,6 +195,14 @@ public class SecurityTaskRequest {
         this.endTime = endTime;
     }
 
+    public Integer getSecurityStatus() {
+        return securityStatus;
+    }
+
+    public void setSecurityStatus(Integer securityStatus) {
+        this.securityStatus = securityStatus;
+    }
+
     @Override
     public String toString() {
         return "SecurityTaskRequest{" +
@@ -211,6 +221,7 @@ public class SecurityTaskRequest {
                 ", cameraId=" + cameraId +
                 ", beginTime=" + beginTime +
                 ", endTime=" + endTime +
+                ", securityStatus=" + securityStatus +
                 '}';
     }
 }

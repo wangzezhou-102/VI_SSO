@@ -1,13 +1,14 @@
 package com.secusoft.web.tusouapi.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.secusoft.web.model.Page;
 
 /**
  * 图搜返回接口Data字段实体
  * @author huanghao
  * @date 2019-06-12
  */
-public class SearchResponseData {
+public class SearchResponseData extends Page {
     @JSONField(name="_index")
     private String index;
 

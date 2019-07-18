@@ -147,6 +147,7 @@
         <include refid="vi_picture_Column" />
         from vi_picture
         where folder_id =#{fid} and pic_type = 1
+        Order by gmt_create desc
     </select>
 
 

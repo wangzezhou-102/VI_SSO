@@ -8,7 +8,7 @@ import com.secusoft.web.tusouapi.model.SearchSource;
 import java.io.Serializable;
 
 
-public class PictureBean implements Serializable {
+public class PictureBean extends Page  {
     private String id;
     private String pictureId;
     private String origImageUrl;

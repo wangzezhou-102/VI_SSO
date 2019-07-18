@@ -78,4 +78,15 @@ public class PictureController {
         ResultVo resultVo = pictureService.cancelPicture(pictureBean);
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
+
+    /**
+     * 收藏图片分页接口
+     * @param pictureBean
+     * @return
+     */
+    @PostMapping("/picturepagehelper")
+    public ResponseEntity<ResultVo> picturePageHelper(@RequestBody PictureBean pictureBean){
+        ResultVo resultVo = pictureService.picturePageHelpe(pictureBean);
+        return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
+    }
 }

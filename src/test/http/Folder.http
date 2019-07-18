@@ -44,8 +44,8 @@ Content-Type: application/json
 
 {
   "status": 0,
-  "pageSize": 2,
-  "pageNumber": 0
+  "pageSize": 1,
+  "pageNumber":4
 }
 
 ###展示所有文件夹
@@ -57,7 +57,8 @@ POST http://localhost:8006/readFolder
 Content-Type: application/json
 
 {
-"id": 8
+    "id": 8,
+  "pageSize": 10
 }
 
 ###

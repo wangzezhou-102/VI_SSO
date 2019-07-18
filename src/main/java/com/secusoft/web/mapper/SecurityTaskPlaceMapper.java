@@ -14,4 +14,5 @@ import java.util.List;
 public interface SecurityTaskPlaceMapper extends BaseMapper<SecurityTaskPlaceBean> {
     List<CodeplacesBean> selectPlaceByTaskId(String taskId);
     List<SecurityPlaceBean> selectTaskPlaceByTaskId(String taskId);
+    void deleteTaskPlaceByTaskId(String taskId);
 }

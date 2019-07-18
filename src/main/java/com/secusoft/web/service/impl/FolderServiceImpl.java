@@ -147,13 +147,22 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public ResultVo getFolder(String fid) {
+    public ResultVo getFolder(FolderBean folder) {
+        if(folder.getPageSize()==null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        String fid=folder.getId();
         FolderBean folderBean = folderMapper.selectOneFolder(fid);
-        List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(fid);
-
+        List<PictureBean> pictureBeanss = pictureMapper.selectPictureByFid(fid);
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
-        if (!pictureBeans.isEmpty()){
+        if (!pictureBeanss.isEmpty()){
+            List<PictureBean> pictureBeans;
+            if(pictureBeanss.size()<folder.getPageSize()){
+                 pictureBeans =pictureBeanss;
+            }else {
+                 pictureBeans = pictureBeanss.subList(0, folder.getPageSize());
+            }
             ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
             for (PictureBean pictureBean:pictureBeans) {
                 SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
@@ -208,6 +217,7 @@ public class FolderServiceImpl implements FolderService {
         					SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty});
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });
+        resultVo.setTotal(Long.valueOf(pictureBeanss.size()));
         return resultVo;
     }
 

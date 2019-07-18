@@ -42,7 +42,11 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public ResultVo updateAreaName(AreaBean areaBean) {
         if(StringUtils.isEmpty(areaBean.getAreaName())){
-            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
+            return ResultVo.failure(BizExceptionEnum.AREA_NAME_NULL.getCode(),BizExceptionEnum.AREA_NAME_NULL.getMessage());
+        }
+        int i = areaMapper.selectCountAreaByName(areaBean);
+        if(i!=0){
+            return ResultVo.failure(BizExceptionEnum.AREA_REPEAT.getCode(),BizExceptionEnum.AREA_REPEAT.getMessage());
         }
         areaMapper.updateAreaNameById(areaBean);
         return ResultVo.success();

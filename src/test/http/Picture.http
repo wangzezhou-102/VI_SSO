@@ -86,4 +86,12 @@ Content-Type: application/json
 {}
 
 ###
+POST http://localhost:8006/picturepagehelper
+Content-Type: application/json
+
+{
+  "folderId": "50",
+  "pageNumber": 1,
+  "pageSize": 3
+}
 ###

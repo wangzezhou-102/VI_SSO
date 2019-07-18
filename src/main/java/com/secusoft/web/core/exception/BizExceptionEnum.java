@@ -15,7 +15,7 @@ public enum BizExceptionEnum {
     REQUEST_NULL(400, "请求有错误"),
     NO_PERMITION(403, "权限不足"),
     SERVER_ERROR(500, "服务器异常"),
-    
+	TQ_SERVER_ERROR(511, "连接天擎服务器异常"),
     /**
      * 业务相关
      */
@@ -23,6 +23,8 @@ public enum BizExceptionEnum {
     TRACK_REPEAT(1001022,"轨迹名重复"),
 	AREA_REPEAT(1001023,"区域名重复"),
     FOLDER_NAME_NULL(1001024,"文件名不能为空"),
+	TRACK_NAME_NULL(1001025,"轨迹名不能为空"),
+	AREA_NAME_NULL(1001025,"区域名不能为空"),
 	/**
 	 * 登录问题
 	 */
@@ -109,7 +111,12 @@ public enum BizExceptionEnum {
 	/**
 	 *收藏相关
 	 */
-	COLLECTION_COVERTRACK(1010,"轨迹覆盖失败");
+	COLLECTION_COVERTRACK(1010,"轨迹覆盖失败"),
+
+	/**
+	 *布控相关
+	 */
+	SECURITY_DELETE_FALL(1100,"布控任务进行中，不可删除");
 	BizExceptionEnum(int code, String message) {
 		this.friendlyCode = code;
 		this.friendlyMsg = message;

@@ -151,7 +151,7 @@ public class FolderController {
    @PostMapping("readFolder")
    @ApiOperation("展示某个文件夹详情")
     public ResponseEntity<ResultVo> readFolder(@RequestBody FolderBean folderBean){
-       ResultVo resultVo = folderService.getFolder(folderBean.getId());
+       ResultVo resultVo = folderService.getFolder(folderBean);
        return new ResponseEntity<>(resultVo, HttpStatus.OK);
    }
 }

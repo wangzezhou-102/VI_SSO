@@ -100,7 +100,9 @@ public class MyInterceptor implements HandlerInterceptor {
             sysOperationLog.setUserId("1");
             sysOperationLog.setOrgCode("10");
             sysOperationLog.setTimeout(endtime-starttime);
-            sysOperationLogMapper.insert(sysOperationLog);
+            if(map.get("param")!=null){
+                sysOperationLogMapper.insert(sysOperationLog);
+            }
         }
     }
 }

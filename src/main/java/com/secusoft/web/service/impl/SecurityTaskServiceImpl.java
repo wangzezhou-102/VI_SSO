@@ -224,7 +224,7 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
         }else {
             securityTaskBean1.setCodeplacesBeans(securityTaskRequest.getCodeplacesBeans());
             List<DeviceBean> deviceBeans = SecurityDevice(securityTaskBean1);
-            for (DeviceBean deviceBean : deviceBeans){
+             for(DeviceBean deviceBean : deviceBeans){
                 ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
                 viTaskDeviceBean.setDeviceId(deviceBean.getDeviceId());
                 viTaskDeviceBean.setTaskId(taskId);
@@ -245,10 +245,26 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
 //        if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(errorCode)) {
 //            throw new RuntimeException(StringUtils.hasLength(errorMsg) ? errorMsg : "布控任务添加失败！");
 //        }
-        for (SecurityTimeBean securityTimeBean:securityTaskRequest.getTimeStamps()) {
-                securityTaskRequest.setBeginTime(securityTimeBean.getBeginTime());
-                securityTaskRequest.setEndTime(securityTimeBean.getEndTime());
-                TQTimeTask(securityTaskRequest);
+        //开启定时任务
+        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
+        for (int i = 0; i < securityTimeBeans.size(); i++) {
+            if (i==0&&securityTaskRequest.getEnable()==1){
+                //修改初始时间为当前时间
+                SecurityTimeBean securityTimeBean = new SecurityTimeBean();
+                securityTimeBean.setBeginTime(System.currentTimeMillis());
+                securityTimeBean.setId(securityTimeBeans.get(0).getId());
+                securityTimeMapper.updateTimeById(securityTimeBean);
+
+                securityTaskRequest.setId(securityTimeBeans.get(0).getId());
+                securityTaskRequest.setBeginTime(System.currentTimeMillis());
+                securityTaskRequest.setEndTime(securityTimeBeans.get(i).getEndTime());
+               // TQTimeTask(securityTaskRequest);
+            }else{
+                securityTaskRequest.setId(securityTimeBeans.get(i).getId());
+                securityTaskRequest.setBeginTime(securityTimeBeans.get(i).getBeginTime());
+                securityTaskRequest.setEndTime(securityTimeBeans.get(i).getEndTime());
+               // TQTimeTask(securityTaskRequest);
+            }
         }
         return ResultVo.success();
     }
@@ -261,6 +277,12 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
         if(StringUtils.isEmpty(securityTaskRequest.getTaskId())){
             return ResultVo.failure(BizExceptionEnum.TASK_ID_NULL.getCode(), BizExceptionEnum.TASK_ID_NULL.getMessage());
         }
+        //正在启动的任务不能删除
+        SecurityTaskBean securityTaskBean = securityTaskMapper.selectSecurityTaskByTaskId(securityTaskRequest);
+        if(securityTaskBean.getEnable()==1){
+            return ResultVo.failure(BizExceptionEnum.SECURITY_DELETE_FALL.getCode(), BizExceptionEnum.SECURITY_DELETE_FALL.getMessage());
+        }
+
         //组装数据下发天擎
         BaseRequest<BKTaskDeleteRequest> bkTaskDeleteRequestBaseRequest = new BaseRequest<>();
         BKTaskDeleteRequest bkTaskDeleteRequest = new BKTaskDeleteRequest();
@@ -291,8 +313,111 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
     @Transactional
     @Override
     public ResultVo setSecurityTask(SecurityTaskRequest securityTaskRequest) {
+        if(securityTaskRequest == null){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if(!StringUtils.hasLength(securityTaskRequest.getTaskId())){
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (!StringUtils.hasLength(securityTaskRequest.getSecurityName())) {
+            return ResultVo.failure(BizExceptionEnum.TASK_NANE_NULL.getCode(), BizExceptionEnum.TASK_NANE_NULL.getMessage());
+        }
+        if (CollectionUtils.isNotEmpty(securityTaskRequest.getTimeStamps())) {
+            for (SecurityTimeBean securityTimeStamp:securityTaskRequest.getTimeStamps()) {
+                if(securityTimeStamp.getBeginTime().compareTo(securityTimeStamp.getEndTime())>0){
+                    return ResultVo.failure(BizExceptionEnum.TASK_DATE_WRONG.getCode(), BizExceptionEnum.TASK_DATE_WRONG.getMessage());
+                }
+            }
+        } else {
+            return ResultVo.failure(BizExceptionEnum.TASK_DATE_NULL.getCode(), BizExceptionEnum.TASK_DATE_NULL.getMessage());
+        }
+        SecurityTaskBean securityTaskBean1 = new SecurityTaskBean();
+        securityTaskBean1.setSecurityName(securityTaskRequest.getSecurityName());
+        List<SecurityTaskBean> securityTaskBeans = securityTaskMapper.selectSecurityTaskBeanByObj(securityTaskBean1);
+        if(securityTaskBeans.size() > 0){
+            return ResultVo.failure(BizExceptionEnum.TASK_NANE_REPEATED.getCode(), BizExceptionEnum.TASK_NANE_REPEATED.getMessage());
+        }
 
-        return null;
+        //判断算力
+//        securityTaskBean1.setCodeplacesBeans(securityTaskRequest.getCodeplacesBeans());
+//        securityTaskBean1.setOrgCode("999");
+//        if (!validUpdateCalute(securityTaskBean1)) {
+//            return ResultVo.failure(BizExceptionEnum.TASK_CALUATE_FAIL.getCode(), BizExceptionEnum.TASK_CALUATE_FAIL.getMessage());
+//        }
+        //如果修改正在执行的任务   那么就应该是停止布控任务  更新数据库  更新阿里那边 (时间 库 地点 设备)
+        //应该跟原来的对比 如果说一致就不修改 不一致再修改
+
+        SecurityTaskBean securityTaskBean = new SecurityTaskBean();
+        securityTaskBean.setTaskId(securityTaskRequest.getTaskId());
+        securityTaskBean.setSecurityName(securityTaskRequest.getSecurityName());
+        securityTaskBean.setSecurityType(securityTaskRequest.getSecurityType());
+        securityTaskBean.setSecurityStatus(0);
+        securityTaskBean.setEnable(securityTaskRequest.getEnable());
+        securityTaskBean.setExposition(securityTaskRequest.getExposition());
+
+        securityTaskMapper.updateSecurityTask(securityTaskBean);
+        securityTimeMapper.deleteTimeByTaskId(securityTaskBean);
+        viTaskRepoMapper.deleteViTaskRepoByTaskId(securityTaskBean.getTaskId());
+        securityTaskPlaceMapper.deleteTaskPlaceByTaskId(securityTaskBean.getTaskId());
+        viTaskDeviceMapper.deleteViTaskDeviceByTaskId(securityTaskBean.getTaskId());
+
+        //安保任务相关时间段添加
+        for (SecurityTimeBean securityTimeBean : securityTaskRequest.getTimeStamps()){
+            securityTimeBean.setTaskId(securityTaskBean.getTaskId());
+            securityTimeMapper.insert(securityTimeBean);
+        }
+
+        //安保任务相关布控库添加
+        List<Integer> repoids = securityTaskRequest.getRepoids();
+        List<ViTaskRepoBean> listRepo = new ArrayList<>();
+        for (Integer repoid : repoids) {
+            ViTaskRepoBean viTaskRepoBean = new ViTaskRepoBean();
+            viTaskRepoBean.setRepoId(repoid);
+            viTaskRepoBean.setTaskId(securityTaskBean.getTaskId());
+            listRepo.add(viTaskRepoBean);
+        }
+        viTaskRepoMapper.insertBatch(listRepo);
+
+        //安保任务相关地点添加
+        List<CodeplacesBean> codeplacesBeans = securityTaskRequest.getCodeplacesBeans();
+        for (CodeplacesBean codeplacesBean:codeplacesBeans){
+            for (Integer i:codeplacesBean.getPlace()){
+                SecurityTaskPlaceBean securityTaskPlaceBean = new SecurityTaskPlaceBean();
+                securityTaskPlaceBean.setTaskId(securityTaskBean.getTaskId());
+                securityTaskPlaceBean.setTypeCode(Integer.valueOf(codeplacesBean.getTypeCode()));
+                securityTaskPlaceBean.setPlaceId(i);
+                securityTaskPlaceMapper.insert(securityTaskPlaceBean);
+            }
+        }
+
+        //安保任务设备添加
+        List<ViTaskDeviceBean> list = new ArrayList<>();
+        if(securityTaskRequest.getSecurityType()==4){
+            List<String> cameraId = securityTaskRequest.getCameraId();
+            for (String id : cameraId) {
+                ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
+                viTaskDeviceBean.setDeviceId(id);
+                viTaskDeviceBean.setTaskId(securityTaskBean.getTaskId());
+                viTaskDeviceBean.setStatus(2);
+                viTaskDeviceBean.setAction(2);
+                list.add(viTaskDeviceBean);
+            }
+            viTaskDeviceMapper.insertBatch(list);
+        }else {
+            securityTaskBean1.setCodeplacesBeans(securityTaskRequest.getCodeplacesBeans());
+            List<DeviceBean> deviceBeans = SecurityDevice(securityTaskBean1);
+            for(DeviceBean deviceBean : deviceBeans){
+                ViTaskDeviceBean viTaskDeviceBean = new ViTaskDeviceBean();
+                viTaskDeviceBean.setDeviceId(deviceBean.getDeviceId());
+                viTaskDeviceBean.setTaskId(securityTaskBean.getTaskId());
+                viTaskDeviceBean.setStatus(2);
+                viTaskDeviceBean.setAction(2);
+                list.add(viTaskDeviceBean);
+            }
+            viTaskDeviceMapper.insertBatch(list);
+        }
+        //
+        return ResultVo.success();
     }
 
     @Override
@@ -450,18 +575,18 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
      */
     private void TQTimeTask(SecurityTaskRequest securityTaskRequest) {
 
-//        Timer timer = new Timer();
-//        //设备提前5分钟启动码流计划任务
-//        videoStreamStartTask(timer, securityTaskRequest);
+        Timer timer = new Timer();
+        //设备提前5分钟启动码流计划任务
+        videoStreamStartTask(timer, securityTaskRequest);
 
-//        //开始布控任务
-//        surveyStartTask(timer, securityTaskRequest);
-//
-//        //停止布控任务
-//        surveyStopTask(timer, securityTaskRequest);
-//
-//        //设备延后固定时间停止码流计划任务
-//        videoStreamStopTask(timer, securityTaskRequest);
+        //开始布控任务
+        surveyStartTask(timer, securityTaskRequest);
+
+        //停止布控任务
+        surveyStopTask(timer, securityTaskRequest);
+
+        //设备延后固定时间停止码流计划任务
+        videoStreamStopTask(timer, securityTaskRequest);
     }
 
     /**
@@ -482,20 +607,25 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
         }
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        timer.schedule(new SecurityVideoStreamStartTask(securityTaskRequest), securityTaskRequest.getEnable() == 1 ? new Date() : calendar.getTime());
+        timer.schedule(new SecurityVideoStreamStartTask(securityTaskRequest), calendar.getTime());
     }
 
     /**
      * 开始布控任务
      *
      * @param timer
-     * @param viSurveyTaskBean
+     * @param securityTaskRequest
      */
-    private void surveyStartTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
+    private void surveyStartTask(Timer timer, SecurityTaskRequest securityTaskRequest) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
-        timer.schedule(new SurveyStartTask(viSurveyTaskBean), viSurveyTaskBean.getEnable() == 1 ? new Date() : calendar.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date parse = simpleDateFormat.parse(simpleDateFormat.format(securityTaskRequest.getBeginTime()));
+            calendar.setTime(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        timer.schedule(new SecurityStartTask(securityTaskRequest),  calendar.getTime());
     }
 
 
@@ -503,27 +633,40 @@ public class SecurityTaskServiceImpl implements SecurityTaskService {
      * 结束布控任务
      *
      * @param timer
-     * @param viSurveyTaskBean
+     * @param securityTaskRequest
      */
-    private void surveyStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
+    private void surveyStopTask(Timer timer, SecurityTaskRequest securityTaskRequest) {
         Calendar calendar = Calendar.getInstance();
-        //设备提前5分钟启动码流计划任务
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
-        timer.schedule(new SurveyStopTask(viSurveyTaskBean), calendar.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date parse = simpleDateFormat.parse(simpleDateFormat.format(securityTaskRequest.getEndTime()));
+            calendar.setTime(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        timer.schedule(new SecurityStopTask(securityTaskRequest), calendar.getTime());
     }
 
     /**
      * 设备停流
      *
      * @param timer
-     * @param viSurveyTaskBean
+     * @param securityTaskRequest
      */
-    private void videoStreamStopTask(Timer timer, ViSurveyTaskBean viSurveyTaskBean) {
+    private void videoStreamStopTask(Timer timer, SecurityTaskRequest securityTaskRequest) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTaskBean.getBeginTime());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date parse = simpleDateFormat.parse(simpleDateFormat.format(securityTaskRequest.getEndTime()));
+            calendar.setTime(parse);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         //设备提前5分钟启动码流计划任务
         calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-        timer.schedule(new VideoStreamStopTask(viSurveyTaskBean), calendar.getTime());
+        timer.schedule(new SecurityVideoStreamStopTask(securityTaskRequest), calendar.getTime());
+
     }
 
     /**
