@@ -151,18 +151,18 @@ public class FolderServiceImpl implements FolderService {
         if(folder.getPageSize()==null){
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(),BizExceptionEnum.PARAM_NULL.getMessage());
         }
+        if(folder != null && folder.getPageNumber() != null && folder.getPageSize() != null) {
+            PageHelper.startPage(folder.getPageNumber().intValue(), folder.getPageSize());
+        }
         String fid=folder.getId();
+        List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(fid);
+        PageInfo<PictureBean> pageInfo = new PageInfo<PictureBean>(pictureBeans);
+
         FolderBean folderBean = folderMapper.selectOneFolder(fid);
-        List<PictureBean> pictureBeanss = pictureMapper.selectPictureByFid(fid);
         List<TrackBean> trackBeans = trackMapper.selectTrackByFid(fid);
         List<AreaBean> areaBeans = areaMapper.selectAreaByFid(fid);
-        if (!pictureBeanss.isEmpty()){
-            List<PictureBean> pictureBeans;
-            if(pictureBeanss.size()<folder.getPageSize()){
-                 pictureBeans =pictureBeanss;
-            }else {
-                 pictureBeans = pictureBeanss.subList(0, folder.getPageSize());
-            }
+
+        if (!pictureBeans.isEmpty()){
             ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
             for (PictureBean pictureBean:pictureBeans) {
                 SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
@@ -217,7 +217,7 @@ public class FolderServiceImpl implements FolderService {
         					SerializerFeature.WriteMapNullValue,SerializerFeature.WriteNullListAsEmpty});
         ResultVo resultVo = JSON.parseObject(responStr, new TypeReference<ResultVo>() {
         });
-        resultVo.setTotal(Long.valueOf(pictureBeanss.size()));
+        resultVo.setTotal(pageInfo.getTotal());
         return resultVo;
     }
 
