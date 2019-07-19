@@ -615,7 +615,6 @@ public class PatrolTaskServiceImpl implements PatrolTaskService {
         bkTaskSubmitRequest.setMeta(bkTaskMeta);
         bkTaskSubmitRequestBaseRequest.setData(bkTaskSubmitRequest);
         bkTaskSubmitRequestBaseRequest.setRequestId(bkrepoConfig.getRequestId());
-
         return bkTaskSubmitRequestBaseRequest;
     }
 
