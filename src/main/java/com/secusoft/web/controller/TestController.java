@@ -1269,7 +1269,7 @@ public class TestController<psvm> extends BaseController {
 
     @RequestMapping("testSys")
     public Object testSys() {
-        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog(null);
 
         System.out.println("一共几条数据" + sysOperationLogs.size());
         List<ArrayList<SearchRequestData>> searchRequests = new ArrayList<>();
@@ -1319,4 +1319,10 @@ public class TestController<psvm> extends BaseController {
 
     }
 
+    public static void main(String[] args) throws ParseException {
+        Long aLong = Long.valueOf("1563263448221");
+        String result2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(aLong);
+        Date parse =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(result2);
+        System.out.println(parse);
+    }
 }

@@ -1666,14 +1666,14 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     }
 
     @Override
-    public ResultVo cacheSearch() {
+    public ResultVo cacheSearch(SysOperationLog sysOperationLogg) {
         //返回时 需要将ids里面图片转化为OssUrl
-        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog(sysOperationLogg);
         List<ArrayList<SearchRequestData>> searchRequests =new ArrayList<>();
-        ArrayList<String> strings = new ArrayList<>();
         int j=0;
         HashMap<Integer, StringBuilder> map = new HashMap<Integer, StringBuilder>();
         for (SysOperationLog sysOperationLog:sysOperationLogs) {
+            ArrayList<String> strings = new ArrayList<>();
             String param = sysOperationLog.getParam();
             BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
             });

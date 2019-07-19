@@ -58,6 +58,14 @@
         select <include refid="sys_operation_log_Column" />
         from
         sys_operation_log
+        <where>
+            <if test="searchType !=null">
+               and search_type=#{searchType}
+            </if>
+            <if test="title !=null">
+                and title=#{title}
+            </if>
+        </where>
         ORDER BY operate_date DESC LIMIT 3
     </select>
     <select id="tusouSearchTotal" resultType="java.lang.Integer">
