@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class PatrolRouteBean {
     //路线id
-    private Integer Id;
+    private Integer id;
     //路线名称
     private String routeName;
-    //状态 0-无操作 1-使用中 2-未使用 3-已删除
+    //状态 0-无操作 1-使用中 2-未使用 
     private Integer status;
     //创建者id
     private Integer createId;
@@ -41,11 +41,11 @@ public class PatrolRouteBean {
 
     public void setDevices(List<DeviceBean> devices) { this.devices = devices; }
 
-    public Integer getId() { return Id; }
+    public Integer getId() { return id; }
 
-    public void setId(Integer id) { Id = id; }
+	public void setId(Integer id) {	this.id = id; }
 
-    public String getRouteName() { return routeName; }
+	public String getRouteName() { return routeName; }
 
     public void setRouteName(String routeName) { this.routeName = routeName; }
 
@@ -72,7 +72,7 @@ public class PatrolRouteBean {
     @Override
     public String toString() {
         return "PatrolRouteBean{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", routeName='" + routeName + '\'' +
                 ", status=" + status +
                 ", createId=" + createId +
@@ -81,32 +81,6 @@ public class PatrolRouteBean {
                 ", updateTime=" + updateTime +
                 ", devices=" + devices +
                 '}';
-    }
-
-    public boolean validateStatus(){
-        //此处参数必须不为3 且不为空
-        if(status == null || status != 3 ){
-            return false;
-        }
-        return true;
-    }
-    public boolean validateRouteNameAndDevices(){
-        if(routeName == null || devices == null || createId == null){
-            return false;
-        }
-        return true;
-    }
-    public boolean validateId(){
-        if(Id == null){
-            return false;
-        }
-        return true;
-    }
-    public boolean validateIdAndDevices(){
-        if(Id == null || devices == null){
-            return false;
-        }
-        return true;
     }
 
 }

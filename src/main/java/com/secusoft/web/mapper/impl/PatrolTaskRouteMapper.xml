@@ -15,6 +15,11 @@
     <select id="selectPatrolTaskRouteAll" parameterType="com.secusoft.web.model.PatrolTaskRouteBean"
             resultMap="PatrolTaskRouteResultMap">
         select task_id,route_id from vi_patrol_task_route
+        <where>
+        	<if test="routeId != null">
+        		route_id=#{routeId}
+        	</if>
+        </where>
     </select>
     <insert id="insertPatrolTaskRoute" parameterType="com.secusoft.web.model.PatrolTaskRouteBean">
         insert into vi_patrol_task_route
@@ -32,11 +37,11 @@
     <!-- 删除任务关联路线信息 -->
     <delete id="deletePatrolTaskRoute" parameterType="com.secusoft.web.model.PatrolTaskRouteBean">
         delete from vi_patrol_task_route
-        <where>
-            <if test="taskId != null">
-                task_id=#{taskId}
-            </if>
-        </where>
+        <trim prefix=" where " prefixOverrides="and">
+            <if test="id != null">id=#{id}</if>
+            <if test="taskId != null">and task_id=#{taskId},</if>
+            <if test="routeId != null">and route_id=#{routeId}</if>
+        </trim>
     </delete>
     <!-- 修改路线信息 -->
     <update id="updatePatrolTaskRoute" parameterType="com.secusoft.web.model.PatrolTaskRouteBean">

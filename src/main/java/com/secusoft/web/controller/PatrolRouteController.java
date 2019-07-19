@@ -26,48 +26,33 @@ public class PatrolRouteController {
 
     @PostMapping("/selectrouteall")
     public ResponseEntity selectPatrolRouteByStatus(@RequestBody PatrolRouteBean patrolRouteBean){//可选状态 删除-3
-        if(!patrolRouteBean.validateStatus()){
-            throw new BussinessException(BizExceptionEnum.PARAM_ERROR);
-        }
         ResultVo resultVo = patrolRouteService.selectPatrolRouteByStatus(patrolRouteBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
     @PostMapping("/selectroute")
     public ResponseEntity selectPatrolRouteById(@RequestBody PatrolRouteBean patrolRouteBean){//路线id Id
-        if(!patrolRouteBean.validateId()){
-            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
-        }
         ResultVo resultVo = patrolRouteService.selectPatrolRouteById(patrolRouteBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
     @PostMapping("/addroute")
     public ResponseEntity addPatrolRoute(@RequestBody PatrolRouteBean patrolRouteBean){ //路线名称routeName 设备列表 devices 创建者createId 组织code ordCode
-        if(!patrolRouteBean.validateRouteNameAndDevices()){
-            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
-        }
         ResultVo resultVo = patrolRouteService.insertPatroRoute(patrolRouteBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
     @PostMapping("/delroute")
-    public ResponseEntity delPatrolRoute(@RequestBody PatrolRouteBean patrolRouteBean){//删除状态-3 status 路线id Id
-        if(!patrolRouteBean.validateId()){
-            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
-        }
+    public ResponseEntity delPatrolRoute(@RequestBody PatrolRouteBean patrolRouteBean){//路线id id
         ResultVo resultVo = patrolRouteService.deletePatrolRoute(patrolRouteBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
 
     @PostMapping("/updateroute")
     public ResponseEntity updatePatrolRoute(@RequestBody PatrolRouteBean patrolRouteBean){//设备列表 devices 路线id Id 路线名称 routeName
-        if(!patrolRouteBean.validateIdAndDevices()){
-            throw new BussinessException(BizExceptionEnum.PARAM_NULL);
-        }
         ResultVo resultVo = patrolRouteService.updatePatroRoute(patrolRouteBean);
         return ResponseUtil.handle(Constants.OK, resultVo);
     }
-
+    
 
 }

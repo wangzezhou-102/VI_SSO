@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.secusoft.web.mapper.PatrolRouteMapper">
     <resultMap id="PatrolRouteResultMap" type="com.secusoft.web.model.PatrolRouteBean">
-        <id column="id" property="Id"/>
+        <id column="id" property="id"/>
         <result column="route_name" property="routeName"/>
         <result column="status" property="status"/>
         <result column="create_id" property="createId" />
@@ -15,22 +15,21 @@
     <!-- 根据主键(id)查询路线 -->
     <select id="selectPatrolRouteByPrimaryKey" parameterType="java.lang.Integer" resultMap="PatrolRouteResultMap">
         select id,route_name,status from vi_patrol_route
-        where id=#{Id}
+        where id=#{id}
     </select>
-    <!-- 根据状态查询不相关所有路线 -->
-    <select id="selectPatrolRouteByStatus" parameterType="com.secusoft.web.model.PatrolRouteBean" resultMap="PatrolRouteResultMap">
+    <!-- 查询所有路线 -->
+    <select id="selectPatrolRouteAll" resultMap="PatrolRouteResultMap">
         select id,route_name,status from vi_patrol_route
-        where status!=#{status}
     </select>
     <!-- 根据路线名称查寻路线id -->
     <select id="selectPatrolRouteByRouteName" parameterType="com.secusoft.web.model.PatrolRouteBean" resultMap="PatrolRouteResultMap">
         select id,status from vi_patrol_route
-        where route_name=#{routeName}
+        where route_name=#{routeName} and status=#{status}
     </select>
     <insert id="insertPatrolRoute" parameterType="com.secusoft.web.model.PatrolRouteBean">
         insert into vi_patrol_route
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="Id != null">id,</if>
+            <if test="id != null">id,</if>
             <if test="routeName != null">route_name,</if>
             <if test="status != null">status,</if>
             <if test="createTime != null">create_time,</if>
@@ -40,7 +39,7 @@
             <if test="orgCode != null">org_code</if>>
         </trim>
         <trim prefix="values(" suffix=")" suffixOverrides=",">
-            <if test="Id != null">#{Id},</if>
+            <if test="id != null">#{id},</if>
             <if test="routeName != null">#{routeName},</if>
             <if test="status != null">#{status},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -51,8 +50,8 @@
         </trim>
     </insert>
     <!-- 删除路线信息 -->
-    <delete id="deletePatrolRouteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from vi_patrol_route where id=#{Id}
+    <delete id="deletePatrolRouteByPrimaryKey" parameterType="com.secusoft.web.model.PatrolRouteBean">
+        delete from vi_patrol_route where id=#{id}
     </delete>
     <!-- 修改路线信息 -->
     <update id="updatePatrolRouteByPrimaryKey" parameterType="com.secusoft.web.model.PatrolRouteBean">
@@ -68,7 +67,7 @@
                 update_time=#{updateTime}
             </if>
         </trim>
-        where id=#{Id}
+        where id=#{id}
     </update>
 
 </mapper>

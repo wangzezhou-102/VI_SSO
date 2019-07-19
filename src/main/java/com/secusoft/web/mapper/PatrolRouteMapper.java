@@ -17,13 +17,13 @@ public interface PatrolRouteMapper {
     //增加路线
     int insertPatrolRoute(PatrolRouteBean patrolRouteBean);
     //删除路线
-    int deletePatrolRouteByPrimaryKey(@Param("Id")Integer Id );
+    int deletePatrolRouteByPrimaryKey(PatrolRouteBean patrolRouteBean);
     //修改路线信息
     int updatePatrolRouteByPrimaryKey(PatrolRouteBean patrolRouteBean);
     //查看路线
     PatrolRouteBean selectPatrolRouteByPrimaryKey(@Param("Id")Integer Id);
     //查看路线id
     PatrolRouteBean selectPatrolRouteByRouteName(PatrolRouteBean patrolRouteBean);
-    //查看所有路线（未被删除的路线）
-    List<PatrolRouteBean> selectPatrolRouteByStatus(PatrolRouteBean patrolRouteBean);
+    //查看所有路线
+    List<PatrolRouteBean> selectPatrolRouteAll();
 }
