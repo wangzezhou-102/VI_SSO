@@ -42,6 +42,7 @@
 
     <select id="selectByStatus" parameterType="folderBean" resultMap="result_Folder_Map">
         select id , folder_name  ,status from vi_folder where status =#{status}
+         ORDER BY gmt_create desc
     </select>
 
     <select id="selectAllFolder" resultType="com.secusoft.web.model.FolderBean">

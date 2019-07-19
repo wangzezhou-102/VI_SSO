@@ -18,77 +18,73 @@ public class SecurityTaskUntils {
     private static long nm = 1000 * 60;// 一分钟的毫秒数
     private static long ns = 1000;// 一秒钟的毫秒数
 
-//    public static boolean validTaskBeginTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
-//        if (1 == securityTaskRequest.getEnable()) {
-//            return true;
-//        }
-//        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
-//        for (SecurityTimeBean securityTimeBean:securityTimeBeans){
-//            if (securityTimeBean.getBeginTime().equals(securityTaskRequest.getBeginTime())){
-//                return true;
-//            }
-//        }
-//        long diff = new Date().getTime() - securityTaskRequest.getBeginTime().getTime();
-//        long sec = diff % nd % nh % nm / ns;// 计算差多少秒
-//        //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
-//        //若和当前时间相差时间大于0秒，则不执行
-//        if (sec != 0) {
-//            return false;
-//        }
-//        return true;
-//    }
+    public static boolean securityTaskBeginTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
+        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
 
-    public static boolean validTaskEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
-        if (1 == viSurveyTaskBean.getEnable()) {
-            return true;
+        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+        //时间与库中时间一致
+        for (SecurityTimeBean securityTimeBean:securityTimeBeans){
+            if(securityTimeBean.getId().equals(securityTaskRequest.getId())){
+                Long beginTime = securityTimeBean.getBeginTime();
+                Long time=beginTime-timeInMillis;
+                if(time == 0){
+                    return true;
+                }
+            }
         }
-        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-        long diff = new Date().getTime() - viSurveyTask.getEndTime().getTime();
-        long sec = diff % nd % nh % nm / ns;// 计算差多少秒
-        //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
-        //若和当前时间相差时间大于0秒，则不执行
-        if (sec != 0) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
-//    public static boolean securityTaskStreamBeginTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
-//        if (1 == securityTaskRequest.getEnable()) {
-//            return true;
-//        }
-//        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(viSurveyTask.getBeginTime());
-//        //设备提前5分钟启动码流计划任务
-//        calendar.add(Calendar.MINUTE, Integer.parseInt("-" + NormalConfig.getStreamMinute()));
-//        long diff = new Date().getTime() - calendar.getTime().getTime();
-//        long sec = diff % nd % nh % nm / ns;// 计算差多少秒
-//        //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
-//        //若和当前时间相差时间大于3秒，则不执行
-//        if (sec != 0) {
-//            return false;
-//        }
-//        return true;
-//    }
+    public static boolean securityTaskEndTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
+        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
+
+        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+        //时间与库中时间一致
+        for (SecurityTimeBean securityTimeBean:securityTimeBeans){
+            if(securityTimeBean.getId().equals(securityTaskRequest.getId())){
+                Long endTime = securityTimeBean.getEndTime();
+                Long time=endTime-timeInMillis;
+                if(time == 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean securityTaskStreamBeginTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
+
+        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
+
+        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+        //时间与库中时间一致
+        for (SecurityTimeBean securityTimeBean:securityTimeBeans){
+            if(securityTimeBean.getId().equals(securityTaskRequest.getId())){
+                Long beginTime = securityTimeBean.getBeginTime();
+                Long time=beginTime-timeInMillis-5000;
+                if(time == 0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
-    public static boolean validTaskStreamEndTime(ViSurveyTaskMapper viSurveyTaskMapper, ViSurveyTaskBean viSurveyTaskBean) {
-        if (1 == viSurveyTaskBean.getEnable()) {
-            return true;
+    public static boolean securityTaskStreamEndTime(SecurityTimeMapper securityTimeMapper, SecurityTaskRequest securityTaskRequest) {
+        List<SecurityTimeBean> securityTimeBeans = securityTimeMapper.selectTimeByTaskId(securityTaskRequest.getTaskId());
+
+        long timeInMillis = Calendar.getInstance().getTimeInMillis();
+        //时间与库中时间一致
+        for (SecurityTimeBean securityTimeBean:securityTimeBeans){
+            if(securityTimeBean.getId().equals(securityTaskRequest.getId())){
+                Long endTime = securityTimeBean.getEndTime();
+                Long time=endTime-timeInMillis-5000;
+                if(time == 0){
+                    return true;
+                }
+            }
         }
-        ViSurveyTaskBean viSurveyTask = viSurveyTaskMapper.getViSurveyTaskById(viSurveyTaskBean);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(viSurveyTask.getEndTime());
-        //设备提前5分钟启动码流计划任务
-        calendar.add(Calendar.MINUTE, Integer.parseInt("+" + NormalConfig.getStreamMinute()));
-        long diff = new Date().getTime() - calendar.getTime().getTime();
-        long sec = diff % nd % nh % nm / ns;// 计算差多少秒
-        //if(Math.abs(Integer.valueOf(String.valueOf(sec)))>5){
-        //若和当前时间相差时间大于0秒，则不执行
-        if (sec != 0) {
-            return false;
-        }
-        return true;
+        return false;
     }
 }

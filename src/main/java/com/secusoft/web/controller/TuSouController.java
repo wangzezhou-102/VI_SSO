@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.ResultVo;
+import com.secusoft.web.model.SysOperationLog;
 import com.secusoft.web.tusouapi.TuSouClient;
 import com.secusoft.web.tusouapi.service.TuSouSearchService;
 import org.slf4j.Logger;
@@ -63,8 +64,8 @@ public class TuSouController {
      * @return
      */
     @RequestMapping("/cacheSearch")
-    public ResponseEntity<ResultVo> cacheSearch(){
-        ResultVo resultVo = tuSouSearchService.cacheSearch();
+    public ResponseEntity<ResultVo> cacheSearch(@RequestBody SysOperationLog sysOperationLog){
+        ResultVo resultVo = tuSouSearchService.cacheSearch(sysOperationLog);
         return new ResponseEntity<>(resultVo, HttpStatus.OK);
     }
 }

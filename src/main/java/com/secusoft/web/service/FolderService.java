@@ -14,7 +14,7 @@ public interface FolderService {
     ResultVo getFolderByStatus(FolderBean folderBean);
     ResultVo getFolderByName(FolderBean folderBean);
     ResultVo getAllFolder();
-    ResultVo getFolder(String fid);
+    ResultVo getFolder(FolderBean folderBean);
     Map<String, Object> getPicById(String id);
 
 }

@@ -1,5 +1,7 @@
 package com.secusoft.web.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.UUIDUtil;
 import com.secusoft.web.core.util.UploadUtil;
@@ -11,6 +13,7 @@ import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.service.PictureService;
 
+import com.secusoft.web.tusouapi.model.SearchResponseData;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +38,7 @@ public class PictureServiceImpl implements PictureService {
     @Resource
     DeviceMapper deviceMapper;
 
-    @Autowired
+    @Resource
     FolderMapper folderMapper;
     
     @Override
@@ -132,6 +136,7 @@ public class PictureServiceImpl implements PictureService {
 	/**
 	 * 目标搜图取消收藏图片
 	 */
+    @Override
 	public ResultVo cancelPicture(PictureBean pictureBean) {
 		if(StringUtils.isEmpty(pictureBean.getPictureId())) {
             return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
@@ -147,4 +152,35 @@ public class PictureServiceImpl implements PictureService {
 		}
 		return resultVo;
 	}
+
+    @Override
+    public ResultVo picturePageHelpe(PictureBean picture) {
+        if(picture != null && picture.getPageNumber() != null && picture.getPageSize() != null) {
+            PageHelper.startPage(picture.getPageNumber().intValue(), picture.getPageSize());
+        }
+        List<PictureBean> pictureBeans = pictureMapper.selectPictureByFid(picture.getFolderId());
+        ArrayList<SearchResponseData> searchResponseDatas = new ArrayList<>();
+        if (!pictureBeans.isEmpty()){
+            for (PictureBean pictureBean:pictureBeans) {
+                SearchResponseData searchResponseData = PictureBean.toSearchResponseDate(pictureBean);
+                searchResponseDatas.add(searchResponseData);
+            }
+            DeviceBean device = new DeviceBean();
+            List<DeviceBean> deviceBeans = deviceMapper.readDeviceList(device);
+            searchResponseDatas.forEach(searchResponseData -> {
+                deviceBeans.forEach(deviceBean ->{
+                    if (deviceBean.getDeviceId().equals(searchResponseData.getSource().getCameraId())){
+                        searchResponseData.getSource().setDeviceBean(deviceBean);
+                    }
+                });
+                if(searchResponseData.getSource().getDeviceBean()==null){
+                    DeviceBean deviceBean = new DeviceBean();
+                    deviceBean.setDeviceName("未命名");
+                    searchResponseData.getSource().setDeviceBean(deviceBean);
+                }
+            });
+        }
+        PageInfo<PictureBean> pageInfo = new PageInfo<PictureBean>(pictureBeans);
+        return ResultVo.success(pageInfo.getList(),pageInfo.getTotal());
+    }
 }

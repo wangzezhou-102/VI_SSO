@@ -54,8 +54,9 @@ POST http://localhost:8006/updateAreaName
 Content-Type: application/json
 
 {
-    "id": "8",
-  "areaName": "嫌疑人Akun活动范围"
+    "id": "7",
+  "areaName": "嫌疑人活动范围",
+  "folderId": "8"
 }
 
 ###

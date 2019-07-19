@@ -12,7 +12,7 @@ public class PatrolRouteDeviceBean {
     private Integer routeId;
 
     private String deviceId;
-
+    //设备状态和路线状态保持一致（状态  0-无操作 1-使用中 2-未使用 ）
     private Integer status;
 
     private DeviceBean deviceBean;

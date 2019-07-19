@@ -19,5 +19,32 @@
         SELECT id,task_id,begin_time,end_time,time_status
          FROM `vi`.`vi_security_time`
          where task_id = #{taskId}
+         Order by begin_time
     </select>
+
+    <update id="updateTimeById" parameterType="securityTimeBean">
+        update vi_security_time
+        <set>
+            <if test="beginTime != null">
+                begin_time=#{beginTime},
+            </if>
+            <if test="endTime != null">
+                end_time=#{endTime}
+            </if>
+            <if test="timeStatus != null">
+                time_status=#{timeStatus},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id=#{id}
+            </if>
+        </where>
+
+    </update>
+
+    <delete id="deleteTimeByTaskId" parameterType="securityTimeBean">
+          delete from vi_security_time
+          where task_id=#{taskId}
+    </delete>
 </mapper>

@@ -3,7 +3,7 @@
 <mapper namespace="com.secusoft.web.mapper.PatrolRouteDeviceMapper">
 
     <resultMap id="PatrolRouteDeviceResultMap" type="com.secusoft.web.model.PatrolRouteDeviceBean">
-        <id column="id" property="Id"/>
+        <id column="id" property="id"/>
         <result column="route_id" property="routeId"/>
         <result column="device_id" property="deviceId"/>
         <result column="status" property="status"/>

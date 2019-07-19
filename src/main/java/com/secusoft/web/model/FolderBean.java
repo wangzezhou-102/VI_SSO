@@ -108,6 +108,7 @@ public class FolderBean extends Page  {
                 ", imageSearchList=" + imageSearchList +
                 ", trackList=" + trackList +
                 ", deviceArea=" + deviceArea +
+                ", idn=" + idn +
                 '}';
     }
 }

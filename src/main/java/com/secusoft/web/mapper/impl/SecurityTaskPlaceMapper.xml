@@ -33,5 +33,10 @@
       where task_id = #{taskId}
     </select>
 
+    <delete id="deleteTaskPlaceByTaskId"  parameterType="java.lang.String">
+         delete from vi_security_task_place
+          where task_id=#{taskId}
+    </delete>
+
 
 </mapper>

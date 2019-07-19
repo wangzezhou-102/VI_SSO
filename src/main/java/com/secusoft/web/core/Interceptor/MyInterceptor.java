@@ -1,7 +1,11 @@
 package com.secusoft.web.core.Interceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.mapper.SysOperationLogMapper;
 import com.secusoft.web.model.SysOperationLog;
+import com.secusoft.web.tusouapi.model.BaseRequest;
+import com.secusoft.web.tusouapi.model.SearchRequestData;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -100,7 +104,13 @@ public class MyInterceptor implements HandlerInterceptor {
             sysOperationLog.setUserId("1");
             sysOperationLog.setOrgCode("10");
             sysOperationLog.setTimeout(endtime-starttime);
-            sysOperationLogMapper.insert(sysOperationLog);
+            if(map.get("param")!=null){
+                String param = map.get("param");
+                BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
+                });
+                sysOperationLog.setSearchType(searchRequestBaseRequest.getData().getType());
+                sysOperationLogMapper.insert(sysOperationLog);
+            }
         }
     }
 }
