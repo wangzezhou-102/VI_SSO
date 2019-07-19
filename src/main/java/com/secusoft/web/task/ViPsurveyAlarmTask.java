@@ -58,7 +58,7 @@ public class ViPsurveyAlarmTask {
 
     //@Scheduled(cron = "0 0 */1 * * ?")
     //0 0/1 * * * ? 每分钟执行一次
-    @Scheduled(cron = "0/30 * * * * ? ")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void ViPsurveyAlaram() throws IOException {
         log.info("开始获取实时告警数据");
         String responseStr = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getGetViPsurveyAlarm(), "");
