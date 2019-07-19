@@ -95,6 +95,12 @@
             <if test="traceId!=null">
                 and vrt.trace_id =#{traceId}
             </if>
+            <if test="traceName != null">
+                and trace_name=#{traceName}
+            </if>
+            <if test="validState != null">
+                and valid_state=#{validState}
+            </if>
         </where>
     </select>
 </mapper>

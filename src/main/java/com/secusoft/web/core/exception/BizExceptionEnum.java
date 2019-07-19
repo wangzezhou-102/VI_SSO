@@ -121,6 +121,7 @@ public enum BizExceptionEnum {
 	TRACE_NANE_NULL(1102,"实时追踪任务名称不能为空"),
 	TRACE_IMGCONTENT_NULL(1103,"实时追踪任务追踪图片不能为空"),
 	TRACE_ID_NULL(1104,"实时追踪任务id为null或0"),
+	TRACE_NANE_REPEATED(1105,"该名称已存在，请输入不存在的名称"),
 
 	/**
 	 *布控相关

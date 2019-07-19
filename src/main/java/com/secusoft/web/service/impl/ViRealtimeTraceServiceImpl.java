@@ -55,6 +55,14 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         }
 
         ViRealtimeTraceBean bean = new ViRealtimeTraceBean();
+        bean.setTraceName(request.getTraceName());
+        bean.setValidState(1);
+        ViRealtimeTraceBean viRealtimeTraceById = viRealtimeTraceMapper.getViRealtimeTraceById(bean);
+        if (viRealtimeTraceById != null) {
+            return ResultVo.failure(BizExceptionEnum.TRACE_NANE_REPEATED.getCode(), BizExceptionEnum.TRACE_NANE_REPEATED.getMessage());
+        }
+
+        bean = new ViRealtimeTraceBean();
 
         //复制对象
         BeanCopier beanCopier = BeanCopier.create(ViRealtimeTraceRequest.class, ViRealtimeTraceBean.class, false);
@@ -99,12 +107,20 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
 
         ViRealtimeTraceBean bean = new ViRealtimeTraceBean();
         bean.setId(request.getId());
+        bean.setValidState(1);
         ViRealtimeTraceBean viRealtimeTraceById = viRealtimeTraceMapper.getViRealtimeTraceById(bean);
         if (viRealtimeTraceById == null) {
             return ResultVo.failure(BizExceptionEnum.NOT_FOUND.getCode(), BizExceptionEnum.NOT_FOUND.getMessage());
         }
 
         if (!viRealtimeTraceById.getTraceName().equals(request.getTraceName())) {
+            bean = new ViRealtimeTraceBean();
+            bean.setTraceName(request.getTraceName());
+            bean.setValidState(1);
+            viRealtimeTraceById = viRealtimeTraceMapper.getViRealtimeTraceById(bean);
+            if (viRealtimeTraceById != null && viRealtimeTraceById.getId() != request.getId()) {
+                return ResultVo.failure(BizExceptionEnum.TRACE_NANE_REPEATED.getCode(), BizExceptionEnum.TRACE_NANE_REPEATED.getMessage());
+            }
             viRealtimeTraceById.setTraceName(request.getTraceName());
         }
 
@@ -205,7 +221,8 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
 
         System.out.println(JSON.toJSONString(baseRequest));
         //这里可以直接将search返回给前端  默认已相似度排序
-        com.secusoft.web.serviceapi.model.BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getTusouSearch(), baseRequest);
+        com.secusoft.web.serviceapi.model.BaseResponse baseResponse = ServiceApiClient.getClientConnectionPool().fetchByPostMethod(ServiceApiConfig.getTusouSearch(),
+                baseRequest);
 
         String code = baseResponse.getCode();
         if (!String.valueOf(BizExceptionEnum.OK.getCode()).equals(code)) {
