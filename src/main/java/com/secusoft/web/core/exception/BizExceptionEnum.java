@@ -112,6 +112,16 @@ public enum BizExceptionEnum {
 	 *收藏相关
 	 */
 	COLLECTION_COVERTRACK(1010,"轨迹覆盖失败"),
+	/**
+	 * 实时追踪相关
+	 * @param code
+	 * @param message
+	 */
+	TRACE_DEVICE_NULL(1101,"实时追踪任务设备不能为空"),
+	TRACE_NANE_NULL(1102,"实时追踪任务名称不能为空"),
+	TRACE_IMGCONTENT_NULL(1103,"实时追踪任务追踪图片不能为空"),
+	TRACE_ID_NULL(1104,"实时追踪任务id为null或0"),
+	TRACE_NANE_REPEATED(1105,"该名称已存在，请输入不存在的名称"),
 
 	/**
 	 *布控相关

@@ -114,8 +114,6 @@ public class BkrepoDataTask {
                 //判断是否是首次同步 1首次，0非首次
                 log.info("是否是首次同步：" + (null == syncBean));
 
-
-
                 OdpsUtils.table = "vi_" + str + "_linshi";
                 OdpsUtils.sql = "select * from" + str + ";";
                 OdpsUtils.runSql();

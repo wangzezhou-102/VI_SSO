@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.secusoft.web.core.exception.BizExceptionEnum;
 import com.secusoft.web.core.util.ResponseUtil;
+import com.secusoft.web.core.util.StringUtils;
 import com.secusoft.web.model.PictureBean;
 import com.secusoft.web.model.ResultVo;
 import com.secusoft.web.model.TrackBean;
 import com.secusoft.web.service.TrackService;
 import com.secusoft.web.tusouapi.model.SearchResponseData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,7 @@ public class TrackController {
     @Autowired
     private TrackService trackService;
 
+    private static Logger log = LoggerFactory.getLogger(TrackController.class);
     /**
      * 添加轨迹 不覆盖
      * @param jsonObject Track对象 以及 Picture数组
@@ -44,7 +48,10 @@ public class TrackController {
         });
         ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
         for (SearchResponseData searchResponseData:searchResponseDataList) {
-        	PictureBean pictureBean = new PictureBean();
+            PictureBean pictureBean = new PictureBean();
+            if(StringUtils.isNotEmpty(searchResponseData.getSzId())){
+                pictureBean.setPicType(1);
+            }
             pictureBean.setScore(searchResponseData.getScore()==null?null:searchResponseData.getScore().toString());
             pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
             pictureBean.setPictureId(searchResponseData.getId());
@@ -55,8 +62,13 @@ public class TrackController {
             pictureBean.setCropImageUrl(searchResponseData.getSource().getCropImage());
             pictureBeanList.add(pictureBean);
         }
-
-        ResultVo resultVo = trackService.addTrack(trackBean, pictureBeanList);
+        ResultVo resultVo=null;
+        try {
+            resultVo = trackService.addTrack(trackBean, pictureBeanList);
+        } catch (Exception ex) {
+            log.info(ex.getMessage());
+            resultVo=ResultVo.failure(10111111,ex.getMessage());
+        }
         return new ResponseEntity<ResultVo>(resultVo, HttpStatus.OK);
     }
 
@@ -74,6 +86,9 @@ public class TrackController {
         ArrayList<PictureBean> pictureBeanList = new ArrayList<>();
         for (SearchResponseData searchResponseData:searchResponseDataList) {
             PictureBean pictureBean = new PictureBean();
+            if(StringUtils.isNotEmpty(searchResponseData.getSzId())){
+                pictureBean.setPicType(1);
+            }
             pictureBean.setScore(searchResponseData.getScore()==null?null:searchResponseData.getScore().toString());
             pictureBean.setDeviceId(searchResponseData.getSource().getCameraId());
             pictureBean.setPictureId(searchResponseData.getId());

@@ -207,7 +207,7 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
         List<ViTaskDeviceBean> cutDeviceList = null;
         //取新增设备列表
         List<ViTaskDeviceBean> diffrientDevice = null;
-        if (viSurveyTaskRequest.getSurveyDevice().length > 0) {
+        if (viSurveyTaskRequest.getSurveyDevice()!=null||viSurveyTaskRequest.getSurveyDevice().length > 0) {
             List<String> listDevice = Arrays.asList(viSurveyTaskRequest.getSurveyDevice());
             List<ViTaskDeviceBean> newDevice = new ArrayList<>();
             for (String str : listDevice) {
@@ -578,7 +578,6 @@ public class ViSurveyTaskServiceImpl implements ViSurveyTaskService {
 //        ViSurveyTaskBean viSurveyTaskBean = lists.get(0);
 
         Timer timer = new Timer();
-
         //设备提前5分钟启动码流计划任务
         videoStreamStartTask(timer, viSurveyTaskBean);
 

@@ -26,7 +26,7 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
      * 查询最近的三条搜索记录
      * @return
      */
-    List<SysOperationLog> selectThreeLog();
+    List<SysOperationLog> selectThreeLog(SysOperationLog sysOperationLog);
     /**
      * 目标搜图使用次数
      */

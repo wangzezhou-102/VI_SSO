@@ -20,11 +20,12 @@ public class SysOperationLog {
     private java.util.Date operateDate;//记录时间
     private Long timeout;//毫秒级响应时间
     private String orgCode;//用户组织ID
+    private String searchType;//搜索类型
 
     public SysOperationLog() {
     }
 
-    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, String userId, Date operateDate, Long timeout, String orgCode) {
+    public SysOperationLog(Integer id, Integer type, String title, String remoteAddr, String requestUri, String method, String param, String result, String exception, String userId, Date operateDate, Long timeout, String orgCode, String searchType) {
         this.id = id;
         this.type = type;
         this.title = title;
@@ -38,6 +39,7 @@ public class SysOperationLog {
         this.operateDate = operateDate;
         this.timeout = timeout;
         this.orgCode = orgCode;
+        this.searchType = searchType;
     }
 
     public Integer getId() {
@@ -144,6 +146,14 @@ public class SysOperationLog {
         this.timeout = timeout;
     }
 
+    public String getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(String searchType) {
+        this.searchType = searchType;
+    }
+
     @Override
     public String toString() {
         return "SysOperationLog{" +
@@ -160,6 +170,7 @@ public class SysOperationLog {
                 ", operateDate=" + operateDate +
                 ", timeout=" + timeout +
                 ", orgCode='" + orgCode + '\'' +
+                ", searchType='" + searchType + '\'' +
                 '}';
     }
 }

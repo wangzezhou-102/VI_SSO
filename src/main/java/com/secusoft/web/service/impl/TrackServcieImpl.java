@@ -43,41 +43,46 @@ public class TrackServcieImpl implements TrackService {
         if(trackMapper.selectCountTrackByName(trackBean)==0){
             trackMapper.insertTrack(trackBean);
             ArrayList<String> picIds = new ArrayList<>();
-            System.out.println(pictureBeans.size());
             String relativePath = "/store/" + trackBean.getFolderId() + "/track/" + trackBean.getId() +"/";
             for (PictureBean pictureBean:pictureBeans) {
-                //收藏图片类型是1  轨迹是2
-                pictureBean.setPicType(2);
-                //图片收藏需要下载到本地
+                if(pictureBean.getPicType()==1){
+                    pictureBean.setPicType(2);
+                    pictureBean.setLocalCropImageUrl(pictureBean.getCropImageSignedUrl());
+                    pictureBean.setLocalOriImageUrl(pictureBean.getOriImageSignedUrl());
+                    pictureMapper.insertPicture(pictureBean);
+                    picIds.add(pictureBean.getId());
+                }else {
+                    //收藏图片类型是1  轨迹是2
+                    pictureBean.setPicType(2);
+                    //图片收藏需要下载到本地
+                    String folderName = basePath + relativePath;
+                    //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
+                    String oriFileName = UUIDUtil.getUid("org_") +".jpg";
+                    String cropFileName = UUIDUtil.getUid("crop_") +".jpg";
 
-                String folderName = basePath + relativePath;
-                //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
-                String oriFileName = UUIDUtil.getUid("org_") +".jpg";
-                String cropFileName = UUIDUtil.getUid("crop_") +".jpg";
-
-                try {
-                    //创建并下载到相应的文件夹
-                    Files.createDirectories(Paths.get(folderName));
-                    UploadUtil.downLoadFromUrl(pictureBean.getCropImageSignedUrl(),cropFileName,folderName);
-                    UploadUtil.downLoadFromUrl(pictureBean.getOriImageSignedUrl(),oriFileName,folderName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Path path1 = Paths.get(folderName,oriFileName);
-                    Path path2 = Paths.get(folderName,cropFileName);
                     try {
-                        Files.deleteIfExists(path1);
-                        Files.deleteIfExists(path2);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
+                        //创建并下载到相应的文件夹
+                        Files.createDirectories(Paths.get(folderName));
+                        UploadUtil.downLoadFromUrl(pictureBean.getCropImageSignedUrl(),cropFileName,folderName);
+                        UploadUtil.downLoadFromUrl(pictureBean.getOriImageSignedUrl(),oriFileName,folderName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Path path1 = Paths.get(folderName,oriFileName);
+                        Path path2 = Paths.get(folderName,cropFileName);
+                        try {
+                            Files.deleteIfExists(path1);
+                            Files.deleteIfExists(path2);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        return ResultVo.failure(BizExceptionEnum.SERVER_ERROR);
                     }
-                    return ResultVo.failure(BizExceptionEnum.SERVER_ERROR);
+                    //存储文件夹+文件名 /2019621/1.jpg
+                    pictureBean.setLocalCropImageUrl("/static"+ relativePath + cropFileName);
+                    pictureBean.setLocalOriImageUrl("/static" + relativePath + oriFileName);
+                    pictureMapper.insertPicture(pictureBean);
+                    picIds.add(pictureBean.getId());
                 }
-                //存储文件夹+文件名 /2019621/1.jpg
-                pictureBean.setLocalCropImageUrl("/static"+ relativePath + cropFileName);
-                pictureBean.setLocalOriImageUrl("/static" + relativePath + oriFileName);
-                pictureMapper.insertPicture(pictureBean);
-                picIds.add(pictureBean.getId());
-
             }
             trackMapper.insertTrackPicture(picIds, trackBean.getId());
             return ResultVo.success();
@@ -91,10 +96,8 @@ public class TrackServcieImpl implements TrackService {
     public ResultVo coveraddTrack(TrackBean trackBean, List<PictureBean> pictureBeans) {
         //先把这个轨迹找出来  找到他的id 找到与其对应的 picture 删除（表以及文件）  重新添加图片  更新中间表
         TrackBean track = trackMapper.selectTrackByObj(trackBean);
-
         List<String> pids = trackMapper.selectTrackPictureByTid(track.getId());
         for (String id:pids) {
-
         	PictureBean picBean = pictureMapper.selectPictureById(id);
             String oriFileName = picBean.getLocalOriImageUrl();
             String cropFileName = picBean.getLocalCropImageUrl();
@@ -115,43 +118,55 @@ public class TrackServcieImpl implements TrackService {
         }
         //删除中间表
         trackMapper.deleteTrackPictureById(track.getId());
+
+        ArrayList<String> picIds = new ArrayList<>();
         //下载最新的图片到本地
         for (PictureBean pictureBean : pictureBeans) {
-            pictureBean.setPicType(2);
-            //图片收藏需要下载到本地
-            String relativePath = "/store/" + track.getFolderId() + "/track/" + track.getId() +"/";
+            if(pictureBean.getPicType()==1){
+                pictureBean.setPicType(2);
+                pictureBean.setLocalCropImageUrl(pictureBean.getCropImageSignedUrl());
+                pictureBean.setLocalOriImageUrl(pictureBean.getOriImageSignedUrl());
+                pictureMapper.insertPicture(pictureBean);
+                picIds.add(pictureBean.getId());
+            }else {
+                pictureBean.setPicType(2);
+                //图片收藏需要下载到本地
+                String relativePath = "/store/" + track.getFolderId() + "/track/" + track.getId() +"/";
 
-            String folderName = basePath + relativePath;
-            //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
-            String oriFileName = UUIDUtil.getUid("org_") +".jpg";
-            String cropFileName = UUIDUtil.getUid("crop_") +".jpg";
-            try {
-                //创建并下载到相应的文件夹
-                Files.createDirectories(Paths.get(folderName));
-                UploadUtil.downLoadFromUrl(pictureBean.getCropImageSignedUrl(),cropFileName,folderName);
-                UploadUtil.downLoadFromUrl(pictureBean.getOriImageSignedUrl(),oriFileName,folderName);
-                System.out.println("更新成功");
-            } catch (Exception e) {
-                e.printStackTrace();
-                Path path1 = Paths.get(folderName,oriFileName);
-                Path path2 = Paths.get(folderName,cropFileName);
+                String folderName = basePath + relativePath;
+                //创建文件名称  类似 org_ehWbXqMCZkg6KwRKsU31Cs.jpg
+                String oriFileName = UUIDUtil.getUid("org_") +".jpg";
+                String cropFileName = UUIDUtil.getUid("crop_") +".jpg";
                 try {
-                    Files.deleteIfExists(path1);
-                    Files.deleteIfExists(path2);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                    //创建并下载到相应的文件夹
+                    Files.createDirectories(Paths.get(folderName));
+                    UploadUtil.downLoadFromUrl(pictureBean.getCropImageSignedUrl(),cropFileName,folderName);
+                    UploadUtil.downLoadFromUrl(pictureBean.getOriImageSignedUrl(),oriFileName,folderName);
+                    System.out.println("更新成功");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Path path1 = Paths.get(folderName,oriFileName);
+                    Path path2 = Paths.get(folderName,cropFileName);
+                    try {
+                        Files.deleteIfExists(path1);
+                        Files.deleteIfExists(path2);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    return ResultVo.failure(BizExceptionEnum.SERVER_ERROR);
                 }
-                return ResultVo.failure(BizExceptionEnum.SERVER_ERROR);
+                //存储文件夹+文件名 /2019621/1.jpg
+                pictureBean.setLocalCropImageUrl("/static" + relativePath + cropFileName);
+                pictureBean.setLocalOriImageUrl("/static" + relativePath + oriFileName);
+                pictureMapper.insertPicture(pictureBean);
+                picIds.add(pictureBean.getId());
             }
-            //存储文件夹+文件名 /2019621/1.jpg
-            pictureBean.setLocalCropImageUrl("/static" + relativePath + cropFileName);
-            pictureBean.setLocalOriImageUrl("/static" + relativePath + oriFileName);
         }
-        ArrayList<String> picIds = new ArrayList<>();
-        for (PictureBean pictureBean : pictureBeans) {
-            pictureMapper.insertPicture(pictureBean);
-            picIds.add(pictureBean.getId());
-        }
+
+//        for (PictureBean pictureBean : pictureBeans) {
+//            pictureMapper.insertPicture(pictureBean);
+//            picIds.add(pictureBean.getId());
+//        }
         //重新插入中间表
         trackMapper.insertTrackPicture(picIds, track.getId());
         return ResultVo.success();

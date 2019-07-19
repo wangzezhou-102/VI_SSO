@@ -21,6 +21,8 @@ import com.secusoft.web.tusouapi.service.TuSouSearchService;
 import com.secusoft.web.utils.SearchSortUtils;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,8 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
 
     @Resource
     PictureMapper pictureMapper;
-    
+
+    private static Logger log = LoggerFactory.getLogger(TuSouSearchServiceImpl.class);
     @Override
     public BaseResponse<JSONArray> search(BaseRequest<SearchRequestData> request) {
         return TuSouClient.getClientConnectionPool().fetchByPostMethod(TuSouClient.Path_SEARCH,request);
@@ -50,7 +53,7 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     public ResultVo sortsearch(JSONObject request) {
         String requestStr = JSON.toJSONString(request);
 //        System.out.println("前台发送的数据"+requestStr);
-
+       // log.info("前台发送的数据"+requestStr);
         //判断是否是语义搜索
         BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(request.toJSONString(), new TypeReference<BaseRequest<SearchRequestData>>() {
         });
@@ -1666,14 +1669,14 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
     }
 
     @Override
-    public ResultVo cacheSearch() {
+    public ResultVo cacheSearch(SysOperationLog sysOperationLogg) {
         //返回时 需要将ids里面图片转化为OssUrl
-        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog();
+        List<SysOperationLog> sysOperationLogs = sysOperationLogMapper.selectThreeLog(sysOperationLogg);
         List<ArrayList<SearchRequestData>> searchRequests =new ArrayList<>();
-        ArrayList<String> strings = new ArrayList<>();
         int j=0;
         HashMap<Integer, StringBuilder> map = new HashMap<Integer, StringBuilder>();
         for (SysOperationLog sysOperationLog:sysOperationLogs) {
+            ArrayList<String> strings = new ArrayList<>();
             String param = sysOperationLog.getParam();
             BaseRequest<SearchRequestData> searchRequestBaseRequest = JSON.parseObject(param, new TypeReference<BaseRequest<SearchRequestData>>() {
             });
@@ -1695,7 +1698,9 @@ public class TuSouSearchServiceImpl implements TuSouSearchService {
                     JSONArray data = search.getData();
                     ArrayList<SearchResponseData> searchResponseData = JSON.parseObject(JSON.toJSONString(data), new TypeReference<ArrayList<SearchResponseData>>() {
                     });
-                    strings.add(searchResponseData.get(0).getSource().getCropImageSigned());
+                    if(CollectionUtils.isNotEmpty(searchResponseData)){
+                        strings.add(searchResponseData.get(0).getSource().getCropImageSigned());
+                    }
                 }
                 StringBuilder sb=new StringBuilder();
                 for (String cropurl:strings) {
