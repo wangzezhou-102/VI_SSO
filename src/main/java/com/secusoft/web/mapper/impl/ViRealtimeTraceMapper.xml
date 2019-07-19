@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.secusoft.web.mapper.ViRealtimeTraceMapper">
+    <!-- Picture的resultMap,column是给数据库列起的别名,它对应property类的属性-->
+    <resultMap id="result_ViRealtimeTrace_Map" type="com.secusoft.web.model.ViRealtimeTraceBean">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="trace_id" property="traceId" jdbcType="VARCHAR" />
+        <result column="trace_name" property="traceName" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="VARCHAR" />
+        <result column="action" property="action" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="valid_state" property="validState" jdbcType="INTEGER" />
+        <!--association:用于映射关联查询单个对象的信息
+            property:要将关联查询的用户信息映射到表中那个属性
+          -->
+        <collection property="viTraceDeviceBeans" ofType="com.secusoft.web.model.ViTraceDeviceBean">
+            <!-- id:关联查询用户的唯一标识
+                column:指定唯一标识用户信息的列
+                property:映射到user的那个属性
+            -->
+            <id column="vi_trace_device_id" property="id"/>
+            <result column="trace_id" property="traceId"/>
+            <result column="device_id" property="deviceId"/>
+            <result column="status" property="status"/>
+            <result column="action" property="action"/>
+        </collection>
+    </resultMap>
+    <sql id="table">
+        vi_realtime_trace
+    </sql>
+
+    <sql id="whereSql">
+        <where>
+            <if test="id!=null">
+                and id=#{id}
+            </if>
+            <if test="traceId!=null">
+                and trace_id=#{traceId}
+            </if>
+            <if test="traceName!=null">
+                and trace_name=#{traceName}
+            </if>
+            <if test="validState!=null">
+                and valid_state=#{validState}
+            </if>
+        </where>
+    </sql>
+    <insert id="insertViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
+    insert into vi_realtime_trace (trace_id, trace_name,user_id, content)
+    values ( #{traceId}, #{traceName},#{userId}, #{content})
+  </insert>
+
+    <update id="updateViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
+        update vi_realtime_trace
+        <set>
+            <if test="traceName != null">
+                trace_name=#{traceName},
+            </if>
+            <if test="content != null">
+                content=#{content},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delViRealtimeTrace" parameterType="java.lang.Integer">
+        update vi_realtime_trace
+        set valid_state=0
+        <where>
+            <if test="id!=null">
+                and id=#{id}
+            </if>
+            <if test="traceId!=null">
+                and trace_id=#{traceId}
+            </if>
+        </where>
+    </delete>
+
+    <select id="getAllViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean" resultType="com.secusoft.web.model.ViRealtimeTraceBean">
+        select * from
+        <include refid="table"/>
+        <include refid="whereSql"/>
+        order by create_time desc,modify_time desc
+    </select>
+
+    <select id="getViRealtimeTraceById" parameterType="com.secusoft.web.model.ViRealtimeTraceBean" resultMap="result_ViRealtimeTrace_Map">
+        select vrt.*,vtd.id as vi_trace_device_id,vtd.device_id,vtd.`status`,vtd.action
+        from vi_realtime_trace vrt
+        LEFT JOIN vi_trace_device vtd on vrt.trace_id=vtd.trace_id
+        <where>
+            <if test="id!=null">
+                and vrt.id =#{id}
+            </if>
+            <if test="traceId!=null">
+                and vrt.trace_id =#{traceId}
+            </if>
+        </where>
+    </select>
+</mapper>
