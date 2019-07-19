@@ -74,7 +74,6 @@ public class VideoStreamStartTask extends TimerTask {
                         }
                         viTaskDeviceBean.setAction(1);
                         viTaskDeviceMapper.updateViTaskDevice(viTaskDeviceBean);
-
                     }
                 }
             }

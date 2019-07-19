@@ -12,7 +12,7 @@ public class PatrolTaskRouteBean {
     private String taskId;
     //任务路线id
     private Integer routeId;
-
+    
     public Integer getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
