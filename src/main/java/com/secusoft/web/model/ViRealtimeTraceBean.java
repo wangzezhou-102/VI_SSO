@@ -24,6 +24,16 @@ public class ViRealtimeTraceBean {
 
     private List<ViTraceDeviceBean> viTraceDeviceBeans;
 
+    private Integer areaType;
+
+    public Integer getAreaType() {
+        return areaType;
+    }
+
+    public void setAreaType(Integer areaType) {
+        this.areaType = areaType;
+    }
+
     public Integer getId() {
         return id;
     }

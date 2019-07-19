@@ -55,6 +55,16 @@ public class ViRealtimeTraceRequest {
 
     private Integer validState;
 
+    private Integer areaType;
+
+    public Integer getAreaType() {
+        return areaType;
+    }
+
+    public void setAreaType(Integer areaType) {
+        this.areaType = areaType;
+    }
+
     public String[] getDeviceId() {
         return deviceId;
     }

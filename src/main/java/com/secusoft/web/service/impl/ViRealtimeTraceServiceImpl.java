@@ -61,6 +61,7 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         beanCopier.copy(request, bean, null);
 
         bean.setTraceId("t" + UUID.randomUUID().toString().replace("-", "").toLowerCase());
+        bean.setUserId("1");
         viRealtimeTraceMapper.insertViRealtimeTrace(bean);
 
         List<ViTraceDeviceBean> list = new ArrayList<>();

@@ -7,9 +7,9 @@ public class ViTraceDeviceBean {
 
     private String deviceId;
 
-    private Boolean status;
+    private Integer status;
 
-    private Boolean action;
+    private Integer action;
 
     public Integer getId() {
         return id;
@@ -35,19 +35,19 @@ public class ViTraceDeviceBean {
         this.deviceId = deviceId == null ? null : deviceId.trim();
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public Boolean getAction() {
+    public Integer getAction() {
         return action;
     }
 
-    public void setAction(Boolean action) {
+    public void setAction(Integer action) {
         this.action = action;
     }
 }

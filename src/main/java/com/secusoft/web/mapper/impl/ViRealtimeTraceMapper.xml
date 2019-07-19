@@ -47,8 +47,8 @@
         </where>
     </sql>
     <insert id="insertViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
-    insert into vi_realtime_trace (trace_id, trace_name,user_id, content)
-    values ( #{traceId}, #{traceName},#{userId}, #{content})
+    insert into vi_realtime_trace (trace_id, trace_name,user_id, content,area_type)
+    values ( #{traceId}, #{traceName},#{userId}, #{content},#{areaType})
   </insert>
 
     <update id="updateViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
