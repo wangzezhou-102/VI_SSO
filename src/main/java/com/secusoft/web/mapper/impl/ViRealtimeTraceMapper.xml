@@ -5,6 +5,7 @@
     <resultMap id="result_ViRealtimeTrace_Map" type="com.secusoft.web.model.ViRealtimeTraceBean">
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="trace_id" property="traceId" jdbcType="VARCHAR" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
         <result column="trace_name" property="traceName" jdbcType="VARCHAR" />
         <result column="user_id" property="userId" jdbcType="VARCHAR" />
         <result column="action" property="action" jdbcType="INTEGER" />
@@ -44,11 +45,14 @@
             <if test="validState!=null">
                 and valid_state=#{validState}
             </if>
+            <if test="action!=null">
+                and action=#{action}
+            </if>
         </where>
     </sql>
     <insert id="insertViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
-    insert into vi_realtime_trace (trace_id, trace_name,user_id, content,area_type)
-    values ( #{traceId}, #{traceName},#{userId}, #{content},#{areaType})
+    insert into vi_realtime_trace (trace_id, trace_name,user_id, content,area_type,action)
+    values ( #{traceId}, #{traceName},#{userId}, #{content},#{areaType},#{action})
   </insert>
 
     <update id="updateViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
@@ -60,11 +64,14 @@
             <if test="content != null">
                 content=#{content},
             </if>
+            <if test="action != null">
+                action=#{action},
+            </if>
         </set>
         where id=#{id}
     </update>
 
-    <delete id="delViRealtimeTrace" parameterType="java.lang.Integer">
+    <delete id="delViRealtimeTrace" parameterType="com.secusoft.web.model.ViRealtimeTraceBean">
         update vi_realtime_trace
         set valid_state=0
         <where>
@@ -96,10 +103,10 @@
                 and vrt.trace_id =#{traceId}
             </if>
             <if test="traceName != null">
-                and trace_name=#{traceName}
+                and vrt.trace_name=#{traceName}
             </if>
             <if test="validState != null">
-                and valid_state=#{validState}
+                and vrt.valid_state=#{validState}
             </if>
         </where>
     </select>

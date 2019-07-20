@@ -81,7 +81,7 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         }
         viTraceDeviceMapper.insertBatch(list);
 
-        return ResultVo.success();
+        return ResultVo.success(getPage(request.getTabsAction(),1,10000));
     }
 
     @Override
@@ -117,8 +117,8 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
             bean = new ViRealtimeTraceBean();
             bean.setTraceName(request.getTraceName());
             bean.setValidState(1);
-            viRealtimeTraceById = viRealtimeTraceMapper.getViRealtimeTraceById(bean);
-            if (viRealtimeTraceById != null && viRealtimeTraceById.getId() != request.getId()) {
+            ViRealtimeTraceBean viRealtimeTraceByIds = viRealtimeTraceMapper.getViRealtimeTraceById(bean);
+            if (viRealtimeTraceByIds != null && viRealtimeTraceByIds.getId() != request.getId()) {
                 return ResultVo.failure(BizExceptionEnum.TRACE_NANE_REPEATED.getCode(), BizExceptionEnum.TRACE_NANE_REPEATED.getMessage());
             }
             viRealtimeTraceById.setTraceName(request.getTraceName());
@@ -159,7 +159,7 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         }
         viRealtimeTraceById.setModifyTime(new Date());
         viRealtimeTraceMapper.updateViRealtimeTrace(viRealtimeTraceById);
-        return ResultVo.success();
+        return ResultVo.success(getPage(request.getTabsAction(),1,10000));
     }
 
     @Override
@@ -171,27 +171,54 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         if (request.getId() == null || request.getId() <= 0) {
             return ResultVo.failure(BizExceptionEnum.TRACE_ID_NULL.getCode(), BizExceptionEnum.TRACE_ID_NULL.getMessage());
         }
-        viRealtimeTraceMapper.delViRealtimeTrace(request.getId());
-        return ResultVo.success();
+        ViRealtimeTraceBean viRealtimeTraceBean=new ViRealtimeTraceBean();
+        viRealtimeTraceBean.setId(request.getId());
+        viRealtimeTraceMapper.delViRealtimeTrace(viRealtimeTraceBean);
+        return ResultVo.success(getPage(request.getTabsAction(),1,10000));
     }
 
     @Override
     public ResultVo getAllViRealtimeTrace(ViRealtimeTraceVo viRealtimeTraceVo) {
-        PageHelper.startPage(viRealtimeTraceVo.getCurrent(), viRealtimeTraceVo.getSize());
-        List<ViRealtimeTraceBean> allViRealtimeTrace = viRealtimeTraceMapper.getAllViRealtimeTrace(null);
-        Map<String, Object> pageMap = PageReturnUtils.getPageMap(allViRealtimeTrace, viRealtimeTraceVo.getCurrent(), viRealtimeTraceVo.getSize());
+        return ResultVo.success( getPage(viRealtimeTraceVo.getAction(),viRealtimeTraceVo.getCurrent(),viRealtimeTraceVo.getSize()));
+    }
+
+    private Map<String, Object> getPage(Integer action,Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum, pageSize);
+        ViRealtimeTraceBean bean=new ViRealtimeTraceBean();
+        bean.setAction(action);
+        bean.setValidState(1);
+        List<ViRealtimeTraceBean> allViRealtimeTrace = viRealtimeTraceMapper.getAllViRealtimeTrace(bean);
+        Map<String, Object> pageMap = PageReturnUtils.getPageMap(allViRealtimeTrace, pageNum, pageSize);
 
         ArrayList<ViRealtimeTraceBean> records = (ArrayList<ViRealtimeTraceBean>) pageMap.get("records");
+        List<ViRealtimeTraceReponse> list=new ArrayList<>();
+        List<String> deviceIds=new ArrayList<>();
         for (ViRealtimeTraceBean viRealtimeTraceBean : records) {
+            ViRealtimeTraceReponse reponse=new ViRealtimeTraceReponse();
+
+            //复制对象
+            BeanCopier beanCopier = BeanCopier.create(ViRealtimeTraceBean.class, ViRealtimeTraceReponse.class, false);
+            beanCopier.copy(viRealtimeTraceBean, reponse, null);
+
             ViTraceDeviceBean viTraceDeviceBean = new ViTraceDeviceBean();
             viTraceDeviceBean.setTraceId(viRealtimeTraceBean.getTraceId());
             List<ViTraceDeviceBean> allViTraceDevice = viTraceDeviceMapper.getAllViTraceDevice(viTraceDeviceBean);
-            viRealtimeTraceBean.setViTraceDeviceBeans(allViTraceDevice);
+//            viRealtimeTraceBean.setViTraceDeviceBeans(allViTraceDevice);
+            if(allViTraceDevice!=null&&allViTraceDevice.size()>0) {
+                deviceIds = new ArrayList<>();
+                for (ViTraceDeviceBean deviceBean : allViTraceDevice) {
+                    deviceIds.add(deviceBean.getDeviceId());
+                }
+                String[] strings = deviceIds.toArray(new String[deviceIds.size()]);
+                reponse.setDeviceId(strings);
+            }
+            list.add(reponse);
         }
-        pageMap.put("records", records);
-
-        return ResultVo.success(pageMap);
+        pageMap.put("records", list);
+        pageMap.put("action",action );
+        return pageMap;
     }
+
 
     @Override
     public ResultVo viRealtimeTraceSearch(ViRealtimeTraceRequest request) {
@@ -230,6 +257,22 @@ public class ViRealtimeTraceServiceImpl implements ViRealtimeTraceService {
         }
 
         return ResultVo.success(baseResponse.getData());
+    }
+
+    @Override
+    public ResultVo updateViRealtimeTraceAction(ViRealtimeTraceRequest request) {
+        if (request == null) {
+            return ResultVo.failure(BizExceptionEnum.PARAM_NULL.getCode(), BizExceptionEnum.PARAM_NULL.getMessage());
+        }
+        if (request.getId() == null || request.getId() <= 0) {
+            return ResultVo.failure(BizExceptionEnum.TRACE_ID_NULL.getCode(), BizExceptionEnum.TRACE_ID_NULL.getMessage());
+        }
+        ViRealtimeTraceBean bean=new ViRealtimeTraceBean();
+        bean.setAction(request.getAction());
+        bean.setId(request.getId());
+        viRealtimeTraceMapper.updateViRealtimeTrace(bean);
+
+        return ResultVo.success(getPage(request.getTabsAction(),1,10000));
     }
 
     /**

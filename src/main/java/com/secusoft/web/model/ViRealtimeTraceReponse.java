@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-public class ViRealtimeTraceRequest {
+public class ViRealtimeTraceReponse {
 
     /**
      * 设备编号，以数组形式
@@ -12,37 +12,9 @@ public class ViRealtimeTraceRequest {
     private String[] deviceId;
 
     /**
-     * 查询开始时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
-
-    /**
-     * 查询结束时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
-
-    /**
      * 图片base64
      */
     private String content;
-
-    /**
-     * from 是跳过多少个结果
-     */
-    private String from;
-
-    /**
-     * size是本次展示多少个结果
-     */
-    private String size;
-
-    /**
-     * tab动作，0 关闭，1开启
-     */
-    private Integer tabsAction;
-
 
     private Integer id;
 
@@ -62,14 +34,6 @@ public class ViRealtimeTraceRequest {
 
     private Integer areaType;
 
-    public Integer getTabsAction() {
-        return tabsAction;
-    }
-
-    public void setTabsAction(Integer tabsAction) {
-        this.tabsAction = tabsAction;
-    }
-
     public Integer getAreaType() {
         return areaType;
     }
@@ -86,44 +50,12 @@ public class ViRealtimeTraceRequest {
         this.deviceId = deviceId;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     public Integer getId() {

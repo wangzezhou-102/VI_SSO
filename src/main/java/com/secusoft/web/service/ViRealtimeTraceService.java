@@ -30,4 +30,6 @@ public interface ViRealtimeTraceService {
     ResultVo getAllViRealtimeTrace(ViRealtimeTraceVo viRealtimeTraceVo);
 
     ResultVo viRealtimeTraceSearch(ViRealtimeTraceRequest request);
+
+    ResultVo updateViRealtimeTraceAction(ViRealtimeTraceRequest request);
 }

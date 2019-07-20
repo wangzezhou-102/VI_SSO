@@ -14,7 +14,7 @@ public interface ViRealtimeTraceMapper {
     /**
      * 删除一条实时追踪任务
      */
-    void delViRealtimeTrace(@Param("id") Integer id);
+    void delViRealtimeTrace(ViRealtimeTraceBean bean);
 
     List<ViRealtimeTraceBean> getAllViRealtimeTrace(ViRealtimeTraceBean viRealtimeTraceBean);
 

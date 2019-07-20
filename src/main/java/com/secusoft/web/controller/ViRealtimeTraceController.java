@@ -41,4 +41,9 @@ public class ViRealtimeTraceController {
     public ResponseEntity<ResultVo> viRealtimeTraceSearch(@RequestBody ViRealtimeTraceRequest request) {
         return new ResponseEntity<ResultVo>(viRealtimeTraceService.viRealtimeTraceSearch(request), HttpStatus.OK);
     }
+
+    @PostMapping("/updatevirealtimetraceaction")
+    public ResponseEntity<ResultVo> updateViRealtimeTraceAction(@RequestBody ViRealtimeTraceRequest request) {
+        return new ResponseEntity<ResultVo>(viRealtimeTraceService.updateViRealtimeTraceAction(request), HttpStatus.OK);
+    }
 }
