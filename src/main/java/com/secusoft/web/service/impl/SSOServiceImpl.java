@@ -23,8 +23,7 @@ public class SSOServiceImpl implements SSOService {
         String exp = user.getExp();
         String iat = user.getIat();
         if(exp.equals(iat)){//id_token 单次有效
-
-        }else{
+        }else{//id_token到期时间
             long expL = Long.parseLong(exp);
         }
 
