@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.io.IOException;
-
 /**
  * 单点登录接口
  * @author wangzezhou
@@ -26,7 +24,7 @@ public class SSOController {
         ResultVo resultVo = null;
         try{
             resultVo = ssoService.SSO(ssoRequest);
-        }catch (IOException e){
+        }catch (Exception e){
             //ResponseUtil.handle(Constants.FAILED, resultVo);
         }
 
