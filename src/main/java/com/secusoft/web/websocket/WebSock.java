@@ -1,6 +1,5 @@
 package com.secusoft.web.websocket;
 
-import com.secusoft.web.websocket.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

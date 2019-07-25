@@ -12,8 +12,8 @@ public class JWTVo {
     private String sub;
     //id_token受众，包含client_id
     private String aub;
-    //随机字符串
-    private String nonce;
+    //随机字符串 jwt的唯一身份标识，主要用来作为一次性token,回避重放攻击
+    private String jti;
     //过期时间
     private long exp;
     //构建时间
@@ -35,9 +35,9 @@ public class JWTVo {
 
     public void setAub(String aub) { this.aub = aub; }
 
-    public String getNonce() { return nonce; }
+    public String getJti() { return jti; }
 
-    public void setNonce(String nonce) { this.nonce = nonce; }
+    public void setJti(String jti) { this.jti = jti; }
 
     public long getExp() { return exp; }
 

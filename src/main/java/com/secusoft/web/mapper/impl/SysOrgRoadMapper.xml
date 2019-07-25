@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.secusoft.web.mapper.SysOrgRoadMapper">
-    
-    <select id="getSysOrgRoadByOrgCode" parameterType="com.secusoft.web.model.SysOrgRoadBean" resultType="com.secusoft.web.model.SysOrgRoadBean">
-      select * from sys_org_road
-      where org_code = #{orgCode}
-    </select>
-</mapper>

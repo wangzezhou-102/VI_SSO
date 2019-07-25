@@ -44,8 +44,6 @@ public class MainApplication extends WebMvcConfigurerAdapter {
             logger.warn("未在config目录下找到config.properties配置文件,使用内置默认配置文件!");
             SpringApplication.run(MainApplication.class, args);
         }
-
         logger.info("Application is success!");
-
     }
 }

@@ -37,20 +37,20 @@ public class ResultVo {
     public ResultVo() {
     }
 
-    public static  ResultVo success() {
+    public static ResultVo success() {
         ResultVo resultVo = new ResultVo();
         resultVo.data = null;
         resultVo.message = "success";
         return resultVo;
     }
 
-    public static  ResultVo success(Object result) {
+    public static ResultVo success(Object result) {
         ResultVo resultVo = new ResultVo();
         resultVo.data = result;
         resultVo.message = "success";
         return resultVo;
     }
-    public static  ResultVo success(Object result,Long totalCount) {
+    public static ResultVo success(Object result, Long totalCount) {
         ResultVo resultVo = new ResultVo();
         resultVo.data = result;
         resultVo.message = "success";
@@ -62,7 +62,7 @@ public class ResultVo {
         return failure(error.getCode(), error.getMessage());
     }
     
-    public static  ResultVo failure(int errorCode, String errorMessage) {
+    public static ResultVo failure(int errorCode, String errorMessage) {
         ResultVo resultVo = new ResultVo();
         resultVo.code = errorCode;
         resultVo.message = errorMessage;
